@@ -1,0 +1,53 @@
+{
+  "name": "@api3/contracts",
+  "license": "MIT",
+  "version": "0.1.0",
+  "private": false,
+  "main": "dist/index",
+  "files": [
+    "contracts",
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn build:contracts && yarn build:tsc",
+    "build:contracts": "hardhat compile",
+    "build:tsc": "tsc",
+    "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
+    "deploy:undeterministic": "hardhat deploy --network $NETWORK",
+    "lint": "yarn run prettier:check && yarn run lint:eslint && yarn run lint:solhint",
+    "lint:eslint": "eslint . --ext .js,.ts",
+    "lint:solhint": "solhint ./contracts/**/*.sol",
+    "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
+    "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
+    "scripts:write-env-file-example": "yarn node scripts/write-env-file-example"
+  },
+  "devDependencies": {
+    "@api3/chains": "^1.1.2",
+    "@ethersproject/providers": "^5.4.7",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-etherscan": "^3.0.0",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.2",
+    "@types/chai": "^4.2.0",
+    "@types/mocha": ">=9.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
+    "@typescript-eslint/parser": "^5.54.1",
+    "chai": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.35.0",
+    "ethers": "^5.4.7",
+    "hardhat": "^2.13.0",
+    "hardhat-deploy": "^0.11.25",
+    "hardhat-gas-reporter": "^1.0.8",
+    "prettier": "^2.8.4",
+    "prettier-plugin-solidity": "^1.1.3",
+    "solhint": "^3.4.1",
+    "solidity-coverage": "^0.8.1",
+    "ts-node": "^10.9.1",
+    "typechain": "^8.1.0",
+    "typescript": "^4.9.5"
+  }
+}
