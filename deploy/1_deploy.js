@@ -26,7 +26,12 @@ module.exports = async ({ getUnnamedAccounts, deployments }) => {
     (await ethers.getSigners())[0]
   );
   if ((await ownableCallForwarder.owner()) === accounts[0]) {
-    await ownableCallForwarder.transferOwnership(managerMultisigAddresses[network.name]);
+    const receipt = await ownableCallForwarder.transferOwnership(managerMultisigAddresses[network.name]);
+    await new Promise((resolve) =>
+      ethers.provider.once(receipt.hash, () => {
+        resolve();
+      })
+    );
     log(`Transferred OwnableCallForwarder ownership to ${managerMultisigAddresses[network.name]}`);
   }
 
