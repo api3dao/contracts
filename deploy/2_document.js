@@ -7,7 +7,7 @@ module.exports = async () => {
     .readdirSync('deployments', { withFileTypes: true })
     .filter((item) => item.isDirectory())
     .map((item) => item.name);
-  const contractNames = ['Test'];
+  const contractNames = ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory'];
   const references = {};
   references.chainNames = {};
   for (const network of networks) {
