@@ -1,0 +1,17 @@
+{
+  "chainNames": {
+    "80001": "polygon-testnet"
+  },
+  "AccessControlRegistry": {
+    "80001": "0x38fc78D1156eE53A6644E56EA60Af0C266eAFE2d"
+  },
+  "OwnableCallForwarder": {
+    "80001": "0xc254F3Fd188164b3ce64efED36B9720A1319D1e2"
+  },
+  "Api3ServerV1": {
+    "80001": "0x5d81D78FDA9412Dd8294F6f614B6662570F49D19"
+  },
+  "ProxyFactory": {
+    "80001": "0x087445b90A03be1EF63783a5440ec70686A35869"
+  }
+}
