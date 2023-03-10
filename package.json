@@ -3,15 +3,14 @@
   "license": "MIT",
   "version": "0.1.0",
   "private": false,
-  "main": "dist/index",
+  "main": "src/index",
   "files": [
     "contracts",
-    "dist"
+    "src",
+    "deployments/references.json"
   ],
   "scripts": {
-    "build": "yarn build:contracts && yarn build:tsc",
-    "build:contracts": "hardhat compile",
-    "build:tsc": "tsc",
+    "build": "hardhat compile",
     "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
     "deploy:undeterministic": "hardhat deploy --network $NETWORK",
     "lint": "yarn run prettier:check && yarn run lint:eslint && yarn run lint:solhint",
@@ -22,7 +21,6 @@
     "scripts:write-env-file-example": "yarn node scripts/write-env-file-example"
   },
   "devDependencies": {
-    "@api3/airnode-protocol-v1": "^1.1.1",
     "@api3/chains": "^1.1.2",
     "@ethersproject/providers": "^5.4.7",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
@@ -32,10 +30,7 @@
     "@nomiclabs/hardhat-etherscan": "^3.0.0",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
-    "@types/chai": "^4.2.0",
     "@types/mocha": ">=9.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.54.1",
-    "@typescript-eslint/parser": "^5.54.1",
     "chai": "^4.2.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.35.0",
@@ -47,8 +42,11 @@
     "prettier-plugin-solidity": "^1.1.3",
     "solhint": "^3.4.1",
     "solidity-coverage": "^0.8.1",
-    "ts-node": "^10.9.1",
+    "ts-node": ">=8.0.0",
     "typechain": "^8.1.0",
-    "typescript": "^4.9.5"
+    "typescript": ">=4.5.0"
+  },
+  "dependencies": {
+    "@api3/airnode-protocol-v1": "^1.1.2"
   }
 }
