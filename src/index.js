@@ -1,3 +1,3 @@
-import references from '../deployments/references.json';
+const { references } = require('@api3/airnode-protocol-v1');
 
-export { references };
+module.exports = { references };
