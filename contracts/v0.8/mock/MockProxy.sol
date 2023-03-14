@@ -22,10 +22,10 @@ contract MockProxy is IProxy {
         override
         returns (int224 value, uint32 timestamp)
     {
-        (value, timestamp) = (_value, timestamp);
+        (value, timestamp) = (_value, _timestamp);
     }
 
     function mock(int224 value, uint32 timestamp) external {
-        (_value, timestamp) = (value, timestamp);
+        (_value, _timestamp) = (value, timestamp);
     }
 }
