@@ -6,14 +6,14 @@ import "../interfaces/IProxy.sol";
 // This contract is provided for testing purposes. It can be extended to mock
 // the interface of specific proxy types such as DataFeedProxy and DapiProxy.
 contract MockProxy is IProxy {
-    address public immutable override dapiServer;
+    address public immutable override api3ServerV1;
 
     int224 private _value;
 
     uint32 private _timestamp;
 
-    constructor(address _dapiServer) {
-        dapiServer = _dapiServer;
+    constructor(address _api3ServerV1) {
+        api3ServerV1 = _api3ServerV1;
     }
 
     function read()
