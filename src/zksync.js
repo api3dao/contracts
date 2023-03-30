@@ -15,10 +15,10 @@ const CREATE2_PREFIX = '0x2020dba91b30cc0006188af794c2fb30dd8520db7e2c088b7fc7c1
 // - Get the bytecode from the artifacts
 // - Use `utils.hashBytecode()` from the `zksync-web3` package
 const bytecodeHashes = {
-  dapiProxy: '0x010000718e160c49f26d36ffd29dbe562fcc1ae0c45e3add4ae314721c4cfd50',
-  dataFeedProxy: '0x01000071aa077a2b3722b686ce72da1b80c036fe00b90b1b0666cf7472ed7181',
-  dapiProxyWithOev: '0x010000833ea8eec6c5a363e8de8e0a9fcd770e93f86d9ec426c1f7886822cb4d',
-  dataFeedProxyWithOev: '0x010000832145787c75d77acc93c6b6e61af2909128377978cb54e6f31e139cc0',
+  DapiProxy: '0x010000718e160c49f26d36ffd29dbe562fcc1ae0c45e3add4ae314721c4cfd50',
+  DataFeedProxy: '0x01000071aa077a2b3722b686ce72da1b80c036fe00b90b1b0666cf7472ed7181',
+  DapiProxyWithOev: '0x010000833ea8eec6c5a363e8de8e0a9fcd770e93f86d9ec426c1f7886822cb4d',
+  DataFeedProxyWithOev: '0x010000832145787c75d77acc93c6b6e61af2909128377978cb54e6f31e139cc0',
 };
 
 function confirmChainIdToBelongToZkSync(chainId) {
@@ -52,7 +52,7 @@ function computeDapiProxyAddress(chainId, dapiName, metadata) {
   return computeCreate2Address(
     references.ProxyFactory[chainId.toString()],
     ethers.utils.keccak256(metadata),
-    bytecodeHashes.dapiProxy,
+    bytecodeHashes.DapiProxy,
     ethers.utils.defaultAbiCoder.encode(
       ['address', 'bytes32'],
       [references.Api3ServerV1[chainId.toString()], dapiNameHash]
@@ -65,7 +65,7 @@ function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
   return computeCreate2Address(
     references.ProxyFactory[chainId.toString()],
     ethers.utils.keccak256(metadata),
-    bytecodeHashes.dataFeedProxy,
+    bytecodeHashes.DataFeedProxy,
     ethers.utils.defaultAbiCoder.encode(
       ['address', 'bytes32'],
       [references.Api3ServerV1[chainId.toString()], dataFeedId]
