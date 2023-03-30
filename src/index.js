@@ -1,7 +1,11 @@
 const ethers = require('ethers');
 const { references, DapiProxy__factory, DataFeedProxy__factory } = require('@api3/airnode-protocol-v1');
+const zkSync = require('./zksync');
 
 function computeDapiProxyAddress(chainId, dapiName, metadata) {
+  if (chainId == 280 || chainId == 324) {
+    return zkSync.computeDapiProxyAddress(chainId, dapiName, metadata);
+  }
   const dapiNameHash = ethers.utils.solidityKeccak256(['bytes32'], [ethers.utils.formatBytes32String(dapiName)]);
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
@@ -21,6 +25,9 @@ function computeDapiProxyAddress(chainId, dapiName, metadata) {
 }
 
 function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
+  if (chainId == 280 || chainId == 324) {
+    return zkSync.computeDataFeedProxyAddress(chainId, dataFeedId, metadata);
+  }
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
     [
