@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@api3/airnode-protocol-v1@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@api3/airnode-protocol-v1/-/airnode-protocol-v1-2.2.1.tgz#688551e55d0b665307dd57a37dcf1fa38732f68e"
-  integrity sha512-8DcNvEixNDzJCtGTggGH0oem+PdDckmTeMlas3jWC+wNodxYPsK4NsxULE6Nf4GNH6W+weFnqSNZ1MQ8BIPtQQ==
+"@api3/airnode-protocol-v1@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@api3/airnode-protocol-v1/-/airnode-protocol-v1-2.3.0.tgz#f977060087af641d0036802e6403447a03b2be44"
+  integrity sha512-hgIvfz/5H6klpWwCeJHTHIZQn3kLIxWE2jyjU8gU/hunmuBFJL0gNLjYOsrPQs0J+i+y39vyReJ5c+ozhu859Q==
   dependencies:
     "@openzeppelin/contracts" "4.8.2"
 
