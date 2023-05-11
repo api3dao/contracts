@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/api3dao/contracts.git"
   },
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": false,
   "main": "src/index",
   "files": [
