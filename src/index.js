@@ -75,7 +75,7 @@ function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
 
 function computeDataFeedProxyWithOevAddress(chainId, dataFeedId, oevBeneficiary, metadata) {
   if (chainId == 280 || chainId == 324) {
-    return zkSync.computeDataFeedProxyAddress(chainId, dataFeedId, oevBeneficiary, metadata);
+    return zkSync.computeDataFeedProxyWithOevAddress(chainId, dataFeedId, oevBeneficiary, metadata);
   }
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
