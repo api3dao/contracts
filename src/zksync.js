@@ -60,6 +60,20 @@ function computeDapiProxyAddress(chainId, dapiName, metadata) {
   );
 }
 
+function computeDapiProxyWithOevAddress(chainId, dapiName, oevBeneficiary, metadata) {
+  confirmChainIdToBelongToZkSync(chainId);
+  const dapiNameHash = ethers.utils.solidityKeccak256(['bytes32'], [ethers.utils.formatBytes32String(dapiName)]);
+  return computeCreate2Address(
+    references.ProxyFactory[chainId.toString()],
+    ethers.utils.keccak256(metadata),
+    bytecodeHashes.DapiProxyWithOev,
+    ethers.utils.defaultAbiCoder.encode(
+      ['address', 'bytes32', 'address'],
+      [references.Api3ServerV1[chainId.toString()], dapiNameHash, oevBeneficiary]
+    )
+  );
+}
+
 function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
   confirmChainIdToBelongToZkSync(chainId);
   return computeCreate2Address(
@@ -73,4 +87,22 @@ function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
   );
 }
 
-module.exports = { computeDapiProxyAddress, computeDataFeedProxyAddress };
+function computeDataFeedProxyWithOevAddress(chainId, dataFeedId, oevBeneficiary, metadata) {
+  confirmChainIdToBelongToZkSync(chainId);
+  return computeCreate2Address(
+    references.ProxyFactory[chainId.toString()],
+    ethers.utils.keccak256(metadata),
+    bytecodeHashes.DataFeedProxyWithOev,
+    ethers.utils.defaultAbiCoder.encode(
+      ['address', 'bytes32', 'address'],
+      [references.Api3ServerV1[chainId.toString()], dataFeedId, oevBeneficiary]
+    )
+  );
+}
+
+module.exports = {
+  computeDapiProxyAddress,
+  computeDapiProxyWithOevAddress,
+  computeDataFeedProxyAddress,
+  computeDataFeedProxyWithOevAddress,
+};
