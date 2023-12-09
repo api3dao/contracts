@@ -6,12 +6,8 @@ const {
   DataFeedProxy__factory,
   DataFeedProxyWithOev__factory,
 } = require('@api3/airnode-protocol-v1');
-const zkSync = require('./zksync');
 
 function computeDapiProxyAddress(chainId, dapiName, metadata) {
-  if (chainId == 280 || chainId == 324) {
-    return zkSync.computeDapiProxyAddress(chainId, dapiName, metadata);
-  }
   const dapiNameHash = ethers.utils.solidityKeccak256(['bytes32'], [ethers.utils.formatBytes32String(dapiName)]);
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
@@ -31,9 +27,6 @@ function computeDapiProxyAddress(chainId, dapiName, metadata) {
 }
 
 function computeDapiProxyWithOevAddress(chainId, dapiName, oevBeneficiary, metadata) {
-  if (chainId == 280 || chainId == 324) {
-    return zkSync.computeDapiProxyWithOevAddress(chainId, dapiName, oevBeneficiary, metadata);
-  }
   const dapiNameHash = ethers.utils.solidityKeccak256(['bytes32'], [ethers.utils.formatBytes32String(dapiName)]);
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
@@ -53,9 +46,6 @@ function computeDapiProxyWithOevAddress(chainId, dapiName, oevBeneficiary, metad
 }
 
 function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
-  if (chainId == 280 || chainId == 324) {
-    return zkSync.computeDataFeedProxyAddress(chainId, dataFeedId, metadata);
-  }
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
     [
@@ -74,9 +64,6 @@ function computeDataFeedProxyAddress(chainId, dataFeedId, metadata) {
 }
 
 function computeDataFeedProxyWithOevAddress(chainId, dataFeedId, oevBeneficiary, metadata) {
-  if (chainId == 280 || chainId == 324) {
-    return zkSync.computeDataFeedProxyWithOevAddress(chainId, dataFeedId, oevBeneficiary, metadata);
-  }
   const initcode = ethers.utils.solidityPack(
     ['bytes', 'bytes'],
     [
