@@ -1,16 +1,17 @@
 node_modules
-dist
 .env
-coverage
-coverage.json
-typechain
-typechain-types
+dist
 
 # Hardhat files
-cache
-artifacts
+/cache
+/artifacts
 
-# Contract directories after prepack
-/v0.6
-/v0.7
-/v0.8
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+gas_report

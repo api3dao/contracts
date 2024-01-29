@@ -1,53 +1,59 @@
 {
-  "name": "@api3/contracts",
+  "name": "api3-contracts",
   "description": "Contracts through which API3 services are delivered",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/api3dao/contracts.git"
+  "version": "0.0.3",
+  "engines": {
+    "node": "^20.11.0"
   },
-  "version": "1.0.1",
   "private": false,
-  "main": "src/index",
+  "main": "dist/src/index",
   "files": [
-    "v0.6",
-    "v0.7",
-    "v0.8",
-    "src"
+    "contracts",
+    "dist"
   ],
   "scripts": {
-    "build": "hardhat compile",
-    "lint": "yarn run prettier:check && yarn run lint:eslint && yarn run lint:solhint",
-    "lint:eslint": "eslint . --ext .js,.ts",
+    "build": "pnpm build:contracts && tsc -p tsconfig.build.json",
+    "build:contracts": "hardhat compile",
+    "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
     "lint:solhint": "solhint ./contracts/**/*.sol",
+    "lint:eslint": "eslint . --ext .js,.ts",
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
-    "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\""
+    "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
+    "test": "hardhat test --parallel",
+    "test:coverage": "hardhat coverage",
+    "test:gas": "REPORT_GAS=TRUE hardhat test",
+    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
   },
   "devDependencies": {
-    "@ethersproject/providers": "^5.4.7",
-    "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
+    "@api3/airnode-protocol-v1": "^3.1.0",
+    "@api3/commons": "^0.6.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
-    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
-    "@nomiclabs/hardhat-ethers": "^2.0.0",
-    "@nomiclabs/hardhat-etherscan": "^3.0.0",
-    "@typechain/ethers-v5": "^10.1.0",
-    "@typechain/hardhat": "^6.1.2",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@openzeppelin/merkle-tree": "^1.0.5",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
     "@types/chai": "^4.2.0",
-    "@types/mocha": ">=9.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "chai": "^4.2.0",
-    "eslint": "^8.36.0",
-    "hardhat": "^2.13.0",
+    "eslint": "^8.56.0",
+    "hardhat": "^2.19.4",
     "hardhat-gas-reporter": "^1.0.8",
-    "prettier": "^2.8.4",
-    "prettier-plugin-solidity": "^1.1.3",
-    "solhint": "^3.4.1",
-    "solidity-coverage": "^0.8.1",
-    "ts-node": ">=8.0.0",
-    "typechain": "^8.1.0",
-    "typescript": ">=4.5.0"
+    "prettier": "^3.2.4",
+    "prettier-plugin-solidity": "^1.3.1",
+    "solhint": "^4.1.1",
+    "solidity-coverage": "^0.8.0",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@api3/airnode-protocol-v1": "^3.0.0",
-    "ethers": "^5.4.7"
+    "ethers": "^6.4.0"
   }
 }
