@@ -6,6 +6,7 @@
     "not-rely-on-time": "off",
     "no-empty-blocks": "off",
     "no-global-import": "off",
-    "func-name-mixedcase": "off"
+    "func-name-mixedcase": "off",
+    "immutable-vars-naming": "off"
   }
 }
