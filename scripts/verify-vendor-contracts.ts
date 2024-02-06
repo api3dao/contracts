@@ -1,9 +1,16 @@
 import { execSync } from 'node:child_process';
-import { readdirSync, readFileSync, rmSync } from 'node:fs';
-import { extname, join, relative } from 'node:path';
+import { readFileSync, rmSync } from 'node:fs';
+import { basename, join, relative } from 'node:path';
 
-function main() {
+import { glob } from 'glob';
+
+async function main() {
   const vendors = [
+    {
+      path: join('@openzeppelin', 'contracts@4.8.2'),
+      tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.8.2.tgz',
+      packageContractsPath: '',
+    },
     {
       path: join('@openzeppelin', 'contracts@4.9.5'),
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.9.5.tgz',
@@ -20,28 +27,31 @@ function main() {
     execSync(
       `mkdir -p untarred-package | wget -qO- ${vendor.tarballUrl} | tar xvz -C untarred-package --strip-components=1`
     );
-    const dirents = readdirSync(join('contracts', 'vendor', vendor.path), {
-      recursive: true,
-      withFileTypes: true,
-    }).filter((dirent) => dirent.name && extname(dirent.name) === '.sol');
-    for (const dirent of dirents) {
-      const vendorContract = readFileSync(join(dirent.path, dirent.name)).toString();
+    const filePaths = await glob(`./contracts/vendor/${vendor.path}/**/*.sol`);
+    for (const filePath of filePaths) {
+      const vendorContract = readFileSync(filePath).toString();
       const packageContract = readFileSync(
         join(
           'untarred-package',
           vendor.packageContractsPath,
-          relative(join('contracts', 'vendor', vendor.path), join(dirent.path, dirent.name))
+          relative(join('contracts', 'vendor', vendor.path), join(filePath))
         )
       ).toString();
       if (vendorContract === packageContract) {
         // eslint-disable-next-line no-console
-        console.log(`${dirent.name} is identical!`);
+        console.log(`${basename(filePath)} is identical!`);
       } else {
-        throw new Error(`${dirent.name} is NOT identical!`);
+        throw new Error(`${basename(filePath)} is NOT identical!`);
       }
     }
     rmSync('untarred-package', { recursive: true, force: true });
   }
 }
 
-main();
+/* eslint-disable */
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });

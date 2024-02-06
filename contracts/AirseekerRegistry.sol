@@ -2,10 +2,10 @@
 pragma solidity 0.8.17;
 
 import "./vendor/@openzeppelin/contracts@4.9.5/access/Ownable.sol";
-import "@api3/airnode-protocol-v1/contracts/utils/ExtendedSelfMulticall.sol";
+import "./utils/ExtendedSelfMulticall.sol";
 import "./interfaces/IAirseekerRegistry.sol";
 import "./vendor/@openzeppelin/contracts@4.9.5/utils/structs/EnumerableSet.sol";
-import "@api3/airnode-protocol-v1/contracts/api3-server-v1/interfaces/IApi3ServerV1.sol";
+import "./api3-server-v1/interfaces/IApi3ServerV1.sol";
 
 /// @title A contract where active data feeds and their specs are registered by
 /// the contract owner for the Airseeker that serves them to refer to

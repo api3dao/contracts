@@ -2,9 +2,9 @@
   "name": "@api3/contracts",
   "description": "Contracts through which API3 services are delivered",
   "license": "MIT",
-  "version": "2.0.0-beta",
+  "version": "2.0.0-beta0",
   "engines": {
-    "node": "^20.11.0"
+    "node": "^18.19.0"
   },
   "private": false,
   "main": "dist/src/index",
@@ -14,7 +14,9 @@
   ],
   "scripts": {
     "build": "pnpm build:contracts && tsc -p tsconfig.build.json",
-    "build:contracts": "hardhat compile",
+    "build:contracts": "hardhat compile && hardhat run scripts/overwrite-contract-metadata-hash.ts",
+    "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
+    "deploy:undeterministic": "hardhat deploy --network $NETWORK",
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
     "lint:solhint": "solhint ./contracts/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
@@ -23,11 +25,14 @@
     "test": "hardhat test --parallel",
     "test:coverage": "hardhat coverage",
     "test:gas": "REPORT_GAS=TRUE hardhat test",
-    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
+    "verify-deployments": "hardhat run scripts/verify-deployments.ts",
+    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts",
+    "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/airnode-protocol-v1": "^3.1.0",
+    "@api3/chains": "^4.6.0",
     "@api3/commons": "^0.6.0",
+    "@api3/promise-utils": "^0.4.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
@@ -42,9 +47,12 @@
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "chai": "^4.2.0",
+    "dotenv": "^16.4.1",
     "eslint": "^8.56.0",
     "eth-crypto": "^2.6.0",
+    "glob": "^10.3.10",
     "hardhat": "^2.19.4",
+    "hardhat-deploy": "^0.11.45",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier": "^3.2.4",
     "prettier-plugin-solidity": "^1.3.1",

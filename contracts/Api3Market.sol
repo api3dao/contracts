@@ -2,13 +2,13 @@
 pragma solidity 0.8.17;
 
 import "./HashRegistry.sol";
-import "@api3/airnode-protocol-v1/contracts/utils/ExtendedSelfMulticall.sol";
+import "./utils/ExtendedSelfMulticall.sol";
 import "./interfaces/IApi3Market.sol";
 import "./AirseekerRegistry.sol";
 import "./vendor/@openzeppelin/contracts@4.9.5/utils/math/SafeCast.sol";
 import "./vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/MerkleProof.sol";
-import "@api3/airnode-protocol-v1/contracts/api3-server-v1/interfaces/IApi3ServerV1.sol";
-import "@api3/airnode-protocol-v1/contracts/api3-server-v1/proxies/interfaces/IProxyFactory.sol";
+import "./api3-server-v1/interfaces/IApi3ServerV1.sol";
+import "./api3-server-v1/proxies/interfaces/IProxyFactory.sol";
 
 /// @title The contract that API3 users interact with using the API3 Market
 /// frontend to purchase data feed subscriptions

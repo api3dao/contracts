@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@api3/airnode-protocol-v1/contracts/access-control-registry/interfaces/IAccessControlRegistryAdminnedWithManager.sol";
+import "../access-control-registry/interfaces/IAccessControlRegistryAdminnedWithManager.sol";
 
 interface IOevAuctionHouse is IAccessControlRegistryAdminnedWithManager {
     enum BidStatus {

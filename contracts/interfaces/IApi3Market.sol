@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./IHashRegistry.sol";
-import "@api3/airnode-protocol-v1/contracts/utils/interfaces/IExtendedSelfMulticall.sol";
+import "../utils/interfaces/IExtendedSelfMulticall.sol";
 
 interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
     event BoughtSubscription(

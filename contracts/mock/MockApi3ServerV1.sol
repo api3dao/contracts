@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "@api3/airnode-protocol-v1/contracts/api3-server-v1/Api3ServerV1.sol";
+import "../api3-server-v1/Api3ServerV1.sol";
 
 contract MockApi3ServerV1 is Api3ServerV1 {
     constructor(

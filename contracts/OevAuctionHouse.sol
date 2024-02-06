@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "@api3/airnode-protocol-v1/contracts/access-control-registry/AccessControlRegistryAdminnedWithManager.sol";
+import "./access-control-registry/AccessControlRegistryAdminnedWithManager.sol";
 import "./interfaces/IOevAuctionHouse.sol";
-import "@api3/airnode-protocol-v1/contracts/api3-server-v1/proxies/interfaces/IProxy.sol";
+import "./api3-server-v1/proxies/interfaces/IProxy.sol";
 
 /// @title OEV Auction House contract
 /// @notice OEV is a subset of MEV that oracles have exclusive priority of

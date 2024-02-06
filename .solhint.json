@@ -7,6 +7,7 @@
     "no-empty-blocks": "off",
     "no-global-import": "off",
     "func-name-mixedcase": "off",
-    "immutable-vars-naming": "off"
+    "immutable-vars-naming": "off",
+    "custom-errors": "off"
   }
 }
