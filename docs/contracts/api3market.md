@@ -42,7 +42,7 @@ Each dAPI name in a dAPI management Merkle tree is intended to be unique.
 
 The dAPI sponsor wallet address is derived out of the extended public key of the API3 Airseeker and the dAPI name, meaning that it will be unique per dAPI name.
 
-In the case that a dAPI name is being commissioned, rather than omitting it in the future iterations of the tree, it should be left in permanently with a `bytes32(0)` data feed ID and `address(0)` sponsor wallet address instead.
+In the case that a dAPI name is being decommissioned, rather than omitting it in the future iterations of the tree, it should be left in permanently with a `bytes32(0)` data feed ID and `address(0)` sponsor wallet address instead.
 
 ### dAPI pricing Merkle tree
 
