@@ -50,7 +50,7 @@ module.exports = async () => {
       log(`Deploying Api3ServerV1`);
       return deploy('Api3ServerV1', {
         from: deployer!.address,
-        args: [accessControlRegistry.address, 'Api3ServerV1 admin', ownableCallForwarder.getAddress()],
+        args: [accessControlRegistry.address, 'Api3ServerV1 admin', await ownableCallForwarder.getAddress()],
         log: true,
         deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
       });
