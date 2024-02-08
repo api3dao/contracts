@@ -4,6 +4,8 @@ module.exports = {
     project: ['./tsconfig.json'],
   },
   rules: {
+    camelcase: 'off',
+
     'unicorn/filename-case': 'off',
     'unicorn/prefer-export-from': 'off',
     'unicorn/prefer-object-from-entries': 'off',
