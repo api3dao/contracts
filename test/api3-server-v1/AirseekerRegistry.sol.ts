@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
 import { ethers } from 'hardhat';
 
-import type { AirseekerRegistry, Api3ServerV1 } from '../src/index';
+import type { AirseekerRegistry, Api3ServerV1 } from '../../src/index';
 
 export async function updateBeaconSet(
   api3ServerV1: Api3ServerV1,

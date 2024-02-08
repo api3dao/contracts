@@ -5,10 +5,10 @@ import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
 import { artifacts, ethers } from 'hardhat';
 
-import type { Api3Market } from '../src/index';
+import type { Api3Market } from '../../src/index';
+import { signHash } from '../access/HashRegistry.sol';
 
 import { updateBeaconSet, readBeacons, encodeUpdateParameters } from './AirseekerRegistry.sol';
-import { signHash } from './HashRegistry.sol';
 
 describe('Api3Market', function () {
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
