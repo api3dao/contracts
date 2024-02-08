@@ -4,26 +4,34 @@ import * as path from 'node:path';
 import type { AddressLike } from 'ethers';
 import { config } from 'hardhat';
 
-import { chainsSupportedByDapis } from './data/chain-support.json';
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from './data/chain-support.json';
 
 module.exports = () => {
   const references: Record<string, Record<string, AddressLike>> = {};
-  const deploymentBlockNumbers: Record<string, Record<string, number | string>> = {};
+  const deploymentBlockNumbers: Record<string, Record<string, number>> = {};
 
-  for (const contractName of ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']) {
-    references[contractName] = {};
-    deploymentBlockNumbers[contractName] = {};
-    for (const network of chainsSupportedByDapis) {
+  const networks = new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions]);
+
+  for (const network of networks) {
+    const chainId = config.networks[network]!.chainId!;
+    const contractNames = [
+      ...(chainsSupportedByDapis.includes(network)
+        ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
+        : []),
+      ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
+    ];
+    for (const contractName of contractNames) {
       const deployment = JSON.parse(fs.readFileSync(path.join('deployments', network, `${contractName}.json`), 'utf8'));
-      references[contractName]![config.networks[network]!.chainId!] = deployment.address;
-      if (deployment.receipt) {
-        deploymentBlockNumbers[contractName]![config.networks[network]!.chainId!] = deployment.receipt.blockNumber;
-      } else {
-        deploymentBlockNumbers[contractName]![config.networks[network]!.chainId!] = 'MISSING';
+      references[contractName] = { ...references[contractName], [chainId]: deployment.address };
+      if (!deployment.receipt) {
+        throw new Error(`${network} ${contractName} missing deployment tx receipt`);
       }
+      deploymentBlockNumbers[contractName] = {
+        ...deploymentBlockNumbers[contractName],
+        chainId: deployment.receipt.blockNumber,
+      };
     }
   }
-
   fs.writeFileSync(path.join('deployments', 'addresses.json'), JSON.stringify(references, null, 2));
   fs.writeFileSync(path.join('deployments', 'block-numbers.json'), JSON.stringify(deploymentBlockNumbers, null, 2));
 };

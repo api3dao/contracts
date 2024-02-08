@@ -2,7 +2,7 @@ import { deployments, ethers, network } from 'hardhat';
 
 import type { OwnableCallForwarder, ProxyFactory } from '../src/index';
 
-import { chainsSupportedByDapis } from './data/chain-support.json';
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from './data/chain-support.json';
 import * as managerMultisigAddresses from './data/manager-multisig.json';
 
 module.exports = async () => {
@@ -100,6 +100,18 @@ module.exports = async () => {
     if ((await ethers.provider.getCode(expectedDapiProxyWithOevAddress)) === '0x') {
       await proxyFactory.deployDapiProxyWithOev(ethUsdDapiName, exampleOevBeneficiaryAddress, '0x');
       log(`Deployed example DapiProxyWithOev at ${expectedDapiProxyWithOevAddress}`);
+    }
+
+    if (chainsSupportedByOevAuctions.includes(network.name)) {
+      await deployments.get('OevAuctionHouse').catch(async () => {
+        log(`Deploying OevAuctionHouse`);
+        return deploy('OevAuctionHouse', {
+          from: deployer!.address,
+          args: [accessControlRegistry.address, 'OevAuctionHouse admin', await ownableCallForwarder.getAddress()],
+          log: true,
+          deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+        });
+      });
     }
   } else {
     throw new Error(`${network.name} is not supported`);

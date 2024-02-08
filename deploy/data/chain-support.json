@@ -34,5 +34,6 @@
     "polygon-zkevm-goerli-testnet",
     "rsk",
     "rsk-testnet"
-  ]
+  ],
+  "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }

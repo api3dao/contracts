@@ -2,7 +2,7 @@ import { deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
 
 import type { ProxyFactory } from '../src/index';
 
-import { chainsSupportedByDapis } from './data/chain-support.json';
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from './data/chain-support.json';
 
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
@@ -68,6 +68,14 @@ module.exports = async () => {
       address: expectedDapiProxyWithOevAddress,
       constructorArguments: [Api3ServerV1.address, ethers.keccak256(ethUsdDapiName), testOevBeneficiaryAddress],
     });
+
+    if (chainsSupportedByOevAuctions.includes(network.name)) {
+      const OevAuctionHouse = await deployments.get('OevAuctionHouse');
+      await run('verify:verify', {
+        address: OevAuctionHouse.address,
+        constructorArguments: [AccessControlRegistry.address, 'OevAuctionHouse admin', OwnableCallForwarder.address],
+      });
+    }
   } else {
     throw new Error(`${network.name} is not supported`);
   }
