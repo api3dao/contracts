@@ -32,7 +32,10 @@ module.exports = () => {
       };
     }
   }
-  fs.writeFileSync(path.join('deployments', 'addresses.json'), JSON.stringify(references, null, 2));
-  fs.writeFileSync(path.join('deployments', 'block-numbers.json'), JSON.stringify(deploymentBlockNumbers, null, 2));
+  fs.writeFileSync(path.join('deployments', 'addresses.json'), `${JSON.stringify(references, null, 2)}\n`);
+  fs.writeFileSync(
+    path.join('deployments', 'block-numbers.json'),
+    `${JSON.stringify(deploymentBlockNumbers, null, 2)}\n`
+  );
 };
 module.exports.tags = ['document'];
