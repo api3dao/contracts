@@ -1,8 +1,9 @@
 import { deployments, ethers, network } from 'hardhat';
 
-import * as managerMultisigAddresses from '../deployments/manager-multisig.json';
 import type { OwnableCallForwarder, ProxyFactory } from '../src/index';
-import { chainsSupportedByDapis } from '../src/supported-chains';
+
+import { chainsSupportedByDapis } from './data/chain-support.json';
+import * as managerMultisigAddresses from './data/manager-multisig.json';
 
 module.exports = async () => {
   const { deploy, log } = deployments;

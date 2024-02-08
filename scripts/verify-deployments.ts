@@ -10,7 +10,7 @@ import * as path from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 
-import { chainsSupportedByDapis } from '../src/supported-chains';
+import { chainsSupportedByDapis } from '../deploy/data/chain-support.json';
 
 const METADATA_HASH_LENGTH = 53 * 2;
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
