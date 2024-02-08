@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "../access-control-registry/AccessControlRegistryAdminnedWithManager.sol";
+import "../access/AccessControlRegistryAdminnedWithManager.sol";
 import "./DataFeedServer.sol";
 import "./interfaces/IDapiServer.sol";
 

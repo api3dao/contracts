@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../api3-server-v1/proxies/interfaces/IProxy.sol";
+import "../interfaces/IProxy.sol";
 
 // This contract is provided for testing purposes. It can be extended to mock
 // the interface of specific proxy types such as DataFeedProxy and DapiProxy.

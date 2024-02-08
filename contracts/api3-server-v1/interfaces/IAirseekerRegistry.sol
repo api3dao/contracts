@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IOwnable.sol";
-import "../utils/interfaces/IExtendedSelfMulticall.sol";
+import "../../access/interfaces/IOwnable.sol";
+import "../../utils/interfaces/IExtendedSelfMulticall.sol";
 
 interface IAirseekerRegistry is IOwnable, IExtendedSelfMulticall {
     event ActivatedDataFeedId(bytes32 indexed dataFeedId);

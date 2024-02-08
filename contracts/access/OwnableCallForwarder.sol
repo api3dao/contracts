@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "./vendor/@openzeppelin/contracts@4.8.2/access/Ownable.sol";
-import "./vendor/@openzeppelin/contracts@4.8.2/utils/Address.sol";
+import "../vendor/@openzeppelin/contracts@4.8.2/access/Ownable.sol";
+import "../vendor/@openzeppelin/contracts@4.8.2/utils/Address.sol";
 import "./interfaces/IOwnableCallForwarder.sol";
 
 /// @title Contract that forwards the calls that its owner sends

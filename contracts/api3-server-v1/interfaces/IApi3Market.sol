@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IHashRegistry.sol";
-import "../utils/interfaces/IExtendedSelfMulticall.sol";
+import "../../access/interfaces/IHashRegistry.sol";
+import "../../utils/interfaces/IExtendedSelfMulticall.sol";
 
 interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
     event BoughtSubscription(

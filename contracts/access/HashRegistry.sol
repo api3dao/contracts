@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "./vendor/@openzeppelin/contracts@4.9.5/access/Ownable.sol";
+import "../vendor/@openzeppelin/contracts@4.9.5/access/Ownable.sol";
 import "./interfaces/IHashRegistry.sol";
-import "./vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/ECDSA.sol";
+import "../vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/ECDSA.sol";
 
 /// @title A contract where a value for each hash type can be registered using
 /// the signatures of the respective signers that are set by the contract owner
