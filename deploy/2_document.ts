@@ -33,7 +33,7 @@ module.exports = () => {
       }
       deploymentBlockNumbers[contractName] = {
         ...deploymentBlockNumbers[contractName],
-        chainId: deployment.receipt.blockNumber,
+        [chainId]: deployment.receipt.blockNumber,
       };
     }
   }
