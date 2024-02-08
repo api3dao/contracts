@@ -10,23 +10,28 @@ import * as path from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 
-import { chainsSupportedByDapis } from '../data/chain-support.json';
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
 
 const METADATA_HASH_LENGTH = 53 * 2;
+// https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
 
 async function main() {
-  const chainAliases = chainsSupportedByDapis.includes(process.env.NETWORK!)
+  const networks = process.env.NETWORK
     ? [process.env.NETWORK]
-    : chainsSupportedByDapis;
-  const contractNames = ['AccessControlRegistry', 'Api3ServerV1', 'OwnableCallForwarder', 'ProxyFactory'];
+    : new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions]);
 
-  for (const chainAlias of chainAliases) {
-    const provider = new ethers.JsonRpcProvider((config.networks[chainAlias!] as any).url);
+  for (const network of networks) {
+    const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+    const contractNames = [
+      ...(chainsSupportedByDapis.includes(network)
+        ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
+        : []),
+      ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
+    ];
+
     for (const contractName of contractNames) {
-      const deployment = JSON.parse(
-        fs.readFileSync(path.join('deployments', chainAlias!, `${contractName}.json`), 'utf8')
-      );
+      const deployment = JSON.parse(fs.readFileSync(path.join('deployments', network, `${contractName}.json`), 'utf8'));
       const artifact = await deployments.getArtifact(contractName);
       const constructor = artifact.abi.find((method) => method.type === 'constructor');
       const expectedEncodedConstructorArguments = constructor
@@ -54,10 +59,10 @@ async function main() {
           },
         });
         if (!goFetchContractCode.success || !goFetchContractCode.data) {
-          throw new Error(`${chainAlias} ${contractName} (deterministic) contract code could not be fetched`);
+          throw new Error(`${network} ${contractName} (deterministic) contract code could not be fetched`);
         }
         if (goFetchContractCode.data === '0x') {
-          throw new Error(`${chainAlias} ${contractName} (deterministic) contract code does not exist`);
+          throw new Error(`${network} ${contractName} (deterministic) contract code does not exist`);
         }
       } else {
         const goFetchCreationTx = await go(async () => provider.getTransaction(deployment.transactionHash), {
@@ -71,13 +76,13 @@ async function main() {
           },
         });
         if (!goFetchCreationTx.success || !goFetchCreationTx.data) {
-          throw new Error(`${chainAlias} ${contractName} creation tx could not be fetched`);
+          throw new Error(`${network} ${contractName} creation tx could not be fetched`);
         }
         const creationTx: any = goFetchCreationTx.data;
         const creationData = creationTx.data;
 
         if (deployment.address !== ethers.getCreateAddress(creationTx)) {
-          throw new Error(`${chainAlias} ${contractName} creation tx deployment address does not match`);
+          throw new Error(`${network} ${contractName} creation tx deployment address does not match`);
         }
 
         const creationBytecode = creationData.slice(0, artifact.bytecode.length);
@@ -90,14 +95,14 @@ async function main() {
         const expectedMetadataHash = `0x${expectedCreationBytecode.slice(-METADATA_HASH_LENGTH)}`;
 
         if (creationBytecodeWithoutMetadataHash !== expectedBytecodeWithoutMetadataHash) {
-          throw new Error(`${chainAlias} ${contractName} deployment bytecode does not match`);
+          throw new Error(`${network} ${contractName} deployment bytecode does not match`);
         }
         if (creationMetadataHash !== expectedMetadataHash) {
           // eslint-disable-next-line no-console
-          console.log(`${chainAlias} ${contractName} deployment metadata hash does not match`);
+          console.log(`${network} ${contractName} deployment metadata hash does not match`);
         }
         if (creationEncodedConstructorArguments !== expectedEncodedConstructorArguments) {
-          throw new Error(`${chainAlias} ${contractName} deployment constructor arguments do not match`);
+          throw new Error(`${network} ${contractName} deployment constructor arguments do not match`);
         }
       }
     }
