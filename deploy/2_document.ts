@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import type { AddressLike } from 'ethers';
 import { config } from 'hardhat';
 
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from './data/chain-support.json';
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
 
 module.exports = () => {
   const references: Record<string, Record<string, AddressLike>> = {};

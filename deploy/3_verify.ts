@@ -1,8 +1,7 @@
 import { deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
 
+import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
 import type { ProxyFactory } from '../src/index';
-
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from './data/chain-support.json';
 
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
