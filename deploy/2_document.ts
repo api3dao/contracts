@@ -4,13 +4,17 @@ import * as path from 'node:path';
 import type { AddressLike } from 'ethers';
 import { config } from 'hardhat';
 
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import {
+  chainsSupportedByDapis,
+  chainsSupportedByMarket,
+  chainsSupportedByOevAuctions,
+} from '../data/chain-support.json';
 
 module.exports = () => {
   const references: Record<string, Record<string, AddressLike>> = {};
   const deploymentBlockNumbers: Record<string, Record<string, number>> = {};
 
-  const networks = new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions]);
+  const networks = new Set([...chainsSupportedByDapis, ...chainsSupportedByMarket, ...chainsSupportedByOevAuctions]);
 
   for (const network of networks) {
     const chainId = config.networks[network]!.chainId!;
@@ -18,6 +22,7 @@ module.exports = () => {
       ...(chainsSupportedByDapis.includes(network)
         ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
         : []),
+      ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {

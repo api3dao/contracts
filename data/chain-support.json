@@ -35,5 +35,6 @@
     "rsk",
     "rsk-testnet"
   ],
+  "chainsSupportedByMarket": ["ethereum-sepolia-testnet", "polygon-testnet"],
   "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }

@@ -1,7 +1,11 @@
-import { deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
+import { config, deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
 
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
-import type { ProxyFactory } from '../src/index';
+import {
+  chainsSupportedByDapis,
+  chainsSupportedByMarket,
+  chainsSupportedByOevAuctions,
+} from '../data/chain-support.json';
+import { computeApi3MarketAirseekerRegistryAddress, type ProxyFactory } from '../src/index';
 
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
@@ -67,6 +71,21 @@ module.exports = async () => {
       address: expectedDapiProxyWithOevAddress,
       constructorArguments: [Api3ServerV1.address, ethers.keccak256(ethUsdDapiName), testOevBeneficiaryAddress],
     });
+
+    if (chainsSupportedByMarket.includes(network.name)) {
+      const Api3Market = await deployments.get('Api3Market');
+      await run('verify:verify', {
+        address: Api3Market.address,
+        constructorArguments: [OwnableCallForwarder.address, ProxyFactory.address],
+      });
+      const airseekerRegistryAddress = computeApi3MarketAirseekerRegistryAddress(
+        config.networks[network.name]!.chainId!
+      );
+      await run('verify:verify', {
+        address: airseekerRegistryAddress,
+        constructorArguments: [Api3Market.address, Api3ServerV1.address],
+      });
+    }
 
     if (chainsSupportedByOevAuctions.includes(network.name)) {
       const OevAuctionHouse = await deployments.get('OevAuctionHouse');

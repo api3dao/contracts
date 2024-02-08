@@ -11,6 +11,9 @@
   "ProxyFactory": {
     "chainId": 4570404
   },
+  "Api3Market": {
+    "chainId": 45694263
+  },
   "OevAuctionHouse": {
     "chainId": 987
   }

@@ -1,6 +1,10 @@
 import { deployments, ethers, network } from 'hardhat';
 
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import {
+  chainsSupportedByDapis,
+  chainsSupportedByMarket,
+  chainsSupportedByOevAuctions,
+} from '../data/chain-support.json';
 import * as managerMultisigAddresses from '../data/manager-multisig.json';
 import type { OwnableCallForwarder, ProxyFactory } from '../src/index';
 
@@ -99,6 +103,21 @@ module.exports = async () => {
     if ((await ethers.provider.getCode(expectedDapiProxyWithOevAddress)) === '0x') {
       await proxyFactory.deployDapiProxyWithOev(ethUsdDapiName, exampleOevBeneficiaryAddress, '0x');
       log(`Deployed example DapiProxyWithOev at ${expectedDapiProxyWithOevAddress}`);
+    }
+
+    // TODO: Set the deterministic deployment salt to zero once the contract is finalized
+    if (chainsSupportedByMarket.includes(network.name)) {
+      await deployments.get('Api3Market').catch(async () => {
+        log(`Deploying Api3Market`);
+        return deploy('Api3Market', {
+          from: deployer!.address,
+          args: [await ownableCallForwarder.getAddress(), proxyFactoryAddress],
+          log: true,
+          deterministicDeployment: process.env.DETERMINISTIC
+            ? '0x0000000000000000000000000000000000000000000000000000000000000001'
+            : '',
+        });
+      });
     }
 
     if (chainsSupportedByOevAuctions.includes(network.name)) {
