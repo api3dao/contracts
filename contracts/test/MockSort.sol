@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "../Median.sol";
+import "../api3-server-v1/aggregation/Median.sol";
 
 contract MockSort is Sort {
     function exposedSort(

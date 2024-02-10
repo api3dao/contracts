@@ -25,6 +25,7 @@
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
     "test": "hardhat test --parallel",
     "test:coverage": "hardhat coverage",
+    "test:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:gas": "REPORT_GAS=TRUE hardhat test",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
     "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts",

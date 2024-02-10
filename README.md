@@ -14,6 +14,7 @@ Test the contracts, get coverage and gas reports
 
 ```sh
 pnpm test
+pnpm test:extended
 # Outputs to `./coverage`
 pnpm test:coverage
 # Outputs to `gas_report`

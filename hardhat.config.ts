@@ -12,6 +12,9 @@ const config: HardhatUserConfig = {
     noColors: true,
   },
   networks: hardhatConfig.networks(),
+  paths: {
+    tests: process.env.EXTENDED_TEST ? './test-extended' : './test',
+  },
   solidity: {
     version: '0.8.17',
     settings: {
