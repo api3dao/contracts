@@ -32,7 +32,7 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^4.6.0",
+    "@api3/chains": "^4.7.0",
     "@api3/commons": "^0.6.0",
     "@api3/promise-utils": "^0.4.0",
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
