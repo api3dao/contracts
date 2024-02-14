@@ -8,6 +8,7 @@
     "base-goerli-testnet",
     "bsc",
     "bsc-testnet",
+    "blast-sepolia-testnet",
     "cronos-testnet",
     "ethereum",
     "ethereum-goerli-testnet",
@@ -35,6 +36,6 @@
     "rsk",
     "rsk-testnet"
   ],
-  "chainsSupportedByMarket": ["ethereum-sepolia-testnet", "polygon-testnet"],
+  "chainsSupportedByMarket": ["blast-sepolia-testnet", "ethereum-sepolia-testnet", "polygon-testnet"],
   "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }
