@@ -1,7 +1,8 @@
+import * as crypto from 'node:crypto';
+
 import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import ethCrypto = require('eth-crypto');
 import type { AddressLike, BytesLike } from 'ethers';
 import { ethers } from 'hardhat';
 
@@ -65,7 +66,7 @@ describe('OevAuctionHouse', function () {
   // A salt field is added to support bids that would have an identical ID otherwise. The searcher should
   // use a salt that was never used before, and a random bytes32 would work fine here.
   // This function also includes a toy example for how bid details can be encrypted.
-  async function encodeBidDetails(
+  function encodeBidDetails(
     proxyWithOevAddress: AddressLike,
     conditionType: BidConditionType,
     conditionValue: bigint,
@@ -76,21 +77,20 @@ describe('OevAuctionHouse', function () {
       [proxyWithOevAddress, conditionType, conditionValue, updateSenderAddress, ethers.hexlify(ethers.randomBytes(32))]
     );
     // The auctioneer public key is provided in the searcher-facing documentation
-    const auctioneerPublicKey =
-      '046b3b7d231a75ff99f45ea3aa2b3b765c3f97857d1ecd904ae6cf165e75aa2086737de060e5ad916a6dfaa6506666bd44fae9fccdb67e6fdaccf8dfb48f95fbce';
+    const { publicKey: auctioneerPublicKey, privateKey: auctioneerPrivateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 4096,
+    });
     // The searcher does the following to encrypt the bid details with the auctioneer public key
-    const encodedBidDetails = ethCrypto.hex.compress(bidDetails.slice(2), true);
-    const encryptedBidDetails = ethCrypto.cipher.stringify(
-      await ethCrypto.encryptWithPublicKey(auctioneerPublicKey, encodedBidDetails)
-    );
+    const encryptedBidDetails = crypto
+      .publicEncrypt(auctioneerPublicKey, Buffer.from(bidDetails.slice(2), 'hex').toString('base64'))
+      .toString('hex');
     // Let us also demonstrate how the message is decrypted even though it is not needed for the purposes of this function.
     // Only the auctioneer bot knows its private key.
-    const auctioneerPrivateKey = '0xf907099c3022166254c3d48ad51d8297a920670e8785a83a713e998137d1d585';
-    const decryptedBidDetails = ethCrypto.hex.decompress(
-      await ethCrypto.decryptWithPrivateKey(auctioneerPrivateKey, ethCrypto.cipher.parse(encryptedBidDetails)),
-      true
-    );
-    if (decryptedBidDetails !== bidDetails) {
+    const decryptedBidDetails = Buffer.from(
+      crypto.privateDecrypt(auctioneerPrivateKey, Buffer.from(encryptedBidDetails, 'hex')).toString(),
+      'base64'
+    ).toString('hex');
+    if (`0x${decryptedBidDetails}` !== bidDetails) {
       throw new Error('Bid detail encryption example failed');
     }
     return `0x${encryptedBidDetails}`;
@@ -204,7 +204,7 @@ describe('OevAuctionHouse', function () {
     const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
     const bidAmount = ethers.parseEther('5');
     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-    const bidDetails = await encodeBidDetails(
+    const bidDetails = encodeBidDetails(
       proxyWithOevAddress,
       BidConditionType.GTE,
       ethers.parseEther('2000'),
@@ -251,7 +251,7 @@ describe('OevAuctionHouse', function () {
     const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
     const bidAmount = ethers.parseEther('5');
     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-    const bidDetails = await encodeBidDetails(
+    const bidDetails = encodeBidDetails(
       proxyWithOevAddress,
       BidConditionType.GTE,
       ethers.parseEther('2000'),
@@ -1275,7 +1275,7 @@ describe('OevAuctionHouse', function () {
                           );
                           const bidAmount = ethers.parseEther('5');
                           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                          const bidDetails = await encodeBidDetails(
+                          const bidDetails = encodeBidDetails(
                             proxyWithOevAddress,
                             BidConditionType.GTE,
                             ethers.parseEther('2000'),
@@ -1335,7 +1335,7 @@ describe('OevAuctionHouse', function () {
                           );
                           const bidAmount = ethers.parseEther('5');
                           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                          const bidDetails = await encodeBidDetails(
+                          const bidDetails = encodeBidDetails(
                             proxyWithOevAddress,
                             BidConditionType.GTE,
                             ethers.parseEther('2000'),
@@ -1375,7 +1375,7 @@ describe('OevAuctionHouse', function () {
                         );
                         const bidAmount = ethers.parseEther('5');
                         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                        const bidDetails = await encodeBidDetails(
+                        const bidDetails = encodeBidDetails(
                           proxyWithOevAddress,
                           BidConditionType.GTE,
                           ethers.parseEther('2000'),
@@ -1416,7 +1416,7 @@ describe('OevAuctionHouse', function () {
                       );
                       const bidAmount = ethers.parseEther('5');
                       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                      const bidDetails = await encodeBidDetails(
+                      const bidDetails = encodeBidDetails(
                         proxyWithOevAddress,
                         BidConditionType.GTE,
                         ethers.parseEther('2000'),
@@ -1458,7 +1458,7 @@ describe('OevAuctionHouse', function () {
                     );
                     const bidAmount = ethers.parseEther('5');
                     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                    const bidDetails = await encodeBidDetails(
+                    const bidDetails = encodeBidDetails(
                       proxyWithOevAddress,
                       BidConditionType.GTE,
                       ethers.parseEther('2000'),
@@ -1511,7 +1511,7 @@ describe('OevAuctionHouse', function () {
                   );
                   const bidAmount = ethers.parseEther('5');
                   const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                  const bidDetails = await encodeBidDetails(
+                  const bidDetails = encodeBidDetails(
                     proxyWithOevAddress,
                     BidConditionType.GTE,
                     ethers.parseEther('2000'),
@@ -1550,7 +1550,7 @@ describe('OevAuctionHouse', function () {
                 const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
                 const bidAmount = ethers.parseEther('5');
                 const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-                const bidDetails = await encodeBidDetails(
+                const bidDetails = encodeBidDetails(
                   proxyWithOevAddress,
                   BidConditionType.GTE,
                   ethers.parseEther('2000'),
@@ -1653,7 +1653,7 @@ describe('OevAuctionHouse', function () {
           const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
           const bidAmount = BigInt(0);
           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-          const bidDetails = await encodeBidDetails(
+          const bidDetails = encodeBidDetails(
             proxyWithOevAddress,
             BidConditionType.GTE,
             ethers.parseEther('2000'),
@@ -1689,7 +1689,7 @@ describe('OevAuctionHouse', function () {
         const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
         const bidAmount = ethers.parseEther('5');
         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-        const bidDetails = await encodeBidDetails(
+        const bidDetails = encodeBidDetails(
           proxyWithOevAddress,
           BidConditionType.GTE,
           ethers.parseEther('2000'),
@@ -1725,7 +1725,7 @@ describe('OevAuctionHouse', function () {
       const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
       const bidAmount = ethers.parseEther('5');
       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-      const bidDetails = await encodeBidDetails(
+      const bidDetails = encodeBidDetails(
         proxyWithOevAddress,
         BidConditionType.GTE,
         ethers.parseEther('2000'),
@@ -1778,7 +1778,7 @@ describe('OevAuctionHouse', function () {
               const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
               const bidAmount = ethers.parseEther('5');
               const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-              const bidDetails = await encodeBidDetails(
+              const bidDetails = encodeBidDetails(
                 proxyWithOevAddress,
                 BidConditionType.GTE,
                 ethers.parseEther('2000'),
@@ -1826,7 +1826,7 @@ describe('OevAuctionHouse', function () {
               const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
               const bidAmount = ethers.parseEther('5');
               const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-              const bidDetails = await encodeBidDetails(
+              const bidDetails = encodeBidDetails(
                 proxyWithOevAddress,
                 BidConditionType.GTE,
                 ethers.parseEther('2000'),
@@ -1871,7 +1871,7 @@ describe('OevAuctionHouse', function () {
             const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
             const bidAmount = ethers.parseEther('5');
             const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-            const bidDetails = await encodeBidDetails(
+            const bidDetails = encodeBidDetails(
               proxyWithOevAddress,
               BidConditionType.GTE,
               ethers.parseEther('2000'),
@@ -1913,7 +1913,7 @@ describe('OevAuctionHouse', function () {
           const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
           const bidAmount = ethers.parseEther('5');
           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-          const bidDetails = await encodeBidDetails(
+          const bidDetails = encodeBidDetails(
             proxyWithOevAddress,
             BidConditionType.GTE,
             ethers.parseEther('2000'),
@@ -1953,7 +1953,7 @@ describe('OevAuctionHouse', function () {
         const proxyWithOevAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
         const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-        const bidDetails = await encodeBidDetails(
+        const bidDetails = encodeBidDetails(
           proxyWithOevAddress,
           BidConditionType.GTE,
           ethers.parseEther('2000'),
@@ -1982,7 +1982,7 @@ describe('OevAuctionHouse', function () {
       const bidTopic = ethers.solidityPackedKeccak256(['uint256', 'address'], [chainId, proxyWithOevAddress]);
       const bidAmount = ethers.parseEther('5');
       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-      const bidDetails = await encodeBidDetails(
+      const bidDetails = encodeBidDetails(
         proxyWithOevAddress,
         BidConditionType.GTE,
         ethers.parseEther('2000'),
