@@ -60,11 +60,15 @@ Validate the deployment config
 pnpm validate-deployment-config
 ```
 
-Verify the deployments
+Verify the deployments and validate their current state
 
 ```sh
 # on all chains
 pnpm verify-deployments
 # or a single chain
 NETWORK=ethereum pnpm verify-deployments
+# on all chains
+pnpm validate-deployments
+# or a single chain
+NETWORK=ethereum pnpm validate-deployments
 ```
