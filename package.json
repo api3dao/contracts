@@ -11,7 +11,8 @@
   "files": [
     "contracts",
     "!contracts/test",
-    "dist"
+    "dist",
+    "proxy-interfaces"
   ],
   "scripts": {
     "build": "pnpm build:contracts && tsc -p tsconfig.build.json",
@@ -19,7 +20,7 @@
     "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
     "deploy:undeterministic": "hardhat deploy --network $NETWORK",
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
-    "lint:solhint": "solhint ./contracts/**/*.sol",
+    "lint:solhint": "solhint ./contracts/**/*.sol && solhint ./proxy-interfaces/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
