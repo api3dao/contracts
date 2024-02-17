@@ -27,6 +27,7 @@
     "test:coverage": "hardhat coverage",
     "test:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:gas": "REPORT_GAS=TRUE hardhat test",
+    "validate-deployment-config": "hardhat run scripts/validate-deployment-config.ts",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
     "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts",
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"

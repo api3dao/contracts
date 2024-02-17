@@ -54,6 +54,12 @@ MerkleProof.sol is identical!
 ECDSA.sol is identical!
 ```
 
+Validate the deployment config
+
+```sh
+pnpm validate-deployment-config
+```
+
 Verify the deployments
 
 ```sh
