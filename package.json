@@ -8,6 +8,7 @@
   },
   "private": false,
   "main": "dist/src/index",
+  "types": "dist/src/index",
   "files": [
     "access",
     "api3-server-v1",
