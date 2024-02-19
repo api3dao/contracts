@@ -9,10 +9,11 @@
   "private": false,
   "main": "dist/src/index",
   "files": [
-    "contracts",
-    "!contracts/test",
-    "dist",
-    "proxy-interfaces"
+    "access",
+    "api3-server-v1",
+    "utils",
+    "vendor",
+    "dist"
   ],
   "scripts": {
     "build": "pnpm build:contracts && tsc -p tsconfig.build.json",
@@ -20,10 +21,12 @@
     "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
     "deploy:undeterministic": "hardhat deploy --network $NETWORK",
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
-    "lint:solhint": "solhint ./contracts/**/*.sol && solhint ./proxy-interfaces/**/*.sol",
+    "lint:solhint": "solhint ./contracts/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
+    "prepack": "./prepack.sh",
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
+    "postpack": "./postpack.sh",
     "test": "hardhat test --parallel",
     "test:coverage": "hardhat coverage",
     "test:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
