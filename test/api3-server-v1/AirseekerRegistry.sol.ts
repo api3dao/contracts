@@ -322,7 +322,7 @@ describe('AirseekerRegistry', function () {
     context('Sender is the owner', function () {
       context('Data feed ID is not zero', function () {
         context('Data feed ID is activated', function () {
-          it('activates the data feed ID', async function () {
+          it('deactivates the data feed ID', async function () {
             const { roles, dataFeedId, airseekerRegistry } = await helpers.loadFixture(deploy);
             await airseekerRegistry.connect(roles.owner).setDataFeedIdToBeActivated(dataFeedId);
             await expect(airseekerRegistry.connect(roles.owner).setDataFeedIdToBeDeactivated(dataFeedId))
@@ -367,7 +367,7 @@ describe('AirseekerRegistry', function () {
     context('Sender is the owner', function () {
       context('dAPI name is not zero', function () {
         context('dAPI name is activated', function () {
-          it('activates the dAPI name', async function () {
+          it('deactivates the dAPI name', async function () {
             const { roles, dapiName, airseekerRegistry } = await helpers.loadFixture(deploy);
             await airseekerRegistry.connect(roles.owner).setDapiNameToBeActivated(dapiName);
             await expect(airseekerRegistry.connect(roles.owner).setDapiNameToBeDeactivated(dapiName))
