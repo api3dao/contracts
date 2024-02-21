@@ -4,14 +4,13 @@ import * as path from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
-import api3MarketHashSigners from '../data/api3market-hash-signers.json';
 import {
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import managerMultisigAddresses from '../data/manager-multisig.json';
-import type { AccessControlRegistry, OwnableCallForwarder, Api3Market } from '../src/index';
+import type { AccessControlRegistry, OwnableCallForwarder } from '../src/index';
 
 async function main() {
   const networks = process.env.NETWORK
@@ -70,7 +69,7 @@ async function main() {
           accessControlRegistryAbi,
           provider
         ) as unknown as AccessControlRegistry;
-        const { address: api3MarketAddress, abi: api3MarketAbi } = JSON.parse(
+        const { address: api3MarketAddress } = JSON.parse(
           fs.readFileSync(path.join('deployments', network, `Api3Market.json`), 'utf8')
         );
         const goFetchApi3MarketDapiNameSetterRoleStatus = await go(
@@ -91,29 +90,6 @@ async function main() {
         }
         if (!goFetchApi3MarketDapiNameSetterRoleStatus.data) {
           throw new Error(`${network} Api3Market does not have the dAPI name setter role`);
-        }
-        // Validate Api3Market hash signers
-        const api3Market = new ethers.Contract(api3MarketAddress, api3MarketAbi, provider) as unknown as Api3Market;
-        for (const [hashTypeName, signers] of Object.entries(api3MarketHashSigners)) {
-          const goFetchHashTypeSignersHash = await go(
-            async () => api3Market.hashTypeToSignersHash(ethers.solidityPackedKeccak256(['string'], [hashTypeName])),
-            {
-              retries: 5,
-              attemptTimeoutMs: 10_000,
-              totalTimeoutMs: 50_000,
-              delay: {
-                type: 'random',
-                minDelayMs: 2000,
-                maxDelayMs: 5000,
-              },
-            }
-          );
-          if (!goFetchHashTypeSignersHash.success || !goFetchHashTypeSignersHash.data) {
-            throw new Error(`${network} ${hashTypeName} signers hash could not be fetched`);
-          }
-          if (goFetchHashTypeSignersHash.data !== ethers.solidityPackedKeccak256(['address[]'], [signers])) {
-            throw new Error(`${network} ${hashTypeName} signers hash does not match ${signers.toString()}`);
-          }
         }
       }
     }
