@@ -3,16 +3,14 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies", "resolutions"],
       "matchUpdateTypes": ["patch", "minor"],
-      "schedule": ["before 1am on the first day of the month"],
-      "groupName": "devDependencies (non-major)"
+      "schedule": ["before 10am on the first day of the month"],
+      "groupName": "other minor updates"
     },
     {
-      "matchDepTypes": ["actions"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "schedule": ["before 1am on the first day of the month"],
-      "groupName": "actions (non-major)"
+      "matchUpdateTypes": ["major"],
+      "schedule": ["before 10am on the first day of the month"],
+      "groupName": "other major updates"
     },
     {
       "matchDepTypes": ["dependencies"],
