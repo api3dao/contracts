@@ -2769,146 +2769,162 @@ describe('OevAuctionHouse', function () {
   });
 
   describe('getCurrentCollateralAndProtocolFeeAmounts', function () {
-    context('Collateral rate proxy is valid', function () {
-      context('Collateral rate is positive', function () {
-        context('Collateral rate is not stale', function () {
-          context('Native currency rate proxy is valid', function () {
-            context('Native currency rate is positive', function () {
-              context('Native currency rate is not stale', function () {
-                context(
-                  'Collateral and protocol fee amounts are small enough to be typecasted to uint104',
-                  function () {
-                    it('gets current collateral and protocol fee amounts', async function () {
-                      const { oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
-                      const chainId = '137';
-                      const bidAmount = ethers.parseEther('5');
-                      const { collateralAmount, protocolFeeAmount } = calculateCollateralAndProtocolFeeAmounts(
-                        chainId,
-                        bidAmount
-                      );
-                      const currentCollateralAndProtocolFeeAmounts =
-                        await oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount);
-                      expect(currentCollateralAndProtocolFeeAmounts.collateralAmount).to.equal(collateralAmount);
-                      expect(currentCollateralAndProtocolFeeAmounts.protocolFeeAmount).to.equal(protocolFeeAmount);
-                    });
-                  }
-                );
-                context(
-                  'Collateral and protocol fee amounts are not small enough to be typecasted to uint104',
-                  function () {
-                    it('revert', async function () {
-                      const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
-                      const chainId = '137';
-                      const { collateralAmount } = calculateCollateralAndProtocolFeeAmounts(
-                        chainId,
-                        ethers.parseEther('1')
-                      );
-                      const bidAmountCausingCollateralAmountOverflow =
-                        (BigInt(2) ** BigInt(104) * ethers.parseEther('1')) / collateralAmount;
-                      await expect(
-                        oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(
+    context('Collateral requirement and protocol fee are not zero', function () {
+      context('Collateral rate proxy is valid', function () {
+        context('Collateral rate is positive', function () {
+          context('Collateral rate is not stale', function () {
+            context('Native currency rate proxy is valid', function () {
+              context('Native currency rate is positive', function () {
+                context('Native currency rate is not stale', function () {
+                  context(
+                    'Collateral and protocol fee amounts are small enough to be typecasted to uint104',
+                    function () {
+                      it('gets current collateral and protocol fee amounts', async function () {
+                        const { oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
+                        const chainId = '137';
+                        const bidAmount = ethers.parseEther('5');
+                        const { collateralAmount, protocolFeeAmount } = calculateCollateralAndProtocolFeeAmounts(
                           chainId,
-                          bidAmountCausingCollateralAmountOverflow
-                        )
-                      ).to.be.revertedWith('Value does not fit in uint104');
-                      await oevAuctionHouse
-                        .connect(roles.manager)
-                        .setProtocolFeeInBasisPoints(COLLATERAL_AMOUNT_IN_BASIS_POINTS + 2.5 * 100);
-                      const { protocolFeeAmount } = calculateCollateralAndProtocolFeeAmounts(
-                        chainId,
-                        ethers.parseEther('1')
-                      );
-                      const bidAmountCausingProtocolFeeAmountOverflow =
-                        (BigInt(2) ** BigInt(104) * ethers.parseEther('1')) / protocolFeeAmount;
-                      await expect(
-                        oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(
+                          bidAmount
+                        );
+                        const currentCollateralAndProtocolFeeAmounts =
+                          await oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount);
+                        expect(currentCollateralAndProtocolFeeAmounts.collateralAmount).to.equal(collateralAmount);
+                        expect(currentCollateralAndProtocolFeeAmounts.protocolFeeAmount).to.equal(protocolFeeAmount);
+                      });
+                    }
+                  );
+                  context(
+                    'Collateral and protocol fee amounts are not small enough to be typecasted to uint104',
+                    function () {
+                      it('revert', async function () {
+                        const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
+                        const chainId = '137';
+                        const { collateralAmount } = calculateCollateralAndProtocolFeeAmounts(
                           chainId,
-                          bidAmountCausingProtocolFeeAmountOverflow
-                        )
-                      ).to.be.revertedWith('Value does not fit in uint104');
-                    });
-                  }
-                );
+                          ethers.parseEther('1')
+                        );
+                        const bidAmountCausingCollateralAmountOverflow =
+                          (BigInt(2) ** BigInt(104) * ethers.parseEther('1')) / collateralAmount;
+                        await expect(
+                          oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(
+                            chainId,
+                            bidAmountCausingCollateralAmountOverflow
+                          )
+                        ).to.be.revertedWith('Value does not fit in uint104');
+                        await oevAuctionHouse
+                          .connect(roles.manager)
+                          .setProtocolFeeInBasisPoints(COLLATERAL_AMOUNT_IN_BASIS_POINTS + 2.5 * 100);
+                        const { protocolFeeAmount } = calculateCollateralAndProtocolFeeAmounts(
+                          chainId,
+                          ethers.parseEther('1')
+                        );
+                        const bidAmountCausingProtocolFeeAmountOverflow =
+                          (BigInt(2) ** BigInt(104) * ethers.parseEther('1')) / protocolFeeAmount;
+                        await expect(
+                          oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(
+                            chainId,
+                            bidAmountCausingProtocolFeeAmountOverflow
+                          )
+                        ).to.be.revertedWith('Value does not fit in uint104');
+                      });
+                    }
+                  );
+                });
+                context('Native currency rate is stale', function () {
+                  it('reverts', async function () {
+                    const { oevAuctionHouse, chainIdToNativeCurrencyRateProxy } =
+                      await helpers.loadFixture(deployAndSetUp);
+                    const chainId = '137';
+                    const bidAmount = ethers.parseEther('5');
+                    const nextTimestamp = (await helpers.time.latest()) + 1;
+                    await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                    await chainIdToNativeCurrencyRateProxy[chainId]!.mock(
+                      CHAIN_ID_TO_PRICE[chainId]!,
+                      nextTimestamp - MAXIMUM_RATE_AGE
+                    );
+                    await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
+                      .to.be.revertedWithCustomError(oevAuctionHouse, 'NativeCurrencyRateIsStale')
+                      .withArgs();
+                  });
+                });
               });
-              context('Native currency rate is stale', function () {
+              context('Native currency rate is not positive', function () {
                 it('reverts', async function () {
                   const { oevAuctionHouse, chainIdToNativeCurrencyRateProxy } =
                     await helpers.loadFixture(deployAndSetUp);
                   const chainId = '137';
                   const bidAmount = ethers.parseEther('5');
-                  const nextTimestamp = (await helpers.time.latest()) + 1;
-                  await helpers.time.setNextBlockTimestamp(nextTimestamp);
-                  await chainIdToNativeCurrencyRateProxy[chainId]!.mock(
-                    CHAIN_ID_TO_PRICE[chainId]!,
-                    nextTimestamp - MAXIMUM_RATE_AGE
-                  );
+                  await chainIdToNativeCurrencyRateProxy[chainId]!.mock(0, Math.floor(Date.now() / 1000));
                   await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
-                    .to.be.revertedWithCustomError(oevAuctionHouse, 'NativeCurrencyRateIsStale')
+                    .to.be.revertedWithCustomError(oevAuctionHouse, 'NativeCurrencyRateIsNotPositive')
                     .withArgs();
                 });
               });
             });
-            context('Native currency rate is not positive', function () {
+            context('Native currency rate proxy is not valid', function () {
               it('reverts', async function () {
-                const { oevAuctionHouse, chainIdToNativeCurrencyRateProxy } = await helpers.loadFixture(deployAndSetUp);
+                const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
                 const chainId = '137';
                 const bidAmount = ethers.parseEther('5');
-                await chainIdToNativeCurrencyRateProxy[chainId]!.mock(0, Math.floor(Date.now() / 1000));
-                await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
-                  .to.be.revertedWithCustomError(oevAuctionHouse, 'NativeCurrencyRateIsNotPositive')
-                  .withArgs();
+                await oevAuctionHouse
+                  .connect(roles.manager)
+                  .setChainNativeCurrencyRateProxy(chainId, oevAuctionHouse.getAddress());
+                await expect(
+                  oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
+                ).to.be.revertedWithoutReason();
               });
             });
           });
-          context('Native currency rate proxy is not valid', function () {
+          context('Collateral rate is stale', function () {
             it('reverts', async function () {
-              const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
+              const { oevAuctionHouse, collateralRateProxy } = await helpers.loadFixture(deployAndSetUp);
               const chainId = '137';
               const bidAmount = ethers.parseEther('5');
-              await oevAuctionHouse
-                .connect(roles.manager)
-                .setChainNativeCurrencyRateProxy(chainId, oevAuctionHouse.getAddress());
-              await expect(
-                oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
-              ).to.be.revertedWithoutReason();
+              const nextTimestamp = (await helpers.time.latest()) + 1;
+              await helpers.time.setNextBlockTimestamp(nextTimestamp);
+              await collateralRateProxy.mock(COLLATERAL_RATE, nextTimestamp - MAXIMUM_RATE_AGE);
+              await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
+                .to.be.revertedWithCustomError(oevAuctionHouse, 'CollateralRateIsStale')
+                .withArgs();
             });
           });
         });
-        context('Collateral rate is stale', function () {
+        context('Collateral rate is not positive', function () {
           it('reverts', async function () {
             const { oevAuctionHouse, collateralRateProxy } = await helpers.loadFixture(deployAndSetUp);
             const chainId = '137';
             const bidAmount = ethers.parseEther('5');
-            const nextTimestamp = (await helpers.time.latest()) + 1;
-            await helpers.time.setNextBlockTimestamp(nextTimestamp);
-            await collateralRateProxy.mock(COLLATERAL_RATE, nextTimestamp - MAXIMUM_RATE_AGE);
+            await collateralRateProxy.mock(0, Math.floor(Date.now() / 1000));
             await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
-              .to.be.revertedWithCustomError(oevAuctionHouse, 'CollateralRateIsStale')
+              .to.be.revertedWithCustomError(oevAuctionHouse, 'CollateralRateIsNotPositive')
               .withArgs();
           });
         });
       });
-      context('Collateral rate is not positive', function () {
+      context('Collateral rate proxy is not valid', function () {
         it('reverts', async function () {
-          const { oevAuctionHouse, collateralRateProxy } = await helpers.loadFixture(deployAndSetUp);
+          const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
           const chainId = '137';
           const bidAmount = ethers.parseEther('5');
-          await collateralRateProxy.mock(0, Math.floor(Date.now() / 1000));
-          await expect(oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount))
-            .to.be.revertedWithCustomError(oevAuctionHouse, 'CollateralRateIsNotPositive')
-            .withArgs();
+          await oevAuctionHouse.connect(roles.manager).setCollateralRateProxy(oevAuctionHouse.getAddress());
+          await expect(
+            oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
+          ).to.be.revertedWithoutReason();
         });
       });
     });
-    context('Collateral rate proxy is not valid', function () {
-      it('reverts', async function () {
-        const { roles, oevAuctionHouse } = await helpers.loadFixture(deployAndSetUp);
+    context('Collateral requirement and protocol fee are zero', function () {
+      it('returns zero', async function () {
+        const { oevAuctionHouse } = await helpers.loadFixture(deploy);
         const chainId = '137';
         const bidAmount = ethers.parseEther('5');
-        await oevAuctionHouse.connect(roles.manager).setCollateralRateProxy(oevAuctionHouse.getAddress());
-        await expect(
-          oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
-        ).to.be.revertedWithoutReason();
+        const currentCollateralAndProtocolFeeAmounts = await oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(
+          chainId,
+          bidAmount
+        );
+        expect(currentCollateralAndProtocolFeeAmounts.collateralAmount).to.equal(0);
+        expect(currentCollateralAndProtocolFeeAmounts.protocolFeeAmount).to.equal(0);
       });
     });
   });
