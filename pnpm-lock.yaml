@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^4.9.0
-    version: 4.9.0(typescript@5.3.3)
+    specifier: ^4.10.0
+    version: 4.10.0(typescript@5.3.3)
   '@api3/commons':
     specifier: ^0.6.2
     version: 0.6.2(eslint@8.56.0)(typescript@5.3.3)
@@ -111,8 +111,8 @@ packages:
   /@adraffy/ens-normalize@1.10.0:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
 
-  /@api3/chains@4.9.0(typescript@5.3.3):
-    resolution: {integrity: sha512-lbdXmaswmXr73B67w+I0OU9tYFHWD0KTfz75BW99tmF0GsyWTzKzWb2T2/yNV7kSeNPuuEYQ+SsSz7bft/Y7Zg==}
+  /@api3/chains@4.10.0(typescript@5.3.3):
+    resolution: {integrity: sha512-7uxBtfu9/FTWzYsivorjL506AmqxQ6YljcFbpKApZ7JjlAZnuXJc4KPdNRKZ+CVFkg5FbfNEgjVPcj2otNvoHw==}
     dependencies:
       viem: 2.7.6(typescript@5.3.3)(zod@3.22.4)
       zod: 3.22.4
@@ -3440,6 +3440,7 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: true
+    bundledDependencies: false
 
   /evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
