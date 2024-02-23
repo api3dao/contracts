@@ -30,6 +30,7 @@
   "moonbeam": "0xd8eC2c4158a0Cb65Dd42E2d1C1da8EA11975Ba22",
   "moonriver": "0xCC5005Bd08b8882c9A132C0067E7D3f79796C251",
   "oev-network-sepolia-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
+  "oev-network-sepolia-testnet-hackathon": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "optimism-goerli-testnet": "0x55D72F0eb10e85D390B20DA57aa3122312647c0d",
   "optimism": "0x8F3A2508C45a58d4fBAd5Ce564899659626D41B6",
   "polygon": "0x4923968942E8aae4656ae4913874EB7312e0F7c7",

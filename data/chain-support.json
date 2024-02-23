@@ -27,6 +27,7 @@
     "moonbeam-testnet",
     "moonriver",
     "oev-network-sepolia-testnet",
+    "oev-network-sepolia-testnet-hackathon",
     "optimism",
     "optimism-goerli-testnet",
     "polygon",
@@ -37,5 +38,5 @@
     "rsk-testnet"
   ],
   "chainsSupportedByMarket": ["blast-sepolia-testnet", "ethereum-sepolia-testnet", "polygon-testnet"],
-  "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
+  "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet", "oev-network-sepolia-testnet-hackathon"]
 }
