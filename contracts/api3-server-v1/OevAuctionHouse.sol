@@ -803,34 +803,39 @@ contract OevAuctionHouse is
         override
         returns (uint104 collateralAmount, uint104 protocolFeeAmount)
     {
-        (int224 collateralRateValue, uint32 collateralRateTimestamp) = IProxy(
-            collateralRateProxy
-        ).read();
-        if (collateralRateValue <= 0) revert CollateralRateIsNotPositive();
-        if (block.timestamp >= collateralRateTimestamp + MAXIMUM_RATE_AGE)
-            revert CollateralRateIsStale();
-        (
-            int224 nativeCurrencyRateValue,
-            uint32 nativeCurrencyRateTimestamp
-        ) = IProxy(chainIdToNativeCurrencyRateProxy[chainId]).read();
-        if (nativeCurrencyRateValue <= 0)
-            revert NativeCurrencyRateIsNotPositive();
-        if (block.timestamp >= nativeCurrencyRateTimestamp + MAXIMUM_RATE_AGE)
-            revert NativeCurrencyRateIsStale();
-        collateralAmount = safeCastToUint104(
-            (bidAmount *
-                uint256(int256(nativeCurrencyRateValue)) *
-                collateralInBasisPoints) /
-                uint256(int256(collateralRateValue)) /
-                HUNDRED_PERCENT_IN_BASIS_POINTS
-        );
-        protocolFeeAmount = safeCastToUint104(
-            (bidAmount *
-                uint256(int256(nativeCurrencyRateValue)) *
-                protocolFeeInBasisPoints) /
-                uint256(int256(collateralRateValue)) /
-                HUNDRED_PERCENT_IN_BASIS_POINTS
-        );
+        if (collateralInBasisPoints != 0 || protocolFeeInBasisPoints != 0) {
+            (
+                int224 collateralRateValue,
+                uint32 collateralRateTimestamp
+            ) = IProxy(collateralRateProxy).read();
+            if (collateralRateValue <= 0) revert CollateralRateIsNotPositive();
+            if (block.timestamp >= collateralRateTimestamp + MAXIMUM_RATE_AGE)
+                revert CollateralRateIsStale();
+            (
+                int224 nativeCurrencyRateValue,
+                uint32 nativeCurrencyRateTimestamp
+            ) = IProxy(chainIdToNativeCurrencyRateProxy[chainId]).read();
+            if (nativeCurrencyRateValue <= 0)
+                revert NativeCurrencyRateIsNotPositive();
+            if (
+                block.timestamp >=
+                nativeCurrencyRateTimestamp + MAXIMUM_RATE_AGE
+            ) revert NativeCurrencyRateIsStale();
+            collateralAmount = safeCastToUint104(
+                (bidAmount *
+                    uint256(int256(nativeCurrencyRateValue)) *
+                    collateralInBasisPoints) /
+                    uint256(int256(collateralRateValue)) /
+                    HUNDRED_PERCENT_IN_BASIS_POINTS
+            );
+            protocolFeeAmount = safeCastToUint104(
+                (bidAmount *
+                    uint256(int256(nativeCurrencyRateValue)) *
+                    protocolFeeInBasisPoints) /
+                    uint256(int256(collateralRateValue)) /
+                    HUNDRED_PERCENT_IN_BASIS_POINTS
+            );
+        }
     }
 
     /// @notice Sends value to recipient
