@@ -24,7 +24,7 @@ function getDeploymentAddresses(chainId: ethers.BigNumberish) {
 
 function computeDapiProxyAddress(chainId: ethers.BigNumberish, dapiName: string, metadata: ethers.BytesLike) {
   const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
-  const dapiNameHash = ethers.solidityPackedKeccak256(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
+  const dapiNameHash = ethers.solidityPacked(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
@@ -42,7 +42,7 @@ function computeDapiProxyWithOevAddress(
   metadata: ethers.BytesLike
 ) {
   const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
-  const dapiNameHash = ethers.solidityPackedKeccak256(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
+  const dapiNameHash = ethers.solidityPacked(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
@@ -62,7 +62,7 @@ function computeDataFeedProxyAddress(
   metadata: ethers.BytesLike
 ) {
   const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
-  const initcode = ethers.solidityPackedKeccak256(
+  const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
       DataFeedProxy__factory.bytecode,
@@ -79,7 +79,7 @@ function computeDataFeedProxyWithOevAddress(
   metadata: ethers.BytesLike
 ) {
   const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
-  const initcode = ethers.solidityPackedKeccak256(
+  const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
       DataFeedProxyWithOev__factory.bytecode,
