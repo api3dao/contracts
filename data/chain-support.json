@@ -6,6 +6,8 @@
     "avalanche-testnet",
     "base",
     "base-goerli-testnet",
+    "blast",
+    "blast-sepolia-testnet",
     "bsc",
     "bsc-testnet",
     "blast-sepolia-testnet",
