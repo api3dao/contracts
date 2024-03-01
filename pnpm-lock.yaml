@@ -11,11 +11,11 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^4.10.0
-    version: 4.10.0(typescript@5.3.3)
+    specifier: ^4.11.0
+    version: 4.11.0(typescript@5.3.3)
   '@api3/commons':
-    specifier: ^0.6.2
-    version: 0.6.2(eslint@8.57.0)(typescript@5.3.3)
+    specifier: ^0.7.0
+    version: 0.7.0(eslint@8.56.0)(typescript@5.3.3)
   '@api3/promise-utils':
     specifier: ^0.4.0
     version: 0.4.0
@@ -111,8 +111,8 @@ packages:
   /@adraffy/ens-normalize@1.10.0:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
 
-  /@api3/chains@4.10.0(typescript@5.3.3):
-    resolution: {integrity: sha512-7uxBtfu9/FTWzYsivorjL506AmqxQ6YljcFbpKApZ7JjlAZnuXJc4KPdNRKZ+CVFkg5FbfNEgjVPcj2otNvoHw==}
+  /@api3/chains@4.11.0(typescript@5.3.3):
+    resolution: {integrity: sha512-hEtqsn1HGMS/TfsoViIpudNy2G8DaTvbVzH1rTWSGsQRFCKc0PqNYvEAVPvEY4Aec7lM76bdf6c5HsAD4LzuIw==}
     dependencies:
       viem: 2.7.6(typescript@5.3.3)(zod@3.22.4)
       zod: 3.22.4
@@ -122,16 +122,18 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@api3/commons@0.6.2(eslint@8.57.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-IBR9WAcbglFdMyehiv3MWFVK1jKv2jAao6tU2DcUmMztea0H+Nn9xAomHCwAlg7mTNn3qk7ZpWosZNGZjfeSTw==}
+  /@api3/commons@0.7.0(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-+aMO/RZjrwaIdjKxR+qrLlFNZ5jZ6UoR+m2X0x8wagahXFMO33ukuWxbSmhdZG7lPW1zmGjrIBoAFfcDm+oOOw==}
     engines: {node: ^18.14.0 || ^20.10.0, pnpm: ^8.8.0}
     peerDependencies:
       eslint: ^8.50.0
     dependencies:
       '@api3/ois': 2.3.1
-      '@api3/promise-utils': 0.4.0
+      '@api3/promise-utils': 0.4.0s
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.3.3)
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.3.3)
+      axios: 1.6.7
+      dotenv: 16.4.5
       eslint: 8.57.0
       eslint-config-next: 13.5.6(eslint@8.57.0)(typescript@5.3.3)
       eslint-plugin-check-file: 2.6.2(eslint@8.57.0)
@@ -154,6 +156,7 @@ packages:
       zod: 3.22.4
     transitivePeerDependencies:
       - bufferutil
+      - debug
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
       - jest
@@ -2078,6 +2081,16 @@ packages:
       - debug
     dev: true
 
+  /axios@1.6.7:
+    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+    dependencies:
+      follow-redirects: 1.15.5(debug@4.3.4)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /axobject-query@3.2.1:
     resolution: {integrity: sha512-jsyHu61e6N4Vbz/v18DHwWYKK0bSWLqn47eeDSKPB7m8tqMHF9YJ+mhIk2lVteyZrY8tnSj/jHOv4YiTCuCJgg==}
     dependencies:
@@ -2680,6 +2693,11 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
+    dev: true
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
     dev: true
 
   /dotenv@16.4.5:
