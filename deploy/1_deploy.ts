@@ -105,7 +105,7 @@ module.exports = async () => {
         await proxyFactory.deployDapiProxyWithOev(ethUsdDapiName, exampleOevBeneficiaryAddress, '0x');
         log(`Deployed example DapiProxyWithOev at ${expectedDapiProxyWithOevAddress}`);
       }
-      
+
       // TODO: Set the deterministic deployment salt to zero once the contract is finalized
       if (chainsSupportedByMarket.includes(network.name)) {
         await deployments.get('Api3Market').catch(async () => {

@@ -23,7 +23,6 @@ module.exports = () => {
   ]);
 
   for (const network of networks) {
-    console.log(network)
     const chainId = config.networks[network]!.chainId!;
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
