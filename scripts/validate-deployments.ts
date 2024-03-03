@@ -15,10 +15,18 @@ import type { AccessControlRegistry, OwnableCallForwarder } from '../src/index';
 async function main() {
   const networks = process.env.NETWORK
     ? [process.env.NETWORK]
-    : new Set([...chainsSupportedByDapis, ...chainsSupportedByMarket, ...chainsSupportedByOevAuctions]);
+    : new Set([
+        ...Object.keys(managerMultisigAddresses),
+        ...chainsSupportedByDapis,
+        ...chainsSupportedByMarket,
+        ...chainsSupportedByOevAuctions,
+      ]);
 
   for (const network of networks) {
-    if (chainsSupportedByDapis.includes(network)) {
+    // TODO: Remove after the chains are removed
+    if (['base-goerli-testnet', 'scroll-goerli-testnet'].includes(network)) continue;
+
+    if (Object.keys(managerMultisigAddresses).includes(network)) {
       const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
       // Validate that the OwnableCallForwarder owner is the manager multisig
       const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = JSON.parse(
