@@ -9,19 +9,24 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
+import managerMultisigAddresses from '../data/manager-multisig.json';
 
 module.exports = () => {
   const references: Record<string, Record<string, AddressLike>> = {};
   const deploymentBlockNumbers: Record<string, Record<string, number>> = {};
 
-  const networks = new Set([...chainsSupportedByDapis, ...chainsSupportedByMarket, ...chainsSupportedByOevAuctions]);
+  const networks = new Set([
+    ...Object.keys(managerMultisigAddresses),
+    ...chainsSupportedByDapis,
+    ...chainsSupportedByMarket,
+    ...chainsSupportedByOevAuctions,
+  ]);
 
   for (const network of networks) {
     const chainId = config.networks[network]!.chainId!;
     const contractNames = [
-      ...(chainsSupportedByDapis.includes(network)
-        ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
-        : []),
+      ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
+      ...(chainsSupportedByDapis.includes(network) ? ['AccessControlRegistry', 'Api3ServerV1', 'ProxyFactory'] : []),
       ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
