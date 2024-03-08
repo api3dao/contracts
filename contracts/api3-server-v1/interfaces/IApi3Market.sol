@@ -25,11 +25,10 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         bytes32 dapiName,
         bytes32 dataFeedId,
         address payable sponsorWallet,
-        bytes calldata dapiManagementMerkleData,
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price,
-        bytes calldata dapiPricingMerkleData
+        bytes calldata dapiManagementAndDapiPricingMerkleData
     ) external payable returns (bytes32 subscriptionId);
 
     function updateCurrentSubscriptionId(bytes32 dapiName) external;

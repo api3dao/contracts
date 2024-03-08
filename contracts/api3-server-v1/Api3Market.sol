@@ -168,38 +168,31 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// @param dapiName dAPI name
     /// @param dataFeedId Data feed ID
     /// @param sponsorWallet Sponsor wallet address
-    /// @param dapiManagementMerkleData ABI-encoded dAPI management Merkle root
-    /// and proof
     /// @param updateParameters Update parameters
     /// @param duration Subscription duration
     /// @param price Subscription price
-    /// @param dapiPricingMerkleData ABI-encoded dAPI pricing Merkle root and
-    /// proof
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
     /// @return subscriptionId Subscription ID
     function buySubscription(
         bytes32 dapiName,
         bytes32 dataFeedId,
         address payable sponsorWallet,
-        bytes calldata dapiManagementMerkleData,
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price,
-        bytes calldata dapiPricingMerkleData
+        bytes calldata dapiManagementAndDapiPricingMerkleData
     ) external payable override returns (bytes32 subscriptionId) {
         require(dataFeedId != bytes32(0), "Data feed ID zero");
         require(sponsorWallet != address(0), "Sponsor wallet address zero");
-        verifyDapiManagementMerkleProof(
+        verifyDapiManagementAndDapiPricingMerkleProofs(
             dapiName,
             dataFeedId,
             sponsorWallet,
-            dapiManagementMerkleData
-        );
-        verifyDapiPricingMerkleProof(
-            dapiName,
             updateParameters,
             duration,
             price,
-            dapiPricingMerkleData
+            dapiManagementAndDapiPricingMerkleData
         );
         subscriptionId = addSubscriptionToQueue(
             dapiName,
@@ -998,20 +991,16 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         );
     }
 
-    /// @notice Verifies the dAPI pricing Merkle proof
-    /// @param dapiName dAPI name
-    /// @param updateParameters Update parameters
-    /// @param duration Subscription duration
-    /// @param price Subscription price
-    /// @param dapiPricingMerkleData ABI-encoded dAPI pricing Merkle root and
-    /// proof
-    function verifyDapiPricingMerkleProof(
+    function verifyDapiManagementAndDapiPricingMerkleProofs(
         bytes32 dapiName,
+        bytes32 dataFeedId,
+        address sponsorWallet,
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price,
-        bytes calldata dapiPricingMerkleData
+        bytes calldata dapiManagementAndDapiPricingMerkleData
     ) private view {
+        require(dapiName != bytes32(0), "dAPI name zero");
         require(
             updateParameters.length == UPDATE_PARAMETERS_LENGTH,
             "Update parameters length invalid"
@@ -1019,9 +1008,33 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         require(duration != 0, "Duration zero");
         require(price != 0, "Price zero");
         (
+            bytes32 dapiManagementMerkleRoot,
+            bytes32[] memory dapiManagementMerkleProof,
             bytes32 dapiPricingMerkleRoot,
             bytes32[] memory dapiPricingMerkleProof
-        ) = abi.decode(dapiPricingMerkleData, (bytes32, bytes32[]));
+        ) = abi.decode(
+                dapiManagementAndDapiPricingMerkleData,
+                (bytes32, bytes32[], bytes32, bytes32[])
+            );
+        require(
+            hashes[DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE].value ==
+                dapiManagementMerkleRoot,
+            "Invalid root"
+        );
+        require(
+            MerkleProof.verify(
+                dapiManagementMerkleProof,
+                dapiManagementMerkleRoot,
+                keccak256(
+                    bytes.concat(
+                        keccak256(
+                            abi.encode(dapiName, dataFeedId, sponsorWallet)
+                        )
+                    )
+                )
+            ),
+            "Invalid proof"
+        );
         require(
             hashes[DAPI_PRICING_MERKLE_ROOT_HASH_TYPE].value ==
                 dapiPricingMerkleRoot,

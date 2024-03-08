@@ -85,7 +85,7 @@ This section describes what happens under the hood of the API3 Market frontend.
 
 The requirements for a `buySubscription()` call to succeed are as follow:
 
-- The `dapiManagementMerkleData` and `dapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3Market, are valid
+- The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3Market, are valid
 - The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of 5 items
 - The data feed is registered at AirseekerRegistry
 - The data feed has been updated at most a day ago
