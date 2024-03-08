@@ -113,6 +113,9 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     // Length of abi.encode(uint256, int224, uint256)
     uint256 private constant UPDATE_PARAMETERS_LENGTH = 32 + 32 + 32;
 
+    bytes32 private constant API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE =
+        keccak256(abi.encodePacked("Api3Market signature delegation"));
+
     /// @dev Api3Market deploys its own AirseekerRegistry deterministically.
     /// This implies that Api3Market-specific Airseekers should be operated by
     /// pointing at this contract.
@@ -682,7 +685,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         override(HashRegistry, IHashRegistry)
         returns (bytes32)
     {
-        return keccak256(abi.encodePacked("Api3Market signature delegation"));
+        return API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE;
     }
 
     /// @notice Adds the subscription to the queue if applicable
