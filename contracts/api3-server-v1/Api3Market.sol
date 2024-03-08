@@ -35,7 +35,7 @@ import "./proxies/interfaces/IProxyFactory.sol";
 /// the data feed before making the call to buy the subscription, and compute
 /// the amount to be sent that will barely allow the subscription to be
 /// purchased. For most users, building such a transaction themselves would be
-/// too impractical.
+/// impractical.
 contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     enum UpdateParametersComparisonResult {
         EqualToQueued,
@@ -154,17 +154,17 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     }
 
     /// @notice Buys subscription and updates the current subscription ID if
-    /// necessary. The user is recommended to interact with this contract only
-    /// over the API3 Market frontend due to its complexity.
+    /// necessary. The user is recommended to interact with this contract over
+    /// the API3 Market frontend due to its complexity.
     /// @dev The data feed that the dAPI name will be set to after this
     /// function is called must be readied (see `validateDataFeedReadiness()`)
     /// before calling this function.
     /// Enough funds must be sent to put the sponsor wallet balance over its
     /// expected amount after the subscription is bought. Since sponsor wallets
-    /// send data feed update transactions, it is not possible to estimate what
-    /// their balance will be at the time sent transactions are confirmed. To
-    /// avoid transactions being reverted as a result of this, consider sending
-    /// some extra.
+    /// send data feed update transactions, it is not possible to determine
+    /// what their balance will be at the time sent transactions are confirmed.
+    /// To avoid transactions being reverted as a result of this, consider
+    /// sending some extra.
     /// @param dapiName dAPI name
     /// @param dataFeedId Data feed ID
     /// @param sponsorWallet Sponsor wallet address
@@ -257,7 +257,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// This function is allowed to be called even when the respective dAPI is
     /// not active, which means that a dAPI name being set does not imply that
     /// the respective data feed is in service. Users should only use dAPIs for
-    /// which there is an active subscription with the update parameters that
+    /// which there is an active subscription with update parameters that
     /// satisfy their needs.
     /// @param dapiName dAPI name
     /// @param dataFeedId Data feed ID
@@ -474,7 +474,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// and the expected balance is computed from these, which introduces a
     /// rounding error in the order of Weis. This also applies in practice (in
     /// that one can buy a subscription whose price is 1 ETH at 0.999... ETH).
-    /// This behavior is accepted due to being trivial in effect.
+    /// This behavior is accepted due to its effect being negligible.
     /// @param dapiName dAPI name
     /// @param updateParameters Update parameters
     /// @param duration Subscription duration

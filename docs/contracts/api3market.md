@@ -33,7 +33,7 @@ These Merkle trees are then published for the users to be able to provide the re
 
 The leaves of the dAPI management Merkle tree is the hash of the following values:
 
-- dAPI name (`bytes32`): An immutable name that describes what data the dAPI provides (e.g., `ETH/USD`).
+- dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`).
 - Data feed ID (`bytes32`): The ID of the [data feed](./api3serverv1.md#data-feeds) that the dAPI is to be pointed at.
   Cannot specify a [Beacon set](./api3serverv1.md#beacon-set) with more than 21 [Beacons](./api3serverv1.md#beacon).
 - dAPI sponsor wallet address (`address`): The address of the [sponsor wallet](../specs/airnode-protocol.md#sponsor-wallets) that will send the dAPI update transactions.
@@ -48,7 +48,7 @@ In the case that a dAPI name is being decommissioned, rather than omitting it in
 
 The leaves of the dAPI pricing Merkle tree is the hash of the following values:
 
-- dAPI name (`bytes32`): An immutable name that describes what data the dAPI provides (e.g., `ETH/USD`)
+- dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`)
 - Chain ID (`uint256`): The ID of the chain for which the price will apply
 - dAPI update parameters (`bytes`): Encoded update parameters. Unlike AirseekerRegistry, Api3Market expects the update parameters to have an exact format.
   Refer to the [example `updateParameters` format in AirseekerRegistry docs](./airseekerregistry.md#how-airseeker-uses-airseekerregistry).
@@ -80,7 +80,7 @@ Each Airnode address in a signed API URL Merkle tree is intended to be unique.
 ## Buying a subscription
 
 The user needs to prepare the states of [Api3ServerV1](./api3serverv1.md) and [AirseekerRegistry](./airseekerregistry.md), and provide the respective Merkle proofs to buy a subscription.
-Since this is too complex for most users, they are recommended to interact with Api3Market only over the API3 Market frontend, which abstracts away this complexity.
+Since this is too complex for most users, they are recommended to interact with Api3Market over the API3 Market frontend, which abstracts away this complexity.
 This section describes what happens under the hood of the API3 Market frontend.
 
 The requirements for a `buySubscription()` call to succeed are as follow:
@@ -111,7 +111,7 @@ Another pitfall here is that calling `eth_estimateGas` with `tryMulticall()` wil
 
 As the [HashRegistry docs](./hashregistry.md#operating-a-hashregistry) instruct, it is a best practice to register each newly signed [Merkle root](#merkle-roots-as-hashregistry-hash-types) as soon as possible (and simultaneously update the sources from which the users will [fetch Merkle tree data to buy subscriptions](#buying-a-subscription)).
 Although doing so ensures that following subscription purchases will use the new Merkle tree data, the update does not apply to previous subscriptions automatically.
-Specifically, `updateDapiName()` should be called whenever it does not revert for an active dAPI (and this may also require `registerDataFeed()` to be called and the respective data feed to be updated in the same multicall).
+Specifically, `updateDapiName()` should be called whenever it does not revert for an active dAPI (which may also require `registerDataFeed()` to be called and the respective data feed to be updated in the same multicall).
 
 As a subscription expires (i.e., the block timestamp reaches its end timestamp), the current subscription ID needs to be updated.
 Any subscription purchase for the same dAPI does this automatically, yet `updateCurrentSubscriptionId()` should be called whenever it does not revert for an active dAPI for this to be done as soon as possible.
