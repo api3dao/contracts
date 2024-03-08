@@ -1268,9 +1268,3 @@ describe('AirseekerRegistry', function () {
     });
   });
 });
-
-module.exports = {
-  updateBeaconSet,
-  readBeacons,
-  encodeUpdateParameters,
-};
