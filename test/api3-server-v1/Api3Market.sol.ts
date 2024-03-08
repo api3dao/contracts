@@ -8,7 +8,7 @@ import { artifacts, ethers } from 'hardhat';
 import type { Api3Market } from '../../src/index';
 import { signHash } from '../access/HashRegistry.sol';
 
-import { updateBeaconSet, readBeacons, encodeUpdateParameters } from './AirseekerRegistry.sol';
+import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from './AirseekerRegistry.sol';
 
 describe('Api3Market', function () {
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
@@ -3581,6 +3581,225 @@ describe('Api3Market', function () {
           ).to.be.revertedWith('Invalid proof');
         });
       });
+    });
+  });
+
+  describe('API3 Market flow', function () {
+    it('works as intended', async function () {
+      const {
+        airnodes,
+        airseekerRegistry,
+        api3Market,
+        api3ServerV1,
+        beaconIds,
+        dapiManagementMerkleLeaves,
+        dapiManagementMerkleRoot,
+        dapiPricingMerkleLeaves,
+        dapiPricingMerkleRoot,
+        dataFeedDetails,
+        dataFeedId,
+        roles,
+        templateIds,
+      } = await helpers.loadFixture(deploy);
+      // Wait a week so that the Beacon updates and the Beacon set update are stale
+      await helpers.time.increase(7 * 24 * 60 * 60);
+      // Only update the second Beacon
+      const timestampNow = await helpers.time.latest();
+      await updateBeacon(api3ServerV1, 'ETH/USD', airnodes[1]!, timestampNow, ethers.parseEther('2200'));
+      // Do not register the data feed
+
+      // The Market frontend first checks if it should register the data feed or update any of the data feeds
+      let registerDataFeed = false;
+      const updateBeacons = airnodes.map((_) => false);
+      let updateBeaconSet = false;
+      // Data feed ID and data feed details come from the dAPI management package
+      const staticCallReturndata = await api3Market.multicall.staticCall([
+        api3Market.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
+        api3Market.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]),
+        api3Market.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
+      ]);
+      const staticCallFirstDataFeedData = ethers.AbiCoder.defaultAbiCoder().decode(
+        ['bytes', 'int224', 'uint32', 'int224[]', 'uint32[]'],
+        staticCallReturndata[0]!
+      );
+      // If the first call failed to read any Beacons, the data feed must have not been registered
+      if (staticCallFirstDataFeedData[3].length === 0) {
+        registerDataFeed = true;
+      }
+      const staticCallSecondDataFeedData = ethers.AbiCoder.defaultAbiCoder().decode(
+        ['bytes', 'int224', 'uint32', 'int224[]', 'uint32[]'],
+        staticCallReturndata[2]!
+      );
+      // If a Beacon reads a stale value, update the Beacon
+      for (let i = 0; i < updateBeacons.length; i++) {
+        if (staticCallSecondDataFeedData[4][i] + BigInt(24 * 60 * 60) < timestampNow) {
+          updateBeacons[i] = true;
+        }
+      }
+      // If the data feed consists of more than one Beacon and the data feed reads a stale value, update the Beacon set
+      if (
+        staticCallSecondDataFeedData[3].length > 1 &&
+        staticCallSecondDataFeedData[2] + BigInt(24 * 60 * 60) < timestampNow
+      ) {
+        updateBeaconSet = true;
+      }
+      // We should only be told to skip updating the second Beacon
+      expect(registerDataFeed).to.equal(true);
+      expect(updateBeacons).to.deep.equal([true, false, true]);
+      expect(updateBeaconSet).to.equal(true);
+
+      // Construct the multicall calldata based on the findings above
+      const multicallCalldata = [];
+      if (registerDataFeed) {
+        multicallCalldata.push(api3Market.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]));
+      }
+      const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [ethers.parseEther('2200')]);
+      for (const [i, updateBeacon] of updateBeacons.entries()) {
+        if (updateBeacon) {
+          // Signed data comes from the signed APIs
+          multicallCalldata.push(
+            api3Market.interface.encodeFunctionData('updateBeaconWithSignedData', [
+              airnodes[i]!.address,
+              templateIds[i],
+              timestampNow,
+              encodedValue,
+              await airnodes[i]!.signMessage(
+                ethers.toBeArray(
+                  ethers.solidityPackedKeccak256(
+                    ['bytes32', 'uint256', 'bytes'],
+                    [templateIds[i], timestampNow, encodedValue]
+                  )
+                )
+              ),
+            ])
+          );
+        }
+      }
+      if (updateBeaconSet) {
+        multicallCalldata.push(api3Market.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
+      }
+
+      // dAPI management Merkle data comes from the dAPI management package
+      // dAPI pricing Merkle data comes from the dAPI pricing API
+      const paymentAmount = await computeRequiredPaymentAmount(
+        api3Market,
+        dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+        dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
+      );
+
+      // First estimate the gas limit using `multicallAndBuySubscription()`...
+      const gasLimit = await api3Market
+        .connect(roles.randomPerson)
+        .multicallAndBuySubscription.estimateGas(
+          multicallCalldata,
+          dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+          dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+          dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+          BigInt(dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration),
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+          ethers.AbiCoder.defaultAbiCoder().encode(
+            ['bytes32', 'bytes32[]', 'bytes32', 'bytes32[]'],
+            [
+              dapiManagementMerkleRoot,
+              dapiManagementMerkleLeaves.ethUsd!.proof,
+              dapiPricingMerkleRoot,
+              dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.proof,
+            ]
+          ),
+          {
+            value: paymentAmount,
+          }
+        );
+      // ...and add a buffer because we will be sending the transaction with `tryMulticallAndBuySubscription()`
+      const gasLimitWithBuffer = (gasLimit * BigInt(11)) / BigInt(10);
+
+      // Below is the actual subscription purchase transaction
+      const subscriptionId = computeSubscriptionId(
+        dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
+      );
+      const subscriptionTimestamp = (await helpers.time.latest()) + 1;
+      await helpers.time.setNextBlockTimestamp(subscriptionTimestamp);
+      await expect(
+        api3Market
+          .connect(roles.randomPerson)
+          .tryMulticallAndBuySubscription(
+            multicallCalldata,
+            dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+            dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+            dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
+            dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+            BigInt(dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration),
+            dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+            ethers.AbiCoder.defaultAbiCoder().encode(
+              ['bytes32', 'bytes32[]', 'bytes32', 'bytes32[]'],
+              [
+                dapiManagementMerkleRoot,
+                dapiManagementMerkleLeaves.ethUsd!.proof,
+                dapiPricingMerkleRoot,
+                dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.proof,
+              ]
+            ),
+            {
+              value: paymentAmount,
+              gasLimit: gasLimitWithBuffer,
+            }
+          )
+      )
+        .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+        .withArgs(
+          dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+          computeSubscriptionId(
+            dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+            dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
+          )
+        )
+        .to.emit(airseekerRegistry, 'UpdatedDapiNameUpdateParameters')
+        .withArgs(
+          dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
+        )
+        .to.emit(airseekerRegistry, 'ActivatedDapiName')
+        .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+        .to.emit(api3ServerV1, 'SetDapiName')
+        .withArgs(
+          dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+          dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+          await api3Market.getAddress()
+        )
+        .to.emit(api3Market, 'BoughtSubscription')
+        .withArgs(
+          dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+          subscriptionId,
+          dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+          dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+          dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+          paymentAmount
+        );
+      const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
+      const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
+      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+      expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
+      expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
+      expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
+      expect(dapiData.beaconValues).to.deep.equal(beaconReadings.map((beaconReading) => beaconReading.value));
+      expect(dapiData.beaconTimestamps).to.deep.equal(beaconReadings.map((beaconReading) => beaconReading.timestamp));
+      expect(dapiData.updateParameters).to.deep.equal([
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+      ]);
+      expect(dapiData.endTimestamps).to.deep.equal([
+        subscriptionTimestamp + dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+      ]);
+      expect(dapiData.dailyPrices).to.deep.equal([
+        (BigInt(dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price) * BigInt(24 * 60 * 60)) /
+          BigInt(dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration),
+      ]);
     });
   });
 

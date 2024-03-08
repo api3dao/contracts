@@ -46,6 +46,38 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         bytes calldata signedApiUrlMerkleData
     ) external;
 
+    function multicallAndBuySubscription(
+        bytes[] calldata multicallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        returns (bytes[] memory returndata, bytes32 subscriptionId);
+
+    function tryMulticallAndBuySubscription(
+        bytes[] calldata tryMulticallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        returns (
+            bool[] memory successes,
+            bytes[] memory returndata,
+            bytes32 subscriptionId
+        );
+
     function updateBeaconWithSignedData(
         address airnode,
         bytes32 templateId,

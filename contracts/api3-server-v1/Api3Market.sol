@@ -185,7 +185,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         uint256 duration,
         uint256 price,
         bytes calldata dapiManagementAndDapiPricingMerkleData
-    ) external payable override returns (bytes32 subscriptionId) {
+    ) public payable override returns (bytes32 subscriptionId) {
         require(dataFeedId != bytes32(0), "Data feed ID zero");
         require(sponsorWallet != address(0), "Sponsor wallet address zero");
         verifyDapiManagementAndDapiPricingMerkleProofs(
@@ -330,6 +330,99 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         AirseekerRegistry(airseekerRegistry).setSignedApiUrl(
             airnode,
             signedApiUrl
+        );
+    }
+
+    /// @notice Multi-calls this contract, followed by a call with value to buy
+    /// the subscription
+    /// @dev This function is for the API3 Market frontend to call
+    /// `eth_estimateGas` on a single transaction that readies a data feed and
+    /// buys the respective subscription
+    /// @param multicallData Array of calldata of batched calls
+    /// @param dapiName dAPI name
+    /// @param dataFeedId Data feed ID
+    /// @param sponsorWallet Sponsor wallet address
+    /// @param updateParameters Update parameters
+    /// @param duration Subscription duration
+    /// @param price Subscription price
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
+    /// @return returndata Array of returndata of batched calls
+    /// @return subscriptionId Subscription ID
+    function multicallAndBuySubscription(
+        bytes[] calldata multicallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        override
+        returns (bytes[] memory returndata, bytes32 subscriptionId)
+    {
+        returndata = this.multicall(multicallData);
+        subscriptionId = buySubscription(
+            dapiName,
+            dataFeedId,
+            sponsorWallet,
+            updateParameters,
+            duration,
+            price,
+            dapiManagementAndDapiPricingMerkleData
+        );
+    }
+
+    /// @notice Multi-calls this contract in a way that the transaction does
+    /// not revert if any of the batched calls reverts, followed by a call with
+    /// value to buy the subscription
+    /// @dev This function is for the API3 Market frontend to send a single
+    /// transaction that readies a data feed and buys the respective
+    /// subscription. `tryMulticall()` is preferred in the purchase transaction
+    /// because the readying calls may revert due to race conditions.
+    /// @param tryMulticallData Array of calldata of batched calls
+    /// @param dapiName dAPI name
+    /// @param dataFeedId Data feed ID
+    /// @param sponsorWallet Sponsor wallet address
+    /// @param updateParameters Update parameters
+    /// @param duration Subscription duration
+    /// @param price Subscription price
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
+    /// @return successes Array of success conditions of batched calls
+    /// @return returndata Array of returndata of batched calls
+    /// @return subscriptionId Subscription ID
+    function tryMulticallAndBuySubscription(
+        bytes[] calldata tryMulticallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        override
+        returns (
+            bool[] memory successes,
+            bytes[] memory returndata,
+            bytes32 subscriptionId
+        )
+    {
+        (successes, returndata) = this.tryMulticall(tryMulticallData);
+        subscriptionId = buySubscription(
+            dapiName,
+            dataFeedId,
+            sponsorWallet,
+            updateParameters,
+            duration,
+            price,
+            dapiManagementAndDapiPricingMerkleData
         );
     }
 
@@ -650,7 +743,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             );
             (beaconValues[0], beaconTimestamps[0]) = IApi3ServerV1(api3ServerV1)
                 .dataFeeds(deriveBeaconId(airnode, templateId));
-        } else {
+        } else if (dataFeedDetails.length != 0) {
             (address[] memory airnodes, bytes32[] memory templateIds) = abi
                 .decode(dataFeedDetails, (address[], bytes32[]));
             uint256 beaconCount = airnodes.length;

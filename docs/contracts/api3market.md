@@ -104,8 +104,8 @@ For that, they can do a static multicall to `[getDataFeedData(), registerDataFee
 If the data feed needs to be registered and/or updated, these can be done in a single multicall that finally calls `buySubscription()`.
 The data feed details needed to register the data feed would most likely be fetched from the same source that serves the Merkle tree data, and the signed data needed to update the data feed would be fetched from a signed API.
 
-One thing to note here is that data feed updates revert when they are not successful (e.g., because another party updated the data feed with data whose timestamp is more recent than what the user has attempted to use), and thus the multicall should be done through a `tryMulticall()`.
-Another pitfall here is that calling `eth_estimateGas` with `tryMulticall()` will return an arbitrary amount (because `eth_estimateGas` looks for a gas limit that causes the transaction to not revert and `tryMulticall()` never reverts by design), which is why the `eth_estimateGas` call should be done with `multicall()`.
+One thing to note here is that data feed updates revert when they are not successful (e.g., because another party updated the data feed with data whose timestamp is more recent than what the user has attempted to use), and thus the multicall should be done with `tryMulticallAndBuySubscription()`.
+Another pitfall here is that calling `eth_estimateGas` with `tryMulticallAndBuySubscription()` will return an arbitrary amount (because `eth_estimateGas` looks for a gas limit that causes the transaction to not revert and `tryMulticallAndBuySubscription()` never reverts in the multicall phase by design), which is why the `eth_estimateGas` call should be done with `multicallAndBuySubscription()`.
 
 ## Operating Api3Market
 
