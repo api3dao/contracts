@@ -100,7 +100,7 @@ The daily price of the subscription would be `1.5 / 30 = 0.05 ETH`, which would 
 Then, instead of `2 - 1 = 1 ETH`, the user could send `1 + 0.05 = 1.05 ETH`, which would be very unlikely to revert, granted that the price is accurate.
 
 Before making the `buySubscription()` call, the user should make sure that the data feed is registered at AirseekerRegistry and the data feed has been updated in the last day at Api3ServerV1.
-For that, they can call `getDataFeedData()`.
+For that, they can do a static multicall to `[getDataFeedData(), registerDataFeed(), getDataFeedData()]`, where the returndata of the first `getDataFeedData()` indicate if the data feed needs to be registered, and the returndata of the second `getDataFeedData()` indicate if respective Beacons or Beacon set need to be updated.
 If the data feed needs to be registered and/or updated, these can be done in a single multicall that finally calls `buySubscription()`.
 The data feed details needed to register the data feed would most likely be fetched from the same source that serves the Merkle tree data, and the signed data needed to update the data feed would be fetched from a signed API.
 

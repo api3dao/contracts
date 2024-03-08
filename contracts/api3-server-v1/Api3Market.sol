@@ -609,6 +609,10 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// @dev This function is intended to be used by the API3 Market frontend
     /// to determine what needs to be done to ready the data feed to purchase
     /// the respective subscription.
+    /// In the case that the client wants to use this to fetch the respective
+    /// Beacon readings for an unregistered data feed, they can do a static
+    /// multicall where the `getDataFeedData()` call is preceded by a
+    /// `registerDataFeed()` call.
     /// @param dataFeedId Data feed ID
     /// @return dataFeedDetails Data feed details
     /// @return dataFeedValue Data feed value read from Api3ServerV1
