@@ -11,11 +11,12 @@ export async function signHash(
   timestamp: number
 ): Promise<BytesLike[]> {
   return Promise.all(
-    signers.map(async (signer) =>
-      signer.signMessage(
+    signers.map(async (signer) => {
+      const signature = await signer.signMessage(
         ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32', 'uint256'], [hashType, hash, timestamp]))
-      )
-    )
+      );
+      return signature;
+    })
   );
 }
 
@@ -31,16 +32,17 @@ describe('HashRegistry', function () {
     endTimestamp: number
   ): Promise<BytesLike[]> {
     return Promise.all(
-      signers.map(async (signer, index) =>
-        signer.signMessage(
+      signers.map(async (signer, index) => {
+        const signature = await signer.signMessage(
           ethers.toBeArray(
             ethers.solidityPackedKeccak256(
               ['bytes32', 'address', 'uint256'],
               [SIGNATURE_DELEGATION_HASH_TYPE, delegates[index]!.address, endTimestamp]
             )
           )
-        )
-      )
+        );
+        return signature;
+      })
     );
   }
 

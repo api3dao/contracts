@@ -84,9 +84,10 @@ async function signData(
   timestamp: number,
   data: BytesLike
 ) {
-  return airnode.signMessage(
+  const signature = await airnode.signMessage(
     ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, data]))
   );
+  return signature;
 }
 
 async function signOevData(
@@ -116,9 +117,10 @@ async function signOevData(
       bidAmount,
     ]
   );
-  return airnode.signMessage(
+  const signature = await airnode.signMessage(
     ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32'], [oevUpdateHash, templateId]))
   );
+  return signature;
 }
 
 export {

@@ -64,7 +64,8 @@ describe('Api3ServerV1', function () {
     const data = encodeData(decodedData);
     const signatures = await Promise.all(
       beacons.map(async (beacon) => {
-        return testUtils.signData(beacon.airnode, beacon.templateId, timestamp!, data);
+        const signature = await testUtils.signData(beacon.airnode, beacon.templateId, timestamp!, data);
+        return signature;
       })
     );
     const updateBeaconsCalldata = signatures.map((signature, index) => {
@@ -538,7 +539,7 @@ describe('Api3ServerV1', function () {
                           if (index === omitSignatureAtIndex) {
                             return '0x';
                           } else {
-                            return testUtils.signOevData(
+                            const signature = await testUtils.signOevData(
                               api3ServerV1,
                               await oevProxy.getAddress(),
                               beaconSet.beaconSetId,
@@ -550,6 +551,7 @@ describe('Api3ServerV1', function () {
                               beacon.airnode,
                               beacon.templateId
                             );
+                            return signature;
                           }
                         })
                       );
@@ -617,7 +619,7 @@ describe('Api3ServerV1', function () {
                           if (index === omitSignatureAtIndex) {
                             return '0x';
                           } else {
-                            return testUtils.signOevData(
+                            const signature = await testUtils.signOevData(
                               api3ServerV1,
                               await oevProxy.getAddress(),
                               spoofedDataFeedId,
@@ -629,6 +631,7 @@ describe('Api3ServerV1', function () {
                               beacon.airnode,
                               beacon.templateId
                             );
+                            return signature;
                           }
                         })
                       );
@@ -668,7 +671,7 @@ describe('Api3ServerV1', function () {
                     const signatures = await Promise.all(
                       beacons.map(async (beacon, index) => {
                         if (index === includeSignatureAtIndex) {
-                          return testUtils.signOevData(
+                          const signature = await testUtils.signOevData(
                             api3ServerV1,
                             await oevProxy.getAddress(),
                             beaconSet.beaconSetId,
@@ -680,6 +683,7 @@ describe('Api3ServerV1', function () {
                             beacon.airnode,
                             beacon.templateId
                           );
+                          return signature;
                         } else {
                           return '0x';
                         }
@@ -1674,7 +1678,7 @@ describe('Api3ServerV1', function () {
                 if (index === omitSignatureAtIndex) {
                   return '0x';
                 } else {
-                  return testUtils.signOevData(
+                  const signature = await testUtils.signOevData(
                     api3ServerV1,
                     roles.mockOevProxy!.address,
                     beaconSet.beaconSetId,
@@ -1686,6 +1690,7 @@ describe('Api3ServerV1', function () {
                     beacon.airnode,
                     beacon.templateId
                   );
+                  return signature;
                 }
               })
             );
