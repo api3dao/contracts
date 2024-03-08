@@ -102,7 +102,11 @@ describe('Api3Market', function () {
     const proxyFactory = await ProxyFactory.deploy(api3ServerV1.getAddress());
 
     const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
-    const api3Market = await Api3Market.deploy(roles.owner!.address, proxyFactory.getAddress());
+    const api3Market = await Api3Market.deploy(
+      roles.owner!.address,
+      proxyFactory.getAddress(),
+      MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
+    );
 
     await api3Market.connect(roles.owner).setSigners(
       DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE,
@@ -464,38 +468,54 @@ describe('Api3Market', function () {
   }
 
   describe('constructor', function () {
-    context('ProxyFactory address belongs to a contract with the expected interface', function () {
-      it('constructs', async function () {
-        const { roles, api3ServerV1, proxyFactory, api3Market, airseekerRegistry } = await helpers.loadFixture(deploy);
-        expect(await api3Market.MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH()).to.equal(MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH);
-        expect(await api3Market.DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE()).to.equal(
-          DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE
-        );
-        expect(await api3Market.DAPI_PRICING_MERKLE_ROOT_HASH_TYPE()).to.equal(DAPI_PRICING_MERKLE_ROOT_HASH_TYPE);
-        expect(await api3Market.SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE()).to.equal(SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE);
-        expect(await api3Market.MAXIMUM_DAPI_UPDATE_AGE()).to.equal(MAXIMUM_DAPI_UPDATE_AGE);
-        expect(await api3Market.signatureDelegationHashType()).to.equal(SIGNATURE_DELEGATION_HASH_TYPE);
-        expect(await api3Market.owner()).to.equal(roles.owner!.address);
-        expect(await api3Market.proxyFactory()).to.equal(await proxyFactory.getAddress());
-        expect(await api3Market.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
-        expect(await airseekerRegistry.owner()).to.equal(await api3Market.getAddress());
-        expect(await airseekerRegistry.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
+    context('Maximum subscription queue length is not zero', function () {
+      context('ProxyFactory address belongs to a contract with the expected interface', function () {
+        it('constructs', async function () {
+          const { roles, api3ServerV1, proxyFactory, api3Market, airseekerRegistry } =
+            await helpers.loadFixture(deploy);
+          expect(await api3Market.DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE()).to.equal(
+            DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE
+          );
+          expect(await api3Market.DAPI_PRICING_MERKLE_ROOT_HASH_TYPE()).to.equal(DAPI_PRICING_MERKLE_ROOT_HASH_TYPE);
+          expect(await api3Market.SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE()).to.equal(
+            SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE
+          );
+          expect(await api3Market.MAXIMUM_DAPI_UPDATE_AGE()).to.equal(MAXIMUM_DAPI_UPDATE_AGE);
+          expect(await api3Market.signatureDelegationHashType()).to.equal(SIGNATURE_DELEGATION_HASH_TYPE);
+          expect(await api3Market.owner()).to.equal(roles.owner!.address);
+          expect(await api3Market.proxyFactory()).to.equal(await proxyFactory.getAddress());
+          expect(await api3Market.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
+          expect(await airseekerRegistry.owner()).to.equal(await api3Market.getAddress());
+          expect(await airseekerRegistry.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
+          expect(await api3Market.maximumSubscriptionQueueLength()).to.equal(MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH);
+        });
+      });
+      context('ProxyFactory address belongs to a contract without the expected interface', function () {
+        it('reverts', async function () {
+          const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
+          const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
+          await expect(
+            Api3Market.deploy(roles.owner!.address, api3ServerV1.getAddress(), MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
+          ).to.be.revertedWithoutReason();
+        });
+      });
+      context('ProxyFactory address does not belong to a contract', function () {
+        it('reverts', async function () {
+          const { roles } = await helpers.loadFixture(deploy);
+          const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
+          await expect(
+            Api3Market.deploy(roles.owner!.address, roles.randomPerson!.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
+          ).to.be.revertedWithoutReason();
+        });
       });
     });
-    context('ProxyFactory address belongs to a contract without the expected interface', function () {
+    context('Maximum subscription queue length is not zero', function () {
       it('reverts', async function () {
         const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
         const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
-        await expect(Api3Market.deploy(roles.owner!.address, api3ServerV1.getAddress())).to.be.revertedWithoutReason();
-      });
-    });
-    context('ProxyFactory address does not belong to a contract', function () {
-      it('reverts', async function () {
-        const { roles } = await helpers.loadFixture(deploy);
-        const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
-        await expect(
-          Api3Market.deploy(roles.owner!.address, roles.randomPerson!.address)
-        ).to.be.revertedWithoutReason();
+        await expect(Api3Market.deploy(roles.owner!.address, await api3ServerV1.getAddress(), 0)).to.be.revertedWith(
+          'Maximum queue length zero'
+        );
       });
     });
   });
