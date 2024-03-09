@@ -64,7 +64,7 @@ describe('Api3ServerV1', function () {
     const data = encodeData(decodedData);
     const signatures = await Promise.all(
       beacons.map(async (beacon) => {
-        const signature = await testUtils.signData(beacon.airnode, beacon.templateId, timestamp!, data);
+        const signature = await testUtils.signData(beacon.airnode, beacon.templateId, timestamp, data);
         return signature;
       })
     );
