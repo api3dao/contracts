@@ -509,7 +509,7 @@ describe('Api3Market', function () {
         });
       });
     });
-    context('Maximum subscription queue length is not zero', function () {
+    context('Maximum subscription queue length is zero', function () {
       it('reverts', async function () {
         const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
         const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
