@@ -3628,7 +3628,21 @@ describe('Api3Market', function () {
       await updateBeacon(api3ServerV1, 'ETH/USD', airnodes[1]!, timestampNow, ethers.parseEther('2200'));
       // Do not register the data feed
 
-      // The Market frontend first checks if it should register the data feed or update any of the data feeds
+      // The market first checks if the required payment amount can be computed.
+      // The respective call may revert if the current state of the queue is not compatible with the requested subscription.
+      // dAPI management Merkle data comes from the dAPI management package
+      // dAPI pricing Merkle data comes from the dAPI pricing API
+      const paymentAmount = await computeRequiredPaymentAmount(
+        api3Market,
+        dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+        dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
+      );
+
+      // Then, the Market frontend checks if it should register the data feed or
+      // update any Beacons or the Beacon set
       let registerDataFeed = false;
       const updateBeacons = airnodes.map((_) => false);
       let updateBeaconSet = false;
@@ -3698,17 +3712,6 @@ describe('Api3Market', function () {
       if (updateBeaconSet) {
         multicallCalldata.push(api3Market.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
       }
-
-      // dAPI management Merkle data comes from the dAPI management package
-      // dAPI pricing Merkle data comes from the dAPI pricing API
-      const paymentAmount = await computeRequiredPaymentAmount(
-        api3Market,
-        dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
-        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
-        dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
-        dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
-      );
 
       // First estimate the gas limit using `multicallAndBuySubscription()`...
       const gasLimit = await api3Market
