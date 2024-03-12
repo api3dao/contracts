@@ -93,7 +93,7 @@ async function main() {
             },
           }
         );
-        if (!goFetchApi3MarketDapiNameSetterRoleStatus.success || !goFetchApi3MarketDapiNameSetterRoleStatus.data) {
+        if (!goFetchApi3MarketDapiNameSetterRoleStatus.success) {
           throw new Error(`${network} Api3Market dAPI name setter role status could not be fetched`);
         }
         if (!goFetchApi3MarketDapiNameSetterRoleStatus.data) {
