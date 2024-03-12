@@ -3624,7 +3624,7 @@ describe('Api3Market', function () {
       // Then, the Market frontend checks if it should register the data feed or
       // update any Beacons or the Beacon set
       let registerDataFeed = false;
-      const updateBeacons = airnodes.map((_) => false);
+      const updateBeacons = Array.from({ length: airnodes.length }).fill(false);
       let updateBeaconSet = false;
       // Data feed ID and data feed details come from the dAPI management package
       const staticCallReturndata = await api3Market.multicall.staticCall([
