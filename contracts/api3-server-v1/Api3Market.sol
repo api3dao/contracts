@@ -55,19 +55,6 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         bytes32 nextSubscriptionId;
     }
 
-    /// @notice Maximum subscription queue length for a dAPI
-    /// @dev Some functionality in this contract requires to iterate through
-    /// the entire subscription queue for a dAPI, and the queue length is
-    /// limited to prevent this process from being bloated. Considering that
-    /// each item in the subscription queue has unique update parameters, the
-    /// length of the subscription queue is also limited by the number of
-    /// unique update parameters offered in the dAPI pricing Merkle tree. For
-    /// reference, at the time this contract is implemented, the API3 Market
-    /// offers 4 update parameter options, and this number is not expected to
-    /// be increased (i.e., we do not expect this queue length limit to be hit
-    /// in practice).
-    uint256 public constant override MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
-
     /// @notice dAPI management Merkle root hash type
     /// @dev "Hash type" is what HashRegistry uses to address hashes used for
     /// different purposes
@@ -96,6 +83,17 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// @notice AirseekerRegistry contract address
     address public immutable override airseekerRegistry;
 
+    /// @notice Maximum subscription queue length for a dAPI
+    /// @dev Some functionality in this contract requires to iterate through
+    /// the entire subscription queue for a dAPI, and the queue length is
+    /// limited to prevent this process from being bloated. Considering that
+    /// each item in the subscription queue has unique update parameters, the
+    /// length of the subscription queue is also limited by the number of
+    /// unique update parameters offered in the dAPI pricing Merkle tree. For
+    /// reference, at the time this contract is implemented, the API3 Market
+    /// offers 4 update parameter options.
+    uint256 public immutable override maximumSubscriptionQueueLength;
+
     /// @notice Subscriptions indexed by their IDs
     mapping(bytes32 => Subscription) public override subscriptions;
 
@@ -121,7 +119,17 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// pointing at this contract.
     /// @param owner_ Owner address
     /// @param proxyFactory_ ProxyFactory contract address
-    constructor(address owner_, address proxyFactory_) HashRegistry(owner_) {
+    /// @param maximumSubscriptionQueueLength_ Maximum subscription queue
+    /// length
+    constructor(
+        address owner_,
+        address proxyFactory_,
+        uint256 maximumSubscriptionQueueLength_
+    ) HashRegistry(owner_) {
+        require(
+            maximumSubscriptionQueueLength_ != 0,
+            "Maximum queue length zero"
+        );
         proxyFactory = proxyFactory_;
         address api3ServerV1_ = IProxyFactory(proxyFactory_).api3ServerV1();
         api3ServerV1 = api3ServerV1_;
@@ -131,6 +139,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
                 api3ServerV1_
             )
         );
+        maximumSubscriptionQueueLength = maximumSubscriptionQueueLength_;
     }
 
     /// @notice Returns the owner address
@@ -975,7 +984,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             }
         }
         require(
-            newQueueLength < MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
+            newQueueLength < maximumSubscriptionQueueLength,
             "Subscription queue full"
         );
     }

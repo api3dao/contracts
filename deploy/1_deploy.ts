@@ -11,6 +11,7 @@ import type { OwnableCallForwarder, ProxyFactory } from '../src/index';
 module.exports = async () => {
   const { deploy, log } = deployments;
   const [deployer] = await ethers.getSigners();
+  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (Object.keys(managerMultisigAddresses).includes(network.name)) {
     const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = await deployments
@@ -112,7 +113,7 @@ module.exports = async () => {
           log(`Deploying Api3Market`);
           return deploy('Api3Market', {
             from: deployer!.address,
-            args: [await ownableCallForwarder.getAddress(), proxyFactoryAddress],
+            args: [await ownableCallForwarder.getAddress(), proxyFactoryAddress, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH],
             log: true,
             deterministicDeployment: process.env.DETERMINISTIC
               ? '0x0000000000000000000000000000000000000000000000000000000000000001'

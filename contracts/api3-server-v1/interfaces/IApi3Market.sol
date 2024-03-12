@@ -149,11 +149,6 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         bytes32 subscriptionId
     ) external view returns (bytes memory updateParameters);
 
-    function MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH()
-        external
-        view
-        returns (uint256);
-
     function DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE()
         external
         view
@@ -176,6 +171,8 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
     function proxyFactory() external view returns (address);
 
     function airseekerRegistry() external view returns (address);
+
+    function maximumSubscriptionQueueLength() external view returns (uint256);
 
     function subscriptions(
         bytes32 subscriptionId
