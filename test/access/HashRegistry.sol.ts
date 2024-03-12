@@ -10,14 +10,14 @@ export async function signHash(
   hash: BytesLike,
   timestamp: number
 ): Promise<BytesLike[]> {
-  return Promise.all(
-    signers.map(async (signer) => {
-      const signature = await signer.signMessage(
-        ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32', 'uint256'], [hashType, hash, timestamp]))
-      );
-      return signature;
-    })
-  );
+  let signatures: BytesLike[] = [];
+  for (const signer of signers) {
+    const signature = await signer.signMessage(
+      ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32', 'uint256'], [hashType, hash, timestamp]))
+    );
+    signatures = [...signatures, signature];
+  }
+  return signatures;
 }
 
 describe('HashRegistry', function () {
@@ -31,19 +31,19 @@ describe('HashRegistry', function () {
     delegates: HDNodeWallet[],
     endTimestamp: number
   ): Promise<BytesLike[]> {
-    return Promise.all(
-      signers.map(async (signer, index) => {
-        const signature = await signer.signMessage(
-          ethers.toBeArray(
-            ethers.solidityPackedKeccak256(
-              ['bytes32', 'address', 'uint256'],
-              [SIGNATURE_DELEGATION_HASH_TYPE, delegates[index]!.address, endTimestamp]
-            )
+    let signatures: BytesLike[] = [];
+    for (const [index, signer] of signers.entries()) {
+      const signature = await signer.signMessage(
+        ethers.toBeArray(
+          ethers.solidityPackedKeccak256(
+            ['bytes32', 'address', 'uint256'],
+            [SIGNATURE_DELEGATION_HASH_TYPE, delegates[index]!.address, endTimestamp]
           )
-        );
-        return signature;
-      })
-    );
+        )
+      );
+      signatures = [...signatures, signature];
+    }
+    return signatures;
   }
 
   async function deploy() {
