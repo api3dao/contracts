@@ -38,6 +38,22 @@
     "rsk",
     "rsk-testnet"
   ],
-  "chainsSupportedByMarket": ["blast-sepolia-testnet", "ethereum-sepolia-testnet", "polygon-testnet"],
+  "chainsSupportedByMarket": [
+    "arbitrum-goerli-testnet",
+    "avalanche-testnet",
+    "blast-sepolia-testnet",
+    "bsc-testnet",
+    "cronos-testnet",
+    "ethereum-goerli-testnet",
+    "ethereum-sepolia-testnet",
+    "fantom-testnet",
+    "gnosis-testnet",
+    "kava-testnet",
+    "linea-goerli-testnet",
+    "mantle-goerli-testnet",
+    "moonbeam-testnet",
+    "polygon-testnet",
+    "polygon-zkevm-goerli-testnet"
+  ],
   "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }
