@@ -23,9 +23,6 @@ async function main() {
     : new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions]);
 
   for (const network of networks) {
-    // TODO: Remove after the chains are removed
-    if (['base-goerli-testnet', 'scroll-goerli-testnet'].includes(network)) continue;
-
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),

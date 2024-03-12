@@ -23,9 +23,6 @@ async function main() {
       ]);
 
   for (const network of networks) {
-    // TODO: Remove after the chains are removed
-    if (['base-goerli-testnet', 'scroll-goerli-testnet'].includes(network)) continue;
-
     if (Object.keys(managerMultisigAddresses).includes(network)) {
       const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
       // Validate that the OwnableCallForwarder owner is the manager multisig
