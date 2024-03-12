@@ -1,17 +1,14 @@
 {
   "chainsSupportedByDapis": [
     "arbitrum",
-    "arbitrum-goerli-testnet",
     "avalanche",
     "avalanche-testnet",
     "base",
-    "base-goerli-testnet",
     "blast",
     "blast-sepolia-testnet",
     "bsc",
     "bsc-testnet",
     "blast-sepolia-testnet",
-    "cronos-testnet",
     "ethereum",
     "ethereum-goerli-testnet",
     "ethereum-sepolia-testnet",
@@ -22,38 +19,28 @@
     "kava",
     "kava-testnet",
     "linea",
-    "linea-goerli-testnet",
     "mantle",
-    "mantle-goerli-testnet",
     "moonbeam",
     "moonbeam-testnet",
     "moonriver",
     "oev-network-sepolia-testnet",
     "optimism",
-    "optimism-goerli-testnet",
     "polygon",
     "polygon-testnet",
     "polygon-zkevm",
-    "polygon-zkevm-goerli-testnet",
-    "rsk",
-    "rsk-testnet"
+    "rsk"
   ],
   "chainsSupportedByMarket": [
-    "arbitrum-goerli-testnet",
     "avalanche-testnet",
     "blast-sepolia-testnet",
     "bsc-testnet",
-    "cronos-testnet",
     "ethereum-goerli-testnet",
     "ethereum-sepolia-testnet",
     "fantom-testnet",
     "gnosis-testnet",
     "kava-testnet",
-    "linea-goerli-testnet",
-    "mantle-goerli-testnet",
     "moonbeam-testnet",
-    "polygon-testnet",
-    "polygon-zkevm-goerli-testnet"
+    "polygon-testnet"
   ],
   "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }
