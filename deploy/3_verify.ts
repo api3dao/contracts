@@ -11,6 +11,7 @@ import { computeApi3MarketAirseekerRegistryAddress, type ProxyFactory } from '..
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
   const [deployer] = await ethers.getSigners();
+  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (Object.keys(managerMultisigAddresses).includes(network.name)) {
     const OwnableCallForwarder = await deployments.get('OwnableCallForwarder');
@@ -78,7 +79,7 @@ module.exports = async () => {
         const Api3Market = await deployments.get('Api3Market');
         await run('verify:verify', {
           address: Api3Market.address,
-          constructorArguments: [OwnableCallForwarder.address, ProxyFactory.address],
+          constructorArguments: [OwnableCallForwarder.address, ProxyFactory.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH],
         });
         const airseekerRegistryAddress = computeApi3MarketAirseekerRegistryAddress(
           config.networks[network.name]!.chainId!
