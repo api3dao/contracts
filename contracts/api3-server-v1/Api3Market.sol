@@ -35,7 +35,7 @@ import "./proxies/interfaces/IProxyFactory.sol";
 /// the data feed before making the call to buy the subscription, and compute
 /// the amount to be sent that will barely allow the subscription to be
 /// purchased. For most users, building such a transaction themselves would be
-/// too impractical.
+/// impractical.
 contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     enum UpdateParametersComparisonResult {
         EqualToQueued,
@@ -113,6 +113,9 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     // Length of abi.encode(uint256, int224, uint256)
     uint256 private constant UPDATE_PARAMETERS_LENGTH = 32 + 32 + 32;
 
+    bytes32 private constant API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE =
+        keccak256(abi.encodePacked("Api3Market signature delegation"));
+
     /// @dev Api3Market deploys its own AirseekerRegistry deterministically.
     /// This implies that Api3Market-specific Airseekers should be operated by
     /// pointing at this contract.
@@ -154,52 +157,45 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     }
 
     /// @notice Buys subscription and updates the current subscription ID if
-    /// necessary. The user is recommended to interact with this contract only
-    /// over the API3 Market frontend due to its complexity.
+    /// necessary. The user is recommended to interact with this contract over
+    /// the API3 Market frontend due to its complexity.
     /// @dev The data feed that the dAPI name will be set to after this
     /// function is called must be readied (see `validateDataFeedReadiness()`)
     /// before calling this function.
     /// Enough funds must be sent to put the sponsor wallet balance over its
     /// expected amount after the subscription is bought. Since sponsor wallets
-    /// send data feed update transactions, it is not possible to estimate what
-    /// their balance will be at the time sent transactions are confirmed. To
-    /// avoid transactions being reverted as a result of this, consider sending
-    /// some extra.
+    /// send data feed update transactions, it is not possible to determine
+    /// what their balance will be at the time sent transactions are confirmed.
+    /// To avoid transactions being reverted as a result of this, consider
+    /// sending some extra.
     /// @param dapiName dAPI name
     /// @param dataFeedId Data feed ID
     /// @param sponsorWallet Sponsor wallet address
-    /// @param dapiManagementMerkleData ABI-encoded dAPI management Merkle root
-    /// and proof
     /// @param updateParameters Update parameters
     /// @param duration Subscription duration
     /// @param price Subscription price
-    /// @param dapiPricingMerkleData ABI-encoded dAPI pricing Merkle root and
-    /// proof
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
     /// @return subscriptionId Subscription ID
     function buySubscription(
         bytes32 dapiName,
         bytes32 dataFeedId,
         address payable sponsorWallet,
-        bytes calldata dapiManagementMerkleData,
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price,
-        bytes calldata dapiPricingMerkleData
-    ) external payable override returns (bytes32 subscriptionId) {
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    ) public payable override returns (bytes32 subscriptionId) {
         require(dataFeedId != bytes32(0), "Data feed ID zero");
         require(sponsorWallet != address(0), "Sponsor wallet address zero");
-        verifyDapiManagementMerkleProof(
+        verifyDapiManagementAndDapiPricingMerkleProofs(
             dapiName,
             dataFeedId,
             sponsorWallet,
-            dapiManagementMerkleData
-        );
-        verifyDapiPricingMerkleProof(
-            dapiName,
             updateParameters,
             duration,
             price,
-            dapiPricingMerkleData
+            dapiManagementAndDapiPricingMerkleData
         );
         subscriptionId = addSubscriptionToQueue(
             dapiName,
@@ -264,7 +260,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// This function is allowed to be called even when the respective dAPI is
     /// not active, which means that a dAPI name being set does not imply that
     /// the respective data feed is in service. Users should only use dAPIs for
-    /// which there is an active subscription with the update parameters that
+    /// which there is an active subscription with update parameters that
     /// satisfy their needs.
     /// @param dapiName dAPI name
     /// @param dataFeedId Data feed ID
@@ -334,6 +330,99 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         AirseekerRegistry(airseekerRegistry).setSignedApiUrl(
             airnode,
             signedApiUrl
+        );
+    }
+
+    /// @notice Multi-calls this contract, followed by a call with value to buy
+    /// the subscription
+    /// @dev This function is for the API3 Market frontend to call
+    /// `eth_estimateGas` on a single transaction that readies a data feed and
+    /// buys the respective subscription
+    /// @param multicallData Array of calldata of batched calls
+    /// @param dapiName dAPI name
+    /// @param dataFeedId Data feed ID
+    /// @param sponsorWallet Sponsor wallet address
+    /// @param updateParameters Update parameters
+    /// @param duration Subscription duration
+    /// @param price Subscription price
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
+    /// @return returndata Array of returndata of batched calls
+    /// @return subscriptionId Subscription ID
+    function multicallAndBuySubscription(
+        bytes[] calldata multicallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        override
+        returns (bytes[] memory returndata, bytes32 subscriptionId)
+    {
+        returndata = this.multicall(multicallData);
+        subscriptionId = buySubscription(
+            dapiName,
+            dataFeedId,
+            sponsorWallet,
+            updateParameters,
+            duration,
+            price,
+            dapiManagementAndDapiPricingMerkleData
+        );
+    }
+
+    /// @notice Multi-calls this contract in a way that the transaction does
+    /// not revert if any of the batched calls reverts, followed by a call with
+    /// value to buy the subscription
+    /// @dev This function is for the API3 Market frontend to send a single
+    /// transaction that readies a data feed and buys the respective
+    /// subscription. `tryMulticall()` is preferred in the purchase transaction
+    /// because the readying calls may revert due to race conditions.
+    /// @param tryMulticallData Array of calldata of batched calls
+    /// @param dapiName dAPI name
+    /// @param dataFeedId Data feed ID
+    /// @param sponsorWallet Sponsor wallet address
+    /// @param updateParameters Update parameters
+    /// @param duration Subscription duration
+    /// @param price Subscription price
+    /// @param dapiManagementAndDapiPricingMerkleData ABI-encoded dAPI
+    /// management and dAPI pricing Merkle roots and proofs
+    /// @return successes Array of success conditions of batched calls
+    /// @return returndata Array of returndata of batched calls
+    /// @return subscriptionId Subscription ID
+    function tryMulticallAndBuySubscription(
+        bytes[] calldata tryMulticallData,
+        bytes32 dapiName,
+        bytes32 dataFeedId,
+        address payable sponsorWallet,
+        bytes calldata updateParameters,
+        uint256 duration,
+        uint256 price,
+        bytes calldata dapiManagementAndDapiPricingMerkleData
+    )
+        external
+        payable
+        override
+        returns (
+            bool[] memory successes,
+            bytes[] memory returndata,
+            bytes32 subscriptionId
+        )
+    {
+        (successes, returndata) = this.tryMulticall(tryMulticallData);
+        subscriptionId = buySubscription(
+            dapiName,
+            dataFeedId,
+            sponsorWallet,
+            updateParameters,
+            duration,
+            price,
+            dapiManagementAndDapiPricingMerkleData
         );
     }
 
@@ -481,7 +570,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// and the expected balance is computed from these, which introduces a
     /// rounding error in the order of Weis. This also applies in practice (in
     /// that one can buy a subscription whose price is 1 ETH at 0.999... ETH).
-    /// This behavior is accepted due to being trivial in effect.
+    /// This behavior is accepted due to its effect being negligible.
     /// @param dapiName dAPI name
     /// @param updateParameters Update parameters
     /// @param duration Subscription duration
@@ -616,6 +705,10 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// @dev This function is intended to be used by the API3 Market frontend
     /// to determine what needs to be done to ready the data feed to purchase
     /// the respective subscription.
+    /// In the case that the client wants to use this to fetch the respective
+    /// Beacon readings for an unregistered data feed, they can do a static
+    /// multicall where the `getDataFeedData()` call is preceded by a
+    /// `registerDataFeed()` call.
     /// @param dataFeedId Data feed ID
     /// @return dataFeedDetails Data feed details
     /// @return dataFeedValue Data feed value read from Api3ServerV1
@@ -650,7 +743,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             );
             (beaconValues[0], beaconTimestamps[0]) = IApi3ServerV1(api3ServerV1)
                 .dataFeeds(deriveBeaconId(airnode, templateId));
-        } else {
+        } else if (dataFeedDetails.length != 0) {
             (address[] memory airnodes, bytes32[] memory templateIds) = abi
                 .decode(dataFeedDetails, (address[], bytes32[]));
             uint256 beaconCount = airnodes.length;
@@ -685,7 +778,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         override(HashRegistry, IHashRegistry)
         returns (bytes32)
     {
-        return keccak256(abi.encodePacked("Api3Market signature delegation"));
+        return API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE;
     }
 
     /// @notice Adds the subscription to the queue if applicable
@@ -998,20 +1091,16 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         );
     }
 
-    /// @notice Verifies the dAPI pricing Merkle proof
-    /// @param dapiName dAPI name
-    /// @param updateParameters Update parameters
-    /// @param duration Subscription duration
-    /// @param price Subscription price
-    /// @param dapiPricingMerkleData ABI-encoded dAPI pricing Merkle root and
-    /// proof
-    function verifyDapiPricingMerkleProof(
+    function verifyDapiManagementAndDapiPricingMerkleProofs(
         bytes32 dapiName,
+        bytes32 dataFeedId,
+        address sponsorWallet,
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price,
-        bytes calldata dapiPricingMerkleData
+        bytes calldata dapiManagementAndDapiPricingMerkleData
     ) private view {
+        require(dapiName != bytes32(0), "dAPI name zero");
         require(
             updateParameters.length == UPDATE_PARAMETERS_LENGTH,
             "Update parameters length invalid"
@@ -1019,9 +1108,33 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         require(duration != 0, "Duration zero");
         require(price != 0, "Price zero");
         (
+            bytes32 dapiManagementMerkleRoot,
+            bytes32[] memory dapiManagementMerkleProof,
             bytes32 dapiPricingMerkleRoot,
             bytes32[] memory dapiPricingMerkleProof
-        ) = abi.decode(dapiPricingMerkleData, (bytes32, bytes32[]));
+        ) = abi.decode(
+                dapiManagementAndDapiPricingMerkleData,
+                (bytes32, bytes32[], bytes32, bytes32[])
+            );
+        require(
+            hashes[DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE].value ==
+                dapiManagementMerkleRoot,
+            "Invalid root"
+        );
+        require(
+            MerkleProof.verify(
+                dapiManagementMerkleProof,
+                dapiManagementMerkleRoot,
+                keccak256(
+                    bytes.concat(
+                        keccak256(
+                            abi.encode(dapiName, dataFeedId, sponsorWallet)
+                        )
+                    )
+                )
+            ),
+            "Invalid proof"
+        );
         require(
             hashes[DAPI_PRICING_MERKLE_ROOT_HASH_TYPE].value ==
                 dapiPricingMerkleRoot,

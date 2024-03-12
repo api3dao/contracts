@@ -6,6 +6,33 @@ import { ethers } from 'hardhat';
 
 import type { AirseekerRegistry, Api3ServerV1 } from '../../src/index';
 
+export async function updateBeacon(
+  api3ServerV1: Api3ServerV1,
+  feedName: string,
+  airnode: HDNodeWallet,
+  timestamp: BigNumberish,
+  value: BigNumberish
+) {
+  const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [value]);
+  const templateId = deriveTemplateId(`OIS title of Airnode with address ${airnode.address}`, feedName);
+  const beaconId = deriveBeaconId(airnode.address, templateId);
+  await api3ServerV1.updateBeaconWithSignedData(
+    airnode.address,
+    templateId,
+    timestamp,
+    encodedValue,
+    await airnode.signMessage(
+      ethers.toBeArray(
+        ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, encodedValue])
+      )
+    )
+  );
+  return {
+    templateId,
+    beaconId,
+  };
+}
+
 export async function updateBeaconSet(
   api3ServerV1: Api3ServerV1,
   feedName: string,
@@ -1268,9 +1295,3 @@ describe('AirseekerRegistry', function () {
     });
   });
 });
-
-module.exports = {
-  updateBeaconSet,
-  readBeacons,
-  encodeUpdateParameters,
-};
