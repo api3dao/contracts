@@ -107,7 +107,6 @@ module.exports = async () => {
         log(`Deployed example DapiProxyWithOev at ${expectedDapiProxyWithOevAddress}`);
       }
 
-      // TODO: Set the deterministic deployment salt to zero once the contract is finalized
       if (chainsSupportedByMarket.includes(network.name)) {
         await deployments.get('Api3Market').catch(async () => {
           log(`Deploying Api3Market`);
@@ -115,9 +114,7 @@ module.exports = async () => {
             from: deployer!.address,
             args: [await ownableCallForwarder.getAddress(), proxyFactoryAddress, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH],
             log: true,
-            deterministicDeployment: process.env.DETERMINISTIC
-              ? '0x0000000000000000000000000000000000000000000000000000000000000001'
-              : '',
+            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
           });
         });
       }
