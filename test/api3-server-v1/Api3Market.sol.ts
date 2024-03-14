@@ -3687,32 +3687,31 @@ describe('Api3Market', function () {
       if (registerDataFeed) {
         multicallCalldata.push(api3Market.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]));
       }
-      const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [ethers.parseEther('2200')]);
-      for (const [i, updateBeacon] of updateBeacons.entries()) {
-        if (updateBeacon) {
-          // Signed data comes from the signed APIs
-          multicallCalldata.push(
-            api3Market.interface.encodeFunctionData('updateBeaconWithSignedData', [
-              airnodes[i]!.address,
-              templateIds[i],
-              timestampNow,
-              encodedValue,
-              await airnodes[i]!.signMessage(
-                ethers.toBeArray(
-                  ethers.solidityPackedKeccak256(
-                    ['bytes32', 'uint256', 'bytes'],
-                    [templateIds[i], timestampNow, encodedValue]
-                  )
-                )
-              ),
-            ])
-          );
-        }
-      }
       if (updateBeaconSet) {
+        const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [ethers.parseEther('2200')]);
+        for (const [i, updateBeacon] of updateBeacons.entries()) {
+          if (updateBeacon) {
+            // Signed data comes from the signed APIs
+            multicallCalldata.push(
+              api3Market.interface.encodeFunctionData('updateBeaconWithSignedData', [
+                airnodes[i]!.address,
+                templateIds[i],
+                timestampNow,
+                encodedValue,
+                await airnodes[i]!.signMessage(
+                  ethers.toBeArray(
+                    ethers.solidityPackedKeccak256(
+                      ['bytes32', 'uint256', 'bytes'],
+                      [templateIds[i], timestampNow, encodedValue]
+                    )
+                  )
+                ),
+              ])
+            );
+          }
+        }
         multicallCalldata.push(api3Market.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
       }
-
       // First estimate the gas limit using `multicallAndBuySubscription()`...
       const gasLimit = await api3Market
         .connect(roles.randomPerson)
