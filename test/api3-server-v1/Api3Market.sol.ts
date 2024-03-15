@@ -3616,7 +3616,6 @@ describe('Api3Market', function () {
         dapiManagementMerkleRoot,
         dapiPricingMerkleLeaves,
         dapiPricingMerkleRoot,
-        dataFeedDetails,
         dataFeedId,
         roles,
         templateIds,
@@ -3642,7 +3641,15 @@ describe('Api3Market', function () {
       );
 
       // Then, the Market frontend checks if it should register the data feed or
-      // update any Beacons or the Beacon set
+      // update any Beacons or the Beacon set.
+      // Data feed details get encoded differently they are for a single Beacon
+      const dataFeedDetails =
+        airnodes.length === 1
+          ? ethers.AbiCoder.defaultAbiCoder().encode(['address', 'bytes32'], [airnodes[0]!.address, templateIds[0]])
+          : ethers.AbiCoder.defaultAbiCoder().encode(
+              ['address[]', 'bytes32[]'],
+              [airnodes.map((airnode) => airnode.address), templateIds]
+            );
       let registerDataFeed = false;
       const updateBeacons = Array.from({ length: airnodes.length }).fill(false);
       let updateBeaconSet = false;
