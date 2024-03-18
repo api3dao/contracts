@@ -17,18 +17,17 @@ contract AuctioneerRegistry is Ownable, SelfMulticall {
 
     // This fee shouldn't guarantee indefinite support. We can specify that we
     // will deactivate proxies that haven't generated any OEV for a length of
-    // time.
-    // Similarly, we should be able to deactivate proxies whose metadata is not
-    // formatted correctly, or ones that are on chains that we're not serving
-    // yet, etc. Payment should not be reason to allow these to take up
+    // time. Similarly, we should be able to deactivate proxies whose data is
+    // not formatted correctly, or ones that are on chains that we're not
+    // serving yet, etc. Payment should not be reason to allow these to take up
     // auctioneer capacity.
     uint256 public activationFeeInUsdWith18Decimals;
 
     uint256 public maximumOevProxyCount;
 
-    mapping(bytes32 => bytes) public hashToOevProxyMetadata;
+    mapping(bytes32 => bytes) public hashToOevProxyData;
 
-    EnumerableSet.Bytes32Set private oevProxyMetadataHashSet;
+    EnumerableSet.Bytes32Set private oevProxyDataHashSet;
 
     constructor(
         address usdRateAirnode_,
@@ -70,29 +69,29 @@ contract AuctioneerRegistry is Ownable, SelfMulticall {
         // Emit event
     }
 
-    // The OEV proxy metadata is:
+    // The OEV proxy data is:
     //   - Chain ID
     //   - Data feed ID / dAPI name
     //   - Beneficiary address
-    //   - Metadata
+    //   - Data
     // We do not derive/validate the proxy address on-chain in case the logic
     // for doing so is different for a future integration (such as zksync).
     // The auctioneer is allowed to deny service to OEV proxies based on
-    // arbitrary off-chain rules. For example, the metadata not being formatted
+    // arbitrary off-chain rules. For example, the data not being formatted
     // correctly, or the proxy belonging to a chain that the specific
     // auctioneer with the AuctioneerRegistry contract is not serving can be
     // reasons to deny service.
     function activateOevProxyAsOwner(
-        bytes calldata oevProxyMetadata
+        bytes calldata oevProxyData
     ) external onlyOwner {
-        activateOevProxy(oevProxyMetadata);
+        activateOevProxy(oevProxyData);
     }
 
     function activateOevProxyWithPayment(
         uint256 timestamp,
         bytes calldata data,
         bytes calldata signature,
-        bytes calldata oevProxyMetadata
+        bytes calldata oevProxyData
     ) external payable {
         require(data.length == 32, "Data length invalid");
         require(
@@ -118,45 +117,45 @@ contract AuctioneerRegistry is Ownable, SelfMulticall {
                 activationFeeInUsdWith18Decimals,
             "Insufficient payment"
         );
-        activateOevProxy(oevProxyMetadata);
+        activateOevProxy(oevProxyData);
     }
 
-    function activateOevProxy(bytes calldata oevProxyMetadata) private {
-        require(oevProxyMetadata.length != 0, "Metadata empty");
+    function activateOevProxy(bytes calldata oevProxyData) private {
+        require(oevProxyData.length != 0, "Data empty");
         require(
             activeOevProxyCount() < maximumOevProxyCount,
             "OEV proxy capacity full"
         );
-        bytes32 oevProxyMetadataHash = keccak256(oevProxyMetadata);
-        if (hashToOevProxyMetadata[oevProxyMetadataHash].length == 0) {
-            hashToOevProxyMetadata[oevProxyMetadataHash] = oevProxyMetadata;
+        bytes32 oevProxyDataHash = keccak256(oevProxyData);
+        if (hashToOevProxyData[oevProxyDataHash].length == 0) {
+            hashToOevProxyData[oevProxyDataHash] = oevProxyData;
         }
-        if (!oevProxyMetadataHashSet.contains(oevProxyMetadataHash)) {
+        if (!oevProxyDataHashSet.contains(oevProxyDataHash)) {
             // Emit event
-            oevProxyMetadataHashSet.add(oevProxyMetadataHash);
+            oevProxyDataHashSet.add(oevProxyDataHash);
         }
     }
 
     function deactivateOevProxyAsOwner(
-        bytes32 oevProxyMetadataHash
+        bytes32 oevProxyDataHash
     ) external onlyOwner {
-        if (oevProxyMetadataHashSet.contains(oevProxyMetadataHash)) {
-            oevProxyMetadataHashSet.remove(oevProxyMetadataHash);
+        if (oevProxyDataHashSet.contains(oevProxyDataHash)) {
+            oevProxyDataHashSet.remove(oevProxyDataHash);
             // Emit event
         }
     }
 
     // Auctioneer multicalls the below two functions
     function activeOevProxyCount() public view returns (uint256) {
-        return oevProxyMetadataHashSet.length();
+        return oevProxyDataHashSet.length();
     }
 
-    function activeOevProxyMetadata(
+    function activeOevProxyData(
         uint256 index
-    ) external view returns (bytes memory oevProxyMetadata) {
+    ) external view returns (bytes memory oevProxyData) {
         if (index < activeOevProxyCount()) {
-            oevProxyMetadata = hashToOevProxyMetadata[
-                oevProxyMetadataHashSet.at(index)
+            oevProxyData = hashToOevProxyData[
+                oevProxyDataHashSet.at(index)
             ];
         }
     }
