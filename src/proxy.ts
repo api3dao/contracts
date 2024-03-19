@@ -22,8 +22,18 @@ function getDeploymentAddresses(chainId: ethers.BigNumberish) {
   return { api3ServerV1Address, proxyFactoryAddress };
 }
 
-function computeDapiProxyAddress(chainId: ethers.BigNumberish, dapiName: string, metadata: ethers.BytesLike) {
-  const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
+interface ContractAddresses {
+  api3ServerV1Address: string;
+  proxyFactoryAddress: string;
+}
+
+function computeDapiProxyAddress(
+  chainId: ethers.BigNumberish,
+  dapiName: string,
+  metadata: ethers.BytesLike,
+  contracts: ContractAddresses = getDeploymentAddresses(chainId)
+) {
+  const { api3ServerV1Address, proxyFactoryAddress } = contracts;
   const dapiNameHash = ethers.solidityPackedKeccak256(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
@@ -39,9 +49,10 @@ function computeDapiProxyWithOevAddress(
   chainId: ethers.BigNumberish,
   dapiName: string,
   oevBeneficiary: ethers.AddressLike,
-  metadata: ethers.BytesLike
+  metadata: ethers.BytesLike,
+  contracts: ContractAddresses = getDeploymentAddresses(chainId)
 ) {
-  const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
+  const { api3ServerV1Address, proxyFactoryAddress } = contracts;
   const dapiNameHash = ethers.solidityPackedKeccak256(['bytes32'], [ethers.encodeBytes32String(dapiName)]);
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
@@ -59,9 +70,10 @@ function computeDapiProxyWithOevAddress(
 function computeDataFeedProxyAddress(
   chainId: ethers.BigNumberish,
   dataFeedId: ethers.BytesLike,
-  metadata: ethers.BytesLike
+  metadata: ethers.BytesLike,
+  contracts: ContractAddresses = getDeploymentAddresses(chainId)
 ) {
-  const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
+  const { api3ServerV1Address, proxyFactoryAddress } = contracts;
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
@@ -76,9 +88,10 @@ function computeDataFeedProxyWithOevAddress(
   chainId: ethers.BigNumberish,
   dataFeedId: ethers.BytesLike,
   oevBeneficiary: ethers.AddressLike,
-  metadata: ethers.BytesLike
+  metadata: ethers.BytesLike,
+  contracts: ContractAddresses = getDeploymentAddresses(chainId)
 ) {
-  const { api3ServerV1Address, proxyFactoryAddress } = getDeploymentAddresses(chainId);
+  const { api3ServerV1Address, proxyFactoryAddress } = contracts;
   const initcode = ethers.solidityPacked(
     ['bytes', 'bytes'],
     [
@@ -93,6 +106,7 @@ function computeDataFeedProxyWithOevAddress(
 }
 
 export {
+  type ContractAddresses,
   computeDapiProxyAddress,
   computeDapiProxyWithOevAddress,
   computeDataFeedProxyAddress,
