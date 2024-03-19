@@ -72,6 +72,7 @@ contract AuctioneerRegistry is Ownable, SelfMulticall {
     // The OEV proxy data is:
     //   - Chain ID
     //   - Data feed ID / dAPI name
+    //   - Is dAPI
     //   - Beneficiary address
     //   - Data
     // We do not derive/validate the proxy address on-chain in case the logic
