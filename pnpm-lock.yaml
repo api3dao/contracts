@@ -11,11 +11,11 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^4.13.0
-    version: 4.13.0(typescript@5.4.2)
+    specifier: ^4.13.1
+    version: 4.13.1(typescript@5.4.2)
   '@api3/commons':
-    specifier: ^0.7.1
-    version: 0.7.1(eslint@8.57.0)(typescript@5.4.2)
+    specifier: ^0.8.0
+    version: 0.8.0(eslint@8.57.0)(typescript@5.4.2)
   '@api3/promise-utils':
     specifier: ^0.4.0
     version: 0.4.0
@@ -115,8 +115,8 @@ packages:
   /@adraffy/ens-normalize@1.10.1:
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  /@api3/chains@4.13.0(typescript@5.4.2):
-    resolution: {integrity: sha512-MjAz/03peNiqOUqWie35mO0QihPTWYYGU+fGXTo0NkPher3bsl0EhSdxDIn4uzkRTgCskAN4jTCwGI28b70y6A==}
+  /@api3/chains@4.13.1(typescript@5.4.2):
+    resolution: {integrity: sha512-JvvZBsZT0WcfrbXJAWd9ha7JPqOcXiP9uJfa7vqRD65WNbm5H8R91QR6at7JQyIi9HzSwTeiOaKVKGjrfHaUsg==}
     dependencies:
       viem: 2.7.20(typescript@5.4.2)(zod@3.22.4)
       zod: 3.22.4
@@ -126,9 +126,9 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@api3/commons@0.7.1(eslint@8.57.0)(typescript@5.4.2):
-    resolution: {integrity: sha512-Cm2OfuLklEffSh2/DFnfyOBpa/JC3mXi4Xx0MUVZU8aqcGkc62bD3CqLXRXHEsxe2IQLg3B4NZhOZeNEWFl0nQ==}
-    engines: {node: ^18.14.0 || ^20.10.0, pnpm: ^8.8.0}
+  /@api3/commons@0.8.0(eslint@8.57.0)(typescript@5.4.2):
+    resolution: {integrity: sha512-iuAz5+dD4Qvh72pGJRRVefU/gE5F6cmIJj+JmAuy90IHB23Cg/iON1tNWUhg44Bp9A6mJMkNNASmZMkpe0JwHA==}
+    engines: {node: '>=18.14.0'}
     peerDependencies:
       eslint: ^8.50.0
     dependencies:
@@ -3627,7 +3627,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: true
-    bundledDependencies: false
 
   /evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
