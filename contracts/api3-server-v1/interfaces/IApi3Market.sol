@@ -16,6 +16,8 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         uint256 paymentAmount
     );
 
+    event CanceledSubscriptions(bytes32 indexed dapiName);
+
     event UpdatedCurrentSubscriptionId(
         bytes32 indexed dapiName,
         bytes32 indexed subscriptionId
@@ -30,6 +32,8 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         uint256 price,
         bytes calldata dapiManagementAndDapiPricingMerkleData
     ) external payable returns (bytes32 subscriptionId);
+
+    function cancelSubscriptions(bytes32 dapiName) external;
 
     function updateCurrentSubscriptionId(bytes32 dapiName) external;
 

@@ -9,7 +9,7 @@ For example, buying a subscription for a [dAPI](./api3serverv1.md#dapi) that is 
 
 Api3Market inherits [HashRegistry](./hashregistry.md), which inherits Ownable, which means Api3Market has an owner.
 Unlike HashRegistry, the Api3Market ownership cannot be transferred or renounced (i.e., the owner specified at the deployment is immutable).
-Api3Market does not use the ownership functionality, which means that the owner is solely used for [HashRegistry functionality](./hashregistry.md#the-owner), which is setting signers for a hash type or setting a hash.
+In addition to [HashRegistry functionality](./hashregistry.md#the-owner), Api3Market allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decomissioned urgently, without waiting for the ongoing subscriptions to end.
 
 ## Merkle roots as HashRegistry hash types
 
