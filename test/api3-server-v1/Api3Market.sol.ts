@@ -7,8 +7,7 @@ import { artifacts, ethers } from 'hardhat';
 
 import type { Api3Market } from '../../src/index';
 import { signHash } from '../access/HashRegistry.sol';
-
-import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from './AirseekerRegistry.sol';
+import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
 
 describe('Api3Market', function () {
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
