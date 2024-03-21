@@ -2855,6 +2855,122 @@ describe('Api3Market', function () {
     });
   });
 
+  describe('cancelSubscriptions', function () {
+    context('Sender is the owner', function () {
+      context('dAPI subscription queue is not empty', function () {
+        it('cancels subscriptions', async function () {
+          const {
+            roles,
+            api3ServerV1,
+            beaconIds,
+            dataFeedDetails,
+            api3Market,
+            airseekerRegistry,
+            dapiManagementMerkleLeaves,
+            dapiManagementMerkleRoot,
+            dapiPricingMerkleLeaves,
+            dapiPricingMerkleRoot,
+          } = await helpers.loadFixture(deploy);
+          await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+          await api3Market
+            .connect(roles.randomPerson)
+            .buySubscription(
+              dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+              dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+              dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
+              dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+              dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+              dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+              ethers.AbiCoder.defaultAbiCoder().encode(
+                ['bytes32', 'bytes32[]', 'bytes32', 'bytes32[]'],
+                [
+                  dapiManagementMerkleRoot,
+                  dapiManagementMerkleLeaves.ethUsd!.proof,
+                  dapiPricingMerkleRoot,
+                  dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.proof,
+                ]
+              ),
+              {
+                value: await computeRequiredPaymentAmount(
+                  api3Market,
+                  dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+                  dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
+                  dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
+                  dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
+                  dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
+                ),
+              }
+            );
+          await api3Market
+            .connect(roles.randomPerson)
+            .buySubscription(
+              dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+              dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
+              dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
+              dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
+              dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
+              dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.price,
+              ethers.AbiCoder.defaultAbiCoder().encode(
+                ['bytes32', 'bytes32[]', 'bytes32', 'bytes32[]'],
+                [
+                  dapiManagementMerkleRoot,
+                  dapiManagementMerkleLeaves.ethUsd!.proof,
+                  dapiPricingMerkleRoot,
+                  dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.proof,
+                ]
+              ),
+              {
+                value: await computeRequiredPaymentAmount(
+                  api3Market,
+                  dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
+                  dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
+                  dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
+                  dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.price,
+                  dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
+                ),
+              }
+            );
+          await expect(
+            api3Market.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+          )
+            .to.emit(api3Market, 'CanceledSubscriptions')
+            .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+            .to.emit(airseekerRegistry, 'DeactivatedDapiName')
+            .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+          const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
+          const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
+          const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+          expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
+          expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
+          expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
+          expect(dapiData.beaconValues).to.deep.equal(beaconReadings.map((beaconReading) => beaconReading.value));
+          expect(dapiData.beaconTimestamps).to.deep.equal(
+            beaconReadings.map((beaconReading) => beaconReading.timestamp)
+          );
+          expect(dapiData.updateParameters).to.deep.equal([]);
+          expect(dapiData.endTimestamps).to.deep.equal([]);
+          expect(dapiData.dailyPrices).to.deep.equal([]);
+        });
+      });
+      context('dAPI subscription queue is empty', function () {
+        it('reverts', async function () {
+          const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+          await expect(
+            api3Market.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+          ).to.be.revertedWith('Subscription queue empty');
+        });
+      });
+    });
+    context('Sender is not the owner', function () {
+      it('reverts', async function () {
+        const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+        await expect(
+          api3Market.connect(roles.randomPerson).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+        ).to.be.revertedWith('Ownable: caller is not the owner');
+      });
+    });
+  });
+
   describe('updateCurrentSubscriptionId', function () {
     context('dAPI subscription queue is not empty', function () {
       context('Current subscription ID needs to be updated', function () {

@@ -234,6 +234,24 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         }
     }
 
+    /// @notice Called by the owner to cancel all subscriptions for a dAPI
+    /// that needs to be decommissioned urgently
+    /// @dev The root of a new dAPI pricing Merkle tree that excludes the dAPI
+    /// should be registered before canceling the subscriptions. Otherwise,
+    /// anyone can immediately buy the subscriptions again.
+    /// @param dapiName dAPI name
+    function cancelSubscriptions(bytes32 dapiName) external override onlyOwner {
+        require(
+            dapiNameToCurrentSubscriptionId[dapiName] != bytes32(0),
+            "Subscription queue empty"
+        );
+        dapiNameToCurrentSubscriptionId[dapiName] = bytes32(0);
+        AirseekerRegistry(airseekerRegistry).setDapiNameToBeDeactivated(
+            dapiName
+        );
+        emit CanceledSubscriptions(dapiName);
+    }
+
     /// @notice If the current subscription has ended, updates it with the one
     /// that will end next
     /// @dev The fact that there is a current subscription that has ended would
