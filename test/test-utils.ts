@@ -124,7 +124,7 @@ async function signOevData(
   return signature;
 }
 
-export async function updateBeacon(
+async function updateBeacon(
   api3ServerV1: Api3ServerV1,
   feedName: string,
   airnode: HDNodeWallet,
@@ -151,7 +151,7 @@ export async function updateBeacon(
   };
 }
 
-export async function updateBeaconSet(
+async function updateBeaconSet(
   api3ServerV1: Api3ServerV1,
   feedName: string,
   airnodes: HDNodeWallet[],
@@ -193,7 +193,7 @@ export async function updateBeaconSet(
   };
 }
 
-export async function readBeacons(api3ServerV1: Api3ServerV1, beaconIds: BytesLike[]) {
+async function readBeacons(api3ServerV1: Api3ServerV1, beaconIds: BytesLike[]) {
   const returndata = await api3ServerV1.multicall.staticCall(
     beaconIds.map((beaconId) => api3ServerV1.interface.encodeFunctionData('dataFeeds', [beaconId]))
   );
@@ -204,18 +204,14 @@ export async function readBeacons(api3ServerV1: Api3ServerV1, beaconIds: BytesLi
     });
 }
 
-export function encodeUpdateParameters(
-  deviationThreshold: number,
-  deviationReference: number,
-  heartbeatInterval: number
-) {
+function encodeUpdateParameters(deviationThreshold: number, deviationReference: number, heartbeatInterval: number) {
   return ethers.AbiCoder.defaultAbiCoder().encode(
     ['uint256', 'int224', 'uint256'],
     [deviationThreshold, deviationReference, heartbeatInterval]
   );
 }
 
-export function deriveTemplateId(oisTitle: string, feedName: string) {
+function deriveTemplateId(oisTitle: string, feedName: string) {
   const endpointId = ethers.solidityPackedKeccak256(['string', 'string'], [oisTitle, 'feed']);
   // Parameters encoded in Airnode ABI
   // https://docs.api3.org/reference/airnode/latest/specifications/airnode-abi.html
@@ -231,11 +227,11 @@ export function deriveTemplateId(oisTitle: string, feedName: string) {
   );
 }
 
-export function deriveBeaconId(airnodeAddress: AddressLike, templateId: BytesLike) {
+function deriveBeaconId(airnodeAddress: AddressLike, templateId: BytesLike) {
   return ethers.solidityPackedKeccak256(['address', 'bytes32'], [airnodeAddress, templateId]);
 }
 
-export function deriveBeaconSetId(beaconIds: BytesLike[]) {
+function deriveBeaconSetId(beaconIds: BytesLike[]) {
   return ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(['bytes32[]'], [beaconIds]));
 }
 
@@ -252,4 +248,11 @@ export {
   deriveRole,
   signData,
   signOevData,
+  updateBeacon,
+  updateBeaconSet,
+  readBeacons,
+  encodeUpdateParameters,
+  deriveTemplateId,
+  deriveBeaconId,
+  deriveBeaconSetId,
 };
