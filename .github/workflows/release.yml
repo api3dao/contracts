@@ -15,13 +15,21 @@ jobs:
       packages: write
       pull-requests: write
     steps:
+      - name: Clone @api3/contracts
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          cache: 'pnpm'
 
       - name: Ensure main is present for the commit message preparation
         run: |
