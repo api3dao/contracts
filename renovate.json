@@ -35,7 +35,7 @@
   "lockFileMaintenance": {
     "enabled": false
   },
-  "baseBranches": ["phase21"],
+  "baseBranches": ["main"],
   "reviewers": ["bbenligiray", "hiletmis"],
   "dependencyDashboard": false
 }
