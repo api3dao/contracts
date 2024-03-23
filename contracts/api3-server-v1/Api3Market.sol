@@ -117,6 +117,12 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// @dev Api3Market deploys its own AirseekerRegistry deterministically.
     /// This implies that Api3Market-specific Airseekers should be operated by
     /// pointing at this contract.
+    /// The maximum subscription queue length should be large enough to not
+    /// obstruct subscription purchases under usual conditions, and small
+    /// enough to keep the queue at an iterable size. For example, if the
+    /// number of unique update parameters in the dAPI pricing Merkle trees
+    /// that are being used is around 5, a maximum subscription queue length of
+    /// 10 would be acceptable for a typical chain.
     /// @param owner_ Owner address
     /// @param proxyFactory_ ProxyFactory contract address
     /// @param maximumSubscriptionQueueLength_ Maximum subscription queue
