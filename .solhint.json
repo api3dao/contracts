@@ -8,6 +8,6 @@
     "no-global-import": "off",
     "func-name-mixedcase": "off",
     "immutable-vars-naming": "off",
-    "custom-errors": "off"
+    "gas-custom-errors": "off"
   }
 }
