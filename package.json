@@ -1,6 +1,12 @@
 {
   "name": "@api3/contracts",
   "description": "Contracts through which API3 services are delivered",
+  "keywords": [
+    "api3",
+    "data feed",
+    "oracle",
+    "oev"
+  ],
   "license": "MIT",
   "version": "2.0.0-beta.16",
   "engines": {
