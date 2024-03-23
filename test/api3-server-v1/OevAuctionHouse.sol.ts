@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import type { AddressLike, BytesLike } from 'ethers';
 import { ethers } from 'hardhat';
 
-import type { MockProxy } from '../src/index';
+import type { MockProxy } from '../../src/index';
 
 describe('OevAuctionHouse', function () {
   enum BidConditionType {

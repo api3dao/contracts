@@ -820,7 +820,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         bytes calldata updateParameters,
         uint256 duration,
         uint256 price
-    ) private returns (bytes32 subscriptionId) {
+    ) internal returns (bytes32 subscriptionId) {
         uint32 endTimestamp;
         bytes32 previousSubscriptionId;
         bytes32 nextSubscriptionId;

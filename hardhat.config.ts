@@ -15,6 +15,9 @@ const config: HardhatUserConfig = {
     outputFile: 'gas_report',
     noColors: true,
   },
+  mocha: {
+    timeout: process.env.EXTENDED_TEST ? 60 * 60_000 : 60_000,
+  },
   networks: hardhatConfig.networks(),
   paths: {
     tests: process.env.EXTENDED_TEST ? './test-extended' : './test',
