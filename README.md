@@ -2,12 +2,26 @@
 
 > Contracts through which API3 services are delivered
 
-## Instructions
+This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
+
+1. Purchase data feed subscriptions at the API3 Market
+1. Deploy the respective DapiProxyWithOev contracts at the API3 Market
+1. Use the proxy contract interfaces provided by this package in the reader contract, as demonstrated in https://github.com/api3dao/data-feed-reader-example
+1. Use the proxy address computation utility functions provided by this package to validate the proxy addresses being used
+
+A more complete list of what this package includes is as follows:
+
+- All contracts that facilitate API3 data feed services
+- `@typechain/ethers-v6` typings of these contracts
+- Addresses of the API3 deployments of these contracts
+- Proxy address computation utility functions
+
+## Developer instructions
 
 Install the dependencies and build
 
 ```sh
-pnpm install
+pnpm i && pnpm build
 ```
 
 Test the contracts, get coverage and gas reports
