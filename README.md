@@ -16,6 +16,19 @@ A more complete list of what this package includes is as follows:
 - Addresses of the API3 deployments of these contracts
 - Proxy address computation utility functions
 
+## Security
+
+We have conducted 10+ audits of our contracts and their off-chain components.
+Below are the reports of the ones that are directly related to the contracts in this repo (or in some cases, earlier versions of them).
+
+- [2024-02-20 Quantstamp](./audit-reports/2024-02-20%20Quantstamp.pdf)
+- [2023-12-20 Quantstamp](./audit-reports/2023-12-20%20Quantstamp.pdf)
+- [2023-03-02 Sigma Prime](./audit-reports/2023-03-02%20Sigma%20Prime.pdf)
+- [2022-03-30 Trail of Bits](./audit-reports/2022-03-30%20Trail%20of%20Bits.pdf)
+- [2021-12-16 Sigma Prime](./audit-reports/2021-12-16%20Sigma%20Prime.pdf)
+
+For bug reports, contact `security@api3.org`
+
 ## Developer instructions
 
 Install the dependencies and build
