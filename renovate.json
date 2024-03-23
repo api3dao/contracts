@@ -1,0 +1,41 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "schedule": ["before 10am on the first day of the month"],
+      "groupName": "other minor updates"
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "schedule": ["before 10am on the first day of the month"],
+      "groupName": "other major updates"
+    },
+    {
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "schedule": ["before 1am on the first day of the month"],
+      "groupName": "dependencies (non-major)"
+    },
+    {
+      "matchPackagePatterns": ["@api3/.*"],
+      "matchUpdateTypes": ["major"],
+      "schedule": ["before 6pm"],
+      "groupName": "api3 major updates"
+    },
+    {
+      "matchPackagePatterns": ["@api3/.*"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "schedule": ["before 6pm"],
+      "groupName": "api3"
+    }
+  ],
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "baseBranches": ["main"],
+  "reviewers": ["bbenligiray", "hiletmis"],
+  "dependencyDashboard": false
+}
