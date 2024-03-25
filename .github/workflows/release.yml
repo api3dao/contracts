@@ -36,6 +36,9 @@ jobs:
           git checkout main
           git checkout production
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Prepare for the commit message
         run: |
           echo "NEW_VERSION=$(pnpm changeset status --output=release.json > /dev/null && jq -r '.releases[0].newVersion' release.json && rm release.json)" >> "$GITHUB_ENV"
