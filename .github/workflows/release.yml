@@ -57,6 +57,6 @@ jobs:
 
       - name: Create PR to merge production to main
         if: steps.changesets.outputs.published == 'true'
-        run: gh pr create -B main -H production --title 'Merge production to main' --reviewer bbenligiray
+        run: gh pr create -B main -H production --title 'Merge production to main' --body 'This PR is created automatically after a release' --reviewer bbenligiray
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
