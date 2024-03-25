@@ -44,7 +44,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: pnpm changeset:version
+          version: pnpm changeset version
           publish: pnpm changeset publish
           title: 'Release v${{ env.NEW_VERSION }}'
           commit: 'Release v${{ env.NEW_VERSION }}'
