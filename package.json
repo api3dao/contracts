@@ -44,7 +44,7 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^4.13.1",
+    "@api3/chains": "^4.14.0",
     "@api3/commons": "^0.8.0",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.27.1",
