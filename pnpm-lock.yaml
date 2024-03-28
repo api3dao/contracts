@@ -14,8 +14,8 @@ devDependencies:
     specifier: ^4.14.0
     version: 4.14.0(typescript@5.4.2)
   '@api3/commons':
-    specifier: ^0.8.0
-    version: 0.8.0(eslint@8.57.0)(typescript@5.4.2)
+    specifier: ^0.9.0
+    version: 0.9.0(eslint@8.57.0)(typescript@5.4.2)
   '@api3/promise-utils':
     specifier: ^0.4.0
     version: 0.4.0
@@ -129,8 +129,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@api3/commons@0.8.0(eslint@8.57.0)(typescript@5.4.2):
-    resolution: {integrity: sha512-iuAz5+dD4Qvh72pGJRRVefU/gE5F6cmIJj+JmAuy90IHB23Cg/iON1tNWUhg44Bp9A6mJMkNNASmZMkpe0JwHA==}
+  /@api3/commons@0.9.0(eslint@8.57.0)(typescript@5.4.2):
+    resolution: {integrity: sha512-bbndrqECtsG/N4df+yJnyeYDgaOTdGMJLB7PzyfNj+xhlvI6+6NYhAIGyO40w6vhf/mPysWGk50pGmig3C5Cyw==}
     engines: {node: '>=18.14.0'}
     peerDependencies:
       eslint: ^8.50.0
@@ -3947,7 +3947,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: true
-    bundledDependencies: false
 
   /evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
@@ -6305,7 +6304,7 @@ packages:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     hasBin: true
     dependencies:
-      glob: 7.2.0
+      glob: 7.2.3
     dev: true
 
   /rimraf@3.0.2:
