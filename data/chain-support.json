@@ -1,9 +1,11 @@
 {
   "chainsSupportedByDapis": [
     "arbitrum",
+    "arbitrum-sepolia-testnet",
     "avalanche",
     "avalanche-testnet",
     "base",
+    "base-sepolia-testnet",
     "blast",
     "blast-sepolia-testnet",
     "bsc",
@@ -25,13 +27,17 @@
     "moonriver",
     "oev-network-sepolia-testnet",
     "optimism",
+    "optimism-sepolia-testnet",
     "polygon",
     "polygon-testnet",
     "polygon-zkevm",
+    "polygon-zkevm-sepolia-testnet",
     "rsk"
   ],
   "chainsSupportedByMarket": [
+    "arbitrum-sepolia-testnet",
     "avalanche-testnet",
+    "base-sepolia-testnet",
     "blast-sepolia-testnet",
     "bsc-testnet",
     "ethereum-sepolia-testnet",
@@ -39,7 +45,9 @@
     "gnosis-testnet",
     "kava-testnet",
     "moonbeam-testnet",
-    "polygon-testnet"
+    "optimism-sepolia-testnet",
+    "polygon-testnet",
+    "polygon-zkevm-sepolia-testnet"
   ],
   "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
 }
