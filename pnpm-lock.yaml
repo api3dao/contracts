@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^4.14.0
-    version: 4.14.0(typescript@5.4.2)
+    specifier: ^4.16.0
+    version: 4.16.0(typescript@5.4.2)
   '@api3/commons':
     specifier: ^0.9.0
     version: 0.9.0(eslint@8.57.0)(typescript@5.4.2)
@@ -118,10 +118,10 @@ packages:
   /@adraffy/ens-normalize@1.10.1:
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  /@api3/chains@4.14.0(typescript@5.4.2):
-    resolution: {integrity: sha512-zM37/EW6bsYVmu6wea+3+D7FlK60kI6LBYwCRxE85ISUUCT6gkclkFLksGN6vrw4ZTl9Xool2fbhALHiuYA7Uw==}
+  /@api3/chains@4.16.0(typescript@5.4.2):
+    resolution: {integrity: sha512-dk2l4p/wszxrZucqA90GQ6jEuYd8s1eEydEJeYe2C2dW7mUviTz63XetLwMYIyxoa5pMiG1EClKW0qKMWXqIYQ==}
     dependencies:
-      viem: 2.7.20(typescript@5.4.2)(zod@3.22.4)
+      viem: 2.9.6(typescript@5.4.2)(zod@3.22.4)
       zod: 3.22.4
     transitivePeerDependencies:
       - bufferutil
@@ -3947,6 +3947,7 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: true
+    bundledDependencies: false
 
   /evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
@@ -7302,8 +7303,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /viem@2.7.20(typescript@5.4.2)(zod@3.22.4):
-    resolution: {integrity: sha512-S31a24LWEjqXAjw1A+3/xALo+4eiYKklAjLtlLdPhA0cp+Kv6GcgruNVTktP8pKIGNYvpyQ+HA9PJyUhVXPdDw==}
+  /viem@2.9.6(typescript@5.4.2)(zod@3.22.4):
+    resolution: {integrity: sha512-VVFWjGQei2wnWTvAB/xrIf22m6flCwxeBr8LnwejXMTSSi1EORWEswrw2lfKTmw3TlRPSG4uSiQMa/d0l0DKRg==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
