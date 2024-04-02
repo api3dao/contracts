@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 2.3.0
+
+### Minor Changes
+
+- 5dc511b: Add dAPI support for x-layer and x-layer-sepolia-testnet
+
 ## 2.2.0
 
 ### Minor Changes
