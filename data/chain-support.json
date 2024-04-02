@@ -32,7 +32,9 @@
     "polygon-testnet",
     "polygon-zkevm",
     "polygon-zkevm-sepolia-testnet",
-    "rsk"
+    "rsk",
+    "x-layer",
+    "x-layer-sepolia-testnet"
   ],
   "chainsSupportedByMarket": [
     "arbitrum",
