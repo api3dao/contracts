@@ -25,6 +25,7 @@
     "moonbeam",
     "moonbeam-testnet",
     "moonriver",
+    "oev-network-agg-sepolia-testnet",
     "oev-network-sepolia-testnet",
     "optimism",
     "optimism-sepolia-testnet",
@@ -67,5 +68,5 @@
     "polygon-zkevm",
     "polygon-zkevm-sepolia-testnet"
   ],
-  "chainsSupportedByOevAuctions": ["oev-network-sepolia-testnet"]
+  "chainsSupportedByOevAuctions": ["oev-network-agg-sepolia-testnet", "oev-network-sepolia-testnet"]
 }
