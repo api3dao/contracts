@@ -1,5 +1,23 @@
 # @api3/contracts
 
+## 2.4.0
+
+### Minor Changes
+
+- f93df05: Add dAPI and OEV auction support for oev-network-agg-sepolia-testnet
+
+## 2.3.0
+
+### Minor Changes
+
+- 5dc511b: Add dAPI support for x-layer and x-layer-sepolia-testnet
+
+## 2.2.0
+
+### Minor Changes
+
+- f433d4a: Add Market support for arbitrum, avalanche, base, blast, bsc, ethereum, fantom, gnosis, kava, linea, mantle, moonbeam, moonriver, optimism, polygon, polygon-zkevm
+
 ## 2.1.0
 
 ### Minor Changes
