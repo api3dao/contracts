@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 2.4.0
+
+### Minor Changes
+
+- f93df05: Add dAPI and OEV auction support for oev-network-agg-sepolia-testnet
+
 ## 2.3.0
 
 ### Minor Changes
