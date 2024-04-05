@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^4.16.0
-    version: 4.16.0(typescript@5.4.3)
+    specifier: ^4.16.1
+    version: 4.16.1(typescript@5.4.3)
   '@api3/commons':
     specifier: ^0.9.0
     version: 0.9.0(eslint@8.57.0)(typescript@5.4.3)
@@ -118,8 +118,8 @@ packages:
   /@adraffy/ens-normalize@1.10.1:
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  /@api3/chains@4.16.0(typescript@5.4.3):
-    resolution: {integrity: sha512-dk2l4p/wszxrZucqA90GQ6jEuYd8s1eEydEJeYe2C2dW7mUviTz63XetLwMYIyxoa5pMiG1EClKW0qKMWXqIYQ==}
+  /@api3/chains@4.16.1(typescript@5.4.3):
+    resolution: {integrity: sha512-ve0k83r7tnH/e2+JSYcEEnLbBP+jcqwOH4+7KL6lTiheZebOyPKUSlxOvTmBvuA1ejP3o77uEkyR+OZnaf/DwA==}
     dependencies:
       viem: 2.9.6(typescript@5.4.3)(zod@3.22.4)
       zod: 3.22.4
