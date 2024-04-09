@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 2.5.0
+
+### Minor Changes
+
+- 650745f: Add dAPI and Market support for fraxtal, fraxtal-holesky-testnet, linea-sepolia-testnet, mode, mode-sepolia-testnet
+
 ## 2.4.0
 
 ### Minor Changes
