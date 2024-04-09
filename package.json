@@ -10,7 +10,7 @@
   "license": "MIT",
   "version": "2.4.0",
   "engines": {
-    "node": "^20.11.1"
+    "node": "^20.12.1"
   },
   "private": false,
   "main": "dist/src/index",
@@ -44,7 +44,7 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^4.16.0",
+    "@api3/chains": "^4.17.0",
     "@api3/commons": "^0.9.0",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.27.1",
@@ -52,29 +52,29 @@
     "@nomicfoundation/hardhat-ethers": "^3.0.5",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "@nomicfoundation/hardhat-verify": "^2.0.4",
+    "@nomicfoundation/hardhat-verify": "^2.0.5",
     "@openzeppelin/merkle-tree": "^1.0.6",
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
-    "@types/chai": "^4.3.12",
+    "@types/chai": "^4.3.14",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.24",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@types/node": "^20.12.4",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
     "chai": "^4.4.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
-    "glob": "^10.3.10",
-    "hardhat": "^2.20.1",
-    "hardhat-deploy": "^0.12.1",
-    "hardhat-gas-reporter": "^1.0.10",
+    "glob": "^10.3.12",
+    "hardhat": "^2.22.2",
+    "hardhat-deploy": "^0.12.2",
+    "hardhat-gas-reporter": "^2.0.2",
     "prettier": "^3.2.5",
     "prettier-plugin-solidity": "^1.3.1",
     "solhint": "^4.5.2",
-    "solidity-coverage": "^0.8.10",
+    "solidity-coverage": "^0.8.11",
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.3"
   },
   "dependencies": {
     "ethers": "^6.11.1"

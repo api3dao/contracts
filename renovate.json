@@ -3,6 +3,11 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
+      "matchPackagePatterns": ["@nomicfoundation/.*", "chai"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "matchUpdateTypes": ["patch", "minor"],
       "schedule": ["before 10am on the first day of the month"],
       "groupName": "other minor updates"
