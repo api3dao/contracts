@@ -5,6 +5,9 @@ import { hardhatConfig } from '@api3/chains';
 fs.writeFileSync(
   'example.env',
   hardhatConfig.getEnvVariableNames().reduce((fileContents: string, envVariableName: string) => {
-    return `${fileContents}${envVariableName}=\n`;
+    if (!envVariableName.startsWith('HARDHAT_HTTP_RPC_URL_')) {
+      return `${fileContents}${envVariableName}=\n`;
+    }
+    return fileContents;
   }, '')
 );
