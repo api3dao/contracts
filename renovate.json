@@ -3,6 +3,10 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
+      "matchPackageNames": ["node"],
+      "enabled": false
+    },
+    {
       "matchPackagePatterns": ["@nomicfoundation/.*", "chai"],
       "matchUpdateTypes": ["major"],
       "enabled": false

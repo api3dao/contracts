@@ -10,7 +10,7 @@
   "license": "MIT",
   "version": "2.5.0",
   "engines": {
-    "node": "^20.12.1"
+    "node": ">=18.14.0"
   },
   "repository": {
     "type": "git",
