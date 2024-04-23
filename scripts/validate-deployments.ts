@@ -56,10 +56,6 @@ async function main() {
         );
       }
       if (chainsSupportedByMarket.includes(network)) {
-        // TODO: Remove this after 2.1 launch
-        if (!network.includes('-testnet')) {
-          continue;
-        }
         // Validate that Api3Market is a dAPI name setter
         const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
         const adminRole = ethers.solidityPackedKeccak256(
