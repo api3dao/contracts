@@ -12,6 +12,7 @@
     "bsc-testnet",
     "blast-sepolia-testnet",
     "ethereum",
+    "ethereum-holesky-testnet",
     "ethereum-sepolia-testnet",
     "fantom",
     "fantom-testnet",
@@ -30,17 +31,18 @@
     "moonbeam",
     "moonbeam-testnet",
     "moonriver",
-    "oev-network-agg-sepolia-testnet",
     "oev-network-sepolia-testnet",
+    "opbnb",
+    "opbnb-testnet",
     "optimism",
     "optimism-sepolia-testnet",
     "polygon",
-    "polygon-testnet",
     "polygon-zkevm",
     "polygon-zkevm-sepolia-testnet",
     "rsk",
     "x-layer",
-    "x-layer-sepolia-testnet"
+    "x-layer-sepolia-testnet",
+    "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByMarket": [
     "arbitrum",
@@ -54,6 +56,7 @@
     "bsc",
     "bsc-testnet",
     "ethereum",
+    "ethereum-holesky-testnet",
     "ethereum-sepolia-testnet",
     "fantom",
     "fantom-testnet",
@@ -71,16 +74,18 @@
     "moonbeam",
     "moonbeam-testnet",
     "moonriver",
+    "opbnb",
+    "opbnb-testnet",
     "optimism",
     "optimism-sepolia-testnet",
     "polygon",
-    "polygon-testnet",
     "polygon-zkevm",
-    "polygon-zkevm-sepolia-testnet"
+    "polygon-zkevm-sepolia-testnet",
+    "x-layer",
+    "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByOevAuctions": [
     "arbitrum-sepolia-testnet",
-    "oev-network-agg-sepolia-testnet",
     "oev-network-sepolia-testnet"
   ]
 }
