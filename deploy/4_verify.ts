@@ -33,10 +33,12 @@ module.exports = async () => {
       });
 
       const ProxyFactory = await deployments.get('ProxyFactory');
+      /*
       await run('verify:verify', {
         address: ProxyFactory.address,
         constructorArguments: [Api3ServerV1.address],
       });
+      */
 
       const proxyFactory = new ethers.Contract(
         ProxyFactory.address,
