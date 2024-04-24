@@ -78,5 +78,9 @@
     "polygon-zkevm",
     "polygon-zkevm-sepolia-testnet"
   ],
-  "chainsSupportedByOevAuctions": ["oev-network-agg-sepolia-testnet", "oev-network-sepolia-testnet"]
+  "chainsSupportedByOevAuctions": [
+    "arbitrum-sepolia-testnet",
+    "oev-network-agg-sepolia-testnet",
+    "oev-network-sepolia-testnet"
+  ]
 }
