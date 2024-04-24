@@ -84,8 +84,5 @@
     "x-layer",
     "zircuit-sepolia-testnet"
   ],
-  "chainsSupportedByOevAuctions": [
-    "arbitrum-sepolia-testnet",
-    "oev-network-sepolia-testnet"
-  ]
+  "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network-sepolia-testnet"]
 }
