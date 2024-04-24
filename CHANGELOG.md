@@ -1,5 +1,17 @@
 # @api3/contracts
 
+## 3.0.0
+
+### Major Changes
+
+- b9d10af: Rename oev-network-agg-sepolia-testnet as oev-network-sepolia-testnet and remove the old oev-network-sepolia-testnet
+- b9d10af: Remove Goerli L2s, polygon-testnet
+
+### Minor Changes
+
+- b9d10af: Add dAPI and Market support for ethereum-holesky-testnet, opbnb, opbnb-testnet, zicuit-sepolia-testnet
+- b9d10af: Add Market support for x-layer
+
 ## 2.6.0
 
 ### Minor Changes
