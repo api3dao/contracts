@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 2.6.0
+
+### Minor Changes
+
+- d28cec3: Add OEV auction support to arbitrum-sepolia-testnet
+
 ## 2.5.0
 
 ### Minor Changes
