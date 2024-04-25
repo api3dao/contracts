@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 3.1.0
+
+### Minor Changes
+
+- 0548743: Add dAPI and Market support to merlin, merlin-testnet, metis, metis-sepolia-testnet
+- 0548743: Add Market support to x-layer-sepolia-testnet
+
 ## 3.0.0
 
 ### Major Changes
