@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 3.2.0
+
+### Minor Changes
+
+- da2e47e: Add dAPI support to neon-evm and neon-evm-testnet
+- da2e47e: Add dAPI and Market support to bob-sepolia-testnet, lightlink- lightlink-sepolia-testnet
+
 ## 3.1.0
 
 ### Minor Changes
