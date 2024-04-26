@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 3.2.1
+
+### Patch Changes
+
+- 71e9278: Fix lightlink-sepolia-testnet deployments
+
 ## 3.2.0
 
 ### Minor Changes
