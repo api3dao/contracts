@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 3.3.0
+
+### Minor Changes
+
+- e75f6ba: Add dAPI and Market support to bsquared, lukso, lukso-testnet and sei-testnet
+
 ## 3.2.1
 
 ### Patch Changes
