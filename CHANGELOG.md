@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 3.4.0
+
+### Minor Changes
+
+- 8b2195e: Add dAPI and Market support to bsquared-testnet, inevm- inevm-testnet, kroma, kroma-sepolia-testnet and taiko-holesky-testnet
+
 ## 3.3.0
 
 ### Minor Changes
