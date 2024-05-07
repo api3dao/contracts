@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 3.5.0
+
+### Minor Changes
+
+- 60aa12c: Add dAPI and Market support to bob, polygon-sepolia-testnet, rari
+- 60aa12c: Add dAPI support to berachain-testnet
+
 ## 3.4.0
 
 ### Minor Changes
