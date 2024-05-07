@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  pre-build:
     runs-on: ubuntu-latest
     steps:
       - name: Clone @api3/contracts
@@ -29,11 +29,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+  build:
+    runs-on: ubuntu-latest
+    needs: pre-build
+    steps:
       - name: Build
         run: pnpm build
 
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Lint
         run: pnpm lint
 
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Test
         run: pnpm test
