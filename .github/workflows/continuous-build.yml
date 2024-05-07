@@ -55,5 +55,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Verify vendor contracts
+        run: pnpm verify-vendor-contracts
+
       - name: Test
         run: pnpm test
