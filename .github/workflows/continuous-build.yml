@@ -26,6 +26,9 @@ jobs:
           node-version: '20.x'
           cache: 'pnpm'
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Lint
         run: pnpm lint
 
@@ -48,6 +51,9 @@ jobs:
         with:
           node-version: '20.x'
           cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Test
         run: pnpm test
