@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^6.2.0
-    version: 6.2.0(typescript@5.4.5)
+    specifier: ^6.3.0
+    version: 6.3.0(typescript@5.4.5)
   '@api3/commons':
     specifier: ^0.9.0
     version: 0.9.0(eslint@8.57.0)(typescript@5.4.5)
@@ -118,8 +118,8 @@ packages:
   /@adraffy/ens-normalize@1.10.1:
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  /@api3/chains@6.2.0(typescript@5.4.5):
-    resolution: {integrity: sha512-TjwOACEO896lBTOFN7sLMn7zsNZkWsBbXN+Y1nf7lyyZTx8GBFx8kLj2eho1jcKa5EPvi3ADUss3L4/6v2s5vw==}
+  /@api3/chains@6.3.0(typescript@5.4.5):
+    resolution: {integrity: sha512-ZBurUD69aoA4oCuLOOJ/91+9VXYJaXnMz3HkWg+yuiwCK9DaIgpS2Pl6kagga3UDOT80unRXcCwUpTQF5fkYIw==}
     dependencies:
       viem: 2.9.31(typescript@5.4.5)(zod@3.23.6)
       zod: 3.23.6
@@ -176,7 +176,7 @@ packages:
     resolution: {integrity: sha512-hYQCbCAtWMGKV+pECRY5tbfCSOcheeo9s6wtrhn1dOWw151VeG0sKG3VbBEsyA6cvSaldewBWY3t/JGaupdThg==}
     dependencies:
       lodash: 4.17.21
-      zod: 3.22.4
+      zod: 3.23.6
     dev: true
 
   /@api3/promise-utils@0.4.0:
