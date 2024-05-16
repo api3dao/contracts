@@ -49,6 +49,7 @@
   "moonriver": "0xCC5005Bd08b8882c9A132C0067E7D3f79796C251",
   "neon-evm": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "neon-evm-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
+  "oev-network": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "oev-network-sepolia-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "opbnb": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "opbnb-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",

@@ -50,6 +50,7 @@
     "moonriver",
     "neon-evm",
     "neon-evm-testnet",
+    "oev-network",
     "oev-network-sepolia-testnet",
     "opbnb",
     "opbnb-testnet",
@@ -128,5 +129,5 @@
     "x-layer-sepolia-testnet",
     "zircuit-sepolia-testnet"
   ],
-  "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network-sepolia-testnet"]
+  "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network", "oev-network-sepolia-testnet"]
 }
