@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 3.6.0
+
+### Minor Changes
+
+- 6ddadd1: Add dAPI and OEV auction support to oev-network
+
 ## 3.5.0
 
 ### Minor Changes
