@@ -56,11 +56,12 @@ describe('AirseekerRegistry', function () {
       api3ServerV1AdminRoleDescription,
       roles.api3ServerV1Manager!.address
     );
+    const beaconSetValueTimestamp = await helpers.time.latest();
     const { beaconIds, beaconSetId: dataFeedId } = await updateBeaconSet(
       api3ServerV1,
       'ETH/USD',
       airnodes,
-      await helpers.time.latest(),
+      beaconSetValueTimestamp,
       ethers.parseEther('2200')
     );
     const dapiName = ethers.encodeBytes32String('ETH/USD');

@@ -29,17 +29,12 @@ describe('Api3Market', function () {
       roles.api3ServerV1Manager!.address
     );
 
+    const beaconSetValueTimestamp = await helpers.time.latest();
     const {
       templateIds,
       beaconIds,
       beaconSetId: dataFeedId,
-    } = await updateBeaconSet(
-      api3ServerV1,
-      'ETH/USD',
-      airnodes,
-      await helpers.time.latest(),
-      ethers.parseEther('2200')
-    );
+    } = await updateBeaconSet(api3ServerV1, 'ETH/USD', airnodes, beaconSetValueTimestamp, ethers.parseEther('2200'));
     const dataFeedDetails = ethers.AbiCoder.defaultAbiCoder().encode(
       ['address[]', 'bytes32[]'],
       [airnodes.map((airnode) => airnode.address), templateIds]
