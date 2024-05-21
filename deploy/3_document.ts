@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+import { CHAINS } from '@api3/chains';
 import type { AddressLike } from 'ethers';
 import { config } from 'hardhat';
 
@@ -46,6 +47,16 @@ module.exports = () => {
   fs.writeFileSync(
     path.join('deployments', 'block-numbers.json'),
     `${JSON.stringify(deploymentBlockNumbers, null, 2)}\n`
+  );
+  fs.writeFileSync(
+    path.join('deployments', 'manager-multisig-addresses.json'),
+    `${JSON.stringify(
+      Object.entries(managerMultisigAddresses).reduce((acc, [alias, address]) => {
+        return { ...acc, [CHAINS.find((chain) => chain.alias === alias)!.id]: address };
+      }, {}),
+      null,
+      2
+    )}\n`
   );
 };
 module.exports.tags = ['document'];
