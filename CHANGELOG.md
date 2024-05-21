@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 3.7.0
+
+### Minor Changes
+
+- d33b3b1: Export manager multisig addresses
+- 265c365: Add dAPI and Market support to apechain-arbitrum-sepolia-testnet, astar, astar-sepolia-tesnet, core, immutable-sepolia-testnet
+
 ## 3.6.0
 
 ### Minor Changes
