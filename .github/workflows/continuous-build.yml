@@ -86,6 +86,8 @@ jobs:
       
       - name: Validate deployments
         run: pnpm validate-deployments
+        if: always()
 
       - name: Verify deployments
         run: pnpm verify-deployments
+        if: always()
