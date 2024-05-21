@@ -160,34 +160,31 @@ async function updateBeaconSet(
 ) {
   const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [value]);
 
-  const beaconUpdateData = airnodes.map((airnode) => {
-    const templateId = deriveTemplateId(`OIS title of Airnode with address ${airnode.address}`, feedName);
-    return {
-      airnode,
-      templateId,
-      beaconId: deriveBeaconId(airnode.address, templateId),
-    };
-  });
-  for (const beaconUpdateDatum of beaconUpdateData) {
-    await api3ServerV1.updateBeaconWithSignedData(
-      beaconUpdateDatum.airnode.address,
-      beaconUpdateDatum.templateId,
-      timestamp,
-      encodedValue,
-      await beaconUpdateDatum.airnode.signMessage(
-        ethers.toBeArray(
-          ethers.solidityPackedKeccak256(
-            ['bytes32', 'uint256', 'bytes'],
-            [beaconUpdateDatum.templateId, timestamp, encodedValue]
+  const beaconUpdateData = await Promise.all(
+    airnodes.map(async (airnode) => {
+      const templateId = deriveTemplateId(`OIS title of Airnode with address ${airnode.address}`, feedName);
+      return {
+        airnode,
+        templateId,
+        beaconId: deriveBeaconId(airnode.address, templateId),
+        signature: await airnode.signMessage(
+          ethers.toBeArray(
+            ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, encodedValue])
           )
-        )
-      )
-    );
-  }
-  const beaconIds = beaconUpdateData.map((beaconUpdateDatum) => beaconUpdateDatum.beaconId);
+        ),
+      };
+    })
+  );
+  await Promise.all(
+    beaconUpdateData.map(async ({ airnode, templateId, signature }) =>
+      api3ServerV1.updateBeaconWithSignedData(airnode.address, templateId, timestamp, encodedValue, signature)
+    )
+  );
+
+  const beaconIds = beaconUpdateData.map(({ beaconId }) => beaconId);
   await api3ServerV1.updateBeaconSetWithBeacons(beaconIds);
   return {
-    templateIds: beaconUpdateData.map((beaconUpdateDatum) => beaconUpdateDatum.templateId),
+    templateIds: beaconUpdateData.map(({ templateId }) => templateId),
     beaconIds,
     beaconSetId: deriveBeaconSetId(beaconIds),
   };
