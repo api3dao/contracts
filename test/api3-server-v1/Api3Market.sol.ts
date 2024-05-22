@@ -3808,6 +3808,14 @@ describe('Api3Market', function () {
         const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [ethers.parseEther('2200')]);
         for (const [i, updateBeacon] of updateBeacons.entries()) {
           if (updateBeacon) {
+            const signature = await airnodes[i]!.signMessage(
+              ethers.toBeArray(
+                ethers.solidityPackedKeccak256(
+                  ['bytes32', 'uint256', 'bytes'],
+                  [templateIds[i], timestampNow, encodedValue]
+                )
+              )
+            );
             // Signed data comes from the signed APIs
             multicallCalldata.push(
               api3Market.interface.encodeFunctionData('updateBeaconWithSignedData', [
@@ -3815,14 +3823,7 @@ describe('Api3Market', function () {
                 templateIds[i],
                 timestampNow,
                 encodedValue,
-                await airnodes[i]!.signMessage(
-                  ethers.toBeArray(
-                    ethers.solidityPackedKeccak256(
-                      ['bytes32', 'uint256', 'bytes'],
-                      [templateIds[i], timestampNow, encodedValue]
-                    )
-                  )
-                ),
+                signature,
               ])
             );
           }

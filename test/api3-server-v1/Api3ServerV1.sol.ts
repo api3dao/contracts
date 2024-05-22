@@ -249,8 +249,8 @@ describe('Api3ServerV1', function () {
             const currentTimestamp = await helpers.time.latest();
             const beaconTimestamps = [currentTimestamp, currentTimestamp, currentTimestamp];
             await Promise.all(
-              beacons.map(async (beacon, index) => {
-                await updateBeacon(roles, api3ServerV1, beacon, beaconValues[index]!, beaconTimestamps[index]);
+              beacons.map((beacon, index) => {
+                updateBeacon(roles, api3ServerV1, beacon, beaconValues[index]!, beaconTimestamps[index]);
               })
             );
             const beaconIds = beacons.map((beacon) => {
@@ -1262,14 +1262,16 @@ describe('Api3ServerV1', function () {
                 beacon.templateId,
                 signature
               );
+              const oevProxyAddress = await oevProxyWithRevertingBeneficiary.getAddress();
+              const data = encodeData(beaconValue);
               await api3ServerV1
                 .connect(roles.searcher)
                 .updateOevProxyDataFeedWithSignedData(
-                  await oevProxyWithRevertingBeneficiary.getAddress(),
+                  oevProxyAddress,
                   beacon.beaconId,
                   updateId,
                   beaconTimestamp,
-                  encodeData(beaconValue),
+                  data,
                   [packedOevUpdateSignature],
                   {
                     value: bidAmount,
@@ -1507,13 +1509,14 @@ describe('Api3ServerV1', function () {
           const beaconTimestamp = await helpers.time.latest();
           const bidAmount = 10_000;
           const updateId = testUtils.generateRandomBytes32();
+          const data = encodeData(beaconValue);
           const signature = await testUtils.signOevData(
             api3ServerV1,
             roles.mockOevProxy!.address,
             beacon.beaconId,
             updateId,
             beaconTimestamp,
-            encodeData(beaconValue),
+            data,
             roles.searcher!.address,
             bidAmount,
             beacon.airnode,
@@ -1527,7 +1530,7 @@ describe('Api3ServerV1', function () {
               beacon.beaconId,
               updateId,
               beaconTimestamp,
-              encodeData(beaconValue),
+              data,
               [packedOevUpdateSignature],
               {
                 value: bidAmount,
