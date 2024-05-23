@@ -39,7 +39,7 @@ module.exports = async () => {
               ind + 1,
               `0x${(ind + 1).toString().padStart(64, '0')}`,
               await deployer?.signMessage(
-                ethers.toBeArray(
+                ethers.getBytes(
                   ethers.solidityPackedKeccak256(
                     ['bytes32', 'uint256', 'bytes'],
                     [templateId, ind + 1, `0x${(ind + 1).toString().padStart(64, '0')}`]
@@ -72,7 +72,7 @@ module.exports = async () => {
             ind + 101,
             `0x${(ind + 101).toString().padStart(64, '0')}`,
             await deployer?.signMessage(
-              ethers.toBeArray(
+              ethers.getBytes(
                 ethers.solidityPackedKeccak256(
                   ['bytes32', 'uint256', 'bytes'],
                   [templateId, ind + 101, `0x${(ind + 101).toString().padStart(64, '0')}`]
