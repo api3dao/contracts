@@ -312,7 +312,7 @@ describe('ExternalMulticallSimulator', function () {
   // We won't test multicall() and tryMulticall() via eth_call, as they are expected to
   // behave normally
 
-  // DapiTransmuter is a ExternalMulticallSimulator contract which is given the dAPI name setter role.
+  // DapiTransmuter is an ExternalMulticallSimulator contract that is given the dAPI name setter role.
   // OEV searchers can use a DapiTransmuter to simulate multicalls that update dAPIs and make arbitrary calls.
   describe('DapiTransmuter', function () {
     it('transmuted dAPI value', async function () {
