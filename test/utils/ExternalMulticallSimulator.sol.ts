@@ -7,9 +7,14 @@ import { ethers } from 'hardhat';
 import { type DapiProxyWithOev, DapiProxyWithOev__factory } from '../../src/index';
 import * as testUtils from '../test-utils';
 
+interface Call {
+  target: AddressLike;
+  data: BytesLike;
+}
+
 async function getDapiTransmutationCalldata(
-  preTransmutationCalls: { target: AddressLike; data: BytesLike }[],
-  postTransmutationCalls: { target: AddressLike; data: BytesLike }[],
+  preTransmutationCalls: Call[],
+  postTransmutationCalls: Call[],
   api3ServerV1Address: AddressLike,
   api3ServerV1Interface: Interface,
   dapiName: BytesLike,
@@ -320,7 +325,7 @@ describe('ExternalMulticallSimulator', function () {
         ethUsdDapiName,
         ethUsdDapiProxyWithOev,
       } = await deployDapiTransmuter();
-      const preTransmutationCalls: { target: AddressLike; data: BytesLike }[] = [];
+      const preTransmutationCalls: Call[] = [];
       const postTransmutationCalls = [
         {
           target: await ethUsdDapiProxyWithOev.getAddress(),
