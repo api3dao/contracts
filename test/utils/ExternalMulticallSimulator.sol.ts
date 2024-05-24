@@ -315,7 +315,7 @@ describe('ExternalMulticallSimulator', function () {
   // DapiTransmuter is a ExternalMulticallSimulator contract which is given the dAPI name setter role.
   // OEV searchers can use a DapiTransmuter to simulate multicalls that update dAPIs and make arbitrary calls.
   describe('DapiTransmuter', function () {
-    it('works', async function () {
+    it('transmuted dAPI value', async function () {
       const {
         roles,
         externalMulticallSimulator,
