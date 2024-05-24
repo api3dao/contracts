@@ -1,5 +1,4 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
+import type { AddressLike, BaseWallet, BigNumberish, BytesLike } from 'ethers';
 import { ethers } from 'hardhat';
 
 import type { Api3ServerV1 } from '../src/index';
@@ -79,12 +78,7 @@ function deriveRole(adminRole: BytesLike, roleDescription: string) {
   );
 }
 
-async function signData(
-  airnode: HardhatEthersSigner | HDNodeWallet,
-  templateId: BytesLike,
-  timestamp: number,
-  data: BytesLike
-) {
+async function signData(airnode: BaseWallet, templateId: BytesLike, timestamp: number, data: BytesLike) {
   const signature = await airnode.signMessage(
     ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, data]))
   );
@@ -100,7 +94,7 @@ async function signOevData(
   data: BytesLike,
   searcherAddress: AddressLike,
   bidAmount: BigNumberish,
-  airnode: HDNodeWallet,
+  airnode: BaseWallet,
   templateId: BytesLike
 ) {
   const { chainId } = await api3ServerV1.runner!.provider!.getNetwork();
@@ -127,7 +121,7 @@ async function signOevData(
 async function updateBeacon(
   api3ServerV1: Api3ServerV1,
   feedName: string,
-  airnode: HDNodeWallet,
+  airnode: BaseWallet,
   timestamp: BigNumberish,
   value: BigNumberish
 ) {
@@ -154,7 +148,7 @@ async function updateBeacon(
 async function updateBeaconSet(
   api3ServerV1: Api3ServerV1,
   feedName: string,
-  airnodes: HDNodeWallet[],
+  airnodes: BaseWallet[],
   timestamp: BigNumberish,
   value: BigNumberish
 ) {
