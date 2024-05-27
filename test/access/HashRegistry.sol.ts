@@ -13,7 +13,7 @@ export async function signHash(
   let signatures: BytesLike[] = [];
   for (const signer of signers) {
     const signature = await signer.signMessage(
-      ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32', 'uint256'], [hashType, hash, timestamp]))
+      ethers.getBytes(ethers.solidityPackedKeccak256(['bytes32', 'bytes32', 'uint256'], [hashType, hash, timestamp]))
     );
     signatures = [...signatures, signature];
   }
@@ -34,7 +34,7 @@ describe('HashRegistry', function () {
     let signatures: BytesLike[] = [];
     for (const [index, signer] of signers.entries()) {
       const signature = await signer.signMessage(
-        ethers.toBeArray(
+        ethers.getBytes(
           ethers.solidityPackedKeccak256(
             ['bytes32', 'address', 'uint256'],
             [SIGNATURE_DELEGATION_HASH_TYPE, delegates[index]!.address, endTimestamp]
