@@ -345,7 +345,7 @@ describe('ExternalMulticallSimulator', function () {
       const returndata = await externalMulticallSimulator
         .connect(roles.addressZero)
         .multicall.staticCall(dapiTransmutationCalldata);
-      // Note that the decoding below is a bit tricky. From the array, the user pick
+      // Note that the decoding below is a bit tricky. From the array, the user picks
       // the item whose returndata they want to read, decode that as a `bytes` type,
       // then decode the result of that with the types of the returndata of the function
       // they called.
