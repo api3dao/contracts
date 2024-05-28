@@ -3821,7 +3821,7 @@ describe('Api3Market', function () {
                 timestampNow,
                 encodedValue,
                 await airnodes[i]!.signMessage(
-                  ethers.toBeArray(
+                  ethers.getBytes(
                     ethers.solidityPackedKeccak256(
                       ['bytes32', 'uint256', 'bytes'],
                       [templateIds[i], timestampNow, encodedValue]
@@ -3953,7 +3953,7 @@ describe('Api3Market', function () {
       const timestamp = await helpers.time.latest();
       const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [123]);
       const signature = await airnodes[0]!.signMessage(
-        ethers.toBeArray(
+        ethers.getBytes(
           ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateIds[0], timestamp, encodedValue])
         )
       );
