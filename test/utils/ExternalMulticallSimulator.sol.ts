@@ -349,9 +349,14 @@ describe('ExternalMulticallSimulator', function () {
       // the item whose returndata they want to read, decode that as a `bytes` type,
       // then decode the result of that with the types of the returndata of the function
       // they called.
-      const [transmutedValue] = ethers.AbiCoder.defaultAbiCoder().decode(
-        ['int224', 'uint32'],
-        ethers.AbiCoder.defaultAbiCoder().decode(['bytes'], returndata.at(-1)!)[0]
+      const readReturndata = returndata.at(-1);
+      const [decodedFunctionCallReturndata] = externalMulticallSimulator.interface.decodeFunctionResult(
+        'functionCall',
+        readReturndata!
+      );
+      const [transmutedValue] = ethUsdDapiProxyWithOev.interface.decodeFunctionResult(
+        'read',
+        decodedFunctionCallReturndata
       );
       expect(transmutedValue).to.equal(transmutationValue);
     });
