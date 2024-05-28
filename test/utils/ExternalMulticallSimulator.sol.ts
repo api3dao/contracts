@@ -241,7 +241,7 @@ describe('ExternalMulticallSimulator', function () {
         await expect(externalMulticallSimulator.connect(roles.randomPerson).multicall([])).to.not.be.reverted;
       });
     });
-    context('The calls only include multicall()s with no calls no be made', function () {
+    context('The calls only include multicall()s with no calls to be made', function () {
       it('does not revert', async function () {
         const { roles, externalMulticallSimulator, externalMulticallSimulatorInterface } =
           await helpers.loadFixture(deploy);
