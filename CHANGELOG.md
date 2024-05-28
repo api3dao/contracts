@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 4.0.0
+
+### Major Changes
+
+- f27c258: Remove oev-network-sepolia-testnet
+
+### Minor Changes
+
+- 0f7bb18: Add dAPI and Market support to core-testnet, metal, rari-arbitrum-sepolia-testnet, sei and taiko
+
 ## 3.7.0
 
 ### Minor Changes
