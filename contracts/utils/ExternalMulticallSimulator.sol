@@ -6,9 +6,9 @@ import "./interfaces/IExternalMulticallSimulator.sol";
 import "../vendor/@openzeppelin/contracts@4.9.5/utils/Address.sol";
 
 /// @title Contract that simulates external calls in single or batched form
-/// @notice The contract only allows eth_call to be used for while making
-/// external calls to ensure that it is only used for simulating outcomes,
-/// rather than sending actual transactions
+/// @notice This contract requires address-zero to be impersonated and zero gas
+/// price to be used while making external calls to ensure that it is only used
+/// for simulating outcomes rather than sending transactions
 contract ExternalMulticallSimulator is
     SelfMulticall,
     IExternalMulticallSimulator
