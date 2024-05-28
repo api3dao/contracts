@@ -13,22 +13,17 @@ contract ExternalMulticallSimulator is
     SelfMulticall,
     IExternalMulticallSimulator
 {
-    /// @dev Only allows calls where the sender is address-zero and the gas
-    /// price is zero, which indicates that the call is made through eth_call
-    modifier onlyEthCall() {
-        require(msg.sender == address(0), "Sender address not zero");
-        require(tx.gasprice == 0, "Tx gas price not zero");
-        _;
-    }
-
-    /// @notice eth_call'ed to simulate an external call
+    /// @notice eth_call'ed while impersonating address-zero with zero gas
+    /// price to simulate an external call
     /// @param target Target address of the external call
     /// @param data Calldata of the external call
     /// @return Returndata of the external call
     function functionCall(
         address target,
         bytes memory data
-    ) external override onlyEthCall returns (bytes memory) {
+    ) external override returns (bytes memory) {
+        require(msg.sender == address(0), "Sender address not zero");
+        require(tx.gasprice == 0, "Tx gas price not zero");
         return Address.functionCall(target, data);
     }
 }
