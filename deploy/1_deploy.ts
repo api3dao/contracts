@@ -58,6 +58,18 @@ module.exports = async () => {
         });
       });
 
+      // TODO: Remove the condition
+      if (['blast', 'mantle'].includes(network.name)) {
+        await deployments.get('ExternalMulticallSimulator').catch(async () => {
+          log(`Deploying ExternalMulticallSimulator`);
+          return deploy('ExternalMulticallSimulator', {
+            from: deployer!.address,
+            log: true,
+            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+          });
+        });
+      }
+
       const { address: proxyFactoryAddress, abi: proxyFactoryAbi } = await deployments
         .get('ProxyFactory')
         .catch(async () => {
