@@ -10,7 +10,11 @@ import * as path from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 
-import { chainsSupportedByDapis, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import {
+  chainsSupportedByDapis,
+  chainsSupportedByMarket,
+  chainsSupportedByOevAuctions,
+} from '../data/chain-support.json';
 import managerMultisigAddresses from '../data/manager-multisig.json';
 
 const METADATA_HASH_LENGTH = 53 * 2;
@@ -29,6 +33,7 @@ async function main() {
       ...(chainsSupportedByDapis.includes(network)
         ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
         : []),
+      ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
 
