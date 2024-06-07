@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 4.1.1
+
+### Patch Changes
+
+- ce96c06: Fix neon-evm and neon-evm-testnet Api3Market deployments
+
 ## 4.1.0
 
 ### Minor Changes
