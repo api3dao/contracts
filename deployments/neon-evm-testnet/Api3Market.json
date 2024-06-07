@@ -1,0 +1,1212 @@
+{
+  "address": "0x10760b9c0f87e28003380c8fb282db44f292b5b7",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "proxyFactory_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maximumSubscriptionQueueLength_",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sponsorWallet",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "paymentAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "BoughtSubscription",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "CanceledSubscriptions",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "hashValue",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "hashTimestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "RegisteredHash",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "hashValue",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "hashTimestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetHash",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "signers",
+          "type": "address[]"
+        }
+      ],
+      "name": "SetSigners",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "UpdatedCurrentSubscriptionId",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "DAPI_PRICING_MERKLE_ROOT_HASH_TYPE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAXIMUM_DAPI_UPDATE_AGE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "airseekerRegistry",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "api3ServerV1",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address payable",
+          "name": "sponsorWallet",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "dapiManagementAndDapiPricingMerkleData",
+          "type": "bytes"
+        }
+      ],
+      "name": "buySubscription",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "cancelSubscriptions",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "computeExpectedSponsorWalletBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "expectedSponsorWalletBalance",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "expectedSponsorWalletBalance",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "containsBytecode",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "dapiNameToCurrentSubscriptionId",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "metadata",
+          "type": "bytes"
+        }
+      ],
+      "name": "deployDapiProxy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "proxyAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "oevBeneficiary",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "metadata",
+          "type": "bytes"
+        }
+      ],
+      "name": "deployDapiProxyWithOev",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "proxyAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBlockBasefee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBlockNumber",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBlockTimestamp",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getChainId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getDapiData",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "dataFeedDetails",
+          "type": "bytes"
+        },
+        {
+          "internalType": "int224",
+          "name": "dapiValue",
+          "type": "int224"
+        },
+        {
+          "internalType": "uint32",
+          "name": "dapiTimestamp",
+          "type": "uint32"
+        },
+        {
+          "internalType": "int224[]",
+          "name": "beaconValues",
+          "type": "int224[]"
+        },
+        {
+          "internalType": "uint32[]",
+          "name": "beaconTimestamps",
+          "type": "uint32[]"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "updateParameters",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "uint32[]",
+          "name": "endTimestamps",
+          "type": "uint32[]"
+        },
+        {
+          "internalType": "uint224[]",
+          "name": "dailyPrices",
+          "type": "uint224[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getDataFeedData",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "dataFeedDetails",
+          "type": "bytes"
+        },
+        {
+          "internalType": "int224",
+          "name": "dataFeedValue",
+          "type": "int224"
+        },
+        {
+          "internalType": "uint32",
+          "name": "dataFeedTimestamp",
+          "type": "uint32"
+        },
+        {
+          "internalType": "int224[]",
+          "name": "beaconValues",
+          "type": "int224[]"
+        },
+        {
+          "internalType": "uint32[]",
+          "name": "beaconTimestamps",
+          "type": "uint32[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getHashValue",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hashValue",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "hashTypeToSignersHash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "hashes",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "value",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "maximumSubscriptionQueueLength",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "data",
+          "type": "bytes[]"
+        }
+      ],
+      "name": "multicall",
+      "outputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "returndata",
+          "type": "bytes[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "multicallData",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address payable",
+          "name": "sponsorWallet",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "dapiManagementAndDapiPricingMerkleData",
+          "type": "bytes"
+        }
+      ],
+      "name": "multicallAndBuySubscription",
+      "outputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "returndata",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "proxyFactory",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "dataFeedDetails",
+          "type": "bytes"
+        }
+      ],
+      "name": "registerDataFeed",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "hashValue",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "hashTimestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "signatures",
+          "type": "bytes[]"
+        }
+      ],
+      "name": "registerHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "hashValue",
+          "type": "bytes32"
+        }
+      ],
+      "name": "setHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "hashType",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address[]",
+          "name": "signers",
+          "type": "address[]"
+        }
+      ],
+      "name": "setSigners",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "signatureDelegationHashType",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "subscriptionIdToUpdateParameters",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "subscriptions",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "updateParametersHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "endTimestamp",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint224",
+          "name": "dailyPrice",
+          "type": "uint224"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "nextSubscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "data",
+          "type": "bytes[]"
+        }
+      ],
+      "name": "tryMulticall",
+      "outputs": [
+        {
+          "internalType": "bool[]",
+          "name": "successes",
+          "type": "bool[]"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "returndata",
+          "type": "bytes[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes[]",
+          "name": "tryMulticallData",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address payable",
+          "name": "sponsorWallet",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "updateParameters",
+          "type": "bytes"
+        },
+        {
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "dapiManagementAndDapiPricingMerkleData",
+          "type": "bytes"
+        }
+      ],
+      "name": "tryMulticallAndBuySubscription",
+      "outputs": [
+        {
+          "internalType": "bool[]",
+          "name": "successes",
+          "type": "bool[]"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "returndata",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "subscriptionId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "beaconIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "updateBeaconSetWithBeacons",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "beaconSetId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "airnode",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "templateId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "updateBeaconWithSignedData",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "beaconId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "updateCurrentSubscriptionId",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "dapiName",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "dataFeedId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "sponsorWallet",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "dapiManagementMerkleData",
+          "type": "bytes"
+        }
+      ],
+      "name": "updateDapiName",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "airnode",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "signedApiUrl",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signedApiUrlMerkleData",
+          "type": "bytes"
+        }
+      ],
+      "name": "updateSignedApiUrl",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xb75cbcfeb529ae655ed64f8cb8baf75aa981a859eb0e7b792ed513389644850a",
+  "receipt": {
+    "blockNumber": 302187352
+  },
+  "args": ["0x81bc85f329cDB28936FbB239f734AE495121F9A6", "0x9EB9798Dc1b602067DFe5A57c3bfc914B965acFD", 10]
+}
