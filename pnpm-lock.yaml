@@ -11,8 +11,8 @@ dependencies:
 
 devDependencies:
   '@api3/chains':
-    specifier: ^7.2.0
-    version: 7.2.0(typescript@5.4.5)
+    specifier: ^7.2.1
+    version: 7.2.1(typescript@5.4.5)
   '@api3/commons':
     specifier: ^0.9.1
     version: 0.9.1(eslint@8.57.0)(typescript@5.4.5)
@@ -118,8 +118,8 @@ packages:
   /@adraffy/ens-normalize@1.10.1:
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  /@api3/chains@7.2.0(typescript@5.4.5):
-    resolution: {integrity: sha512-AYF7zWIwgtiF4e8CFEsAu/gviZ9bT/JZHwIdzHOiYl9W9nLgVJEJL8gpv3YNzFbYqLuu94VlbaWjQOqm22gr/A==}
+  /@api3/chains@7.2.1(typescript@5.4.5):
+    resolution: {integrity: sha512-UQC5PUS0S4eI3oigC+AmyaBWzAybyl7Bf54NHldbZP/xUpVoJW9nYJWbQf//s/3m7sxEr4phbmOsqzwpmSr/pg==}
     dependencies:
       viem: 2.13.7(typescript@5.4.5)(zod@3.23.8)
       zod: 3.23.8
@@ -176,7 +176,7 @@ packages:
     resolution: {integrity: sha512-hYQCbCAtWMGKV+pECRY5tbfCSOcheeo9s6wtrhn1dOWw151VeG0sKG3VbBEsyA6cvSaldewBWY3t/JGaupdThg==}
     dependencies:
       lodash: 4.17.21
-      zod: 3.23.6
+      zod: 3.23.8
     dev: true
 
   /@api3/promise-utils@0.4.0:
@@ -3826,7 +3826,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: true
-    bundledDependencies: false
 
   /evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
