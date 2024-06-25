@@ -7,6 +7,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 
@@ -28,12 +29,17 @@ async function main() {
 
   for (const network of networks) {
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+    const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network)
         ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
         : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
+      ...(chainsSupportedByMarket.includes(network)
+        ? isTestnet
+          ? ['Api3Market']
+          : ['ExternalMulticallSimulator', 'Api3Market']
+        : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
 

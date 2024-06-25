@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
@@ -56,7 +57,7 @@ async function main() {
         );
       }
       if (chainsSupportedByMarket.includes(network)) {
-        // Validate that Api3Market is a dAPI name setter
+        // Validate that ExternalMulticallSimulator and Api3Market are dAPI name setters
         const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
         const adminRole = ethers.solidityPackedKeccak256(
           ['bytes32', 'bytes32'],
@@ -74,6 +75,31 @@ async function main() {
           accessControlRegistryAbi,
           provider
         ) as unknown as AccessControlRegistry;
+        const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
+        if (!isTestnet) {
+          const { address: externalMulticallSimulatorAddress } = JSON.parse(
+            fs.readFileSync(path.join('deployments', network, `ExternalMulticallSimulator.json`), 'utf8')
+          );
+          const goFetchExternalMulticallSimulatorDapiNameSetterRoleStatus = await go(
+            async () => accessControlRegistry.hasRole(dapiNameSetterRole, externalMulticallSimulatorAddress),
+            {
+              retries: 5,
+              attemptTimeoutMs: 10_000,
+              totalTimeoutMs: 50_000,
+              delay: {
+                type: 'random',
+                minDelayMs: 2000,
+                maxDelayMs: 5000,
+              },
+            }
+          );
+          if (!goFetchExternalMulticallSimulatorDapiNameSetterRoleStatus.success) {
+            throw new Error(`${network} ExternalMulticallSimulator dAPI name setter role status could not be fetched`);
+          }
+          if (!goFetchExternalMulticallSimulatorDapiNameSetterRoleStatus.data) {
+            throw new Error(`${network} ExternalMulticallSimulator does not have the dAPI name setter role`);
+          }
+        }
         const { address: api3MarketAddress } = JSON.parse(
           fs.readFileSync(path.join('deployments', network, `Api3Market.json`), 'utf8')
         );

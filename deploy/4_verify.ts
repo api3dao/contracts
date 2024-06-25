@@ -1,3 +1,4 @@
+import { CHAINS } from '@api3/chains';
 import { config, deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
 
 import {
@@ -78,6 +79,13 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
+        const isTestnet = CHAINS.find((chain) => chain.alias === network.name)?.testnet;
+        if (!isTestnet) {
+          const ExternalMulticallSimulator = await deployments.get('ExternalMulticallSimulator');
+          await run('verify:verify', {
+            address: ExternalMulticallSimulator.address,
+          });
+        }
         const Api3Market = await deployments.get('Api3Market');
         await run('verify:verify', {
           address: Api3Market.address,
