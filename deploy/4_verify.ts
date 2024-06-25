@@ -79,7 +79,7 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        const isTestnet = !CHAINS.find((chain) => chain.alias === network)?.testnet;
+        const isTestnet = CHAINS.find((chain) => chain.alias === network.name)?.testnet;
         if (!isTestnet) {
           const ExternalMulticallSimulator = await deployments.get('ExternalMulticallSimulator');
           await run('verify:verify', {

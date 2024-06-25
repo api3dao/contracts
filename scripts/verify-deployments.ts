@@ -29,7 +29,7 @@ async function main() {
 
   for (const network of networks) {
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
-    const isTestnet = !CHAINS.find((chain) => chain.alias === network)?.testnet;
+    const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network)

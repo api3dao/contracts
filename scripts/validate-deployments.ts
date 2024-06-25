@@ -75,7 +75,7 @@ async function main() {
           accessControlRegistryAbi,
           provider
         ) as unknown as AccessControlRegistry;
-        const isTestnet = !CHAINS.find((chain) => chain.alias === network)?.testnet;
+        const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
         if (!isTestnet) {
           const { address: externalMulticallSimulatorAddress } = JSON.parse(
             fs.readFileSync(path.join('deployments', network, `ExternalMulticallSimulator.json`), 'utf8')

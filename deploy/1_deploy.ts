@@ -109,7 +109,7 @@ module.exports = async () => {
       }
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        const isTestnet = !CHAINS.find((chain) => chain.alias === network.name)?.testnet;
+        const isTestnet = CHAINS.find((chain) => chain.alias === network.name)?.testnet;
         if (!isTestnet) {
           await deployments.get('ExternalMulticallSimulator').catch(async () => {
             log(`Deploying ExternalMulticallSimulator`);
