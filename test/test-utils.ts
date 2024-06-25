@@ -80,7 +80,7 @@ function deriveRole(adminRole: BytesLike, roleDescription: string) {
 
 async function signData(airnode: BaseWallet, templateId: BytesLike, timestamp: number, data: BytesLike) {
   const signature = await airnode.signMessage(
-    ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, data]))
+    ethers.getBytes(ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, data]))
   );
   return signature;
 }
@@ -113,7 +113,7 @@ async function signOevData(
     ]
   );
   const signature = await airnode.signMessage(
-    ethers.toBeArray(ethers.solidityPackedKeccak256(['bytes32', 'bytes32'], [oevUpdateHash, templateId]))
+    ethers.getBytes(ethers.solidityPackedKeccak256(['bytes32', 'bytes32'], [oevUpdateHash, templateId]))
   );
   return signature;
 }
@@ -134,7 +134,7 @@ async function updateBeacon(
     timestamp,
     encodedValue,
     await airnode.signMessage(
-      ethers.toBeArray(
+      ethers.getBytes(
         ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, timestamp, encodedValue])
       )
     )
@@ -169,7 +169,7 @@ async function updateBeaconSet(
       timestamp,
       encodedValue,
       await beaconUpdateDatum.airnode.signMessage(
-        ethers.toBeArray(
+        ethers.getBytes(
           ethers.solidityPackedKeccak256(
             ['bytes32', 'uint256', 'bytes'],
             [beaconUpdateDatum.templateId, timestamp, encodedValue]

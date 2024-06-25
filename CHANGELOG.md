@@ -1,5 +1,28 @@
 # @api3/contracts
 
+## 4.1.1
+
+### Patch Changes
+
+- ce96c06: Fix neon-evm and neon-evm-testnet Api3Market deployments
+
+## 4.1.0
+
+### Minor Changes
+
+- 90a9936: Add dAPI and Market support to bitlayer, bitlayer-testnet, scroll, scroll-sepolia-testnet
+- 90a9936: Add Market support to neon-evm, neon-evm-testnet, oev-network
+
+## 4.0.0
+
+### Major Changes
+
+- f27c258: Remove oev-network-sepolia-testnet
+
+### Minor Changes
+
+- 0f7bb18: Add dAPI and Market support to core-testnet, metal, rari-arbitrum-sepolia-testnet, sei and taiko
+
 ## 3.7.0
 
 ### Minor Changes
