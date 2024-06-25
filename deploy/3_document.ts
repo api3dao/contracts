@@ -25,10 +25,15 @@ module.exports = () => {
 
   for (const network of networks) {
     const chainId = config.networks[network]!.chainId!;
+    const isTestnet = !CHAINS.find((chain) => chain.alias === network)?.testnet;
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network) ? ['AccessControlRegistry', 'Api3ServerV1', 'ProxyFactory'] : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['ExternalMulticallSimulator', 'Api3Market'] : []),
+      ...(chainsSupportedByMarket.includes(network)
+        ? isTestnet
+          ? ['Api3Market']
+          : ['ExternalMulticallSimulator', 'Api3Market']
+        : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {
