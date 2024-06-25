@@ -78,6 +78,10 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
+        const ExternalMulticallSimulator = await deployments.get('ExternalMulticallSimulator');
+        await run('verify:verify', {
+          address: ExternalMulticallSimulator.address,
+        });
         const Api3Market = await deployments.get('Api3Market');
         await run('verify:verify', {
           address: Api3Market.address,
