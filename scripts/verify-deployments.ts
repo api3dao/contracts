@@ -33,7 +33,7 @@ async function main() {
       ...(chainsSupportedByDapis.includes(network)
         ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
         : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
+      ...(chainsSupportedByMarket.includes(network) ? ['ExternalMulticallSimulator', 'Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
 
