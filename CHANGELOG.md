@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 4.2.0
+
+### Minor Changes
+
+- f476aaa: Add ExternalMulticallSimulator for mainnets that support the Market
+
 ## 4.1.1
 
 ### Patch Changes
