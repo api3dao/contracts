@@ -3,7 +3,9 @@ pragma solidity ^0.8.0;
 
 import "./DapiProxy.sol";
 import "./interfaces/IOevProxy.sol";
+import "../../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
 
+// TODO: Update all docstrings
 /// @title An immutable proxy contract that is used to read a specific dAPI of
 /// a specific Api3ServerV1 contract and inform Api3ServerV1 about the
 /// beneficiary of the respective OEV proceeds
@@ -12,9 +14,16 @@ import "./interfaces/IOevProxy.sol";
 /// internally. If you intend to deploy this contract without using
 /// ProxyFactory, you are recommended to implement an equivalent validation.
 /// @dev See DapiProxy.sol for comments about usage
-contract DapiProxyWithOev is DapiProxy, IOevProxy {
+contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
+    using ECDSA for bytes32;
+
     /// @notice OEV beneficiary address
     address public immutable override oevBeneficiary;
+
+    bytes32 public immutable oevDapiNameHash;
+
+    int224 oevValue;
+    uint32 oevTimestamp;
 
     /// @param _api3ServerV1 Api3ServerV1 address
     /// @param _dapiNameHash Hash of the dAPI name
@@ -22,9 +31,11 @@ contract DapiProxyWithOev is DapiProxy, IOevProxy {
     constructor(
         address _api3ServerV1,
         bytes32 _dapiNameHash,
+        bytes32 _oevDapiNameHash,
         address _oevBeneficiary
     ) DapiProxy(_api3ServerV1, _dapiNameHash) {
         oevBeneficiary = _oevBeneficiary;
+        oevDapiNameHash = _oevDapiNameHash;
     }
 
     /// @notice Reads the dAPI that this proxy maps to
@@ -37,7 +48,40 @@ contract DapiProxyWithOev is DapiProxy, IOevProxy {
         override
         returns (int224 value, uint32 timestamp)
     {
-        (value, timestamp) = IApi3ServerV1(api3ServerV1)
+        (int224 baseValue, uint32 baseTimestamp) = IApi3ServerV1(api3ServerV1)
             .readDataFeedWithDapiNameHashAsOevProxy(dapiNameHash);
+
+        if (oevTimestamp > baseTimestamp) {
+            return (oevValue, oevTimestamp);
+        } else {
+            return (baseValue, baseTimestamp);
+        }
+    }
+
+    function updateOevDataFeed(
+        address auctioneer,
+        bytes calldata packedUpdateSignature
+    ) external {
+        // TODO: Require that auctioneer address is whitelisted
+        (uint256 expiration, bytes memory signature) = abi.decode(
+            packedUpdateSignature,
+            (uint256, bytes)
+        );
+        require(block.timestamp <= expiration, "Signature expired");
+        require(
+            (
+                keccak256(
+                    abi.encodePacked(
+                        block.chainid,
+                        address(this),
+                        msg.sender,
+                        expiration
+                    )
+                ).toEthSignedMessageHash()
+            ).recover(signature) == auctioneer,
+            "Signature mismatch"
+        );
+        (oevValue, oevTimestamp) = IApi3ServerV1(api3ServerV1)
+            .readDataFeedWithDapiNameHash(oevDapiNameHash);
     }
 }
