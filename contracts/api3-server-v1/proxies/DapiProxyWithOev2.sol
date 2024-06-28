@@ -20,8 +20,6 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
     /// @notice OEV beneficiary address
     address public immutable override oevBeneficiary;
 
-    bytes32 public immutable oevDapiNameHash;
-
     int224 oevValue;
     uint32 oevTimestamp;
 
@@ -31,11 +29,9 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
     constructor(
         address _api3ServerV1,
         bytes32 _dapiNameHash,
-        bytes32 _oevDapiNameHash,
         address _oevBeneficiary
     ) DapiProxy(_api3ServerV1, _dapiNameHash) {
         oevBeneficiary = _oevBeneficiary;
-        oevDapiNameHash = _oevDapiNameHash;
     }
 
     /// @notice Reads the dAPI that this proxy maps to
@@ -60,6 +56,8 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
 
     function updateOevDataFeed(
         address auctioneer,
+        address[] calldata airnodes,
+        bytes32[] calldata templateIds,
         bytes calldata packedUpdateSignature
     ) external {
         // TODO: Require that auctioneer address is whitelisted
@@ -81,7 +79,20 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
             ).recover(signature) == auctioneer,
             "Signature mismatch"
         );
+        bytes32[] memory oevTemplateIds = new bytes32[](templateIds.length);
+        for (uint256 i = 0; i < templateIds.length; i++) {
+            oevTemplateIds[i] = keccak256(abi.encodePacked(templateIds[i]));
+        }
+        bytes32[] memory oevBeaconIds = new bytes32[](airnodes.length);
+        for (uint256 i = 0; i < airnodes.length; i++) {
+            oevBeaconIds[i] = keccak256(
+                abi.encodePacked(airnodes[i], oevTemplateIds[i])
+            );
+        }
+        bytes32 oevDataFeedId = airnodes.length == 1
+            ? oevBeaconIds[0]
+            : keccak256(abi.encode(oevBeaconIds));
         (oevValue, oevTimestamp) = IApi3ServerV1(api3ServerV1)
-            .readDataFeedWithDapiNameHash(oevDapiNameHash);
+            .readDataFeedWithId(oevDataFeedId);
     }
 }
