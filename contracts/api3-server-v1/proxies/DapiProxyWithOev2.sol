@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./DapiProxy.sol";
 import "./interfaces/IOevProxy.sol";
+import "../../access/interfaces/IAccessControlRegistry.sol";
 import "../../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
 
 // TODO: Update all docstrings
@@ -19,6 +20,9 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
 
     /// @notice OEV beneficiary address
     address public immutable override oevBeneficiary;
+
+    /// @notice Auctioneer role description
+    string public constant AUCTIONEER_ROLE_DESCRIPTION = "Auctioneer";
 
     int224 oevValue;
     uint32 oevTimestamp;
@@ -60,7 +64,16 @@ contract DapiProxyWithOev2 is DapiProxy, IOevProxy {
         bytes32[] calldata templateIds,
         bytes calldata packedUpdateSignature
     ) external {
-        // TODO: Require that auctioneer address is whitelisted
+        require(
+            IAccessControlRegistry(
+                IApi3ServerV1(api3ServerV1).accessControlRegistry()
+            ).hasRole(
+                    keccak256(abi.encodePacked(AUCTIONEER_ROLE_DESCRIPTION)),
+                    msg.sender
+                ),
+            "Not authorized"
+        );
+
         (uint256 expiration, bytes memory signature) = abi.decode(
             packedUpdateSignature,
             (uint256, bytes)
