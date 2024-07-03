@@ -12,6 +12,7 @@ module.exports = {
     'lodash/prefer-constant': 'off',
 
     'unicorn/filename-case': 'off',
+    'unicorn/no-anonymous-default-export': 'off',
     'unicorn/prefer-export-from': 'off',
     'unicorn/prefer-object-from-entries': 'off',
     'unicorn/prefer-ternary': 'off',

@@ -5,7 +5,7 @@
 // of the local compilation.
 
 import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { join } from 'node:path';
 
 import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
@@ -44,7 +44,7 @@ async function main() {
     ];
 
     for (const contractName of contractNames) {
-      const deployment = JSON.parse(fs.readFileSync(path.join('deployments', network, `${contractName}.json`), 'utf8'));
+      const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
       const artifact = await deployments.getArtifact(contractName);
       const constructor = artifact.abi.find((method) => method.type === 'constructor');
       const expectedEncodedConstructorArguments = constructor

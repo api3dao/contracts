@@ -1,5 +1,5 @@
 import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { join } from 'node:path';
 
 import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
@@ -28,7 +28,7 @@ async function main() {
       const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
       // Validate that the OwnableCallForwarder owner is the manager multisig
       const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = JSON.parse(
-        fs.readFileSync(path.join('deployments', network, `OwnableCallForwarder.json`), 'utf8')
+        fs.readFileSync(join('deployments', network, `OwnableCallForwarder.json`), 'utf8')
       );
       const ownableCallForwarder = new ethers.Contract(
         ownableCallForwarderAddress,
@@ -68,7 +68,7 @@ async function main() {
           [adminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
         );
         const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
-          fs.readFileSync(path.join('deployments', network, `AccessControlRegistry.json`), 'utf8')
+          fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
         );
         const accessControlRegistry = new ethers.Contract(
           accessControlRegistryAddress,
@@ -78,7 +78,7 @@ async function main() {
         const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
         if (!isTestnet) {
           const { address: externalMulticallSimulatorAddress } = JSON.parse(
-            fs.readFileSync(path.join('deployments', network, `ExternalMulticallSimulator.json`), 'utf8')
+            fs.readFileSync(join('deployments', network, `ExternalMulticallSimulator.json`), 'utf8')
           );
           const goFetchExternalMulticallSimulatorDapiNameSetterRoleStatus = await go(
             async () => accessControlRegistry.hasRole(dapiNameSetterRole, externalMulticallSimulatorAddress),
@@ -101,7 +101,7 @@ async function main() {
           }
         }
         const { address: api3MarketAddress } = JSON.parse(
-          fs.readFileSync(path.join('deployments', network, `Api3Market.json`), 'utf8')
+          fs.readFileSync(join('deployments', network, `Api3Market.json`), 'utf8')
         );
         const goFetchApi3MarketDapiNameSetterRoleStatus = await go(
           async () => accessControlRegistry.hasRole(dapiNameSetterRole, api3MarketAddress),
