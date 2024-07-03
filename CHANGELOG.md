@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 5.0.0
+
+### Major Changes
+
+- 65227d4: Remove berachain-testnet dAPI support
+
 ## 4.2.0
 
 ### Minor Changes
