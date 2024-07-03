@@ -1,5 +1,5 @@
 import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { join } from 'node:path';
 
 import { CHAINS } from '@api3/chains';
 import type { AddressLike } from 'ethers';
@@ -37,7 +37,7 @@ module.exports = () => {
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {
-      const deployment = JSON.parse(fs.readFileSync(path.join('deployments', network, `${contractName}.json`), 'utf8'));
+      const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
       references[contractName] = { ...references[contractName], [chainId]: deployment.address };
       if (!deployment.receipt) {
         throw new Error(`${network} ${contractName} missing deployment tx receipt`);
@@ -48,13 +48,10 @@ module.exports = () => {
       };
     }
   }
-  fs.writeFileSync(path.join('deployments', 'addresses.json'), `${JSON.stringify(references, null, 2)}\n`);
+  fs.writeFileSync(join('deployments', 'addresses.json'), `${JSON.stringify(references, null, 2)}\n`);
+  fs.writeFileSync(join('deployments', 'block-numbers.json'), `${JSON.stringify(deploymentBlockNumbers, null, 2)}\n`);
   fs.writeFileSync(
-    path.join('deployments', 'block-numbers.json'),
-    `${JSON.stringify(deploymentBlockNumbers, null, 2)}\n`
-  );
-  fs.writeFileSync(
-    path.join('deployments', 'manager-multisig-addresses.json'),
+    join('deployments', 'manager-multisig-addresses.json'),
     `${JSON.stringify(
       Object.entries(managerMultisigAddresses).reduce((acc, [alias, address]) => {
         return { ...acc, [CHAINS.find((chain) => chain.alias === alias)!.id]: address };
