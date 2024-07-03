@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['./node_modules/@api3/commons/dist/eslint/universal'],
+  extends: ['plugin:@api3/eslint-plugin-commons/universal'],
   parserOptions: {
     project: ['./tsconfig.json'],
   },
@@ -12,6 +12,7 @@ module.exports = {
     'lodash/prefer-constant': 'off',
 
     'unicorn/filename-case': 'off',
+    'unicorn/no-anonymous-default-export': 'off',
     'unicorn/prefer-export-from': 'off',
     'unicorn/prefer-object-from-entries': 'off',
     'unicorn/prefer-ternary': 'off',
