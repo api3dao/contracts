@@ -78,6 +78,7 @@
   "taiko-holesky-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "x-layer": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "x-layer-sepolia-testnet": "0x2ab9f26E18B64848cd349582ca3B55c2d06f507d",
+  "zircuit": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "zircuit-sepolia-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "zksync": "0xAB3177a68F07e07047bE90509be6AEb11f71da11"
 }

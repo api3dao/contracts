@@ -79,6 +79,7 @@
     "taiko-holesky-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
+    "zircuit",
     "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByMarket": [
@@ -159,6 +160,7 @@
     "taiko-holesky-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
+    "zircuit",
     "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network"]
