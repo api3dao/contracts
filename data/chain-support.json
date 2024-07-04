@@ -9,6 +9,7 @@
     "avalanche-testnet",
     "base",
     "base-sepolia-testnet",
+    "berachain-testnet",
     "bitlayer",
     "bitlayer-testnet",
     "blast",
@@ -78,6 +79,7 @@
     "taiko-holesky-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
+    "zircuit",
     "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByMarket": [
@@ -90,6 +92,7 @@
     "avalanche-testnet",
     "base",
     "base-sepolia-testnet",
+    "berachain-testnet",
     "bitlayer",
     "bitlayer-testnet",
     "blast",
@@ -125,6 +128,7 @@
     "lukso",
     "lukso-testnet",
     "mantle",
+    "mantle-sepolia-testnet",
     "merlin",
     "merlin-testnet",
     "metal",
@@ -156,6 +160,7 @@
     "taiko-holesky-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
+    "zircuit",
     "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network"]
