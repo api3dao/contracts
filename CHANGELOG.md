@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 5.1.0
+
+### Minor Changes
+
+- f8cdc14: Add dAPI and Market support to berachain-testnet and zircuit
+- 3e8ed41: Add Market support to mantle-sepolia-testnet
+
 ## 5.0.0
 
 ### Major Changes
