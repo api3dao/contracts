@@ -26,7 +26,7 @@ beaconId = keccak256(abi.encodePacked(airnode, templateId));
 ### Beacon set
 
 Beacon sets are Beacons that are aggregated on-chain to form multiple-source data feeds.
-Beacons are identified by the hash of the constituting Beacon IDs.
+Beacon sets are identified by the hash of the constituting Beacon IDs.
 
 ```sol
 beaconSetId = keccak256(abi.encode(beaconIds));
