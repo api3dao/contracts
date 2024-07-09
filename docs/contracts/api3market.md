@@ -2,7 +2,7 @@
 
 API3 users interact with Api3Market over the [API3 market frontend](https://market.api3.org) to purchase data feed subscriptions.
 Api3Market deploys an [AirseekerRegistry](./airseekerregistry.md) that it owns in its constructor.
-The user interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../infrastructure/airseeker.md).
+User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../infrastructure/airseeker.md).
 For example, buying a subscription for a [dAPI](./api3serverv1.md#dapi) that is currently deactivated will activate it and set its update parameters to the ones from the subscription, causing Airseeker to immediately start executing updates as specified.
 
 ## The owner
@@ -94,10 +94,10 @@ The requirements for a `buySubscription()` call to succeed are as follow:
 The user should first fetch the Merkle leaf values and proofs for the subscription they wish to purchase, and call `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` with the arguments.
 This call reverting indicates that the subscription cannot be added to the queue of the dAPI, so the subscription cannot be purchased.
 In the case that it does not revert, the user should check the sponsor wallet balance to find out how much they need to pay for the subscription (if any).
-Here, it is a good practice overestimate for the probability of the sponsor wallet sending a transaction before the subscription purchase can be confirmed.
-For example, say the sponsor wallet balance is `1 ETH`, `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` result is `2 ETH`, and the user is buying a 30 day subscription whose price is `1.5 ETH`.
+Here, it is a good practice to overestimate for the probability of the sponsor wallet sending a transaction before the subscription purchase can be confirmed.
+For example, say the sponsor wallet balance is `1 ETH`, `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` returns `2 ETH`, and the user is buying a 30 day subscription whose price is `1.5 ETH`.
 The daily price of the subscription would be `1.5 / 30 = 0.05 ETH`, which would be a decent headroom.
-Then, instead of `2 - 1 = 1 ETH`, the user could send `1 + 0.05 = 1.05 ETH`, which would be very unlikely to revert, granted that the price is accurate.
+Then, instead of sending `2 - 1 = 1 ETH`, the user could send `1 + 0.05 = 1.05 ETH`, which would be very unlikely to revert if the price is accurate.
 
 Before making the `buySubscription()` call, the user should make sure that the data feed is registered at AirseekerRegistry and the data feed has been updated in the last day at Api3ServerV1.
 For that, they can do a static multicall to `[getDataFeedData(), registerDataFeed(), getDataFeedData()]`, where the returndata of the first `getDataFeedData()` indicate if the data feed needs to be registered, and the returndata of the second `getDataFeedData()` indicate if respective Beacons or Beacon set need to be updated.
@@ -120,5 +120,5 @@ Otherwise, the data feed will be updated at a frequency higher than what was pai
 Signed API URL registrations are not required for subscription purchases.
 Therefore, calling `updateSignedApiUrl()` for any Airnode address related to an active dAPI whenever it does not revert is the only way of keeping up to date with these.
 
-Finally, charging a subscription price for a set duration implies a service guarantee, which may not be upheld if the price has been underestimated (e.g., a gas spike causes the sponsor wallet to be depleted before what is predicted).
-Against this, the sponsor wallet balance of each dAPI should be kept at a level close to what the respective `computeExpectedSponsorWalletBalance()` call returns.
+Finally, charging a subscription price for a set duration implies a service guarantee, which may not be upheld if the price has been underestimated (e.g., a gas spike causes the sponsor wallet to be depleted before the predicted time).
+To mitigate this risk, the sponsor wallet balance of each dAPI should be kept at a level close to what the respective `computeExpectedSponsorWalletBalance()` call returns.

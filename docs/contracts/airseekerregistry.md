@@ -41,7 +41,7 @@ function activeDataFeed(uint256 index)
 
 `activeDataFeed()` returns `dataFeedId` and `dapiName`.
 `dataFeedId` and `dapiName` are not needed for the update functionality, and are only provided for Airseeker to refer to in its logs.
-`dataFeedDetails` is contract ABI-encoded [Airnode address](../specs/airnode-protocol.md#airnode-address) array and template ID array belonging to the [data feed](./api3serverv1.md#data-feeds) identified by `dataFeedId`.
+`dataFeedDetails` is contract ABI-encoded [Airnode addresses](../specs/airnode-protocol.md#airnode-address) and template IDs belonging to the [data feed](./api3serverv1.md#data-feeds) identified by `dataFeedId`.
 When a [signed API](../infrastructure/signed-api.md) is called through the URL `$SIGNED_API_URL/public/$AIRNODE_ADDRESS`, it returns an array of signed data, which is keyed by template IDs (e.g., https://signed-api.api3.org/public/0xc52EeA00154B4fF1EbbF8Ba39FDe37F1AC3B9Fd4).
 Therefore, `dataFeedDetails` is all Airseeker needs to fetch the signed data it will use to update the data feed.
 
@@ -69,6 +69,19 @@ However, AirseekerRegistry is agnostic to this format to be future-compatible wi
 
 `signedApiUrls` are a list of signed APIs that correspond to the Airnodes used in the data feed.
 To get the signed data for each Airnode address, Airseeker both uses all signed API URLs specified in its configuration file, and the respective signed API URL that may be returned here.
+
+### `dataFeedDetails` format
+
+In the case that a `dataFeedId` refers to a Beacon, the respective `dataFeedDetails` is formatted as follows:
+```solidity
+abi.encode(airnode, templateId)
+```
+where `airnode` is of `address` type and `templateId` is of `bytes32` type.
+On the other hand, in the case that the `dateFeedId` refers to a Beacon set, the `dataFeedDetails` format will be
+```solidity
+abi.encode(airnodes, templateIds)
+```
+where `airnodes` is of `address[]` type and `templateIds` is of `bytes32[]` type.
 
 ## How to use AirseekerRegistry
 
