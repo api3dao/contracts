@@ -73,14 +73,18 @@ To get the signed data for each Airnode address, Airseeker both uses all signed 
 ### `dataFeedDetails` format
 
 In the case that a `dataFeedId` refers to a Beacon, the respective `dataFeedDetails` is formatted as follows:
+
 ```solidity
 abi.encode(airnode, templateId)
 ```
+
 where `airnode` is of `address` type and `templateId` is of `bytes32` type.
 On the other hand, in the case that the `dateFeedId` refers to a Beacon set, the `dataFeedDetails` format will be
+
 ```solidity
 abi.encode(airnodes, templateIds)
 ```
+
 where `airnodes` is of `address[]` type and `templateIds` is of `bytes32[]` type.
 
 ## How to use AirseekerRegistry
