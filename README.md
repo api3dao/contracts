@@ -1,5 +1,13 @@
 # @api3/contracts
 
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/%40api3%2Fcontracts)](https://www.npmjs.com/package/@api3/contracts)
+![downloads per week](https://img.shields.io/npm/dw/%40api3%2Fcontracts)
+[![license](https://img.shields.io/npm/l/%40api3%2Fchains)](https://www.npmjs.com/package/@api3/chains)
+
+</div>
+
 > Contracts through which API3 services are delivered
 
 This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
