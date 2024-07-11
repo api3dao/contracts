@@ -121,21 +121,30 @@ async function main() {
     ? [process.env.NETWORK]
     : [...new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions])];
 
-  const erroredNetworks: string[] = [];
+  const erroredMainnets: string[] = [];
+  const erroredTestnets: string[] = [];
   await Promise.all(
     networks.map(async (network) => {
       try {
         await verifyDeployments(network);
       } catch (error) {
-        erroredNetworks.push(network);
+        if (CHAINS.find((chain) => chain.alias === network)?.testnet) {
+          erroredTestnets.push(network);
+        } else {
+          erroredMainnets.push(network);
+        }
         // eslint-disable-next-line no-console
         console.error(error, '\n');
       }
     })
   );
-  if (erroredNetworks.length > 0) {
+  if (erroredTestnets.length > 0) {
     // eslint-disable-next-line no-console
-    console.error(`Verification failed on: ${erroredNetworks.join(', ')}`);
+    console.error(`Verification failed on testnets: ${erroredTestnets.join(', ')}`);
+  }
+  if (erroredMainnets.length > 0) {
+    // eslint-disable-next-line no-console
+    console.error(`Verification failed on: ${erroredMainnets.join(', ')}`);
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
