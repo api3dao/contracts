@@ -4,10 +4,9 @@
 
 This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
 
-1. Purchase data feed subscriptions at the API3 Market
-1. Deploy the respective DapiProxyWithOev contracts at the API3 Market
+1. Purchase data feed subscriptions and get the respective proxy addresses at the API3 Market
+1. Use the proxy address computation utility function provided by this package (`computeDapiProxyWithOevAddress()`) to validate the proxy addresses being used
 1. Use the proxy contract interfaces provided by this package in the reader contract, as demonstrated in https://github.com/api3dao/data-feed-reader-example
-1. Use the proxy address computation utility functions provided by this package to validate the proxy addresses being used
 
 A more complete list of what this package includes is as follows:
 
