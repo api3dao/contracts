@@ -34,17 +34,18 @@ The lightness comes at a cost that we will not elaborate here, but in short, the
 API3 took a step back here and asked:
 "Are traditional data feeds actually obsolete, or can they be served in a way that meets the demands of the modern Ethereum landscape?"
 Our answer to this is [market.api3.org](https://market.api3.org/), a B2B SaaS marketplace that serves data feeds.
-Without speaking to a representative or signing a contract, a dApp developer can come in, purchase a subscription to activate a data feed, and start using it in their contract in a few minutes.
+Without speaking to a representative or signing a contract, it enables a dApp developer to come in, purchase a subscription to activate a data feed, and start using it in their contract within minutes.
 Furthermore, the whole system is designed to streamline the addition of support for new chains and data feed types, resulting in a large and dynamic catalog.
 
 ### Oracle Extractable Value (OEV)
 
-The state of a blockchain is updated in a discrete manner, with a confirmed block or a sequenced transaction.
-Furthermore, there are practical limits to block size and block time, which implies that these lags will inevitably lag.
-Since data feeds are also updated by updating the chain state, every data feed update lags, and every data feed is at least slightly out of date.
+The state of a blockchain can only be updated in a discrete manner, with a confirmed block or a sequenced transaction.
+Practical limits (such as block size and block time) apply to this process, which implies that these updates will inevitably lag.
+Since data feeds are also updated by updating the chain state, all data feed updates lag as well.
+Consequently, every data feed is at least slightly out of date at all times.
 This fact can often be exploited to extract funds from the users of the data feed in the form of Oracle Extractable Value (OEV).
 
 OEV can also be seen as a subset of Maximal Extractable Value (MEV) that oracles have priority on extracting by batching additional operations with their updates.
 Furthermore, instead of searching for such OEV opportunities themselves, oracles can auction off this privilege.
 API3 holds transparent and permissionless auctions for OEV opportunities around their data feeds on OEV Network, and returns the auction proceeds to dApps.
-This effectively creates an entirely new revenue stream for data feed users.
+This effectively creates an entirely new revenue stream for dApps.
