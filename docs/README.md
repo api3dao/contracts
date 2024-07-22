@@ -1,8 +1,9 @@
 # `@api3/contracts` docs
 
-> These are in-repo docs related to the contracts in the `@api3/contracts` package.
-> For instructions about how to receive API3 services, end users are recommended to refer to the [official docs](https://docs.api3.org/) first.
-> The content here is intended for internal developers and advanced users who may want to implement custom integrations.
+> For instructions about how to receive API3 services, end users are recommended to refer to the [official docs](https://docs.api3.org/).
+
+The content in this directory is intended to provide insights about API3 contracts that may not be immediately obvious.
+For low-level documentation about functionality and usage, refer to the docstrings and the implementation of the respective contract.
 
 ## Overview
 
@@ -15,12 +16,12 @@ The API3 stack is designed to achieve two main objectives:
 
 All oracle solutions involve referring to an API for off-chain data and submitting it to a chain.
 The [API3 whitepaper](https://github.com/api3dao/api3-whitepaper/blob/master/api3-whitepaper.pdf) points out that these APIs do not materialize spontaneously in the wild, but rather are built and maintained by businesses as products.
-Furthermore, for any serious use-case, there is only a few number of such viable APIs.
+Furthermore, for any serious use-case, there is only a few number of such APIs that are viable.
 Then, the optimal architecture for an oracle solution must only depend on the providers of these APIs, and includes no middlemen.
 
 An API provider that provides oracle services is called a **first-party oracle**.
 API3 uniquely builds data feeds directly out of first-party oracles.
-In contrast, other oracle projects either use third-party oracles, or feed first-party data through layers (e.g., bridges, chains, state channels) that are secured by third parties, which degrades security guarantees down to the level of third-party oracles.
+In contrast, other oracle projects either use third-party oracles, or pass first-party data through layers (e.g., bridges, chains, state channels) that are secured by third parties, which degrades security guarantees down to the level of third-party oracles.
 
 #### API3 Market
 
