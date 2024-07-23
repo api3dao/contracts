@@ -1,20 +1,22 @@
 # Access control contracts
 
-This directory includes various access control contracts that are used in managing API3 services.
-The key philosophy behind these contracts is that the primary risk in access control is mismanagement.
-Centralizing all access control configurations in a single contract would improve visibility, and thus mitigate this risk.
+This directory contains various access control contracts for managing API3 services.
+The key design principle is to centralize access control configurations, improving visibility and reducing mismanagement risks.
 
 ## Role management
 
-AccessControlRegistry is the contract that houses all access control configurations in the form of roles.
-For a contract to refer to AccessControlRegistry for access control configurations (i.e., for it to be "adminned" by AccessControlRegistry), it is intended to inherit AccessControlRegistryAdminned or AccessControlRegistryAdminnedWithManager.
-Furthermore, a RoleDeriver contract is provided to be inherited by contracts that are not adminned by AccessControlRegistry, but still need to be aware of roles.
+- AccessControlRegistry: Central contract storing all access control configurations as roles.
+- Contracts can be _adminned_ by AccessControlRegistry by inheriting:
+  - AccessControlRegistryAdminned
+  - AccessControlRegistryAdminnedWithManager
+- RoleDeriver: For contracts not adminned by AccessControlRegistry but needing role awareness.
 
 ## Manager contracts
 
-AccessControlRegistry keeps roles in the form of trees, where the root is controlled by a single account called the "manager".
-The address of this account is immutable by design, mainly because it was intended for [Airnode addresses](../../specs/airnode-protocol.md#airnode-address) to be managers of their own role trees.
-However, some use cases require the management of role trees to be transferrable.
+AccessControlRegistry organizes roles in tree structures, with each tree controlled by a unique _manager_ account.
+The manager address is immutable, originally designed for [Airnode addresses](../../specs/airnode-protocol.md#airnode-address) to manage their own role trees.
+
+Some use-cases require the management of role trees to be transferrable.
 For example, API3 DAO members operate a multisig that is the manager of the role tree that is related to API3 services.
 At some point, this multisig may want to transfer the management of the role tree to the API3 DAO.
 In such use cases, role trees are created with an OwnableCallForwarder contract as the manager.
