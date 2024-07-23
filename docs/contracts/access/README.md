@@ -23,7 +23,7 @@ In such use cases, role trees are created with an OwnableCallForwarder contract 
 OwnableCallForwarder is a minimal contract that forwards calls from its owner, with transferrable ownership.
 
 API3 often integrates chains within the first few days that they go live, and the API3 manager multisig being deployed is one of the first steps of this process.
-A common issue here is temporary compatibility issues in the official Safe contract deployment process.
+A common issue here is the official Safe contract deployment process holding up the integration.
 To avoid being blocked by this, API3 uses a manager multisig that is a customized GnosisSafe (v1.3.0) called GnosisSafeWithoutProxy.
 
 ## Cross-chain multisig
