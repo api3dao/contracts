@@ -79,7 +79,7 @@ abi.encode(airnode, templateId)
 ```
 
 where `airnode` is of `address` type and `templateId` is of `bytes32` type.
-On the other hand, in the case that the `dateFeedId` refers to a Beacon set, the `dataFeedDetails` format will be
+On the other hand, in the case that the `dataFeedId` refers to a Beacon set, the `dataFeedDetails` format will be
 
 ```solidity
 abi.encode(airnodes, templateIds)
