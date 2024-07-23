@@ -16,4 +16,4 @@ The address of this wallet is referred to as `airnode` in the contracts and is a
 
 Sponsor wallets are derived from the [Airnode](../infrastructure/airnode.md) or [Airseeker](../infrastructure/airseeker.md) mnemonic in a protocol-specific way to provide a specific service.
 Then, the party that requires to receive the service funds the respective sponsor wallet, and the wallet uses these funds to send the transactions to deliver the service.
-An example of this is the Nodary Airseeker serving self-funded [Beacons](../contracts/api3serverv1.md#beacon) that update based on specific update parameters depending on which [sponsor wallet](https://nodary.io/feeds) is funded.
+An example of this is the Nodary Airseeker serving self-funded [Beacons](../contracts/api3-server-v1/api3serverv1.md#beacon) that update based on specific update parameters depending on which [sponsor wallet](https://nodary.io/feeds) is funded.
