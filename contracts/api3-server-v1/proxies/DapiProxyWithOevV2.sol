@@ -156,6 +156,11 @@ contract DapiProxyWithOevV2 is
                 );
                 processBeaconUpdate(beaconIds[ind], timestamps[ind], data[ind]);
             }
+            // One option here is if the resulting Beacon timestamp is lower than the respective one
+            // on Api3ServerV1, we can pull that. This would provide stronger "you can't rewind time
+            // for individual Beacons" guarantees at the cost of Beacon-many extra external calls.
+            // In practice, this would allow third parties to grief cherry-picking strategies of
+            // searchers, but maybe that's a good thing.
         }
         if (beaconCount > 1) {
             updateBeaconSetWithBeacons(beaconIds);
