@@ -45,7 +45,7 @@ contract DapiProxyWithOevV2 is IDapiProxy {
             int224 oevDapiValue,
             uint32 oevDapiTimestamp
         ) = Api3ServerV1OevExtension(api3ServerV1OevExtension).dataFeeds(
-                dataFeedId
+                keccak256(abi.encodePacked(dappId, dataFeedId))
             );
         if (oevDapiTimestamp > baseDapiTimestamp) {
             (value, timestamp) = (oevDapiValue, oevDapiTimestamp);

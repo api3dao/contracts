@@ -108,11 +108,7 @@ contract Api3ServerV1OevExtension is
     // templateIds are the actual ones used by the dAPI (and not the once-hashed OEV ones)
     function updateDappOevDataFeedWithSignedData(
         uint256 dappId,
-        address[] calldata airnodes,
-        bytes32[] calldata templateIds,
-        uint256[] calldata timestamps,
-        bytes[] calldata data,
-        bytes[] calldata signatures
+        bytes[] calldata signedData
     ) external {
         UpdateAllowance storage updateAllowance = dappIdToUpdateAllowance[
             dappId
@@ -122,49 +118,84 @@ contract Api3ServerV1OevExtension is
             block.timestamp < updateAllowance.endTimestamp,
             "Sender cannot update anymore"
         );
-        uint256 beaconCount = airnodes.length;
-        require(
-            beaconCount == templateIds.length &&
-                beaconCount == timestamps.length &&
-                beaconCount == data.length &&
-                beaconCount == signatures.length,
-            "Parameter length mismatch"
-        );
-        bytes32[] memory beaconIds = new bytes32[](beaconCount);
+        uint256 beaconCount = signedData.length;
+        bytes32[] memory baseBeaconIds = new bytes32[](beaconCount);
+        bytes32[] memory oevBeaconIds = new bytes32[](beaconCount);
         for (uint256 ind = 0; ind < beaconCount; ind++) {
-            beaconIds[ind] = deriveBeaconId(airnodes[ind], templateIds[ind]);
-            // Allow the signature to be omitted in case an API provider is not reporting.
-            // See unpackAndValidateOevUpdateSignature() in OevDataFeedServer for a similar thing.
-            if (signatures[ind].length != 0) {
-                // templateId is hashed before checking the signature!
+            (
+                address airnode,
+                bytes32 templateId,
+                uint256 timestamp,
+                bytes memory data,
+                bytes memory signature
+            ) = abi.decode(
+                    signedData[ind],
+                    (address, bytes32, uint256, bytes, bytes)
+                );
+            bytes32 baseBeaconId = deriveBeaconId(airnode, templateId);
+            bytes32 oevBeaconId = keccak256(
+                abi.encodePacked(dappId, baseBeaconId)
+            );
+            baseBeaconIds[ind] = baseBeaconId;
+            oevBeaconIds[ind] = oevBeaconId;
+            if (signature.length != 0) {
                 require(
                     (
                         keccak256(
                             abi.encodePacked(
-                                keccak256(abi.encodePacked(templateIds[ind])),
-                                timestamps[ind],
-                                data[ind]
+                                keccak256(abi.encodePacked(templateId)),
+                                timestamp,
+                                data
                             )
                         ).toEthSignedMessageHash()
-                    ).recover(signatures[ind]) == airnodes[ind],
+                    ).recover(signature) == airnode,
                     "Signature mismatch"
                 );
-                processBeaconUpdate(beaconIds[ind], timestamps[ind], data[ind]);
+                // Cannot use processBeaconUpdate() here because data is not calldata
+                require(
+                    timestamp < block.timestamp + 1 hours,
+                    "Timestamp not valid"
+                );
+                require(
+                    timestamp > _dataFeeds[oevBeaconId].timestamp,
+                    "Does not update timestamp"
+                );
+                _dataFeeds[oevBeaconId] = DataFeed({
+                    value: decodeFulfillmentData(data),
+                    timestamp: uint32(timestamp)
+                });
             }
             (
                 int224 baseBeaconValue,
                 uint32 baseBeaconTimestamp
-            ) = IApi3ServerV1(api3ServerV1).dataFeeds(beaconIds[ind]);
-            if (baseBeaconTimestamp > _dataFeeds[beaconIds[ind]].timestamp) {
-                _dataFeeds[beaconIds[ind]] = DataFeed({
+            ) = IApi3ServerV1(api3ServerV1).dataFeeds(baseBeaconId);
+            if (baseBeaconTimestamp > _dataFeeds[oevBeaconId].timestamp) {
+                _dataFeeds[oevBeaconId] = DataFeed({
                     value: baseBeaconValue,
                     timestamp: baseBeaconTimestamp
                 });
             }
         }
         if (beaconCount > 1) {
-            updateBeaconSetWithBeacons(beaconIds);
+            (int224 updatedValue, uint32 updatedTimestamp) = aggregateBeacons(
+                oevBeaconIds
+            );
+            bytes32 oevBeaconSetId = keccak256(
+                abi.encodePacked(dappId, deriveBeaconSetId(baseBeaconIds))
+            );
+            DataFeed storage oevBeaconSet = _dataFeeds[oevBeaconSetId];
+            if (oevBeaconSet.timestamp == updatedTimestamp) {
+                require(
+                    oevBeaconSet.value != updatedValue,
+                    "Does not update Beacon set"
+                );
+            }
+            _dataFeeds[oevBeaconSetId] = DataFeed({
+                value: updatedValue,
+                timestamp: updatedTimestamp
+            });
         }
+        // Emit event
     }
 
     function mockUpdateAllowance(
