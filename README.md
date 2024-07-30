@@ -1,13 +1,22 @@
 # @api3/contracts
 
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/%40api3%2Fcontracts)](https://www.npmjs.com/package/@api3/contracts)
+![downloads per week](https://img.shields.io/npm/dw/%40api3%2Fcontracts)
+[![continuous-build](https://img.shields.io/github/actions/workflow/status/api3dao/contracts/continuous-build.yml?label=continuous-build)](https://github.com/api3dao/contracts/actions/workflows/continuous-build.yml)
+[![validate-verify](https://img.shields.io/github/actions/workflow/status/api3dao/contracts/validate-verify.yml?label=validate-verify)](https://github.com/api3dao/contracts/actions/workflows/validate-verify.yml)
+[![license](https://img.shields.io/npm/l/%40api3%2Fchains)](https://www.npmjs.com/package/@api3/chains)
+
+</div>
+
 > Contracts through which API3 services are delivered
 
 This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
 
-1. Purchase data feed subscriptions at the API3 Market
-1. Deploy the respective DapiProxyWithOev contracts at the API3 Market
+1. Purchase data feed subscriptions and get the respective proxy addresses at the API3 Market
+1. Use the proxy address computation utility function provided by this package (`computeDapiProxyWithOevAddress()`) to validate the proxy addresses being used
 1. Use the proxy contract interfaces provided by this package in the reader contract, as demonstrated in https://github.com/api3dao/data-feed-reader-example
-1. Use the proxy address computation utility functions provided by this package to validate the proxy addresses being used
 
 A more complete list of what this package includes is as follows:
 
@@ -72,13 +81,14 @@ ECDSA.sol is identical!
 Checking if contracts in @openzeppelin/contracts@4.9.5 are identical to the ones in the package at https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.9.5.tgz
 Strings.sol is identical!
 Context.sol is identical!
+Address.sol is identical!
 Ownable.sol is identical!
-SignedMath.sol is identical!
-SafeCast.sol is identical!
-Math.sol is identical!
 EnumerableSet.sol is identical!
 MerkleProof.sol is identical!
 ECDSA.sol is identical!
+SignedMath.sol is identical!
+SafeCast.sol is identical!
+Math.sol is identical!
 ```
 
 Validate the deployment config

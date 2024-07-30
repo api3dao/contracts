@@ -1,10 +1,10 @@
 # HashRegistry.sol
 
 HashRegistry is a contract that is designed to mirror the governance decisions of a set of EOAs across a large number of chains with minimal operational friction.
-For example, this governance decision could be the list of [Airnode addresses](../specs/airnode-protocol.md#airnode-address) that are decided to be used for each [dAPI](api3serverv1.md#dapi).
+For example, this governance decision could be the list of [Airnode addresses](../../specs/airnode-protocol.md#airnode-address) that are decided to be used for each [dAPI](../api3-server-v1/api3serverv1.md#dapi).
 
 This governance decision can be formatted as a Merkle tree.
-The set of EOAs can then sign the respective Merkle root as the ["dAPI management Merkle root" hash type](./api3market.md#dapi-management-merkle-tree) and publish their signatures.
+The set of EOAs can then sign the respective Merkle root (e.g., as the ["dAPI management Merkle root" hash type](../api3-server-v1/api3market.md#dapi-management-merkle-tree)) and publish their signatures.
 This would allow anyone to be able to register the Merkle root at any HashRegistry on any chain.
 
 The governance decisions that are registered at HashRegistry can be referred to by other contracts.
@@ -18,17 +18,17 @@ It is typical for a Safe multisig contract to be used for multi-party governance
 
 - Safe uses ERC-712, which does not allow signatures to be replayed across chains.
   Although this is typically a good idea, in the use case mentioned above, it would require the EOAs to sign a message for each chain.
-- It is a common occurance for a signer to have to take time off from signing.
+- It is a common occurrence for a signer to have to take time off from signing.
   In such cases, Safe requires signers to be swapped out and in through transactions.
   This process is highly security-critical and error-prone, and it would have to be repeated for each chain.
 
 Safe is highly modular, and arguably, the issues above can be resolved by extending it through custom plugins.
 That being said, in this case where our needs are highly specific and minimal, we opted for a standalone implementation.
-Note that despite being a pseudo-multisig, HashRegistry does not support many commonplace multisig features (ERC-1271, signature threshold, etc.) that are not needed to avoid bloat.
+Note that despite being a pseudo-multisig, HashRegistry does not support many commonplace multisig features (ERC-1271, signature threshold, etc.) because the specific use-case it was designed for does not need them.
 
 ## The owner
 
-HashRegistry has an owner, which can set signers for specific hash types and, and set specific hashes.
+HashRegistry has an owner, which can set signers for specific hash types and set specific hashes.
 The owner can override the decisions of the signers it sets, and thus should be trusted enough to be able to do so.
 
 The ownership can be transferred or revoked similar to a generic Ownable contract, unless this functionality overriden.
@@ -86,7 +86,7 @@ ECDSA.toEthSignedMessageHash(
 Note that the signatures are created before the respective hash is registered, and it only matters if the signer is set as a signer during the registration transaction, and not while the signature is being created.
 
 There is no functionality for signers to cancel their signatures through a transaction, as expecting the signer to send this transaction to all instances of HashRegistry would be error-prone.
-Instead, the signer can be swapped out to make their signature invalid.
+Instead, the signer can be swapped out to make their signatures invalid.
 
 ### Delegation signatures
 
@@ -103,12 +103,12 @@ ECDSA.toEthSignedMessageHash(
 ```
 
 This signature allows the hash signatures of the delegate to be used as a valid replacement of the (delegation) signer across all hash types until the delegation end timestamp.
-This does not prevent the (delegation) signer from continuing to sign hashes.
+Having an active delegation does not stop the signatures of the (delegation) signer to be used to register hashes.
 
 There is no functionality for (delegation) signers to cancel their delegations through a transaction, as expecting the signer to send this transaction to all instances of HashRegistry would be error-prone.
-Instead, the signer can be swapped out to make their delegation invalid.
+Instead, the signer can be swapped out to make their delegations invalid.
 
-Delegations apply across all instances of HashRegistry, unless for inheriting contracts that have overriden `signatureDelegationHashType()`.
+Delegations apply across all instances of HashRegistry, except for inheriting contracts that have overriden `signatureDelegationHashType()`.
 
 ## Hashes
 
@@ -173,5 +173,5 @@ Although this depends on the use-case, new decisions not being enacted is typica
 Furthermore, in the case that there is a list of unregistered eligible hashes, anyone can register these whenever they want and possibly by omitting some of them while doing so, which is again a security issue whose severity depends on the use-case.
 
 The universal recommendation that can be given here is to register any hash relating to your use-case as soon as possible.
-This can be done by making the registration of the hashes be the responsibility of the signers (evidently, they were incentivized enough to sign) and non-signers (which may also have an interest in the registered hashes being up to date).
+This can be done by making the registration of the hashes be the responsibility of the signers (evidently, they were incentivized enough to sign) or the non-signers (which may also have an interest in the registered hashes being up to date).
 Furthermore, one could devise a scheme that awards hash registrations and depend on third-parties to keep the registered hashes up to date.

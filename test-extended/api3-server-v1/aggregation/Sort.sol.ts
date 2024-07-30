@@ -7,6 +7,7 @@ import type { MockSort } from '../../../src/index';
 
 describe('Sort', function () {
   // Adapted from https://stackoverflow.com/a/37580979/14558682
+  // One could also use the zero-one principle here
   async function testSortWithAllPermutations(sort: MockSort, arrayLength: number) {
     const array = Array.from(Array.from({ length: arrayLength }), (_, i) => i - Math.floor(arrayLength / 2));
     const c = Array.from({ length: array.length }).fill(0) as number[];
