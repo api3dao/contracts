@@ -1,5 +1,16 @@
 # @api3/contracts
 
+## 6.0.0
+
+### Major Changes
+
+- 44b57a4: Removed dAPI and Market support from Sei devnet and added to Sei testnet (with the same alias)
+- 44b57a4: Removed dAPI and Market support from ApeChain "Jenkins" testnet and added to ApeChain "Curtis" testnet (with the same alias)
+
+### Minor Changes
+
+- 44b57a4: Add dAPI and Market support to camp-sepolia-testnet
+
 ## 5.1.0
 
 ### Minor Changes
