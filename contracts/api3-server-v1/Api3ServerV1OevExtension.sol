@@ -57,6 +57,7 @@ contract Api3ServerV1OevExtension is
     function payOevBid(
         address auctioneer,
         uint256 dappId,
+        uint32 updateAllowanceStartTimestamp,
         uint32 updateAllowanceEndTimestamp,
         bytes calldata signature
     ) external payable {
@@ -68,18 +69,8 @@ contract Api3ServerV1OevExtension is
             "Auctioneer invalid"
         );
         require(
-            (
-                keccak256(
-                    abi.encodePacked(
-                        block.chainid,
-                        dappId,
-                        msg.sender,
-                        msg.value,
-                        updateAllowanceEndTimestamp
-                    )
-                ).toEthSignedMessageHash()
-            ).recover(signature) == auctioneer,
-            "Signature mismatch"
+            updateAllowanceStartTimestamp <= block.timestamp,
+            "Start timestamp in the future"
         );
         UpdateAllowance storage updateAllowance = dappIdToUpdateAllowance[
             dappId
@@ -87,6 +78,21 @@ contract Api3ServerV1OevExtension is
         require(
             updateAllowance.endTimestamp < updateAllowanceEndTimestamp,
             "End timestamp stale"
+        );
+        require(
+            (
+                keccak256(
+                    abi.encodePacked(
+                        block.chainid,
+                        dappId,
+                        msg.sender,
+                        msg.value,
+                        updateAllowanceStartTimestamp,
+                        updateAllowanceEndTimestamp
+                    )
+                ).toEthSignedMessageHash()
+            ).recover(signature) == auctioneer,
+            "Signature mismatch"
         );
         dappIdToUpdateAllowance[dappId] = UpdateAllowance({
             updater: msg.sender,
