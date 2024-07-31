@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IDapiProxy.sol";
 import "../interfaces/IApi3ServerV1.sol";
-import "./Api3ServerV1OevExtension.sol";
+import "../Api3ServerV1OevExtension.sol";
 
 // This contract will be upgradeable whose proxy is deployed by a factory
 contract DapiProxyWithOevV2 is IDapiProxy {

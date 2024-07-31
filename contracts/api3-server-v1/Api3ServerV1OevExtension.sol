@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../../access/AccessControlRegistryAdminnedWithManager.sol";
-import "../DataFeedServer.sol";
-import "../../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
-import "../interfaces/IApi3ServerV1.sol";
+import "../access/AccessControlRegistryAdminnedWithManager.sol";
+import "./DataFeedServer.sol";
+import "../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
+import "./interfaces/IApi3ServerV1.sol";
 
 contract Api3ServerV1OevExtension is
     AccessControlRegistryAdminnedWithManager,
