@@ -57,7 +57,6 @@ contract Api3ServerV1OevExtension is
     function payOevBid(
         address auctioneer,
         uint256 dappId,
-        uint32 updateAllowanceStartTimestamp,
         uint32 updateAllowanceEndTimestamp,
         bytes calldata signature
     ) external payable {
@@ -67,10 +66,6 @@ contract Api3ServerV1OevExtension is
                 auctioneer
             ),
             "Auctioneer invalid"
-        );
-        require(
-            updateAllowanceStartTimestamp <= block.timestamp,
-            "Start timestamp in the future"
         );
         UpdateAllowance storage updateAllowance = dappIdToUpdateAllowance[
             dappId
@@ -87,7 +82,6 @@ contract Api3ServerV1OevExtension is
                         dappId,
                         msg.sender,
                         msg.value,
-                        updateAllowanceStartTimestamp,
                         updateAllowanceEndTimestamp
                     )
                 ).toEthSignedMessageHash()
