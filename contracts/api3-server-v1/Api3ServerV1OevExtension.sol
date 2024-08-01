@@ -67,6 +67,10 @@ contract Api3ServerV1OevExtension is
             ),
             "Auctioneer invalid"
         );
+        require(
+            updateAllowanceEndTimestamp < block.timestamp + 1 hours,
+            "Timestamp not valid"
+        );
         UpdateAllowance storage updateAllowance = dappIdToUpdateAllowance[
             dappId
         ];
@@ -152,9 +156,10 @@ contract Api3ServerV1OevExtension is
                     "Signature mismatch"
                 );
                 // Cannot use processBeaconUpdate() here because data is not calldata
+                // Timestamp implicitly can't be more than 1 hours in the future due to the check in payOevBid()
                 require(
-                    timestamp < block.timestamp + 1 hours,
-                    "Timestamp not valid"
+                    timestamp < updateAllowance.endTimestamp,
+                    "Timestamp not allowed"
                 );
                 require(
                     timestamp > _dataFeeds[oevBeaconId].timestamp,
