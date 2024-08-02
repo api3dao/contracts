@@ -110,7 +110,7 @@ contract Api3ServerV1OevExtension is
     }
 
     // templateIds are the actual ones used by the dAPI (and not the once-hashed OEV ones)
-    function updateDappOevDataFeedWithSignedData(
+    function updateDappOevDataFeedWithAllowedSignedData(
         uint256 dappId,
         bytes[] calldata signedData
     ) external {
@@ -122,6 +122,31 @@ contract Api3ServerV1OevExtension is
             block.timestamp < updateAllowance.endTimestamp,
             "Sender cannot update anymore"
         );
+        updateDappOevDataFeedWithSignedData(
+            dappId,
+            updateAllowance.endTimestamp,
+            signedData
+        );
+        // Emit event
+    }
+
+    function simulateDappOevDataFeedUpdateWithSignedData(
+        uint256 dappId,
+        bytes[] calldata signedData
+    ) external {
+        require(tx.origin == address(0), "Tx origin not zero address");
+        updateDappOevDataFeedWithSignedData(
+            dappId,
+            type(uint256).max,
+            signedData
+        );
+    }
+
+    function updateDappOevDataFeedWithSignedData(
+        uint256 dappId,
+        uint256 updateAllowanceEndTimestamp,
+        bytes[] calldata signedData
+    ) private {
         uint256 beaconCount = signedData.length;
         bytes32[] memory baseBeaconIds = new bytes32[](beaconCount);
         bytes32[] memory oevBeaconIds = new bytes32[](beaconCount);
@@ -158,7 +183,7 @@ contract Api3ServerV1OevExtension is
                 // Cannot use processBeaconUpdate() here because data is not calldata
                 // Timestamp implicitly can't be more than 1 hours in the future due to the check in payOevBid()
                 require(
-                    timestamp < updateAllowance.endTimestamp,
+                    timestamp < updateAllowanceEndTimestamp,
                     "Timestamp not allowed"
                 );
                 require(
