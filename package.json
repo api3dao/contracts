@@ -68,7 +68,7 @@
     "chai": "^4.5.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
-    "glob": "^10.4.5",
+    "glob": "^11.0.0",
     "hardhat": "^2.22.7",
     "hardhat-deploy": "^0.12.4",
     "hardhat-gas-reporter": "^2.2.0",
@@ -81,6 +81,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "ethers": "^6.12.1"
+    "ethers": "^6.13.2"
   }
 }
