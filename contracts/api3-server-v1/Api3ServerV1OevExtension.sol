@@ -203,19 +203,6 @@ contract Api3ServerV1OevExtension is
         // Emit event
     }
 
-    function mockUpdateAllowance(
-        uint256 dappId,
-        address updater,
-        uint32 updateAllowanceEndTimestamp
-    ) external {
-        require(msg.sender == address(0), "Sender address not zero");
-        require(tx.gasprice == 0, "Tx gas price not zero");
-        dappIdToUpdateAllowance[dappId] = UpdateAllowance({
-            updater: updater,
-            endTimestamp: updateAllowanceEndTimestamp
-        });
-    }
-
     function dataFeeds(
         bytes32 dataFeedId
     ) external view returns (int224 value, uint32 timestamp) {
