@@ -40,6 +40,8 @@
   "kroma-sepolia-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "lightlink": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "lightlink-sepolia-testnet": "0x5aB00E30453EEAd35025A761ED65d51d74574C24",
+  "manta": "0x0D4136b033807C5298a77E2ad7ebE8ce05207D2d",
+  "manta-sepolia-testnet": "0x29AbCeDfa34a229536962b3061913842F103A916",
   "linea": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "linea-sepolia-testnet": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
   "lukso": "0x14A9E40FcAdA95A273ce3c8d4ccF7EA3280BDd26",
