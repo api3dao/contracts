@@ -5,6 +5,7 @@ import { Api3ServerV1__factory } from '../src/index';
 
 type Address = string | `0x${string}`;
 type BytesLike = string | Uint8Array;
+type UpdateBeaconWithSignedDataArgsType = [Address, BytesLike, number, BytesLike, BytesLike];
 
 module.exports = async () => {
   const { log } = deployments;
@@ -32,7 +33,14 @@ module.exports = async () => {
     api3ServerV1.interface.encodeFunctionData('dataFeeds', [beaconSetId]),
   ]);
 
-  const updateMulticallData = [] as BytesLike[];
+  const initialValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224', 'uint32'], [0, 0]);
+
+  function getCallData(ind: number, increment: number, templateId: BytesLike, signature?: BytesLike): BytesLike {
+    if (!signature) return '0x';
+    const data = `0x${(ind + increment).toString().padStart(64, '0')}` as BytesLike;
+    const args: UpdateBeaconWithSignedDataArgsType = [airnodeAddress, templateId, ind + increment, data, signature];
+    return api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', args);
+  }
 
   const updateSignatures = [
     '0x3149d2642658ca2bbf08a47bce005ef5edb8d6c084a154638f4acff14bd9dc77110b54243126ed6cea05eaf810d825b5b4d816e0c254f6160ff97abab67919ee1b',
@@ -42,27 +50,20 @@ module.exports = async () => {
     '0x620db08a26b8acba0108a4e6be834aa5aefc8a7304581b2117ed775df40aedbf75ae190d7f000dd152f921df44469690b816834e68eef2bac2ea6daa8e94960b1b',
     '0x94f32241043cda7efbb3aeff88e460eb46bce8d6b8df784621cd47a39790f7e80f7aca6567b2e656cdf4fd7277d3fd4522bafbfaeb2c31b6e837dd71af7869931c',
     '0x2c25ed17835336f80d1a4705817685069e3d1b93108469e330766ae6921d27262a66ee6318e6aec3d58ce5fcfcd12fa3a528f2a3e042bbda6c9eba7b322099a01c',
-  ];
+  ] as BytesLike[];
+
+  const updateMulticallData = [] as BytesLike[];
+
   for (const [ind, templateId] of templateIds.entries()) {
-    if (dataFeedReadings[ind] === ethers.AbiCoder.defaultAbiCoder().encode(['int224', 'uint32'], [0, 0])) {
-      const signature = updateSignatures[ind] as BytesLike;
-      const data = `0x${(ind + 1).toString().padStart(64, '0')}` as BytesLike;
-      const callData = api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', [
-        airnodeAddress,
-        templateId,
-        ind + 1,
-        data,
-        signature,
-      ]);
-      updateMulticallData.push(callData);
+    if (dataFeedReadings[ind] === initialValue) {
+      updateMulticallData.push(getCallData(ind, 1, templateId, updateSignatures[ind]));
     }
   }
 
-  if (
-    dataFeedReadings[BEACON_SET_BEACON_COUNT] === ethers.AbiCoder.defaultAbiCoder().encode(['int224', 'uint32'], [0, 0])
-  ) {
+  if (dataFeedReadings[BEACON_SET_BEACON_COUNT] === initialValue) {
     updateMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
   }
+
   if (updateMulticallData.length > 0) {
     const transaction = await api3ServerV1.multicall(updateMulticallData);
     await transaction.wait();
@@ -70,7 +71,6 @@ module.exports = async () => {
   } else {
     log('Beacon set update already executed');
   }
-  const estimateGasMulticallData = [] as BytesLike[];
 
   const gasEstimationSignatures = [
     '0xc536e13f74384d8cfcfee6a9f96bdc2572208fc71dec8b95cb08f535776237af7adbf9eaf217483c60f5fabfaf601d5d620d37894cc0ed4e6d30a763790bb2ba1c',
@@ -80,20 +80,11 @@ module.exports = async () => {
     '0xcf9b9ed2a24cb84077f04b5c668df943171cdede356a9573ac253c2f2fe225392098eeef1c1a8ffd4b8fe118790f78d1c2317fc56ce28c30711d5262523f11a81c',
     '0x141e0ac1537e7e82bb6c524ae66978753ea4786995b3cdb8fac32731dabdb5257934ca1a728e7128419dcd8797955c37d20373a3230a64959f63c6d787d305681c',
     '0xef3c28334bfbc669cb73135536dd32a0115766376dfa2c6237926da6a81dd4240c67b12c1232e15b0cd1a6fb569d8f85fa608e549b871ccc9aa69e5112b7f10b1c',
-  ];
+  ] as BytesLike[];
 
-  for (const [ind, templateId] of templateIds.entries()) {
-    const signature = gasEstimationSignatures[ind] as BytesLike;
-    const data = `0x${(ind + 101).toString().padStart(64, '0')}` as BytesLike;
-    const callData = api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', [
-      airnodeAddress,
-      templateId,
-      ind + 101,
-      data,
-      signature,
-    ]);
-    estimateGasMulticallData.push(callData);
-  }
+  const estimateGasMulticallData = templateIds.map((templateId, ind) =>
+    getCallData(ind, 101, templateId, gasEstimationSignatures[ind])
+  ) as BytesLike[];
 
   estimateGasMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
   const estimateGasCalldata = api3ServerV1.interface.encodeFunctionData('multicall', [estimateGasMulticallData]);
