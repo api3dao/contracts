@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 6.2.0
+
+### Minor Changes
+
+- a1a4044: Add dAPI and Market support to conflux and conflux-testnet
+
 ## 6.1.0
 
 ### Minor Changes
