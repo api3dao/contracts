@@ -34,20 +34,6 @@ function getUpdateSignature(ind: number): BytesLike {
   return updateSignatures[ind] as BytesLike;
 }
 
-function getGasEstimationSignature(ind: number): BytesLike {
-  const gasEstimationSignatures = [
-    '0xc536e13f74384d8cfcfee6a9f96bdc2572208fc71dec8b95cb08f535776237af7adbf9eaf217483c60f5fabfaf601d5d620d37894cc0ed4e6d30a763790bb2ba1c',
-    '0x414969811706716036ce99f8abbeeedadef376e3d4c83ebcd75f5d60391ff5cb4250e0d70b37acce9fc33d6bdd12816dd6154ab8bf76ef2a5bb9ce667af527f01c',
-    '0xca9b15bb0e6502c3ee845b207fc3421baaf56a570ef19dc1aadbfa0f2c4773780908bb8fc4b42b0b51b3bde37a115d90049c9a05adf9eab21610b17c7e6308081b',
-    '0xf6acb06f80e13ebaee53d48759a2790cff8dcbf1505c1c16702b370714b8dda4768bf84e1ffc0b1cca239b47f100870968b22072e4e3037dc5d4e1b9255aae301b',
-    '0xcf9b9ed2a24cb84077f04b5c668df943171cdede356a9573ac253c2f2fe225392098eeef1c1a8ffd4b8fe118790f78d1c2317fc56ce28c30711d5262523f11a81c',
-    '0x141e0ac1537e7e82bb6c524ae66978753ea4786995b3cdb8fac32731dabdb5257934ca1a728e7128419dcd8797955c37d20373a3230a64959f63c6d787d305681c',
-    '0xef3c28334bfbc669cb73135536dd32a0115766376dfa2c6237926da6a81dd4240c67b12c1232e15b0cd1a6fb569d8f85fa608e549b871ccc9aa69e5112b7f10b1c',
-  ] as BytesLike[];
-
-  return gasEstimationSignatures[ind] as BytesLike;
-}
-
 function signatureCorrection(signature: string) {
   const v = Number.parseInt(signature.slice(-2), 16);
   let updatedV;
@@ -72,7 +58,7 @@ async function signMessage(value: number, templateId: BytesLike, deployer: Hardh
 module.exports = async () => {
   const { log } = deployments;
   const [deployer] = await ethers.getSigners();
-  const airnodeAddress = '0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1' as Address;
+  const airnodeAddress = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1') as Address;
   const BEACON_SET_BEACON_COUNT = 7;
 
   if (!chainsSupportedByDapis.includes(network.name)) {
@@ -124,11 +110,16 @@ module.exports = async () => {
     log('Beacon set update already executed');
   }
 
+  if (!isDeployer) {
+    log('Skipping gas estimation for non-deployer');
+    return;
+  }
+
   const estimateGasMulticallData = [] as BytesLike[];
 
   for (const [ind, templateId] of templateIds.entries()) {
-    const signature = isDeployer ? await signMessage(ind + 101, templateId, deployer) : getGasEstimationSignature(ind);
-    estimateGasMulticallData.push(await getCallData(api3ServerV1, airnodeAddress, ind + 101, templateId, signature));
+    const signature = await signMessage(ind + 102, templateId, deployer);
+    estimateGasMulticallData.push(await getCallData(api3ServerV1, airnodeAddress, ind + 102, templateId, signature));
   }
 
   estimateGasMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
