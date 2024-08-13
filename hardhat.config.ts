@@ -4,9 +4,20 @@ import { hardhatConfig } from '@api3/chains';
 import { glob } from 'glob';
 import type { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
+import '@nomicfoundation/hardhat-ledger';
 import 'hardhat-deploy';
 import 'dotenv/config';
 import { task } from 'hardhat/config';
+
+const ledgerAccounts = process.env.LEDGER_ACCOUNT ? [process.env.LEDGER_ACCOUNT] : [];
+const networks = hardhatConfig.networks();
+
+if (ledgerAccounts.length > 0) {
+  for (const network of Object.values(networks)) {
+    network.ledgerAccounts = ledgerAccounts;
+    delete network.accounts;
+  }
+}
 
 const config: HardhatUserConfig = {
   etherscan: hardhatConfig.etherscan(),
@@ -18,7 +29,7 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: process.env.EXTENDED_TEST ? 60 * 60_000 : 60_000,
   },
-  networks: hardhatConfig.networks(),
+  networks,
   paths: {
     tests: process.env.EXTENDED_TEST ? './test-extended' : './test',
   },
