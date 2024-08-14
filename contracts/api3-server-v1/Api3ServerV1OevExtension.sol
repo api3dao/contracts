@@ -56,14 +56,6 @@ contract Api3ServerV1OevExtension is
         );
     }
 
-    // If an auctioneer accidentally provides a signature that is too far in the future,
-    // revoke its auctioneer role and then reset update allowances for the affected dApps.
-    function resetUpdateAllowance(uint256 dappId) external override {
-        require(msg.sender == manager, "Sender not manager");
-        delete dappIdToUpdateAllowance[dappId];
-        emit ResetUpdateAllowance(dappId);
-    }
-
     function withdraw(address recipient, uint256 amount) external override {
         require(
             IAccessControlRegistry(accessControlRegistry).hasRole(

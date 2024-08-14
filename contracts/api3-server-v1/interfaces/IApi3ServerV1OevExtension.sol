@@ -8,8 +8,6 @@ interface IApi3ServerV1OevExtension is
     IAccessControlRegistryAdminnedWithManager,
     IDataFeedServer
 {
-    event ResetUpdateAllowance(uint256 indexed dappId);
-
     event Withdrew(address recipient, uint256 amount, address sender);
 
     event PaidOevBid(
@@ -26,8 +24,6 @@ interface IApi3ServerV1OevExtension is
         int224 updatedValue,
         uint32 updatedTimestamp
     );
-
-    function resetUpdateAllowance(uint256 dappId) external;
 
     function withdraw(address recipient, uint256 amount) external;
 
