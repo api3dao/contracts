@@ -12,7 +12,7 @@ interface IApi3ServerV1OevExtension is
 
     event PaidOevBid(
         uint256 indexed dappId,
-        address updater,
+        address indexed updater,
         uint256 bidAmount,
         uint256 updateAllowanceEndTimestamp,
         address auctioneer
@@ -20,6 +20,7 @@ interface IApi3ServerV1OevExtension is
 
     event UpdatedDappOevDataFeed(
         uint256 indexed dappId,
+        address indexed updater,
         bytes32 dataFeedId,
         int224 updatedValue,
         uint32 updatedTimestamp

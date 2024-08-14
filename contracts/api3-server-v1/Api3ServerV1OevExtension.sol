@@ -153,6 +153,7 @@ contract Api3ServerV1OevExtension is
         );
         emit UpdatedDappOevDataFeed(
             dappId,
+            msg.sender,
             baseDataFeedId,
             updatedValue,
             updatedTimestamp
