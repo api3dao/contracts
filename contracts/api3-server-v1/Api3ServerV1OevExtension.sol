@@ -58,10 +58,11 @@ contract Api3ServerV1OevExtension is
 
     function withdraw(address recipient, uint256 amount) external override {
         require(
-            IAccessControlRegistry(accessControlRegistry).hasRole(
-                withdrawerRole,
-                msg.sender
-            ),
+            msg.sender == manager ||
+                IAccessControlRegistry(accessControlRegistry).hasRole(
+                    withdrawerRole,
+                    msg.sender
+                ),
             "Sender cannot withdraw"
         );
         (bool success, ) = recipient.call{value: amount}("");
