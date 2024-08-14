@@ -188,10 +188,13 @@ contract Api3ServerV1OevExtension is
         return Address.functionCall(target, data);
     }
 
-    function dataFeeds(
+    function oevDataFeed(
+        uint256 dappId,
         bytes32 dataFeedId
     ) external view override returns (int224 value, uint32 timestamp) {
-        DataFeed storage dataFeed = _dataFeeds[dataFeedId];
+        DataFeed storage dataFeed = _dataFeeds[
+            keccak256(abi.encodePacked(dappId, dataFeedId))
+        ];
         (value, timestamp) = (dataFeed.value, dataFeed.timestamp);
     }
 

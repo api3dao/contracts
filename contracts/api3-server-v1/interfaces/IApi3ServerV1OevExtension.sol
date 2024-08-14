@@ -61,7 +61,8 @@ interface IApi3ServerV1OevExtension is
         bytes calldata data
     ) external returns (bytes memory);
 
-    function dataFeeds(
+    function oevDataFeed(
+        uint256 dappId,
         bytes32 dataFeedId
     ) external view returns (int224 value, uint32 timestamp);
 
