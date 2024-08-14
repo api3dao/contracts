@@ -151,6 +151,12 @@ contract Api3ServerV1OevExtension is
             updateAllowance.endTimestamp,
             signedData
         );
+        emit UpdatedDappOevDataFeed(
+            dappId,
+            baseDataFeedId,
+            updatedValue,
+            updatedTimestamp
+        );
     }
 
     function simulateDappOevDataFeedUpdate(
@@ -327,11 +333,5 @@ contract Api3ServerV1OevExtension is
                 timestamp: updatedTimestamp
             });
         }
-        emit UpdatedDappOevDataFeed(
-            dappId,
-            baseDataFeedId,
-            updatedValue,
-            updatedTimestamp
-        );
     }
 }
