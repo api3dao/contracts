@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 7.0.0
+
+### Major Changes
+
+- daf2511: - Removed dAPI and Market support from deprecated BOB testnet and added to active BOB testnet (with the same alias)
+
+### Minor Changes
+
+- 071da83: - Add dAPI and Market support to lumia and Lumia-sepolia-testnet
+
 ## 6.2.0
 
 ### Minor Changes
