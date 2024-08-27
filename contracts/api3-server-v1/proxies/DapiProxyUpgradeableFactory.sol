@@ -1,29 +1,36 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/beacon/UpgradeableBeacon.sol";
-import "./interfaces/IDapiProxyUpgradeableFactory.sol";
-import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/beacon/BeaconProxy.sol";
+import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
+import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/ERC1967/ERC1967Proxy.sol";
+import "./DapiProxyImplementationV1.sol";
 
-contract DapiProxyUpgradeableFactory is
-    UpgradeableBeacon,
-    IDapiProxyUpgradeableFactory
-{
+contract DapiProxyUpgradeableFactory is Ownable {
+    address public immutable api3ServerV1;
+    address public immutable api3ServerV1OevExtension;
+
     constructor(
-        address implementation_,
-        address initialOwner
-    ) UpgradeableBeacon(implementation_, initialOwner) {}
+        address initialOwner,
+        address api3ServerV1_,
+        address api3ServerV1OevExtension_
+    ) Ownable(initialOwner) {
+        api3ServerV1 = api3ServerV1_;
+        api3ServerV1OevExtension = api3ServerV1OevExtension_;
+    }
 
     function deployDapiProxyUpgradeable(
-        bytes calldata initializationData,
-        bytes calldata metadata
-    ) external override returns (address proxy) {
-        proxy = address(
-            new BeaconProxy{salt: keccak256(metadata)}(
-                address(this),
-                initializationData
+        bytes32 dapiName,
+        uint256 dappId
+    ) external returns (address proxy) {
+        address implementation = address(
+            new DapiProxyImplementationV1{salt: bytes32(0)}(
+                owner(),
+                api3ServerV1,
+                api3ServerV1OevExtension,
+                dapiName,
+                dappId
             )
         );
-        emit DeployedDapiProxyUpgradeable(proxy, initializationData, metadata);
+        proxy = address(new ERC1967Proxy{salt: bytes32(0)}(implementation, ""));
     }
 }
