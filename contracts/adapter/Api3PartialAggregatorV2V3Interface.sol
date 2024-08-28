@@ -68,7 +68,9 @@ contract Api3PartialAggregatorV2V3Interface is AggregatorV2V3Interface {
     }
 
     /// @dev Functions that use the round ID as an argument are not supported.
-    function getTimestamp(uint256) external view virtual returns (uint256) {
+    function getTimestamp(
+        uint256
+    ) external view virtual override returns (uint256) {
         revert FunctionIsNotSupported();
     }
 
