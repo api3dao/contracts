@@ -3,14 +3,11 @@ pragma solidity 0.8.20;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
+import "../../interfaces/IApi3ReaderProxy.sol";
 import "../interfaces/IApi3ServerV1.sol";
 import "../interfaces/IApi3ServerV1OevExtension.sol";
 
-interface IProxy {
-    function read() external view returns (int224 value, uint32 timestamp);
-}
-
-contract DapiProxyImplementationV1 is UUPSUpgradeable, Ownable, IProxy {
+contract Api3ReaderProxyV1 is UUPSUpgradeable, Ownable, IApi3ReaderProxy {
     address public immutable api3ServerV1;
     address public immutable api3ServerV1OevExtension;
     bytes32 public immutable dapiName;
