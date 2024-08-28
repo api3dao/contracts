@@ -1,3 +1,6 @@
+> [!NOTE]  
+> This is a private fork of https://github.com/api3dao/contracts for an upcoming Quantstamp audit.
+
 # @api3/contracts
 
 <div align="center">
