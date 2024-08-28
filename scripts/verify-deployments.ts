@@ -24,17 +24,12 @@ const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
 
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
-  const isTestnet = CHAINS.find((chain) => chain.alias === network)?.testnet;
   const contractNames = [
     ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
     ...(chainsSupportedByDapis.includes(network)
       ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1', 'ProxyFactory']
       : []),
-    ...(chainsSupportedByMarket.includes(network)
-      ? isTestnet
-        ? ['Api3Market']
-        : ['ExternalMulticallSimulator', 'Api3Market']
-      : []),
+    ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
   ];
 

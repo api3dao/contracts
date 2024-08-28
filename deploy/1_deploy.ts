@@ -1,4 +1,3 @@
-import { CHAINS } from '@api3/chains';
 import { deployments, ethers, network } from 'hardhat';
 
 import {
@@ -109,18 +108,6 @@ module.exports = async () => {
       }
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        const isTestnet = CHAINS.find((chain) => chain.alias === network.name)?.testnet;
-        if (!isTestnet) {
-          await deployments.get('ExternalMulticallSimulator').catch(async () => {
-            log(`Deploying ExternalMulticallSimulator`);
-            return deploy('ExternalMulticallSimulator', {
-              from: deployer!.address,
-              log: true,
-              deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
-            });
-          });
-        }
-
         await deployments.get('Api3Market').catch(async () => {
           log(`Deploying Api3Market`);
           return deploy('Api3Market', {
