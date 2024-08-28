@@ -160,7 +160,6 @@ Furthermore, steps 1 and 3 must be done in the same multicall to utilize a flash
 Therefore, steps 1, 2 and 3 are intended to be done in the same multicall, where steps 2 and 3 can be repeated with different updates.
 
 Since the bid only specifies the address of the contract that is intended to make this multicall, that contract needs to be personalized (e.g., put its interface behind `onlyOwner`) for third-parties to not be able to action on the awarded bid.
-We provide [OevSearcherMulticallV1](../../../contracts//utils/OevSearcherMulticallV1.sol) as an example, yet searchers are free to implement gas-optimized equivalents.
 
 ## Auctioneer flow
 
