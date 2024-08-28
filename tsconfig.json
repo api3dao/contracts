@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+
+    "lib": ["esnext"],
+    "module": "Node16",
+    "esModuleInterop": true,
+    "moduleResolution": "Node16",
+    "strict": true,
+    "target": "esnext",
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+
+    // Disabled because they are covered by Eslint rules
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
+    // Disabled because prefer the property syntax
+    "noPropertyAccessFromIndexSignature": false,
+
+    "baseUrl": "./",
+    "outDir": "./dist"
+  },
+  "include": ["**/*", ".eslintrc.js"]
+}

@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      pull-requests: write
+    steps:
+      - name: Clone @api3/contracts
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Ensure main is present for the commit message preparation
+        run: |
+          git checkout main
+          git checkout production
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare for the commit message
+        run: |
+          echo "NEW_VERSION=$(pnpm changeset status --output=release.json > /dev/null && jq -r '.releases[0].newVersion' release.json && rm release.json)" >> "$GITHUB_ENV"
+
+      - name: Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm changeset publish
+          title: 'Release v${{ env.NEW_VERSION }}'
+          commit: 'Release v${{ env.NEW_VERSION }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Create PR to merge production to main
+        if: steps.changesets.outputs.published == 'true'
+        run: gh pr create -B main -H production --title 'Merge production to main' --body 'This PR is created automatically after a release' --reviewer bbenligiray
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
