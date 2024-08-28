@@ -22,6 +22,7 @@
   "files": [
     "access",
     "api3-server-v1",
+    "interfaces",
     "utils",
     "vendor",
     "dist"

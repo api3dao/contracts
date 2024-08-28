@@ -8,5 +8,6 @@ pnpm i
 pnpm build
 cp -r contracts/access access
 cp -r contracts/api3-server-v1 api3-server-v1
+cp -r contracts/interfaces interfaces
 cp -r contracts/utils utils
 cp -r contracts/vendor vendor
