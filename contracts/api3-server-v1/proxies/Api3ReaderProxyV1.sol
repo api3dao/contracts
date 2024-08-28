@@ -3,11 +3,17 @@ pragma solidity 0.8.20;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
+import {AggregatorV2V3Interface} from "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 import "../interfaces/IApi3ServerV1.sol";
 import "../interfaces/IApi3ServerV1OevExtension.sol";
 
-contract Api3ReaderProxyV1 is UUPSUpgradeable, Ownable, IApi3ReaderProxy {
+contract Api3ReaderProxyV1 is
+    UUPSUpgradeable,
+    Ownable,
+    AggregatorV2V3Interface,
+    IApi3ReaderProxy
+{
     address public immutable api3ServerV1;
     address public immutable api3ServerV1OevExtension;
     bytes32 public immutable dapiName;
@@ -29,7 +35,7 @@ contract Api3ReaderProxyV1 is UUPSUpgradeable, Ownable, IApi3ReaderProxy {
     }
 
     function read()
-        external
+        public
         view
         override
         returns (int224 value, uint32 timestamp)
@@ -53,6 +59,71 @@ contract Api3ReaderProxyV1 is UUPSUpgradeable, Ownable, IApi3ReaderProxy {
             (value, timestamp) = (baseDapiValue, baseDapiTimestamp);
         }
         require(timestamp > 0, "Data feed not initialized");
+    }
+
+    function latestAnswer() external view override returns (int256 value) {
+        (value, ) = read();
+    }
+
+    function latestTimestamp()
+        external
+        view
+        override
+        returns (uint256 timestamp)
+    {
+        (, timestamp) = read();
+    }
+
+    function latestRound() external pure override returns (uint256) {
+        revert("Unsupported function");
+    }
+
+    function getAnswer(uint256) external pure override returns (int256) {
+        revert("Unsupported function");
+    }
+
+    function getTimestamp(uint256) external pure override returns (uint256) {
+        revert("Unsupported function");
+    }
+
+    function decimals() external pure override returns (uint8) {
+        return 18;
+    }
+
+    function description() external pure override returns (string memory) {
+        return "";
+    }
+
+    function version() external pure override returns (uint256) {
+        return 4913;
+    }
+
+    function getRoundData(
+        uint80
+    )
+        external
+        pure
+        override
+        returns (uint80, int256, uint256, uint256, uint80)
+    {
+        revert("Unsupported function");
+    }
+
+    function latestRoundData()
+        external
+        view
+        override
+        returns (
+            uint80 roundId,
+            int256 answer,
+            uint256 startedAt,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        )
+    {
+        roundId = answeredInRound = 0;
+        (answer, startedAt) = read();
+        updatedAt = startedAt;
     }
 
     function _authorizeUpgrade(
