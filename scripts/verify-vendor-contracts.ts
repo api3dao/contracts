@@ -16,6 +16,16 @@ async function main() {
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.9.5.tgz',
       packageContractsPath: '',
     },
+    {
+      path: join('@openzeppelin', 'contracts@5.0.2'),
+      tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz',
+      packageContractsPath: '',
+    },
+    {
+      path: join('@chainlink', 'contracts@1.2.0'),
+      tarballUrl: 'https://registry.npmjs.org/@chainlink/contracts/-/contracts-1.2.0.tgz',
+      packageContractsPath: '',
+    },
   ];
   for (const vendor of vendors) {
     // eslint-disable-next-line no-console
