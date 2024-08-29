@@ -1,20 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../interfaces/IProxy.sol";
+import "../interfaces/IApi3ReaderProxy.sol";
 
-// This contract is provided for testing purposes. It can be extended to mock
-// the interface of specific proxy types such as DataFeedProxy and DapiProxy.
-contract MockProxy is IProxy {
-    address public immutable override api3ServerV1;
-
+contract MockApi3ReaderProxy is IApi3ReaderProxy {
     int224 private _value;
 
     uint32 private _timestamp;
-
-    constructor(address _api3ServerV1) {
-        api3ServerV1 = _api3ServerV1;
-    }
 
     function read()
         external

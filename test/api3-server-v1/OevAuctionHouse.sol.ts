@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import type { AddressLike, BytesLike } from 'ethers';
 import { ethers } from 'hardhat';
 
-import type { MockProxy } from '../../src/index';
+import type { MockApi3ReaderProxy } from '../../src/index';
 
 describe('OevAuctionHouse', function () {
   enum BidConditionType {
@@ -156,18 +156,16 @@ describe('OevAuctionHouse', function () {
       .initializeRoleAndGrantToSender(adminRole, AUCTIONEER_ROLE_DESCRIPTION);
     await accessControlRegistry.connect(roles.manager).grantRole(auctioneerRole, roles.auctioneer!.address);
 
-    const mockApi3ServerV1Address = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
-    const MockProxy = await ethers.getContractFactory('MockProxy', roles.deployer);
-    const collateralRateProxy = await MockProxy.deploy(mockApi3ServerV1Address);
+    const MockApi3ReaderProxy = await ethers.getContractFactory('MockApi3ReaderProxy', roles.deployer);
+    const collateralRateProxy = await MockApi3ReaderProxy.deploy();
     await collateralRateProxy.mock(COLLATERAL_RATE, Math.floor(Date.now() / 1000));
-    const chainIdToNativeCurrencyRateProxy: Record<string, MockProxy> = await Object.keys(CHAIN_ID_TO_PRICE).reduce(
-      async (acc, chainId) => {
-        const proxy = await MockProxy.deploy(mockApi3ServerV1Address);
-        await proxy.mock(CHAIN_ID_TO_PRICE[chainId]!, Math.floor(Date.now() / 1000));
-        return { ...(await acc), [chainId]: proxy };
-      },
-      Promise.resolve({})
-    );
+    const chainIdToNativeCurrencyRateProxy: Record<string, MockApi3ReaderProxy> = await Object.keys(
+      CHAIN_ID_TO_PRICE
+    ).reduce(async (acc, chainId) => {
+      const proxy = await MockApi3ReaderProxy.deploy();
+      await proxy.mock(CHAIN_ID_TO_PRICE[chainId]!, Math.floor(Date.now() / 1000));
+      return { ...(await acc), [chainId]: proxy };
+    }, Promise.resolve({}));
 
     return {
       roles,
