@@ -1,81 +1,36 @@
-/*
-const { ethers } = require('hardhat');
-const { expect } = require('chai');
-
-const OperationEnum = Object.freeze({ Call: 0, DelegateCall: 1 });
+import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import { expect } from 'chai';
+import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
+import { ethers } from 'hardhat';
+import type { GnosisSafeWithoutProxy } from 'typechain-types';
 
 describe('GnosisSafeWithoutProxy', function () {
-  let roles;
-  let gnosisSafe, ownableCallForwarder, target;
-  let threshold = 2;
+  const OperationEnum = Object.freeze({ Call: 0, DelegateCall: 1 });
 
-  async function executeTransaction(owners, to, data, value, throughOwnableCallForwarder) {
-    if (throughOwnableCallForwarder) {
-      to = ownableCallForwarder.address;
-      const forwardFunctionSelector = ethers.utils.hexDataSlice(
-        ethers.utils.keccak256(ethers.utils.toUtf8Bytes('forwardCall(address,bytes)')),
-        0,
-        4
-      );
-      const forwardEncodedParameters = ethers.utils.defaultAbiCoder.encode(
-        ['address', 'bytes'],
-        [target.address, data]
-      );
-      data = ethers.utils.solidityPack(['bytes4', 'bytes'], [forwardFunctionSelector, forwardEncodedParameters]);
-    }
-    const SAFE_TX_TYPEHASH = '0xbb8310d486368db6bd6f849402fdd73ad53d316b5a4b2644ad6efe0f941286d8';
+  // GnosisSafe wants the v of signed messages to be increased by 4
+  // https://docs.safe.global/advanced/smart-account-signatures#eth_sign-signature
+  async function signTxHashForGnosisSafe(signer: HDNodeWallet, txHash: BytesLike) {
+    const signature = await signer.signMessage(ethers.getBytes(txHash));
+    const v = Number.parseInt(signature.slice(-2), 16);
+    const updatedV = v + 4;
+    return signature.slice(0, -2) + updatedV.toString(16);
+  }
+
+  async function signAndExecuteTransaction(
+    gnosisSafe: GnosisSafeWithoutProxy,
+    signers: HDNodeWallet[],
+    to: AddressLike,
+    data: BytesLike,
+    value: BigNumberish
+  ) {
     const operation = OperationEnum.Call;
     const safeTxGas = 0;
     const baseGas = 0;
     const gasPrice = 0;
-    const gasToken = ethers.constants.AddressZero;
-    const refundReceiver = ethers.constants.AddressZero;
+    const gasToken = ethers.ZeroAddress;
+    const refundReceiver = ethers.ZeroAddress;
     const nonce = await gnosisSafe.nonce();
-    const safeTxHash = ethers.utils.keccak256(
-      ethers.utils.defaultAbiCoder.encode(
-        [
-          'bytes32',
-          'address',
-          'uint256',
-          'bytes32',
-          'uint256',
-          'uint256',
-          'uint256',
-          'uint256',
-          'address',
-          'address',
-          'uint256',
-        ],
-        [
-          SAFE_TX_TYPEHASH,
-          to,
-          value,
-          ethers.utils.keccak256(data),
-          operation,
-          safeTxGas,
-          baseGas,
-          gasPrice,
-          gasToken,
-          refundReceiver,
-          nonce,
-        ]
-      )
-    );
-
-    const DOMAIN_SEPARATOR_TYPEHASH = '0x47e79534a245952e8b16893a336b85a3d9ea9fa8c573f3d803afb92a79469218';
-    const domainSeperator = ethers.utils.keccak256(
-      ethers.utils.defaultAbiCoder.encode(
-        ['bytes32', 'uint256', 'address'],
-        [DOMAIN_SEPARATOR_TYPEHASH, (await ethers.provider.getNetwork()).chainId, gnosisSafe.address]
-      )
-    );
-    expect(await gnosisSafe.domainSeparator()).to.equal(domainSeperator);
-
-    const txHashData = ethers.utils.solidityPack(
-      ['bytes1', 'bytes1', 'bytes32', 'bytes32'],
-      ['0x19', '0x01', domainSeperator, safeTxHash]
-    );
-    expect(
+    const txHash = ethers.keccak256(
       await gnosisSafe.encodeTransactionData(
         to,
         value,
@@ -88,35 +43,17 @@ describe('GnosisSafeWithoutProxy', function () {
         refundReceiver,
         nonce
       )
-    ).to.equal(txHashData);
-    const txHash = ethers.utils.keccak256(txHashData);
-
-    // For some reason GnosisSafe wants the v of signed messages to be increased by 4
-    // https://docs.gnosis-safe.io/contracts/signatures#eth_sign-signature
-    async function signHashForGnosisSafe(wallet, hash) {
-      const signature = await wallet.signMessage(ethers.utils.arrayify(hash));
-      const v = parseInt(signature.slice(-2), 16);
-      const updatedV = v + 4;
-      return signature.slice(0, -2) + updatedV.toString(16);
-    }
-
-    const ownerAddressToSignature = {};
-    for (const owner of owners) {
-      ownerAddressToSignature[owner.address] = await signHashForGnosisSafe(owner, txHash);
-    }
-
-    const signaturesWithAscendingAddresses = Object.keys(ownerAddressToSignature)
-      .sort()
-      .reduce((array, key) => {
-        array.push(ownerAddressToSignature[key]);
-        return array;
-      }, []);
-    const signatures = ethers.utils.solidityPack(
-      Array(signaturesWithAscendingAddresses.length).fill('bytes'),
-      signaturesWithAscendingAddresses
     );
 
-    expect(await gnosisSafe.getThreshold()).to.equal(threshold);
+    const signaturesSortedBySignerAddress = await Promise.all(
+      signers
+        .sort((a, b) => (BigInt(a.address) > BigInt(b.address) ? 1 : -1))
+        .map((signer: HDNodeWallet) => signTxHashForGnosisSafe(signer, txHash))
+    );
+    const encodedSignatures = ethers.solidityPacked(
+      Array.from({ length: signaturesSortedBySignerAddress.length }).map(() => 'bytes'),
+      signaturesSortedBySignerAddress
+    );
 
     await gnosisSafe.execTransaction(
       to,
@@ -128,115 +65,136 @@ describe('GnosisSafeWithoutProxy', function () {
       gasPrice,
       gasToken,
       refundReceiver,
-      signatures
+      encodedSignatures
     );
   }
 
-  beforeEach(async () => {
-    const accounts = await ethers.getSigners();
-    roles = {
-      deployer: accounts[0],
-      owner1: accounts[1],
-      owner2: accounts[2],
-      owner3: accounts[3],
-      addedOwner: accounts[4],
-    };
-    const gnosisSafeWithoutProxyFactory = await ethers.getContractFactory('GnosisSafeWithoutProxy', roles.deployer);
-    gnosisSafe = await gnosisSafeWithoutProxyFactory.deploy(
-      [roles.owner1.address, roles.owner2.address, roles.owner3.address],
+  async function deploy() {
+    const [deployer] = await ethers.getSigners();
+    const owners = Array.from({ length: 3 }).map(() => ethers.Wallet.createRandom());
+    const threshold = 2;
+
+    const GnosisSafeWithoutProxy = await ethers.getContractFactory('GnosisSafeWithoutProxy', deployer);
+    const gnosisSafeWithoutProxy = await GnosisSafeWithoutProxy.deploy(
+      owners.map((owner) => owner.address),
       threshold
     );
-    const ownableCallForwarderFactory = await ethers.getContractFactory('OwnableCallForwarder', roles.deployer);
-    ownableCallForwarder = await ownableCallForwarderFactory.deploy(gnosisSafe.address);
-    const targetFactory = await ethers.getContractFactory('MockTarget', roles.deployer);
-    target = await targetFactory.deploy(gnosisSafe.address, ownableCallForwarder.address);
-    expect(await gnosisSafe.getOwners()).to.deep.equal([
-      roles.owner1.address,
-      roles.owner2.address,
-      roles.owner3.address,
-    ]);
-    expect(await gnosisSafe.getThreshold()).to.equal(threshold);
-    await roles.deployer.sendTransaction({
-      to: gnosisSafe.address,
-      value: ethers.utils.parseEther('1'),
+    await deployer?.sendTransaction({ to: gnosisSafeWithoutProxy.getAddress(), value: ethers.parseEther('1') });
+
+    const OwnableCallForwarder = await ethers.getContractFactory('OwnableCallForwarder', deployer);
+    const ownableCallForwarder = await OwnableCallForwarder.deploy(gnosisSafeWithoutProxy.getAddress());
+
+    const MockSafeTarget = await ethers.getContractFactory('MockSafeTarget', deployer);
+    const mockSafeTarget = await MockSafeTarget.deploy(
+      gnosisSafeWithoutProxy.getAddress(),
+      ownableCallForwarder.getAddress()
+    );
+
+    return {
+      owners,
+      threshold,
+      gnosisSafeWithoutProxy,
+      ownableCallForwarder,
+      mockSafeTarget,
+    };
+  }
+
+  describe('constructor', function () {
+    it('sets up the contract', async function () {
+      const { owners, threshold, gnosisSafeWithoutProxy } = await helpers.loadFixture(deploy);
+      expect(await gnosisSafeWithoutProxy.getThreshold()).to.equal(threshold);
+      expect(await gnosisSafeWithoutProxy.getOwners()).to.deep.equal(owners.map((owner) => owner.address));
+      expect(
+        await gnosisSafeWithoutProxy.getStorageAt(
+          BigInt(ethers.solidityPackedKeccak256(['string'], ['fallback_manager.handler.address'])),
+          1
+        )
+      ).to.equal(ethers.ZeroHash);
+      // Similar to https://github.com/safe-global/safe-smart-account/blob/v1.3.0/contracts/handler/CompatibilityFallbackHandler.sol#L74
+      const SENTINEL_MODULES = `0x${'1'.padStart(40, '0')}`;
+      expect(await gnosisSafeWithoutProxy.getModulesPaginated(SENTINEL_MODULES, 10)).to.deep.equal([
+        [],
+        SENTINEL_MODULES,
+      ]);
     });
   });
 
   // The contract gets set up by the constructor and should not allow consecutive setups
   describe('setup', function () {
     it('reverts', async function () {
+      const { owners, threshold, gnosisSafeWithoutProxy } = await helpers.loadFixture(deploy);
       await expect(
-        gnosisSafe.setup(
-          [roles.owner1.address, roles.owner2.address, roles.owner3.address],
+        gnosisSafeWithoutProxy.setup(
+          owners.map((owner) => owner.address),
           threshold,
-          ethers.constants.AddressZero,
+          ethers.ZeroAddress,
           '0x',
-          ethers.constants.AddressZero,
-          ethers.constants.AddressZero,
+          ethers.ZeroAddress,
+          ethers.ZeroAddress,
           0,
-          ethers.constants.AddressZero
+          ethers.ZeroAddress
         )
       ).to.be.revertedWith('GS200');
     });
   });
 
+  // From this point on, try a few of the expected use-cases
   describe('execTransaction', function () {
     context('Transaction is direct', function () {
       context('Transaction is a function call', function () {
         it('executes transaction', async function () {
-          const owners = [roles.owner1, roles.owner2];
-          const to = target.address;
-          const targetFunctionSignature = 'setNumberAsSafe(uint256)';
-          const parameters = [123456];
-          const functionSelector = ethers.utils.hexDataSlice(
-            ethers.utils.keccak256(ethers.utils.toUtf8Bytes(targetFunctionSignature)),
-            0,
-            4
-          );
-          const parameterTypes = targetFunctionSignature
-            .substring(targetFunctionSignature.indexOf('(') + 1, targetFunctionSignature.indexOf(')'))
-            .split(',');
-          const encodedParameters = ethers.utils.defaultAbiCoder.encode(parameterTypes, parameters);
-          const data = ethers.utils.solidityPack(['bytes4', 'bytes'], [functionSelector, encodedParameters]);
+          const { owners, threshold, gnosisSafeWithoutProxy, mockSafeTarget } = await helpers.loadFixture(deploy);
+          const thresholdManyRandomlySelectedSigners = [...owners].sort(() => Math.random() - 0.5).slice(0, threshold);
+          const number = 123;
           const value = 1;
-          await executeTransaction(owners, to, data, value, false);
-          expect(await ethers.provider.getBalance(target.address)).to.equal(value);
-          expect(await target.number()).to.equal(123456);
+          await signAndExecuteTransaction(
+            gnosisSafeWithoutProxy,
+            thresholdManyRandomlySelectedSigners,
+            await mockSafeTarget.getAddress(),
+            mockSafeTarget.interface.encodeFunctionData('setNumberAsSafe', [number]),
+            value
+          );
+          expect(await ethers.provider.getBalance(await mockSafeTarget.getAddress())).to.equal(value);
+          expect(await mockSafeTarget.number()).to.equal(number);
         });
       });
       context('Transaction is not a function call', function () {
         it('executes transaction', async function () {
-          const owners = [roles.owner1, roles.owner2];
-          const to = target.address;
-          const data = '0x';
+          const { owners, threshold, gnosisSafeWithoutProxy, mockSafeTarget } = await helpers.loadFixture(deploy);
+          const thresholdManyRandomlySelectedSigners = [...owners].sort(() => Math.random() - 0.5).slice(0, threshold);
           const value = 1;
-          await executeTransaction(owners, to, data, value, false);
-          expect(await ethers.provider.getBalance(target.address)).to.equal(value);
-          expect(await target.number()).to.equal(0);
+          await signAndExecuteTransaction(
+            gnosisSafeWithoutProxy,
+            thresholdManyRandomlySelectedSigners,
+            await mockSafeTarget.getAddress(),
+            '0x',
+            value
+          );
+          expect(await ethers.provider.getBalance(await mockSafeTarget.getAddress())).to.equal(value);
+          expect(await mockSafeTarget.number()).to.equal(0);
         });
       });
     });
     context('Transaction is through OwnableCallForwarder', function () {
       context('Transaction is a function call', function () {
         it('executes transaction', async function () {
-          const owners = [roles.owner1, roles.owner2];
-          const to = target.address;
-          const targetFunctionSignature = 'setNumberAsForwarder(uint256)';
-          const parameters = [123456];
-          const functionSelector = ethers.utils.hexDataSlice(
-            ethers.utils.keccak256(ethers.utils.toUtf8Bytes(targetFunctionSignature)),
-            0,
-            4
-          );
-          const parameterTypes = targetFunctionSignature
-            .substring(targetFunctionSignature.indexOf('(') + 1, targetFunctionSignature.indexOf(')'))
-            .split(',');
-          const encodedParameters = ethers.utils.defaultAbiCoder.encode(parameterTypes, parameters);
-          const data = ethers.utils.solidityPack(['bytes4', 'bytes'], [functionSelector, encodedParameters]);
+          const { owners, threshold, gnosisSafeWithoutProxy, mockSafeTarget, ownableCallForwarder } =
+            await helpers.loadFixture(deploy);
+          const thresholdManyRandomlySelectedSigners = [...owners].sort(() => Math.random() - 0.5).slice(0, threshold);
+          const number = 123;
           const value = 1;
-          await executeTransaction(owners, to, data, value, true);
-          expect(await ethers.provider.getBalance(target.address)).to.equal(value);
-          expect(await target.number()).to.equal(123456);
+          await signAndExecuteTransaction(
+            gnosisSafeWithoutProxy,
+            thresholdManyRandomlySelectedSigners,
+            await ownableCallForwarder.getAddress(),
+            ownableCallForwarder.interface.encodeFunctionData('forwardCall', [
+              await mockSafeTarget.getAddress(),
+              mockSafeTarget.interface.encodeFunctionData('setNumberAsForwarder', [number]),
+            ]),
+            value
+          );
+          expect(await ethers.provider.getBalance(await mockSafeTarget.getAddress())).to.equal(value);
+          expect(await mockSafeTarget.number()).to.equal(number);
         });
       });
     });
@@ -244,51 +202,38 @@ describe('GnosisSafeWithoutProxy', function () {
 
   describe('changeThreshold', function () {
     it('changes threshold', async function () {
-      const owners = [roles.owner1, roles.owner2];
-      const to = gnosisSafe.address;
+      const { owners, threshold, gnosisSafeWithoutProxy } = await helpers.loadFixture(deploy);
+      const thresholdManyRandomlySelectedSigners = [...owners].sort(() => Math.random() - 0.5).slice(0, threshold);
       const newThreshold = 3;
-      const data = ethers.utils.solidityPack(
-        ['bytes4', 'bytes'],
-        [
-          ethers.utils.hexDataSlice(ethers.utils.keccak256(ethers.utils.toUtf8Bytes('changeThreshold(uint256)')), 0, 4),
-          ethers.utils.defaultAbiCoder.encode(['uint256'], [newThreshold]),
-        ]
+      await signAndExecuteTransaction(
+        gnosisSafeWithoutProxy,
+        thresholdManyRandomlySelectedSigners,
+        gnosisSafeWithoutProxy.getAddress(),
+        gnosisSafeWithoutProxy.interface.encodeFunctionData('changeThreshold', [newThreshold]),
+        0
       );
-      await executeTransaction(owners, to, data, 0, false);
-      expect(await gnosisSafe.getThreshold()).to.equal(newThreshold);
-      expect(await gnosisSafe.getOwners()).to.deep.equal([
-        roles.owner1.address,
-        roles.owner2.address,
-        roles.owner3.address,
-      ]);
+      expect(await gnosisSafeWithoutProxy.getThreshold()).to.equal(newThreshold);
     });
   });
 
   describe('addOwnerWithThreshold', function () {
     it('adds owner with threshold', async function () {
-      const owners = [roles.owner1, roles.owner2];
-      const to = gnosisSafe.address;
+      const { owners, threshold, gnosisSafeWithoutProxy } = await helpers.loadFixture(deploy);
+      const thresholdManyRandomlySelectedSigners = [...owners].sort(() => Math.random() - 0.5).slice(0, threshold);
+      const newOwner = ethers.Wallet.createRandom();
       const newThreshold = 3;
-      const data = ethers.utils.solidityPack(
-        ['bytes4', 'bytes'],
-        [
-          ethers.utils.hexDataSlice(
-            ethers.utils.keccak256(ethers.utils.toUtf8Bytes('addOwnerWithThreshold(address,uint256)')),
-            0,
-            4
-          ),
-          ethers.utils.defaultAbiCoder.encode(['address', 'uint256'], [roles.addedOwner.address, newThreshold]),
-        ]
+      await signAndExecuteTransaction(
+        gnosisSafeWithoutProxy,
+        thresholdManyRandomlySelectedSigners,
+        gnosisSafeWithoutProxy.getAddress(),
+        gnosisSafeWithoutProxy.interface.encodeFunctionData('addOwnerWithThreshold', [newOwner.address, newThreshold]),
+        0
       );
-      await executeTransaction(owners, to, data, 0, false);
-      expect(await gnosisSafe.getThreshold()).to.equal(newThreshold);
-      expect(await gnosisSafe.getOwners()).to.deep.equal([
-        roles.addedOwner.address,
-        roles.owner1.address,
-        roles.owner2.address,
-        roles.owner3.address,
+      expect(await gnosisSafeWithoutProxy.getOwners()).to.deep.equal([
+        newOwner.address,
+        ...owners.map((owner) => owner.address),
       ]);
+      expect(await gnosisSafeWithoutProxy.getThreshold()).to.equal(newThreshold);
     });
   });
 });
-*/
