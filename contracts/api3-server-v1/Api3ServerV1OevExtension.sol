@@ -8,6 +8,12 @@ import "../vendor/@openzeppelin/contracts@4.8.2/utils/Address.sol";
 import "../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
 import "./interfaces/IApi3ServerV1.sol";
 
+/// @title Api3ServerV1 extension for OEV support
+/// @notice Api3ServerV1 contract supports base data feeds and OEV
+/// functionality. This contract implements the updated OEV design, and thus
+/// supersedes the OEV-related portion of Api3ServerV1. As before, the users
+/// are intended to read API3 data feeds through the standardized proxy, which
+/// abstracts this change away.
 contract Api3ServerV1OevExtension is
     AccessControlRegistryAdminnedWithManager,
     DataFeedServer,
@@ -20,42 +26,56 @@ contract Api3ServerV1OevExtension is
         uint32 endTimestamp;
     }
 
-    string public constant override AUCTIONEER_ROLE_DESCRIPTION = "Auctioneer";
-
+    /// @notice Withdrawer role description
     string public constant override WITHDRAWER_ROLE_DESCRIPTION = "Withdrawer";
 
-    bytes32 public immutable override auctioneerRole;
+    /// @notice Auctioneer role description
+    string public constant override AUCTIONEER_ROLE_DESCRIPTION = "Auctioneer";
 
+    /// @notice Withdrawer role
     bytes32 public immutable override withdrawerRole;
 
+    /// @notice Auctioneer role
+    bytes32 public immutable override auctioneerRole;
+
+    /// @notice Api3ServerV1 contract address
     address public immutable override api3ServerV1;
 
+    /// @notice Returns the update allowance status for the dApp with ID
     mapping(uint256 => UpdateAllowance) public override dappIdToUpdateAllowance;
 
+    /// @param accessControlRegistry_ AccessControlRegistry contract address
+    /// @param adminRoleDescription_ Admin role description
+    /// @param manager_ Manager address
+    /// @param api3ServerV1_ Api3ServerV1 address
     constructor(
-        address _accessControlRegistry,
-        string memory _adminRoleDescription,
-        address _manager,
-        address _api3ServerV1
+        address accessControlRegistry_,
+        string memory adminRoleDescription_,
+        address manager_,
+        address api3ServerV1_
     )
         AccessControlRegistryAdminnedWithManager(
-            _accessControlRegistry,
-            _adminRoleDescription,
-            _manager
+            accessControlRegistry_,
+            adminRoleDescription_,
+            manager_
         )
     {
-        require(_api3ServerV1 != address(0), "Api3ServerV1 address zero");
-        api3ServerV1 = _api3ServerV1;
+        require(api3ServerV1_ != address(0), "Api3ServerV1 address zero");
+        api3ServerV1 = api3ServerV1_;
         auctioneerRole = _deriveRole(
-            _deriveAdminRole(_manager),
+            _deriveAdminRole(manager_),
             AUCTIONEER_ROLE_DESCRIPTION
         );
         withdrawerRole = _deriveRole(
-            _deriveAdminRole(_manager),
+            _deriveAdminRole(manager_),
             WITHDRAWER_ROLE_DESCRIPTION
         );
     }
 
+    /// @notice Called by the contract manager or a withdrawer to withdraw the
+    /// accumulated OEV auction proceeds
+    /// @param recipient Recipient address
+    /// @param amount Amount
     function withdraw(address recipient, uint256 amount) external override {
         require(
             msg.sender == manager ||
@@ -70,17 +90,29 @@ contract Api3ServerV1OevExtension is
         emit Withdrew(recipient, amount, msg.sender);
     }
 
-    // The updater whose address is specified by the bidder calls this function with the exact bid amount.
-    // Doing so allows the updater to use the signed data until the end timestamp.
+    /// @notice Called by the updater account specified in the details of the
+    /// winning bid to pay the bid amount and claim update allowance for the
+    /// period that was being auctioned off
+    /// @param dappId dApp ID for which the bid was placed
+    /// @param updateAllowanceEndTimestamp End timestamp of the period for
+    /// which the update allowance was being auctioned off
+    /// @param signature Signature provided by the auctioneer attesting that
+    /// the sender has won the auction
     function payOevBid(
         uint256 dappId,
         uint32 updateAllowanceEndTimestamp,
         bytes calldata signature
     ) external payable override {
+        // Do not allow the bid to be paid if the update allowance will be
+        // useless
         require(
             updateAllowanceEndTimestamp > block.timestamp,
             "Timestamp stale"
         );
+        // It is intended for the auction periods to be in the order of a
+        // minute. To prevent erroneously large update allowance end timestamps
+        // from causing an irreversible state change to the contract, we do not
+        // allow timestamps that are too far in the future.
         require(
             updateAllowanceEndTimestamp < block.timestamp + 1 hours,
             "Timestamp too far from future"
@@ -121,7 +153,14 @@ contract Api3ServerV1OevExtension is
         );
     }
 
-    // templateIds are the actual ones used by the dAPI (and not the once-hashed OEV ones)
+    /// @notice Called by the current updater of the dApp with ID to update the
+    /// OEV data feed specific to the dApp
+    /// @param dappId dApp ID
+    /// @param signedData Signed data (see `_updateDappOevDataFeed()` for
+    /// details)
+    /// @return baseDataFeedId Base data feed ID
+    /// @return updatedValue Updated value
+    /// @return updatedTimestamp Updated timestamp
     function updateDappOevDataFeed(
         uint256 dappId,
         bytes[] calldata signedData
@@ -160,6 +199,19 @@ contract Api3ServerV1OevExtension is
         );
     }
 
+    /// @notice Called by the zero address to simulate an OEV data feed update
+    /// @dev The intended flow is for a searcher to do a static multicall to
+    /// this function and `simulateExternalCall()` to check if the current
+    /// signed data lets them extract OEV. If so, the searcher stores this data
+    /// and places a bid on OevAuctionHouse. If they win the auction, they pay
+    /// the bid and use the stored signed data with `updateDappOevDataFeed()`
+    /// to extract OEV.
+    /// @param dappId dApp ID
+    /// @param signedData Signed data (see `_updateDappOevDataFeed()` for
+    /// details)
+    /// @return baseDataFeedId Base data feed ID
+    /// @return updatedValue Updated value
+    /// @return updatedTimestamp Updated timestamp
     function simulateDappOevDataFeedUpdate(
         uint256 dappId,
         bytes[] calldata signedData
@@ -180,6 +232,15 @@ contract Api3ServerV1OevExtension is
         ) = _updateDappOevDataFeed(dappId, type(uint256).max, signedData);
     }
 
+    /// @notice Called by the zero address to simulate an external call
+    /// @dev The most basic usage of this is in a static multicall that calls
+    /// `simulateDappOevDataFeedUpdate()` multiple times to update the relevant
+    /// feeds, followed by an external call to the liquidator contract of the
+    /// searcher, which is built to return the revenue from the liquidation.
+    /// The returned value would then used to determine the bid amount.
+    /// @param target Target address of the external call
+    /// @param data Calldata of the external call
+    /// @return Returndata of the external call
     function simulateExternalCall(
         address target,
         bytes calldata data
@@ -188,6 +249,13 @@ contract Api3ServerV1OevExtension is
         return Address.functionCall(target, data);
     }
 
+    /// @notice Value of the OEV data feed specific to the dApp, intended for
+    /// informational purposes. The dApps are strongly recommended to use the
+    /// standardized proxies to read data feeds.
+    /// @param dappId dApp ID
+    /// @param dataFeedId Data feed ID
+    /// @return value Data feed value
+    /// @return timestamp Data feed timestamp
     function oevDataFeed(
         uint256 dappId,
         bytes32 dataFeedId
@@ -198,6 +266,23 @@ contract Api3ServerV1OevExtension is
         (value, timestamp) = (dataFeed.value, dataFeed.timestamp);
     }
 
+    /// @notice Updates OEV data feed specific to the dApp with the signed data
+    /// @dev This function replicates the guarantees of base feed updates,
+    /// which makes OEV updates exactly as secure as base feed updates. The
+    /// main difference between base feed updates and OEV feed updates is that
+    /// the signature for OEV updates use the hash of the respective template
+    /// ID (while the base feed updates use the template ID as is).
+    /// @param dappId dApp ID
+    /// @param updateAllowanceEndTimestamp Update allowance end timestamp
+    /// @param signedData Signed data that is a bytes array. Each item in the
+    /// array is the Airnode address, template ID, data feed timestamp, data
+    /// feed value and signature belonging to each Beacon. Similar to base feed
+    /// updates, OEV feed updates allow individual Beacon updates to be omitted
+    /// (in this case by leaving the signature empty) in case signed data for
+    /// some of the Beacons are unavailable.
+    /// @return baseDataFeedId Base data feed ID
+    /// @return updatedValue Updated value
+    /// @return updatedTimestamp Updated timestamp
     function _updateDappOevDataFeed(
         uint256 dappId,
         uint256 updateAllowanceEndTimestamp,
@@ -224,9 +309,14 @@ contract Api3ServerV1OevExtension is
                     (address, bytes32, uint256, bytes, bytes)
                 );
             baseDataFeedId = deriveBeaconId(airnode, templateId);
+            // Each base feed has an OEV equivalent specific to each dApp. The
+            // ID of these OEV feeds are simply the dApp ID and the base data
+            // feed ID hashed together, indepenent from if the base feed is a
+            // Beacon or Beacon set.
             bytes32 oevBeaconId = keccak256(
                 abi.encodePacked(dappId, baseDataFeedId)
             );
+            // The signature cannot be omitted for a single Beacon
             require(
                 (
                     keccak256(
@@ -249,14 +339,9 @@ contract Api3ServerV1OevExtension is
             );
             updatedValue = decodeFulfillmentData(data);
             updatedTimestamp = uint32(timestamp);
-            (
-                int224 baseBeaconValue,
-                uint32 baseBeaconTimestamp
-            ) = IApi3ServerV1(api3ServerV1).dataFeeds(baseDataFeedId);
-            if (baseBeaconTimestamp > updatedTimestamp) {
-                updatedValue = baseBeaconValue;
-                updatedTimestamp = baseBeaconTimestamp;
-            }
+            // We do not need to check if the base feed has a larger timestamp,
+            // as the proxy will prefer the base feed if it has a larger
+            // timestamp anyway
             _dataFeeds[oevBeaconId] = DataFeed({
                 value: updatedValue,
                 timestamp: updatedTimestamp
@@ -276,6 +361,8 @@ contract Api3ServerV1OevExtension is
                         (address, bytes32, uint256, bytes, bytes)
                     );
                 baseBeaconIds[ind] = deriveBeaconId(airnode, templateId);
+                // We also store individual Beacons of an OEV feed to make sure
+                // that their timestamps are not reduced by OEV updates
                 oevBeaconIds[ind] = keccak256(
                     abi.encodePacked(dappId, baseBeaconIds[ind])
                 );
@@ -292,7 +379,6 @@ contract Api3ServerV1OevExtension is
                         ).recover(signature) == airnode,
                         "Signature mismatch"
                     );
-                    // Timestamp implicitly can't be more than 1 hours in the future due to the check in payOevBid()
                     require(
                         timestamp < updateAllowanceEndTimestamp,
                         "Timestamp not allowed"
@@ -306,6 +392,9 @@ contract Api3ServerV1OevExtension is
                         timestamp: uint32(timestamp)
                     });
                 }
+                // Without the following bit, an OEV update would effectively
+                // be able to reduce the timestamps of individual Beacons of a
+                // Beacon set.
                 (
                     int224 baseBeaconValue,
                     uint32 baseBeaconTimestamp
@@ -314,6 +403,8 @@ contract Api3ServerV1OevExtension is
                     baseBeaconTimestamp >
                     _dataFeeds[oevBeaconIds[ind]].timestamp
                 ) {
+                    // Carrying over base feed values to OEV feeds is fine
+                    // because they are secured by identical guarantees
                     _dataFeeds[oevBeaconIds[ind]] = DataFeed({
                         value: baseBeaconValue,
                         timestamp: baseBeaconTimestamp

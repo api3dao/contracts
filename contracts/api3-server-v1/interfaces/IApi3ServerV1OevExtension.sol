@@ -67,20 +67,20 @@ interface IApi3ServerV1OevExtension is
     ) external view returns (int224 value, uint32 timestamp);
 
     // solhint-disable-next-line func-name-mixedcase
-    function AUCTIONEER_ROLE_DESCRIPTION()
-        external
-        view
-        returns (string memory);
-
-    // solhint-disable-next-line func-name-mixedcase
     function WITHDRAWER_ROLE_DESCRIPTION()
         external
         view
         returns (string memory);
 
-    function auctioneerRole() external view returns (bytes32);
+    // solhint-disable-next-line func-name-mixedcase
+    function AUCTIONEER_ROLE_DESCRIPTION()
+        external
+        view
+        returns (string memory);
 
     function withdrawerRole() external view returns (bytes32);
+
+    function auctioneerRole() external view returns (bytes32);
 
     function api3ServerV1() external view returns (address);
 
