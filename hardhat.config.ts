@@ -79,36 +79,6 @@ task(
         newMetadataHash:
           'a2646970667358221220c6d60bcd12cea7d82a3c5388fa1fa84ca1d8dfa2917c4e9e0037441302a9a50e64736f6c63430008110033',
       },
-      DapiProxy: {
-        oldMetadataHash:
-          'a26469706673582212201d061d50f160b049953a990ae61794869544bc65e5a0d25812e444c431cb90f964736f6c63430008110033',
-        newMetadataHash:
-          'a26469706673582212204d3393530e535e3569140afa4c7c81c268dd64b87dfbd3906f5506fdf182327064736f6c63430008110033',
-      },
-      DapiProxyWithOev: {
-        oldMetadataHash:
-          'a2646970667358221220165f090121acbfb6f16face0e037df12b601e08d2e0fd3fd3f5e021e053308ce64736f6c63430008110033',
-        newMetadataHash:
-          'a26469706673582212206e316e144d39ba7f685df4203166425d62bc2b037b8b962ddfe43b136df5f28364736f6c63430008110033',
-      },
-      DataFeedProxy: {
-        oldMetadataHash:
-          'a26469706673582212204c00c55f37d9d93afc24a97a86b86c67275c3e6f0288edd31c678400d06b4dcc64736f6c63430008110033',
-        newMetadataHash:
-          'a2646970667358221220f18d169af51f14c70c3e1306bac114aad61233456eac3e294fc6aeee4c81aabf64736f6c63430008110033',
-      },
-      DataFeedProxyWithOev: {
-        oldMetadataHash:
-          'a2646970667358221220491c4b81100c410951a4eacc896ef33bf2f2865d87768147c4ca7217d63d79c864736f6c63430008110033',
-        newMetadataHash:
-          'a26469706673582212206421406599870e5b60adbcd2eb836fe0e9704d132ee0c8e85d6f24954176ebbc64736f6c63430008110033',
-      },
-      ProxyFactory: {
-        oldMetadataHash:
-          'a2646970667358221220c65d86e8fe1882ee9717fe8fadf286e2319482a7213942b09ed85c68e3cb244164736f6c63430008110033',
-        newMetadataHash:
-          'a2646970667358221220333b0ed644c7120d01ccc6ab4a08f700d99c0e019aa04a88cc487872e686627864736f6c63430008110033',
-      },
     };
     for (const contractName of Object.keys(contractMetadataHashes)) {
       const [artifactFilePath] = await glob(`./artifacts/contracts/**/${contractName}.json`);

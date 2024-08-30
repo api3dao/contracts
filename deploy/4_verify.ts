@@ -1,4 +1,4 @@
-import { config, deployments, ethers, getUnnamedAccounts, network, run } from 'hardhat';
+import { config, deployments, getUnnamedAccounts, network, run } from 'hardhat';
 
 import {
   chainsSupportedByDapis,
@@ -6,11 +6,10 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import managerMultisigAddresses from '../data/manager-multisig.json';
-import { computeApi3MarketAirseekerRegistryAddress, type ProxyFactory } from '../src/index';
+import { computeApi3MarketAirseekerRegistryAddress } from '../src/index';
 
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
-  const [deployer] = await ethers.getSigners();
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (Object.keys(managerMultisigAddresses).includes(network.name)) {
@@ -32,56 +31,15 @@ module.exports = async () => {
         constructorArguments: [AccessControlRegistry.address, 'Api3ServerV1 admin', OwnableCallForwarder.address],
       });
 
-      const ProxyFactory = await deployments.get('ProxyFactory');
-      /*
-      await run('verify:verify', {
-        address: ProxyFactory.address,
-        constructorArguments: [Api3ServerV1.address],
-      });
-      */
-
-      const proxyFactory = new ethers.Contract(
-        ProxyFactory.address,
-        ProxyFactory.abi,
-        ethers.provider
-      ) as unknown as ProxyFactory;
-      const nodaryEthUsdDataFeedId = '0x4385954e058fbe6b6a744f32a4f89d67aad099f8fb8b23e7ea8dd366ae88151d';
-      const expectedDataFeedProxyAddress = await proxyFactory.computeDataFeedProxyAddress(nodaryEthUsdDataFeedId, '0x');
-      await run('verify:verify', {
-        address: expectedDataFeedProxyAddress,
-        constructorArguments: [Api3ServerV1.address, nodaryEthUsdDataFeedId],
-      });
-      const ethUsdDapiName = ethers.encodeBytes32String('ETH/USD');
-      const expectedDapiProxyAddress = await proxyFactory.computeDapiProxyAddress(ethUsdDapiName, '0x');
-      await run('verify:verify', {
-        address: expectedDapiProxyAddress,
-        constructorArguments: [Api3ServerV1.address, ethers.keccak256(ethUsdDapiName)],
-      });
-      const testOevBeneficiaryAddress = deployer!.address;
-      const expectedDataFeedProxyWithOevAddress = await proxyFactory.computeDataFeedProxyWithOevAddress(
-        nodaryEthUsdDataFeedId,
-        testOevBeneficiaryAddress,
-        '0x'
-      );
-      await run('verify:verify', {
-        address: expectedDataFeedProxyWithOevAddress,
-        constructorArguments: [Api3ServerV1.address, nodaryEthUsdDataFeedId, testOevBeneficiaryAddress],
-      });
-      const expectedDapiProxyWithOevAddress = await proxyFactory.computeDapiProxyWithOevAddress(
-        ethUsdDapiName,
-        testOevBeneficiaryAddress,
-        '0x'
-      );
-      await run('verify:verify', {
-        address: expectedDapiProxyWithOevAddress,
-        constructorArguments: [Api3ServerV1.address, ethers.keccak256(ethUsdDapiName), testOevBeneficiaryAddress],
-      });
-
       if (chainsSupportedByMarket.includes(network.name)) {
         const Api3Market = await deployments.get('Api3Market');
         await run('verify:verify', {
           address: Api3Market.address,
-          constructorArguments: [OwnableCallForwarder.address, ProxyFactory.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH],
+          constructorArguments: [
+            OwnableCallForwarder.address,
+            '0x9EB9798Dc1b602067DFe5A57c3bfc914B965acFD',
+            MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
+          ],
         });
         const airseekerRegistryAddress = computeApi3MarketAirseekerRegistryAddress(
           config.networks[network.name]!.chainId!

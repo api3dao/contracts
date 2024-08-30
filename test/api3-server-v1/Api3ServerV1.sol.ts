@@ -179,18 +179,10 @@ describe('Api3ServerV1', function () {
       beaconSetId,
     };
 
-    const dataFeedProxyWithOevFactory = await ethers.getContractFactory('DataFeedProxyWithOev', roles.deployer);
-    const oevProxy = await dataFeedProxyWithOevFactory.deploy(
-      await api3ServerV1.getAddress(),
-      beacons[0]!.beaconId,
-      roles.oevBeneficiary!.address
-    );
-
     return {
       roles,
       accessControlRegistry,
       api3ServerV1,
-      oevProxy,
       api3ServerV1AdminRoleDescription,
       dapiNameSetterRole,
       beacons,
@@ -526,7 +518,7 @@ describe('Api3ServerV1', function () {
                 context('There are enough signatures to constitute an absolute majority', function () {
                   context('Data in packed signatures is consistent with the data feed ID', function () {
                     it('updates OEV proxy Beacon set with signed data', async function () {
-                      const { roles, api3ServerV1, oevProxy, beacons, beaconSet } = await deploy();
+                      const { roles, api3ServerV1, beacons, beaconSet } = await deploy();
                       const oevUpdateValue = 105;
                       const currentTimestamp = await helpers.time.latest();
                       const oevUpdateTimestamp = currentTimestamp + 1;
@@ -541,7 +533,7 @@ describe('Api3ServerV1', function () {
                           } else {
                             const signature = await testUtils.signOevData(
                               api3ServerV1,
-                              await oevProxy.getAddress(),
+                              roles.mockOevProxy!.address,
                               beaconSet.beaconSetId,
                               updateId,
                               oevUpdateTimestamp,
@@ -566,7 +558,7 @@ describe('Api3ServerV1', function () {
                       expect(beaconSetBefore.value).to.equal(0);
                       expect(beaconSetBefore.timestamp).to.equal(0);
                       const oevProxyBeaconSetBefore = await api3ServerV1.oevProxyToIdToDataFeed(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beaconSet.beaconSetId
                       );
                       expect(oevProxyBeaconSetBefore.value).to.equal(0);
@@ -575,7 +567,7 @@ describe('Api3ServerV1', function () {
                         api3ServerV1
                           .connect(roles.searcher)
                           .updateOevProxyDataFeedWithSignedData(
-                            await oevProxy.getAddress(),
+                            roles.mockOevProxy!.address,
                             beaconSet.beaconSetId,
                             updateId,
                             oevUpdateTimestamp,
@@ -587,7 +579,7 @@ describe('Api3ServerV1', function () {
                         .to.emit(api3ServerV1, 'UpdatedOevProxyBeaconSetWithSignedData')
                         .withArgs(
                           beaconSet.beaconSetId,
-                          await oevProxy.getAddress(),
+                          roles.mockOevProxy!.address,
                           updateId,
                           oevUpdateValue,
                           oevUpdateTimestamp
@@ -596,7 +588,7 @@ describe('Api3ServerV1', function () {
                       expect(beaconSetAfter.value).to.equal(0);
                       expect(beaconSetAfter.timestamp).to.equal(0);
                       const oevProxyBeaconSetAfter = await api3ServerV1.oevProxyToIdToDataFeed(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beaconSet.beaconSetId
                       );
                       expect(oevProxyBeaconSetAfter.value).to.equal(oevUpdateValue);
@@ -605,7 +597,7 @@ describe('Api3ServerV1', function () {
                   });
                   context('Data in packed signatures is not consistent with the data feed ID', function () {
                     it('reverts', async function () {
-                      const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                      const { roles, api3ServerV1, beacons } = await deploy();
                       const oevUpdateValue = 105;
                       const currentTimestamp = await helpers.time.latest();
                       const oevUpdateTimestamp = currentTimestamp + 1;
@@ -621,7 +613,7 @@ describe('Api3ServerV1', function () {
                           } else {
                             const signature = await testUtils.signOevData(
                               api3ServerV1,
-                              await oevProxy.getAddress(),
+                              roles.mockOevProxy!.address,
                               spoofedDataFeedId,
                               updateId,
                               oevUpdateTimestamp,
@@ -646,7 +638,7 @@ describe('Api3ServerV1', function () {
                         api3ServerV1
                           .connect(roles.searcher)
                           .updateOevProxyDataFeedWithSignedData(
-                            await oevProxy.getAddress(),
+                            roles.mockOevProxy!.address,
                             spoofedDataFeedId,
                             updateId,
                             oevUpdateTimestamp,
@@ -660,7 +652,7 @@ describe('Api3ServerV1', function () {
                 });
                 context('There are not enough signatures to constitute an absolute majority', function () {
                   it('reverts', async function () {
-                    const { roles, api3ServerV1, oevProxy, beacons, beaconSet } = await deploy();
+                    const { roles, api3ServerV1, beacons, beaconSet } = await deploy();
                     const oevUpdateValue = 105;
                     const currentTimestamp = await helpers.time.latest();
                     const oevUpdateTimestamp = currentTimestamp + 1;
@@ -673,7 +665,7 @@ describe('Api3ServerV1', function () {
                         if (index === includeSignatureAtIndex) {
                           const signature = await testUtils.signOevData(
                             api3ServerV1,
-                            await oevProxy.getAddress(),
+                            roles.mockOevProxy!.address,
                             beaconSet.beaconSetId,
                             updateId,
                             oevUpdateTimestamp,
@@ -700,7 +692,7 @@ describe('Api3ServerV1', function () {
                       api3ServerV1
                         .connect(roles.searcher)
                         .updateOevProxyDataFeedWithSignedData(
-                          await oevProxy.getAddress(),
+                          roles.mockOevProxy!.address,
                           beaconSet.beaconSetId,
                           updateId,
                           oevUpdateTimestamp,
@@ -714,7 +706,7 @@ describe('Api3ServerV1', function () {
               });
               context('There are invalid signatures', function () {
                 it('reverts', async function () {
-                  const { roles, api3ServerV1, oevProxy, beacons, beaconSet } = await deploy();
+                  const { roles, api3ServerV1, beacons, beaconSet } = await deploy();
                   const oevUpdateValue = 105;
                   const currentTimestamp = await helpers.time.latest();
                   const oevUpdateTimestamp = currentTimestamp + 1;
@@ -742,7 +734,7 @@ describe('Api3ServerV1', function () {
                     api3ServerV1
                       .connect(roles.searcher)
                       .updateOevProxyDataFeedWithSignedData(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beaconSet.beaconSetId,
                         updateId,
                         oevUpdateTimestamp,
@@ -759,7 +751,7 @@ describe('Api3ServerV1', function () {
                 context('The signature is not omitted', function () {
                   context('Data in the packed signature is consistent with the data feed ID', function () {
                     it('updates OEV proxy Beacon with signed data', async function () {
-                      const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                      const { roles, api3ServerV1, beacons } = await deploy();
                       const beacon = beacons[0]!;
                       const oevUpdateValue = 105;
                       const currentTimestamp = await helpers.time.latest();
@@ -768,7 +760,7 @@ describe('Api3ServerV1', function () {
                       const updateId = testUtils.generateRandomBytes32();
                       const signature = await testUtils.signOevData(
                         api3ServerV1,
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beacon.beaconId,
                         updateId,
                         oevUpdateTimestamp,
@@ -787,7 +779,7 @@ describe('Api3ServerV1', function () {
                       expect(beaconBefore.value).to.equal(0);
                       expect(beaconBefore.timestamp).to.equal(0);
                       const oevProxyBeaconBefore = await api3ServerV1.oevProxyToIdToDataFeed(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beacon.beaconId
                       );
                       expect(oevProxyBeaconBefore.value).to.equal(0);
@@ -796,7 +788,7 @@ describe('Api3ServerV1', function () {
                         api3ServerV1
                           .connect(roles.searcher)
                           .updateOevProxyDataFeedWithSignedData(
-                            await oevProxy.getAddress(),
+                            roles.mockOevProxy!.address,
                             beacon.beaconId,
                             updateId,
                             oevUpdateTimestamp,
@@ -808,7 +800,7 @@ describe('Api3ServerV1', function () {
                         .to.emit(api3ServerV1, 'UpdatedOevProxyBeaconWithSignedData')
                         .withArgs(
                           beacon.beaconId,
-                          await oevProxy.getAddress(),
+                          roles.mockOevProxy!.address,
                           updateId,
                           oevUpdateValue,
                           oevUpdateTimestamp
@@ -817,7 +809,7 @@ describe('Api3ServerV1', function () {
                       expect(beaconAfter.value).to.equal(0);
                       expect(beaconAfter.timestamp).to.equal(0);
                       const oevProxyBeaconAfter = await api3ServerV1.oevProxyToIdToDataFeed(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beacon.beaconId
                       );
                       expect(oevProxyBeaconAfter.value).to.equal(oevUpdateValue);
@@ -826,7 +818,7 @@ describe('Api3ServerV1', function () {
                   });
                   context('Data in the packed signature is not consistent with the data feed ID', function () {
                     it('reverts', async function () {
-                      const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                      const { roles, api3ServerV1, beacons } = await deploy();
                       const beacon = beacons[0]!;
                       const oevUpdateValue = 105;
                       const currentTimestamp = await helpers.time.latest();
@@ -836,7 +828,7 @@ describe('Api3ServerV1', function () {
                       const spoofedDataFeedId = testUtils.generateRandomBytes32();
                       const signature = await testUtils.signOevData(
                         api3ServerV1,
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         spoofedDataFeedId,
                         updateId,
                         oevUpdateTimestamp,
@@ -855,7 +847,7 @@ describe('Api3ServerV1', function () {
                       expect(beaconBefore.value).to.equal(0);
                       expect(beaconBefore.timestamp).to.equal(0);
                       const oevProxyBeaconBefore = await api3ServerV1.oevProxyToIdToDataFeed(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beacon.beaconId
                       );
                       expect(oevProxyBeaconBefore.value).to.equal(0);
@@ -864,7 +856,7 @@ describe('Api3ServerV1', function () {
                         api3ServerV1
                           .connect(roles.searcher)
                           .updateOevProxyDataFeedWithSignedData(
-                            await oevProxy.getAddress(),
+                            roles.mockOevProxy!.address,
                             spoofedDataFeedId,
                             updateId,
                             oevUpdateTimestamp,
@@ -878,7 +870,7 @@ describe('Api3ServerV1', function () {
                 });
                 context('The signature is omitted', function () {
                   it('reverts', async function () {
-                    const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                    const { roles, api3ServerV1, beacons } = await deploy();
                     const beacon = beacons[0]!;
                     const oevUpdateValue = 105;
                     const currentTimestamp = await helpers.time.latest();
@@ -894,7 +886,7 @@ describe('Api3ServerV1', function () {
                       api3ServerV1
                         .connect(roles.searcher)
                         .updateOevProxyDataFeedWithSignedData(
-                          await oevProxy.getAddress(),
+                          roles.mockOevProxy!.address,
                           beacon.beaconId,
                           updateId,
                           oevUpdateTimestamp,
@@ -908,7 +900,7 @@ describe('Api3ServerV1', function () {
               });
               context('The signature is invalid', function () {
                 it('reverts', async function () {
-                  const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                  const { roles, api3ServerV1, beacons } = await deploy();
                   const beacon = beacons[0]!;
                   const oevUpdateValue = 105;
                   const currentTimestamp = await helpers.time.latest();
@@ -924,7 +916,7 @@ describe('Api3ServerV1', function () {
                     api3ServerV1
                       .connect(roles.searcher)
                       .updateOevProxyDataFeedWithSignedData(
-                        await oevProxy.getAddress(),
+                        roles.mockOevProxy!.address,
                         beacon.beaconId,
                         updateId,
                         oevUpdateTimestamp,
@@ -938,7 +930,7 @@ describe('Api3ServerV1', function () {
             });
             context('No Beacon is specified', function () {
               it('reverts', async function () {
-                const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+                const { roles, api3ServerV1, beacons } = await deploy();
                 const beacon = beacons[0]!;
                 const oevUpdateValue = 105;
                 const currentTimestamp = await helpers.time.latest();
@@ -949,7 +941,7 @@ describe('Api3ServerV1', function () {
                   api3ServerV1
                     .connect(roles.searcher)
                     .updateOevProxyDataFeedWithSignedData(
-                      await oevProxy.getAddress(),
+                      roles.mockOevProxy!.address,
                       beacon.beaconId,
                       updateId,
                       oevUpdateTimestamp,
@@ -963,7 +955,7 @@ describe('Api3ServerV1', function () {
           });
           context('Decoded fulfillment data cannot be typecasted into int224', function () {
             it('reverts', async function () {
-              const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+              const { roles, api3ServerV1, beacons } = await deploy();
               const beacon = beacons[0]!;
               const oevUpdateValueWithUnderflow = (-2n) ** 223n - 1n;
               const currentTimestamp = await helpers.time.latest();
@@ -972,7 +964,7 @@ describe('Api3ServerV1', function () {
               const updateId = testUtils.generateRandomBytes32();
               const signatureWithUnderflow = await testUtils.signOevData(
                 api3ServerV1,
-                await oevProxy.getAddress(),
+                roles.mockOevProxy!.address,
                 beacon.beaconId,
                 updateId,
                 oevUpdateTimestamp,
@@ -991,7 +983,7 @@ describe('Api3ServerV1', function () {
                 api3ServerV1
                   .connect(roles.searcher)
                   .updateOevProxyDataFeedWithSignedData(
-                    await oevProxy.getAddress(),
+                    roles.mockOevProxy!.address,
                     beacon.beaconId,
                     updateId,
                     oevUpdateTimestamp,
@@ -1003,7 +995,7 @@ describe('Api3ServerV1', function () {
               const oevUpdateValueWithOverflow = 2n ** 223n;
               const signatureWithOverflow = await testUtils.signOevData(
                 api3ServerV1,
-                await oevProxy.getAddress(),
+                roles.mockOevProxy!.address,
                 beacon.beaconId,
                 updateId,
                 oevUpdateTimestamp,
@@ -1022,7 +1014,7 @@ describe('Api3ServerV1', function () {
                 api3ServerV1
                   .connect(roles.searcher)
                   .updateOevProxyDataFeedWithSignedData(
-                    await oevProxy.getAddress(),
+                    roles.mockOevProxy!.address,
                     beacon.beaconId,
                     updateId,
                     oevUpdateTimestamp,
@@ -1036,7 +1028,7 @@ describe('Api3ServerV1', function () {
         });
         context('Fulfillment data length is not correct', function () {
           it('reverts', async function () {
-            const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+            const { roles, api3ServerV1, beacons } = await deploy();
             const beacon = beacons[0]!;
             const oevUpdateValue = 105;
             const currentTimestamp = await helpers.time.latest();
@@ -1045,7 +1037,7 @@ describe('Api3ServerV1', function () {
             const updateId = testUtils.generateRandomBytes32();
             const signature = await testUtils.signOevData(
               api3ServerV1,
-              await oevProxy.getAddress(),
+              roles.mockOevProxy!.address,
               beacon.beaconId,
               updateId,
               oevUpdateTimestamp,
@@ -1064,7 +1056,7 @@ describe('Api3ServerV1', function () {
               api3ServerV1
                 .connect(roles.searcher)
                 .updateOevProxyDataFeedWithSignedData(
-                  await oevProxy.getAddress(),
+                  roles.mockOevProxy!.address,
                   beacon.beaconId,
                   updateId,
                   oevUpdateTimestamp,
@@ -1078,7 +1070,7 @@ describe('Api3ServerV1', function () {
       });
       context('Does not update timestamp', function () {
         it('reverts', async function () {
-          const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+          const { roles, api3ServerV1, beacons } = await deploy();
           const beacon = beacons[0]!;
           const oevUpdateValue = 105;
           const currentTimestamp = await helpers.time.latest();
@@ -1087,7 +1079,7 @@ describe('Api3ServerV1', function () {
           const updateId = testUtils.generateRandomBytes32();
           const signature = await testUtils.signOevData(
             api3ServerV1,
-            await oevProxy.getAddress(),
+            roles.mockOevProxy!.address,
             beacon.beaconId,
             updateId,
             oevUpdateTimestamp,
@@ -1101,7 +1093,7 @@ describe('Api3ServerV1', function () {
           await api3ServerV1
             .connect(roles.searcher)
             .updateOevProxyDataFeedWithSignedData(
-              await oevProxy.getAddress(),
+              roles.mockOevProxy!.address,
               beacon.beaconId,
               updateId,
               oevUpdateTimestamp,
@@ -1113,7 +1105,7 @@ describe('Api3ServerV1', function () {
             api3ServerV1
               .connect(roles.searcher)
               .updateOevProxyDataFeedWithSignedData(
-                await oevProxy.getAddress(),
+                roles.mockOevProxy!.address,
                 beacon.beaconId,
                 updateId,
                 oevUpdateTimestamp,
@@ -1127,7 +1119,7 @@ describe('Api3ServerV1', function () {
     });
     context('Timestamp is more than 1 hour from the future', function () {
       it('reverts', async function () {
-        const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+        const { roles, api3ServerV1, beacons } = await deploy();
         const bidAmount = 10_000;
         const updateId = testUtils.generateRandomBytes32();
         const nextTimestamp = (await helpers.time.latest()) + 1;
@@ -1137,7 +1129,7 @@ describe('Api3ServerV1', function () {
           api3ServerV1
             .connect(roles.searcher)
             .updateOevProxyDataFeedWithSignedData(
-              await oevProxy.getAddress(),
+              roles.mockOevProxy!.address,
               updateId,
               beacons[0]!.beaconId,
               beaconTimestampFromFuture,
@@ -1152,14 +1144,14 @@ describe('Api3ServerV1', function () {
     });
     context('Timestamp is zero', function () {
       it('reverts', async function () {
-        const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+        const { roles, api3ServerV1, beacons } = await deploy();
         const bidAmount = 10_000;
         const updateId = testUtils.generateRandomBytes32();
         await expect(
           api3ServerV1
             .connect(roles.searcher)
             .updateOevProxyDataFeedWithSignedData(
-              await oevProxy.getAddress(),
+              roles.mockOevProxy!.address,
               updateId,
               beacons[0]!.beaconId,
               0,
@@ -1180,15 +1172,21 @@ describe('Api3ServerV1', function () {
         context('OEV proxy balance is not zero', function () {
           context('Beneficiary does not revert the transfer', function () {
             it('withdraws the OEV proxy balance to the respective beneficiary', async function () {
-              const { roles, api3ServerV1, oevProxy, beacons } = await deploy();
+              const { roles, api3ServerV1, beacons } = await deploy();
+              const dapiProxyWithOevFactory = await ethers.getContractFactory('MockDapiProxyWithOev', roles.deployer);
               const beacon = beacons[0]!;
+              const dapiProxyWithOev = await dapiProxyWithOevFactory.deploy(
+                await api3ServerV1.getAddress(),
+                beacon.beaconId,
+                roles.oevBeneficiary!.address
+              );
               const beaconValue = Math.floor(Math.random() * 200 - 100);
               const beaconTimestamp = await helpers.time.latest();
               const bidAmount = 10_000;
               const updateId = testUtils.generateRandomBytes32();
               const signature = await testUtils.signOevData(
                 api3ServerV1,
-                await oevProxy.getAddress(),
+                await dapiProxyWithOev.getAddress(),
                 beacon.beaconId,
                 updateId,
                 beaconTimestamp,
@@ -1206,7 +1204,7 @@ describe('Api3ServerV1', function () {
               await api3ServerV1
                 .connect(roles.searcher)
                 .updateOevProxyDataFeedWithSignedData(
-                  await oevProxy.getAddress(),
+                  dapiProxyWithOev.getAddress(),
                   beacon.beaconId,
                   updateId,
                   beaconTimestamp,
@@ -1219,9 +1217,9 @@ describe('Api3ServerV1', function () {
               const oevBeneficiaryBalanceBeforeWithdrawal = await ethers.provider.getBalance(
                 roles.oevBeneficiary!.address
               );
-              await expect(api3ServerV1.connect(roles.randomPerson).withdraw(await oevProxy.getAddress()))
+              await expect(api3ServerV1.connect(roles.randomPerson).withdraw(dapiProxyWithOev.getAddress()))
                 .to.emit(api3ServerV1, 'Withdrew')
-                .withArgs(await oevProxy.getAddress(), roles.oevBeneficiary!.address, bidAmount);
+                .withArgs(await dapiProxyWithOev.getAddress(), roles.oevBeneficiary!.address, bidAmount);
               const oevBeneficiaryBalanceAfterWithdrawal = await ethers.provider.getBalance(
                 roles.oevBeneficiary!.address
               );
@@ -1232,11 +1230,8 @@ describe('Api3ServerV1', function () {
             it('reverts', async function () {
               const { roles, api3ServerV1, beacons } = await deploy();
               const beacon = beacons[0]!;
-              const dataFeedProxyWithOevFactory = await ethers.getContractFactory(
-                'DataFeedProxyWithOev',
-                roles.deployer
-              );
-              const oevProxyWithRevertingBeneficiary = await dataFeedProxyWithOevFactory.deploy(
+              const dapiProxyWithOevFactory = await ethers.getContractFactory('MockDapiProxyWithOev', roles.deployer);
+              const oevProxyWithRevertingBeneficiary = await dapiProxyWithOevFactory.deploy(
                 await api3ServerV1.getAddress(),
                 beacon.beaconId,
                 await api3ServerV1.getAddress()
@@ -1283,9 +1278,16 @@ describe('Api3ServerV1', function () {
         });
         context('OEV proxy balance is zero', function () {
           it('reverts', async function () {
-            const { roles, api3ServerV1, oevProxy } = await deploy();
+            const { roles, api3ServerV1, beacons } = await deploy();
+            const dapiProxyWithOevFactory = await ethers.getContractFactory('MockDapiProxyWithOev', roles.deployer);
+            const beacon = beacons[0]!;
+            const dapiProxyWithOev = await dapiProxyWithOevFactory.deploy(
+              await api3ServerV1.getAddress(),
+              beacon.beaconId,
+              roles.oevBeneficiary!.address
+            );
             await expect(
-              api3ServerV1.connect(roles.randomPerson).withdraw(await oevProxy.getAddress())
+              api3ServerV1.connect(roles.randomPerson).withdraw(dapiProxyWithOev.getAddress())
             ).to.be.revertedWith('OEV proxy balance zero');
           });
         });
@@ -1294,7 +1296,7 @@ describe('Api3ServerV1', function () {
         it('reverts', async function () {
           const { roles, api3ServerV1, beacons } = await deploy();
           const beacon = beacons[0]!;
-          const dataFeedProxyWithOevFactory = await ethers.getContractFactory('DataFeedProxyWithOev', roles.deployer);
+          const dataFeedProxyWithOevFactory = await ethers.getContractFactory('MockDapiProxyWithOev', roles.deployer);
           const oevProxyWithZeroBeneficiary = await dataFeedProxyWithOevFactory.deploy(
             await api3ServerV1.getAddress(),
             beacon.beaconId,

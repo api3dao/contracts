@@ -80,6 +80,15 @@ describe('Api3Market', function () {
       roles.api3ServerV1Manager!.address
     );
 
+    const api3ServerV1OevExtensionAdminRoleDescription = 'Api3ServerV1OevExtension admin';
+    const Api3ServerV1OevExtension = await ethers.getContractFactory('Api3ServerV1OevExtension', roles.deployer);
+    const api3ServerV1OevExtension = await Api3ServerV1OevExtension.deploy(
+      accessControlRegistry.getAddress(),
+      api3ServerV1OevExtensionAdminRoleDescription,
+      roles.api3ServerV1Manager!.address,
+      api3ServerV1.getAddress()
+    );
+
     const {
       templateIds,
       beaconIds,
@@ -97,13 +106,17 @@ describe('Api3Market', function () {
     );
     const dapiName = ethers.encodeBytes32String('ETH/USD');
 
-    const ProxyFactory = await ethers.getContractFactory('ProxyFactory', roles.deployer);
-    const proxyFactory = await ProxyFactory.deploy(api3ServerV1.getAddress());
+    const Api3ReaderProxyFactoryV1 = await ethers.getContractFactory('Api3ReaderProxyFactoryV1', roles.deployer);
+    const api3ReaderProxyFactoryV1 = await Api3ReaderProxyFactoryV1.deploy(
+      roles.api3ServerV1Manager!.address,
+      api3ServerV1.getAddress(),
+      api3ServerV1OevExtension.getAddress()
+    );
 
     const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
     const api3Market = await Api3Market.deploy(
       roles.owner!.address,
-      proxyFactory.getAddress(),
+      api3ReaderProxyFactoryV1.getAddress(),
       MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
     );
 
@@ -458,7 +471,7 @@ describe('Api3Market', function () {
       dataFeedDetails,
       dataFeedId,
       mockContractWithNoDefaultPayable,
-      proxyFactory,
+      proxyFactory: api3ReaderProxyFactoryV1,
       roles,
       signedApiUrlMerkleLeaves,
       signedApiUrlMerkleRoot,
@@ -3982,29 +3995,21 @@ describe('Api3Market', function () {
   });
 
   describe('deployDapiProxy', function () {
-    it('deploys DapiProxy', async function () {
-      const { roles, dapiName, proxyFactory, api3Market } = await helpers.loadFixture(deploy);
-      await expect(api3Market.connect(roles.randomPerson).deployDapiProxy(dapiName, '0x12345678'))
-        .to.emit(proxyFactory, 'DeployedDapiProxy')
-        .withArgs(await proxyFactory.computeDapiProxyAddress(dapiName, '0x12345678'), dapiName, '0x12345678');
+    it('reverts', async function () {
+      const { roles, dapiName, api3Market } = await helpers.loadFixture(deploy);
+      await expect(api3Market.connect(roles.randomPerson).deployDapiProxy(dapiName, '0x12345678')).to.be
+        .revertedWithoutReason;
     });
   });
 
   describe('deployDapiProxyWithOev', function () {
-    it('deploys DapiProxyWithOev', async function () {
-      const { roles, dapiName, proxyFactory, api3Market } = await helpers.loadFixture(deploy);
+    it('reverts', async function () {
+      const { roles, dapiName, api3Market } = await helpers.loadFixture(deploy);
       await expect(
         api3Market
           .connect(roles.randomPerson)
           .deployDapiProxyWithOev(dapiName, roles.randomPerson!.address, '0x12345678')
-      )
-        .to.emit(proxyFactory, 'DeployedDapiProxyWithOev')
-        .withArgs(
-          await proxyFactory.computeDapiProxyWithOevAddress(dapiName, roles.randomPerson!.address, '0x12345678'),
-          dapiName,
-          roles.randomPerson!.address,
-          '0x12345678'
-        );
+      ).to.be.revertedWithoutReason;
     });
   });
 
