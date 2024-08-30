@@ -62,7 +62,7 @@ describe('ExtendedSelfMulticall', function () {
 
   describe('getBlockBasefee', function () {
     it('gets block basefee', async function () {
-      // Commenting this out because it's not supported by Hardhat yet
+      // Commenting this out because it's not supported by Hardhat
       // https://github.com/nomiclabs/hardhat/issues/1688
       // const { extendedSelfMulticall } = await helpers.loadFixture(deploy);
       // expect(await extendedSelfMulticall.getBlockBasefee()).to.equal((await ethers.provider.getBlock('latest'))!.baseFeePerGas);
