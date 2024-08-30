@@ -7,6 +7,16 @@ import { glob } from 'glob';
 async function main() {
   const vendors = [
     {
+      path: join('@chainlink', 'contracts@1.2.0'),
+      tarballUrl: 'https://registry.npmjs.org/@chainlink/contracts/-/contracts-1.2.0.tgz',
+      packageContractsPath: '',
+    },
+    {
+      path: join('@gnosis.pm', 'safe-contracts@1.3.0'),
+      tarballUrl: 'https://registry.npmjs.org/@gnosis.pm/safe-contracts/-/safe-contracts-1.3.0.tgz',
+      packageContractsPath: '',
+    },
+    {
       path: join('@openzeppelin', 'contracts@4.8.2'),
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.8.2.tgz',
       packageContractsPath: '',
@@ -19,11 +29,6 @@ async function main() {
     {
       path: join('@openzeppelin', 'contracts@5.0.2'),
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz',
-      packageContractsPath: '',
-    },
-    {
-      path: join('@chainlink', 'contracts@1.2.0'),
-      tarballUrl: 'https://registry.npmjs.org/@chainlink/contracts/-/contracts-1.2.0.tgz',
       packageContractsPath: '',
     },
   ];
