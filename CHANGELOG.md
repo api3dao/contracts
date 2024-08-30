@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 8.0.0
+
+### Major Changes
+
+- d73336d: Remove bsquared-testnet support
+
+### Minor Changes
+
+- ed1655d: Add dAPI and Market support to sonic-testnet
+
 ## 7.0.0
 
 ### Major Changes
