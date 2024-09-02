@@ -8,22 +8,48 @@ import "./interfaces/IApi3ReaderProxyV1.sol";
 import "../interfaces/IApi3ServerV1.sol";
 import "../interfaces/IApi3ServerV1OevExtension.sol";
 
+/// @title UUPS-upgradeable IApi3ReaderProxy and AggregatorV2V3Interface
+/// implementation that is designed to be deployed by Api3ReaderProxyV1Factory
+/// @notice The owner of this contract is allowed to upgrade it. In the case
+/// that it is deployed by Api3ReaderProxyV1Factory, the owner will be the
+/// owner of Api3ReaderProxyV1Factory at the time of deployment.
+/// @dev For a gas-cheap `read()` implementation, this upgradeable contract
+/// uses immutable variables (rather than initializable ones). To enable this,
+/// an Api3ReaderProxyV1 needs to be deployed for each unique combination of
+/// variables. The end user does not need to concern themselves with this, as
+/// Api3ReaderProxyV1Factory abstracts this detail away.
+/// Refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more
+/// information about the Chainlink interface implementation.
 contract Api3ReaderProxyV1 is
     UUPSUpgradeable,
     Ownable,
     AggregatorV2V3Interface,
     IApi3ReaderProxyV1
 {
+    /// @notice Api3ServerV1 contract address
     address public immutable override api3ServerV1;
 
+    /// @notice Api3ServerV1OevExtension contract address
     address public immutable override api3ServerV1OevExtension;
 
+    /// @notice dAPI name as a bytes32 string
     bytes32 public immutable override dapiName;
 
+    /// @notice dApp ID
     uint256 public immutable override dappId;
 
+    // Api3ServerV1 interface expects the dAPI name hash. keccak256 is
+    // typically expensive on ZK roll-ups, so we compute it once and store it
+    // to use during reads.
     bytes32 private immutable dapiNameHash;
 
+    /// @dev Parameters are validated by Api3ReaderProxyV1Factory
+    /// @param initialOwner Initial owner
+    /// @param api3ServerV1_ Api3ServerV1 contract address
+    /// @param api3ServerV1OevExtension_ Api3ServerV1OevExtension contract
+    /// address
+    /// @param dapiName_ dAPI name as a bytes32 string
+    /// @param dappId_ dApp ID
     constructor(
         address initialOwner,
         address api3ServerV1_,
@@ -38,6 +64,13 @@ contract Api3ReaderProxyV1 is
         dapiNameHash = keccak256(abi.encodePacked(dapiName));
     }
 
+    /// @notice Returns the current value and timestamp of the API3 data feed
+    /// associated with the proxy contract
+    /// @dev Reads the base feed that is associated to the dAPI and the OEV
+    /// feed that is associated to the dApp–dAPI pair, and returns the value
+    /// that is updated more recently
+    /// @return value Data feed value
+    /// @return timestamp Data feed timestamp
     function read()
         public
         view
@@ -65,10 +98,19 @@ contract Api3ReaderProxyV1 is
         require(timestamp > 0, "Data feed not initialized");
     }
 
+    /// @dev AggregatorV2V3Interface users are already responsible with
+    /// validating the values that they receive (e.g., revert if the spot price
+    /// of an asset is negative). Therefore, this contract omits validation.
     function latestAnswer() external view override returns (int256 value) {
         (value, ) = read();
     }
 
+    /// @dev A Chainlink feed contract returns the block timestamp at which the
+    /// feed was last updated. On the other hand, an API3 feed timestamp
+    /// denotes the point in time at which the first-party oracles signed the
+    /// data used to do the last update. We find this to be a reasonable
+    /// approximation, considering that usually the timestamp is only used to
+    /// check if the last update is stale.
     function latestTimestamp()
         external
         view
@@ -78,30 +120,39 @@ contract Api3ReaderProxyV1 is
         (, timestamp) = read();
     }
 
+    /// @dev API3 feeds are updated asynchronously and not in rounds
     function latestRound() external pure override returns (uint256) {
         revert("Unsupported function");
     }
 
+    /// @dev Functions that use the round ID as an argument are not supported
     function getAnswer(uint256) external pure override returns (int256) {
         revert("Unsupported function");
     }
 
+    /// @dev Functions that use the round ID as an argument are not supported
     function getTimestamp(uint256) external pure override returns (uint256) {
         revert("Unsupported function");
     }
 
+    /// @dev API3 feeds always use 18 decimals
     function decimals() external pure override returns (uint8) {
         return 18;
     }
 
+    /// @dev The dApp ID and dAPI name act as the description, and this is left
+    /// empty to save gas on contract deployment
     function description() external pure override returns (string memory) {
         return "";
     }
 
+    /// @dev A unique version is chosen to easily check if an unverified
+    /// contract that acts as a Chainlink feed is an Api3ReaderProxyV1
     function version() external pure override returns (uint256) {
         return 4913;
     }
 
+    /// @dev Functions that use the round ID as an argument are not supported
     function getRoundData(
         uint80
     )
@@ -113,6 +164,9 @@ contract Api3ReaderProxyV1 is
         revert("Unsupported function");
     }
 
+    /// @dev Rounds IDs are returned as `0` as invalid round IDs.
+    /// Similar to `latestAnswer()`, we leave the validation of the returned
+    /// value to the caller.
     function latestRoundData()
         external
         view
@@ -130,6 +184,8 @@ contract Api3ReaderProxyV1 is
         updatedAt = startedAt;
     }
 
+    /// @param newImplementation New implementation contract address
+    /// @dev Only the owner can upgrade this contract
     function _authorizeUpgrade(
         address newImplementation
     ) internal virtual override onlyOwner {}
