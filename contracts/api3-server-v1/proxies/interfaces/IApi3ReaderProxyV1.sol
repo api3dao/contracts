@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.20;
+
+import "../../../interfaces/IApi3ReaderProxy.sol";
+
+interface IApi3ReaderProxyV1 is IApi3ReaderProxy {
+    function api3ServerV1() external returns (address);
+
+    function api3ServerV1OevExtension() external returns (address);
+
+    function dapiName() external returns (bytes32);
+
+    function dappId() external returns (uint256);
+}

@@ -2,12 +2,14 @@
 pragma solidity 0.8.20;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
+import "./interfaces/IApi3ReaderProxyFactoryV1.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/ERC1967/ERC1967Proxy.sol";
 import "./Api3ReaderProxyV1.sol";
 
-contract Api3ReaderProxyFactoryV1 is Ownable {
-    address public immutable api3ServerV1;
-    address public immutable api3ServerV1OevExtension;
+contract Api3ReaderProxyFactoryV1 is Ownable, IApi3ReaderProxyFactoryV1 {
+    address public immutable override api3ServerV1;
+
+    address public immutable override api3ServerV1OevExtension;
 
     constructor(
         address initialOwner,
@@ -21,7 +23,7 @@ contract Api3ReaderProxyFactoryV1 is Ownable {
     function deployDapiProxyUpgradeable(
         bytes32 dapiName,
         uint256 dappId
-    ) external returns (address proxy) {
+    ) external override returns (address proxy) {
         address implementation = address(
             new Api3ReaderProxyV1{salt: bytes32(0)}(
                 owner(),

@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
 import {AggregatorV2V3Interface} from "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
-import "../../interfaces/IApi3ReaderProxy.sol";
+import "./interfaces/IApi3ReaderProxyV1.sol";
 import "../interfaces/IApi3ServerV1.sol";
 import "../interfaces/IApi3ServerV1OevExtension.sol";
 
@@ -12,13 +12,17 @@ contract Api3ReaderProxyV1 is
     UUPSUpgradeable,
     Ownable,
     AggregatorV2V3Interface,
-    IApi3ReaderProxy
+    IApi3ReaderProxyV1
 {
-    address public immutable api3ServerV1;
-    address public immutable api3ServerV1OevExtension;
-    bytes32 public immutable dapiName;
-    uint256 public immutable dappId;
-    bytes32 private dapiNameHash;
+    address public immutable override api3ServerV1;
+
+    address public immutable override api3ServerV1OevExtension;
+
+    bytes32 public immutable override dapiName;
+
+    uint256 public immutable override dappId;
+
+    bytes32 private immutable dapiNameHash;
 
     constructor(
         address initialOwner,
