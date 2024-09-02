@@ -2,11 +2,11 @@
 pragma solidity 0.8.20;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
-import "./interfaces/IApi3ReaderProxyFactoryV1.sol";
+import "./interfaces/IApi3ReaderProxyV1Factory.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/ERC1967/ERC1967Proxy.sol";
 import "./Api3ReaderProxyV1.sol";
 
-contract Api3ReaderProxyFactoryV1 is Ownable, IApi3ReaderProxyFactoryV1 {
+contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
     address public immutable override api3ServerV1;
 
     address public immutable override api3ServerV1OevExtension;

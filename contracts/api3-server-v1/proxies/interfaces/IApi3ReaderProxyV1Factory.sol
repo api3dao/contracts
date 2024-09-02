@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-interface IApi3ReaderProxyFactoryV1 {
+interface IApi3ReaderProxyV1Factory {
     function deployDapiProxyUpgradeable(
         bytes32 dapiName,
         uint256 dappId

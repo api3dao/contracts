@@ -106,8 +106,8 @@ describe('Api3Market', function () {
     );
     const dapiName = ethers.encodeBytes32String('ETH/USD');
 
-    const Api3ReaderProxyFactoryV1 = await ethers.getContractFactory('Api3ReaderProxyFactoryV1', roles.deployer);
-    const api3ReaderProxyFactoryV1 = await Api3ReaderProxyFactoryV1.deploy(
+    const Api3ReaderProxyV1Factory = await ethers.getContractFactory('Api3ReaderProxyV1Factory', roles.deployer);
+    const api3ReaderProxyV1Factory = await Api3ReaderProxyV1Factory.deploy(
       roles.api3ServerV1Manager!.address,
       api3ServerV1.getAddress(),
       api3ServerV1OevExtension.getAddress()
@@ -116,7 +116,7 @@ describe('Api3Market', function () {
     const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
     const api3Market = await Api3Market.deploy(
       roles.owner!.address,
-      api3ReaderProxyFactoryV1.getAddress(),
+      api3ReaderProxyV1Factory.getAddress(),
       MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
     );
 
@@ -471,7 +471,7 @@ describe('Api3Market', function () {
       dataFeedDetails,
       dataFeedId,
       mockContractWithNoDefaultPayable,
-      proxyFactory: api3ReaderProxyFactoryV1,
+      proxyFactory: api3ReaderProxyV1Factory,
       roles,
       signedApiUrlMerkleLeaves,
       signedApiUrlMerkleRoot,
