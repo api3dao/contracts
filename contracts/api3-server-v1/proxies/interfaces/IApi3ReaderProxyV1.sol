@@ -4,6 +4,12 @@ pragma solidity 0.8.20;
 import "../../../interfaces/IApi3ReaderProxy.sol";
 
 interface IApi3ReaderProxyV1 is IApi3ReaderProxy {
+    error DapiNameIsNotSet();
+
+    error DataFeedIsNotInitialized();
+
+    error FunctionIsNotSupported();
+
     function api3ServerV1() external returns (address);
 
     function api3ServerV1OevExtension() external returns (address);

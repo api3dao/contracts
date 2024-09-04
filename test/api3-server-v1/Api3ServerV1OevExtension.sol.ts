@@ -9,42 +9,42 @@ import * as testUtils from '../test-utils';
 
 import { encodeData, median, updateBeacon } from './Api3ServerV1.sol';
 
+export async function signDataWithAlternateTemplateId(
+  airnode: BaseWallet,
+  templateId: BytesLike,
+  timestamp: number,
+  data: BytesLike
+) {
+  const signature = await airnode.signMessage(
+    ethers.getBytes(
+      ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [ethers.keccak256(templateId), timestamp, data])
+    )
+  );
+  return signature;
+}
+
+export async function payOevBid(
+  roles: Record<string, HardhatEthersSigner>,
+  api3ServerV1OevExtension: Api3ServerV1OevExtension,
+  dappId: BigNumberish,
+  updateAllowanceEndTimestamp: BigNumberish,
+  bidAmount: BigNumberish
+) {
+  const { chainId } = await ethers.provider.getNetwork();
+  const signature = await roles.auctioneer!.signMessage(
+    ethers.getBytes(
+      ethers.solidityPackedKeccak256(
+        ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+        [chainId, dappId, roles.updater!.address, bidAmount, updateAllowanceEndTimestamp]
+      )
+    )
+  );
+  return api3ServerV1OevExtension
+    .connect(roles.updater)
+    .payOevBid(dappId, updateAllowanceEndTimestamp, signature, { value: bidAmount });
+}
+
 describe('Api3ServerV1OevExtension', function () {
-  async function signDataWithAlternateTemplateId(
-    airnode: BaseWallet,
-    templateId: BytesLike,
-    timestamp: number,
-    data: BytesLike
-  ) {
-    const signature = await airnode.signMessage(
-      ethers.getBytes(
-        ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [ethers.keccak256(templateId), timestamp, data])
-      )
-    );
-    return signature;
-  }
-
-  async function payOevBid(
-    roles: Record<string, HardhatEthersSigner>,
-    api3ServerV1OevExtension: Api3ServerV1OevExtension,
-    dappId: BigNumberish,
-    updateAllowanceEndTimestamp: BigNumberish,
-    bidAmount: BigNumberish
-  ) {
-    const { chainId } = await ethers.provider.getNetwork();
-    const signature = await roles.auctioneer!.signMessage(
-      ethers.getBytes(
-        ethers.solidityPackedKeccak256(
-          ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
-          [chainId, dappId, roles.updater!.address, bidAmount, updateAllowanceEndTimestamp]
-        )
-      )
-    );
-    return api3ServerV1OevExtension
-      .connect(roles.updater)
-      .payOevBid(dappId, updateAllowanceEndTimestamp, signature, { value: bidAmount });
-  }
-
   async function deploy() {
     const roleNames = ['deployer', 'manager', 'withdrawer', 'auctioneer', 'updater', 'randomPerson'];
     const accounts = await ethers.getSigners();

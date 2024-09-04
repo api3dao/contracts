@@ -12,27 +12,20 @@ import "../../vendor/@openzeppelin/contracts@5.0.2/utils/Create2.sol";
 /// @notice The owner of this contract at the time that it deploys a proxy is
 /// set as the owner of the proxy, which is allowed to upgrade it
 contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
-    /// @notice Api3ServerV1 contract address
-    address public immutable override api3ServerV1;
-
     /// @notice Api3ServerV1OevExtension contract address
     address public immutable override api3ServerV1OevExtension;
 
     /// @param initialOwner Initial owner
-    /// @param api3ServerV1_ Api3ServerV1 contract address
     /// @param api3ServerV1OevExtension_ Api3ServerV1OevExtension contract
     /// address
     constructor(
         address initialOwner,
-        address api3ServerV1_,
         address api3ServerV1OevExtension_
     ) Ownable(initialOwner) {
-        require(api3ServerV1_ != address(0), "Api3ServerV1 address zero");
         require(
             api3ServerV1OevExtension_ != address(0),
             "Api3ServerV1OevExtension address zero"
         );
-        api3ServerV1 = api3ServerV1_;
         api3ServerV1OevExtension = api3ServerV1OevExtension_;
     }
 
@@ -55,13 +48,13 @@ contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
         address implementation = address(
             new Api3ReaderProxyV1{salt: bytes32(0)}(
                 owner(),
-                api3ServerV1,
                 api3ServerV1OevExtension,
                 dapiName,
                 dappId
             )
         );
         proxy = address(new ERC1967Proxy{salt: bytes32(0)}(implementation, ""));
+        emit DeployedApi3ReaderProxyV1(proxy, dapiName, dappId);
     }
 
     /// @notice Computes the address of the Api3ReaderProxyV1
@@ -81,7 +74,6 @@ contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
                     type(Api3ReaderProxyV1).creationCode,
                     abi.encode(
                         owner(),
-                        api3ServerV1,
                         api3ServerV1OevExtension,
                         dapiName,
                         dappId
@@ -94,7 +86,7 @@ contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
             keccak256(
                 abi.encodePacked(
                     type(ERC1967Proxy).creationCode,
-                    abi.encode(implementation)
+                    abi.encode(implementation, bytes(""))
                 )
             )
         );

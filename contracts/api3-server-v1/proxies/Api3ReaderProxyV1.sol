@@ -45,20 +45,19 @@ contract Api3ReaderProxyV1 is
 
     /// @dev Parameters are validated by Api3ReaderProxyV1Factory
     /// @param initialOwner Initial owner
-    /// @param api3ServerV1_ Api3ServerV1 contract address
     /// @param api3ServerV1OevExtension_ Api3ServerV1OevExtension contract
     /// address
     /// @param dapiName_ dAPI name as a bytes32 string
     /// @param dappId_ dApp ID
     constructor(
         address initialOwner,
-        address api3ServerV1_,
         address api3ServerV1OevExtension_,
         bytes32 dapiName_,
         uint256 dappId_
     ) Ownable(initialOwner) {
-        api3ServerV1 = api3ServerV1_;
         api3ServerV1OevExtension = api3ServerV1OevExtension_;
+        api3ServerV1 = IApi3ServerV1OevExtension(api3ServerV1OevExtension_)
+            .api3ServerV1();
         dapiName = dapiName_;
         dappId = dappId_;
         dapiNameHash = keccak256(abi.encodePacked(dapiName));
@@ -79,7 +78,9 @@ contract Api3ReaderProxyV1 is
     {
         bytes32 dataFeedId = IApi3ServerV1(api3ServerV1)
             .dapiNameHashToDataFeedId(dapiNameHash);
-        require(dataFeedId != bytes32(0), "dAPI name not set");
+        if (dataFeedId == bytes32(0)) {
+            revert DapiNameIsNotSet();
+        }
         (int224 baseDapiValue, uint32 baseDapiTimestamp) = IApi3ServerV1(
             api3ServerV1
         ).dataFeeds(dataFeedId);
@@ -95,7 +96,9 @@ contract Api3ReaderProxyV1 is
         } else {
             (value, timestamp) = (baseDapiValue, baseDapiTimestamp);
         }
-        require(timestamp > 0, "Data feed not initialized");
+        if (timestamp == 0) {
+            revert DataFeedIsNotInitialized();
+        }
     }
 
     /// @dev AggregatorV2V3Interface users are already responsible with
@@ -122,17 +125,17 @@ contract Api3ReaderProxyV1 is
 
     /// @dev API3 feeds are updated asynchronously and not in rounds
     function latestRound() external pure override returns (uint256) {
-        revert("Unsupported function");
+        revert FunctionIsNotSupported();
     }
 
     /// @dev Functions that use the round ID as an argument are not supported
     function getAnswer(uint256) external pure override returns (int256) {
-        revert("Unsupported function");
+        revert FunctionIsNotSupported();
     }
 
     /// @dev Functions that use the round ID as an argument are not supported
     function getTimestamp(uint256) external pure override returns (uint256) {
-        revert("Unsupported function");
+        revert FunctionIsNotSupported();
     }
 
     /// @dev API3 feeds always use 18 decimals
@@ -161,7 +164,7 @@ contract Api3ReaderProxyV1 is
         override
         returns (uint80, int256, uint256, uint256, uint80)
     {
-        revert("Unsupported function");
+        revert FunctionIsNotSupported();
     }
 
     /// @dev Rounds IDs are returned as `0` as invalid round IDs.
