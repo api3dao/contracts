@@ -105,8 +105,6 @@ describe('Api3ServerV1', function () {
       'deployer',
       'manager',
       'dapiNameSetter',
-      'sponsor',
-      'updateRequester',
       'searcher',
       'oevBeneficiary',
       'mockOevProxy',
