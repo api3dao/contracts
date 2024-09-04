@@ -62,13 +62,13 @@ contract Api3ServerV1OevExtension is
     {
         require(api3ServerV1_ != address(0), "Api3ServerV1 address zero");
         api3ServerV1 = api3ServerV1_;
-        auctioneerRole = _deriveRole(
-            _deriveAdminRole(manager_),
-            AUCTIONEER_ROLE_DESCRIPTION
-        );
         withdrawerRole = _deriveRole(
             _deriveAdminRole(manager_),
             WITHDRAWER_ROLE_DESCRIPTION
+        );
+        auctioneerRole = _deriveRole(
+            _deriveAdminRole(manager_),
+            AUCTIONEER_ROLE_DESCRIPTION
         );
     }
 
@@ -77,6 +77,8 @@ contract Api3ServerV1OevExtension is
     /// @param recipient Recipient address
     /// @param amount Amount
     function withdraw(address recipient, uint256 amount) external override {
+        require(recipient != address(0), "Recipient address zero");
+        require(amount != 0, "Amount zero");
         require(
             msg.sender == manager ||
                 IAccessControlRegistry(accessControlRegistry).hasRole(
@@ -103,6 +105,7 @@ contract Api3ServerV1OevExtension is
         uint32 updateAllowanceEndTimestamp,
         bytes calldata signature
     ) external payable override {
+        require(dappId != 0, "dApp ID zero");
         // Do not allow the bid to be paid if the update allowance will be
         // useless
         require(

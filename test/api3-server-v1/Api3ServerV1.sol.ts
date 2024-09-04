@@ -7,6 +7,50 @@ import { ethers } from 'hardhat';
 import type { Api3ServerV1 } from '../../src/index';
 import * as testUtils from '../test-utils';
 
+export function encodeData(decodedData: BigNumberish) {
+  return ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [decodedData]);
+}
+
+export function median(array: number[]) {
+  if (array.length === 0) {
+    throw new Error('Attempted to calculate median of empty array');
+  }
+  array.sort((a, b) => {
+    return a - b;
+  });
+  if (array.length % 2 === 1) {
+    return array[Math.floor(array.length / 2)];
+  } else {
+    // We want negatives to round down to zero
+    return Number.parseInt(((array[array.length / 2 - 1]! + array[array.length / 2]!) / 2).toString(), 10);
+  }
+}
+
+export async function updateBeacon(
+  roles: Record<string, HardhatEthersSigner>,
+  api3ServerV1: Api3ServerV1,
+  beacon: {
+    airnode: HDNodeWallet;
+    endpointId: BytesLike;
+    templateParameters: BytesLike;
+    templateId: BytesLike;
+    requestParameters: BytesLike;
+    beaconId: BytesLike;
+  },
+  decodedData: number,
+  timestamp?: number
+) {
+  if (!timestamp) {
+    timestamp = await helpers.time.latest();
+  }
+  const data = encodeData(decodedData);
+  const signature = await testUtils.signData(beacon.airnode, beacon.templateId, timestamp, data);
+  await api3ServerV1
+    .connect(roles.randomPerson)
+    .updateBeaconWithSignedData(beacon.airnode.address, beacon.templateId, timestamp, data, signature);
+  return timestamp;
+}
+
 describe('Api3ServerV1', function () {
   function encodeData(decodedData: BigNumberish) {
     return ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [decodedData]);
@@ -17,31 +61,6 @@ describe('Api3ServerV1', function () {
       ['address', 'bytes32', 'bytes'],
       [airnodeAddress, templateId, signature]
     );
-  }
-
-  async function updateBeacon(
-    roles: Record<string, HardhatEthersSigner>,
-    api3ServerV1: Api3ServerV1,
-    beacon: {
-      airnode: HDNodeWallet;
-      endpointId: BytesLike;
-      templateParameters: BytesLike;
-      templateId: BytesLike;
-      requestParameters: BytesLike;
-      beaconId: BytesLike;
-    },
-    decodedData: number,
-    timestamp?: number
-  ) {
-    if (!timestamp) {
-      timestamp = await helpers.time.latest();
-    }
-    const data = encodeData(decodedData);
-    const signature = await testUtils.signData(beacon.airnode, beacon.templateId, timestamp, data);
-    await api3ServerV1
-      .connect(roles.randomPerson)
-      .updateBeaconWithSignedData(beacon.airnode.address, beacon.templateId, timestamp, data, signature);
-    return timestamp;
   }
 
   async function updateBeaconSet(
@@ -83,21 +102,6 @@ describe('Api3ServerV1', function () {
       api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]),
     ];
     await api3ServerV1.connect(roles.randomPerson).multicall(updateBeaconSetCalldata);
-  }
-
-  function median(array: number[]) {
-    if (array.length === 0) {
-      throw new Error('Attempted to calculate median of empty array');
-    }
-    array.sort((a, b) => {
-      return a - b;
-    });
-    if (array.length % 2 === 1) {
-      return array[Math.floor(array.length / 2)];
-    } else {
-      // We want negatives to round down to zero
-      return Number.parseInt(((array[array.length / 2 - 1]! + array[array.length / 2]!) / 2).toString(), 10);
-    }
   }
 
   async function deploy() {
