@@ -7,6 +7,7 @@ import * as testUtils from '../../test-utils';
 import { encodeData } from '../Api3ServerV1.sol';
 import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevExtension.sol';
 
+// See Api3ReaderProxyV1Factory tests for the upgrade flow
 describe('Api3ReaderProxyV1', function () {
   async function deploy() {
     const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'updater'];
@@ -51,7 +52,6 @@ describe('Api3ReaderProxyV1', function () {
 
     const api3ReaderProxyV1Factory = await ethers.getContractFactory('Api3ReaderProxyV1', roles.deployer);
     const api3ReaderProxyV1 = await api3ReaderProxyV1Factory.deploy(
-      roles.owner!.address,
       api3ServerV1OevExtension.getAddress(),
       dapiName,
       dappId
@@ -92,13 +92,22 @@ describe('Api3ReaderProxyV1', function () {
 
   describe('constructor', function () {
     it('constructs', async function () {
-      const { roles, api3ServerV1, api3ServerV1OevExtension, api3ReaderProxyV1, dapiName, dappId } =
+      const { api3ServerV1, api3ServerV1OevExtension, api3ReaderProxyV1, dapiName, dappId } =
         await helpers.loadFixture(deploy);
-      expect(await api3ReaderProxyV1.owner()).to.equal(roles.owner!.address);
+      expect(await api3ReaderProxyV1.owner()).to.equal(ethers.ZeroAddress);
       expect(await api3ReaderProxyV1.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
       expect(await api3ReaderProxyV1.api3ServerV1OevExtension()).to.equal(await api3ServerV1OevExtension.getAddress());
       expect(await api3ReaderProxyV1.dapiName()).to.equal(dapiName);
       expect(await api3ReaderProxyV1.dappId()).to.equal(dappId);
+    });
+  });
+
+  describe('initialize', function () {
+    it('reverts', async function () {
+      const { roles, api3ReaderProxyV1 } = await helpers.loadFixture(deploy);
+      await expect(api3ReaderProxyV1.initialize(roles.owner!.address))
+        .to.be.revertedWithCustomError(api3ReaderProxyV1, 'InvalidInitialization')
+        .withArgs();
     });
   });
 

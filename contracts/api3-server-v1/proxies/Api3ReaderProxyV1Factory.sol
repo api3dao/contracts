@@ -34,10 +34,12 @@ contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
     /// each proxy to be able to use immutable variables
     /// @param dapiName dAPI name as a bytes32 string
     /// @param dappId dApp ID
+    /// @param metadata Metadata
     /// @return proxy Proxy address
     function deployApi3ReaderProxyV1(
         bytes32 dapiName,
-        uint256 dappId
+        uint256 dappId,
+        bytes calldata metadata
     ) external override returns (address proxy) {
         require(dapiName != bytes32(0), "dAPI name zero");
         require(dappId != 0, "dApp ID zero");
@@ -46,43 +48,42 @@ contract Api3ReaderProxyV1Factory is Ownable, IApi3ReaderProxyV1Factory {
         // we want to revert anyway. Therefore, there is no need to check the
         // case where the implementation is already deployed.
         address implementation = address(
-            new Api3ReaderProxyV1{salt: bytes32(0)}(
-                owner(),
+            new Api3ReaderProxyV1{salt: keccak256(metadata)}(
                 api3ServerV1OevExtension,
                 dapiName,
                 dappId
             )
         );
-        proxy = address(new ERC1967Proxy{salt: bytes32(0)}(implementation, ""));
-        emit DeployedApi3ReaderProxyV1(proxy, dapiName, dappId);
+        proxy = address(
+            new ERC1967Proxy{salt: keccak256(metadata)}(implementation, "")
+        );
+        Api3ReaderProxyV1(proxy).initialize(owner());
+        emit DeployedApi3ReaderProxyV1(proxy, dapiName, dappId, metadata);
     }
 
     /// @notice Computes the address of the Api3ReaderProxyV1
     /// @param dapiName dAPI name as a bytes32 string
     /// @param dappId dApp ID
+    /// @param metadata Metadata
     /// @return proxy Proxy address
     function computeApi3ReaderProxyV1Address(
         bytes32 dapiName,
-        uint256 dappId
+        uint256 dappId,
+        bytes calldata metadata
     ) external view override returns (address proxy) {
         require(dapiName != bytes32(0), "dAPI name zero");
         require(dappId != 0, "dApp ID zero");
         address implementation = Create2.computeAddress(
-            bytes32(0),
+            keccak256(metadata),
             keccak256(
                 abi.encodePacked(
                     type(Api3ReaderProxyV1).creationCode,
-                    abi.encode(
-                        owner(),
-                        api3ServerV1OevExtension,
-                        dapiName,
-                        dappId
-                    )
+                    abi.encode(api3ServerV1OevExtension, dapiName, dappId)
                 )
             )
         );
         proxy = Create2.computeAddress(
-            bytes32(0),
+            keccak256(metadata),
             keccak256(
                 abi.encodePacked(
                     type(ERC1967Proxy).creationCode,

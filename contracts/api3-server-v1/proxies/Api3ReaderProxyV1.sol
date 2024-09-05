@@ -2,7 +2,7 @@
 pragma solidity 0.8.20;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
-import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
+import "../../vendor/@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import {AggregatorV2V3Interface} from "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "./interfaces/IApi3ReaderProxyV1.sol";
 import "../interfaces/IApi3ServerV1.sol";
@@ -22,7 +22,7 @@ import "../interfaces/IApi3ServerV1OevExtension.sol";
 /// information about the Chainlink interface implementation.
 contract Api3ReaderProxyV1 is
     UUPSUpgradeable,
-    Ownable,
+    OwnableUpgradeable,
     AggregatorV2V3Interface,
     IApi3ReaderProxyV1
 {
@@ -44,23 +44,28 @@ contract Api3ReaderProxyV1 is
     bytes32 private immutable dapiNameHash;
 
     /// @dev Parameters are validated by Api3ReaderProxyV1Factory
-    /// @param initialOwner Initial owner
     /// @param api3ServerV1OevExtension_ Api3ServerV1OevExtension contract
     /// address
     /// @param dapiName_ dAPI name as a bytes32 string
     /// @param dappId_ dApp ID
     constructor(
-        address initialOwner,
         address api3ServerV1OevExtension_,
         bytes32 dapiName_,
         uint256 dappId_
-    ) Ownable(initialOwner) {
+    ) {
         api3ServerV1OevExtension = api3ServerV1OevExtension_;
         api3ServerV1 = IApi3ServerV1OevExtension(api3ServerV1OevExtension_)
             .api3ServerV1();
         dapiName = dapiName_;
         dappId = dappId_;
         dapiNameHash = keccak256(abi.encodePacked(dapiName));
+        _disableInitializers();
+    }
+
+    /// @notice Initializes the contract with the initial owner
+    /// @param initialOwner Initial owner
+    function initialize(address initialOwner) external override initializer {
+        __Ownable_init(initialOwner);
     }
 
     /// @notice Returns the current value and timestamp of the API3 data feed

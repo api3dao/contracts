@@ -31,6 +31,11 @@ async function main() {
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz',
       packageContractsPath: '',
     },
+    {
+      path: join('@openzeppelin', 'contracts-upgradeable@5.0.2'),
+      tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-5.0.2.tgz',
+      packageContractsPath: '',
+    },
   ];
   for (const vendor of vendors) {
     // eslint-disable-next-line no-console

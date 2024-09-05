@@ -10,6 +10,8 @@ interface IApi3ReaderProxyV1 is IApi3ReaderProxy {
 
     error FunctionIsNotSupported();
 
+    function initialize(address initialOwner) external;
+
     function api3ServerV1() external returns (address);
 
     function api3ServerV1OevExtension() external returns (address);
