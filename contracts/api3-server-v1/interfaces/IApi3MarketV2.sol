@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "../../access/interfaces/IHashRegistry.sol";
 import "../../utils/interfaces/IExtendedSelfMulticall.sol";
 
-interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
+interface IApi3MarketV2 is IHashRegistry, IExtendedSelfMulticall {
     event BoughtSubscription(
         bytes32 indexed dapiName,
         bytes32 indexed subscriptionId,
@@ -94,14 +94,9 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
         bytes32[] calldata beaconIds
     ) external returns (bytes32 beaconSetId);
 
-    function deployDapiProxy(
+    function deployApi3ReaderProxyV1(
         bytes32 dapiName,
-        bytes calldata metadata
-    ) external returns (address proxyAddress);
-
-    function deployDapiProxyWithOev(
-        bytes32 dapiName,
-        address oevBeneficiary,
+        uint256 dappId,
         bytes calldata metadata
     ) external returns (address proxyAddress);
 
@@ -172,7 +167,7 @@ interface IApi3Market is IHashRegistry, IExtendedSelfMulticall {
 
     function api3ServerV1() external view returns (address);
 
-    function proxyFactory() external view returns (address);
+    function api3ReaderProxyV1Factory() external view returns (address);
 
     function airseekerRegistry() external view returns (address);
 

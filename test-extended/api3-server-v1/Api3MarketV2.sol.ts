@@ -7,7 +7,7 @@ import { ethers } from 'hardhat';
 
 import { encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils';
 
-describe('Api3Market', function () {
+describe('Api3MarketV2', function () {
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
 
   async function deploy() {
@@ -29,6 +29,15 @@ describe('Api3Market', function () {
       roles.api3ServerV1Manager!.address
     );
 
+    const api3ServerV1OevExtensionAdminRoleDescription = 'Api3ServerV1OevExtension admin';
+    const Api3ServerV1OevExtension = await ethers.getContractFactory('Api3ServerV1OevExtension', roles.deployer);
+    const api3ServerV1OevExtension = await Api3ServerV1OevExtension.deploy(
+      accessControlRegistry.getAddress(),
+      api3ServerV1OevExtensionAdminRoleDescription,
+      roles.api3ServerV1Manager!.address,
+      api3ServerV1.getAddress()
+    );
+
     const {
       templateIds,
       beaconIds,
@@ -47,15 +56,21 @@ describe('Api3Market', function () {
 
     const dapiName = ethers.encodeBytes32String('ETH/USD');
 
-    const ProxyFactory = await ethers.getContractFactory('ProxyFactory', roles.deployer);
-    const proxyFactory = await ProxyFactory.deploy(api3ServerV1.getAddress());
+    const Api3ReaderProxyV1Factory = await ethers.getContractFactory('Api3ReaderProxyV1Factory', roles.deployer);
+    const api3ReaderProxyV1Factory = await Api3ReaderProxyV1Factory.deploy(
+      roles.api3ServerV1Manager!.address,
+      api3ServerV1OevExtension.getAddress()
+    );
 
-    const Api3Market = await ethers.getContractFactory('MockApi3Market', roles.deployer);
-    const api3Market = await Api3Market.deploy(
+    const Api3MarketV2 = await ethers.getContractFactory('MockApi3MarketV2', roles.deployer);
+    const api3MarketV2 = await Api3MarketV2.deploy(
       roles.owner!.address,
-      proxyFactory.getAddress(),
+      api3ReaderProxyV1Factory.getAddress(),
       MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
     );
+    const AirseekerRegistry = await ethers.getContractFactory('AirseekerRegistry', roles.deployer);
+    const airseekerRegistry = await AirseekerRegistry.deploy(api3MarketV2.getAddress(), api3ServerV1.getAddress());
+    await api3MarketV2.connect(roles.owner!).setAirseekerRegistry(airseekerRegistry.getAddress());
 
     await accessControlRegistry
       .connect(roles.api3ServerV1Manager)
@@ -68,20 +83,19 @@ describe('Api3Market', function () {
       .initializeRoleAndGrantToSender(await api3ServerV1.adminRole(), 'dAPI name setter');
     await accessControlRegistry
       .connect(roles.api3ServerV1Manager)
-      .grantRole(await api3ServerV1.dapiNameSetterRole(), api3Market.getAddress());
+      .grantRole(await api3ServerV1.dapiNameSetterRole(), api3MarketV2.getAddress());
 
-    await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+    await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
 
     return {
       accessControlRegistry,
       airnodes,
-      api3Market,
+      api3MarketV2,
       api3ServerV1,
       beaconIds,
       dapiName,
       dataFeedDetails,
       dataFeedId,
-      proxyFactory,
       roles,
       templateIds,
     };
@@ -142,11 +156,11 @@ describe('Api3Market', function () {
                       initialQueueLength
                     ) {
                       it('reverts because the candidate subscription does not upgrade the queue', async function () {
-                        const { api3Market, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
+                        const { api3MarketV2, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
                         // Prepare the starting subscription queue
                         // The queue consists of increasingly inferior update parameters and later end timestamps
                         for (let subscriptionInd = 0; subscriptionInd < initialQueueLength; subscriptionInd++) {
-                          await api3Market.addSubscriptionToQueue_(
+                          await api3MarketV2.addSubscriptionToQueue_(
                             dapiName,
                             dataFeedId,
                             encodeUpdateParameters((subscriptionInd + 1) * 1_000_000, 0, 24 * 60 * 60),
@@ -161,7 +175,7 @@ describe('Api3Market', function () {
                           0,
                           24 * 60 * 60
                         );
-                        const startingSubscriptions = await api3Market.getDapiData(dapiName);
+                        const startingSubscriptions = await api3MarketV2.getDapiData(dapiName);
                         const subscriptionQueueEndTimestamps = startingSubscriptions.endTimestamps;
                         let candidateEndTimestamp;
                         if (countSubscriptionsEndingBeforeCandidate < subscriptionQueueEndTimestamps.length) {
@@ -172,7 +186,7 @@ describe('Api3Market', function () {
                         }
                         const candidateDuration = BigInt(candidateEndTimestamp) - BigInt(nextBlockTimestamp);
                         await expect(
-                          api3Market.addSubscriptionToQueue_(
+                          api3MarketV2.addSubscriptionToQueue_(
                             dapiName,
                             dataFeedId,
                             candidateUpdateParameters,
@@ -191,9 +205,9 @@ describe('Api3Market', function () {
                         initialQueueLength
                     ) {
                       it('reverts because the queue is full', async function () {
-                        const { api3Market, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
+                        const { api3MarketV2, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
                         for (let subscriptionInd = 0; subscriptionInd < initialQueueLength; subscriptionInd++) {
-                          await api3Market.addSubscriptionToQueue_(
+                          await api3MarketV2.addSubscriptionToQueue_(
                             dapiName,
                             dataFeedId,
                             encodeUpdateParameters((subscriptionInd + 1) * 1_000_000, 0, 24 * 60 * 60),
@@ -208,7 +222,7 @@ describe('Api3Market', function () {
                           0,
                           24 * 60 * 60
                         );
-                        const startingSubscriptions = await api3Market.getDapiData(dapiName);
+                        const startingSubscriptions = await api3MarketV2.getDapiData(dapiName);
                         const subscriptionQueueEndTimestamps = startingSubscriptions.endTimestamps;
                         let candidateEndTimestamp;
                         if (countSubscriptionsEndingBeforeCandidate < subscriptionQueueEndTimestamps.length) {
@@ -219,7 +233,7 @@ describe('Api3Market', function () {
                         }
                         const candidateDuration = BigInt(candidateEndTimestamp) - BigInt(nextBlockTimestamp);
                         await expect(
-                          api3Market.addSubscriptionToQueue_(
+                          api3MarketV2.addSubscriptionToQueue_(
                             dapiName,
                             dataFeedId,
                             candidateUpdateParameters,
@@ -230,10 +244,10 @@ describe('Api3Market', function () {
                       });
                     } else {
                       it('candidate subscription gets added to the queue', async function () {
-                        const { api3Market, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
+                        const { api3MarketV2, dapiName, dataFeedId } = await helpers.loadFixture(deploy);
                         for (let subscriptionInd = 0; subscriptionInd < initialQueueLength; subscriptionInd++) {
                           const deviationThreshold = (subscriptionInd + 1) * 1_000_000;
-                          await api3Market.addSubscriptionToQueue_(
+                          await api3MarketV2.addSubscriptionToQueue_(
                             dapiName,
                             dataFeedId,
                             encodeUpdateParameters(deviationThreshold, 0, 24 * 60 * 60),
@@ -250,7 +264,7 @@ describe('Api3Market', function () {
                           0,
                           24 * 60 * 60
                         );
-                        const startingSubscriptions = await api3Market.getDapiData(dapiName);
+                        const startingSubscriptions = await api3MarketV2.getDapiData(dapiName);
                         const subscriptionQueueEndTimestamps = startingSubscriptions.endTimestamps;
                         let candidateEndTimestamp;
                         if (countSubscriptionsEndingBeforeCandidate < subscriptionQueueEndTimestamps.length) {
@@ -260,7 +274,7 @@ describe('Api3Market', function () {
                           candidateEndTimestamp = nextBlockTimestamp + 1000 * 24 * 60 * 60;
                         }
                         const candidateDuration = BigInt(candidateEndTimestamp) - BigInt(nextBlockTimestamp);
-                        await api3Market.addSubscriptionToQueue_(
+                        await api3MarketV2.addSubscriptionToQueue_(
                           dapiName,
                           dataFeedId,
                           candidateUpdateParameters,
@@ -291,7 +305,7 @@ describe('Api3Market', function () {
                           expectedUpdateParameters.push(candidateUpdateParameters);
                           expectedEndTimestamps.push(candidateEndTimestamp);
                         }
-                        const resultingSubscriptions = await api3Market.getDapiData(dapiName);
+                        const resultingSubscriptions = await api3MarketV2.getDapiData(dapiName);
                         expect(resultingSubscriptions.updateParameters).to.deep.equal(expectedUpdateParameters);
                         expect(resultingSubscriptions.endTimestamps).to.deep.equal(expectedEndTimestamps);
                       });

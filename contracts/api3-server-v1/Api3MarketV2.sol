@@ -3,12 +3,13 @@ pragma solidity 0.8.17;
 
 import "../access/HashRegistry.sol";
 import "../utils/ExtendedSelfMulticall.sol";
-import "./interfaces/IApi3Market.sol";
-import "./AirseekerRegistry.sol";
+import "./interfaces/IApi3MarketV2.sol";
+import "./interfaces/IAirseekerRegistry.sol";
 import "../vendor/@openzeppelin/contracts@4.9.5/utils/math/SafeCast.sol";
 import "../vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/MerkleProof.sol";
 import "./interfaces/IApi3ServerV1.sol";
-import "./proxies/interfaces/IProxyFactory.sol";
+import "./proxies/interfaces/IApi3ReaderProxyV1Factory.sol";
+import "./interfaces/IApi3ServerV1OevExtension.sol";
 
 /// @title The contract that API3 users interact with using the API3 Market
 /// frontend to purchase data feed subscriptions
@@ -36,7 +37,7 @@ import "./proxies/interfaces/IProxyFactory.sol";
 /// the amount to be sent that will barely allow the subscription to be
 /// purchased. For most users, building such a transaction themselves would be
 /// impractical.
-contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
+contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     enum UpdateParametersComparisonResult {
         EqualToQueued,
         BetterThanQueued,
@@ -78,10 +79,10 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     address public immutable override api3ServerV1;
 
     /// @notice ProxyFactory contract address
-    address public immutable override proxyFactory;
+    address public immutable override api3ReaderProxyV1Factory;
 
     /// @notice AirseekerRegistry contract address
-    address public immutable override airseekerRegistry;
+    address public override airseekerRegistry;
 
     /// @notice Maximum subscription queue length for a dAPI
     /// @dev Some functionality in this contract requires to iterate through
@@ -112,7 +113,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     uint256 private constant UPDATE_PARAMETERS_LENGTH = 32 + 32 + 32;
 
     bytes32 private constant API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE =
-        keccak256(abi.encodePacked("Api3Market signature delegation"));
+        keccak256(abi.encodePacked("Api3MarketV2 signature delegation"));
 
     /// @dev Api3Market deploys its own AirseekerRegistry deterministically.
     /// This implies that Api3Market-specific Airseekers should be operated by
@@ -124,28 +125,42 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// that are being used is around 5, a maximum subscription queue length of
     /// 10 would be acceptable for a typical chain.
     /// @param owner_ Owner address
-    /// @param proxyFactory_ ProxyFactory contract address
+    /// @param api3ReaderProxyV1Factory_ Api3ReaderProxyV1Factory contract
+    /// address
     /// @param maximumSubscriptionQueueLength_ Maximum subscription queue
     /// length
     constructor(
         address owner_,
-        address proxyFactory_,
+        address api3ReaderProxyV1Factory_,
         uint256 maximumSubscriptionQueueLength_
     ) HashRegistry(owner_) {
         require(
             maximumSubscriptionQueueLength_ != 0,
             "Maximum queue length zero"
         );
-        proxyFactory = proxyFactory_;
-        address api3ServerV1_ = IProxyFactory(proxyFactory_).api3ServerV1();
+        api3ReaderProxyV1Factory = api3ReaderProxyV1Factory_;
+        address api3ServerV1_ = IApi3ServerV1OevExtension(
+            IApi3ReaderProxyV1Factory(api3ReaderProxyV1Factory_)
+                .api3ServerV1OevExtension()
+        ).api3ServerV1();
         api3ServerV1 = api3ServerV1_;
-        airseekerRegistry = address(
-            new AirseekerRegistry{salt: bytes32(0)}(
-                address(this),
-                api3ServerV1_
-            )
-        );
         maximumSubscriptionQueueLength = maximumSubscriptionQueueLength_;
+    }
+
+    // override
+    function setAirseekerRegistry(
+        address airseekerRegistry_
+    ) external onlyOwner {
+        require(
+            airseekerRegistry == address(0),
+            "AirseekerRegistry already set"
+        );
+        require(
+            IAirseekerRegistry(airseekerRegistry_).owner() == address(this),
+            "Not AirseekerRegistry owner"
+        );
+        airseekerRegistry = airseekerRegistry_;
+        // emit
     }
 
     /// @notice Returns the owner address
@@ -252,7 +267,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             "Subscription queue empty"
         );
         dapiNameToCurrentSubscriptionId[dapiName] = bytes32(0);
-        AirseekerRegistry(airseekerRegistry).setDapiNameToBeDeactivated(
+        IAirseekerRegistry(airseekerRegistry).setDapiNameToBeDeactivated(
             dapiName
         );
         emit CanceledSubscriptions(dapiName);
@@ -354,13 +369,13 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             keccak256(abi.encodePacked(signedApiUrl)) !=
                 keccak256(
                     abi.encodePacked(
-                        AirseekerRegistry(airseekerRegistry)
+                        IAirseekerRegistry(airseekerRegistry)
                             .airnodeToSignedApiUrl(airnode)
                     )
                 ),
             "Does not update signed API URL"
         );
-        AirseekerRegistry(airseekerRegistry).setSignedApiUrl(
+        IAirseekerRegistry(airseekerRegistry).setSignedApiUrl(
             airnode,
             signedApiUrl
         );
@@ -502,7 +517,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             IApi3ServerV1(api3ServerV1).updateBeaconSetWithBeacons(beaconIds);
     }
 
-    /// @notice Calls ProxyFactory to deterministically deploy the dAPI proxy
+    /// @notice Calls Api3ReaderProxyV1Factory to deterministically deploy Api3ReaderProxyV1
     /// @dev It is recommended for the users to read data feeds through proxies
     /// deployed by ProxyFactory, rather than calling Api3ServerV1 directly.
     /// Even though proxy deployment is not a condition for purchasing
@@ -510,34 +525,16 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     /// purchase a dAPI subscription and deploy the respective proxy in the
     /// same transaction with a multicall.
     /// @param dapiName dAPI name
+    /// @param dappId dApp ID
     /// @param metadata Metadata associated with the proxy
     /// @return proxyAddress Proxy address
-    function deployDapiProxy(
+    function deployApi3ReaderProxyV1(
         bytes32 dapiName,
+        uint256 dappId,
         bytes calldata metadata
     ) external override returns (address proxyAddress) {
-        proxyAddress = IProxyFactory(proxyFactory).deployDapiProxy(
-            dapiName,
-            metadata
-        );
-    }
-
-    /// @notice Calls ProxyFactory to deterministically deploy the dAPI proxy
-    /// with OEV support
-    /// @param dapiName dAPI name
-    /// @param oevBeneficiary OEV beneficiary
-    /// @param metadata Metadata associated with the proxy
-    /// @return proxyAddress Proxy address
-    function deployDapiProxyWithOev(
-        bytes32 dapiName,
-        address oevBeneficiary,
-        bytes calldata metadata
-    ) external override returns (address proxyAddress) {
-        proxyAddress = IProxyFactory(proxyFactory).deployDapiProxyWithOev(
-            dapiName,
-            oevBeneficiary,
-            metadata
-        );
+        proxyAddress = IApi3ReaderProxyV1Factory(api3ReaderProxyV1Factory)
+            .deployApi3ReaderProxyV1(dapiName, dappId, metadata);
     }
 
     /// @notice Calls AirseekerRegistry to register the data feed
@@ -546,7 +543,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
     function registerDataFeed(
         bytes calldata dataFeedDetails
     ) external override returns (bytes32 dataFeedId) {
-        dataFeedId = AirseekerRegistry(airseekerRegistry).registerDataFeed(
+        dataFeedId = IAirseekerRegistry(airseekerRegistry).registerDataFeed(
             dataFeedDetails
         );
     }
@@ -761,7 +758,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             uint32[] memory beaconTimestamps
         )
     {
-        dataFeedDetails = AirseekerRegistry(airseekerRegistry)
+        dataFeedDetails = IAirseekerRegistry(airseekerRegistry)
             .dataFeedIdToDetails(dataFeedId);
         (dataFeedValue, dataFeedTimestamp) = IApi3ServerV1(api3ServerV1)
             .dataFeeds(dataFeedId);
@@ -857,11 +854,11 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
                 emit UpdatedCurrentSubscriptionId(dapiName, subscriptionId);
                 dapiNameToCurrentSubscriptionId[dapiName] = subscriptionId;
             }
-            AirseekerRegistry(airseekerRegistry).setDapiNameUpdateParameters(
+            IAirseekerRegistry(airseekerRegistry).setDapiNameUpdateParameters(
                 dapiName,
                 updateParameters
             );
-            AirseekerRegistry(airseekerRegistry).setDapiNameToBeActivated(
+            IAirseekerRegistry(airseekerRegistry).setDapiNameToBeActivated(
                 dapiName
             );
         } else {
@@ -909,11 +906,11 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
         emit UpdatedCurrentSubscriptionId(dapiName, currentSubscriptionId);
         dapiNameToCurrentSubscriptionId[dapiName] = currentSubscriptionId;
         if (currentSubscriptionId == bytes32(0)) {
-            AirseekerRegistry(airseekerRegistry).setDapiNameToBeDeactivated(
+            IAirseekerRegistry(airseekerRegistry).setDapiNameToBeDeactivated(
                 dapiName
             );
         } else {
-            AirseekerRegistry(airseekerRegistry).setDapiNameUpdateParameters(
+            IAirseekerRegistry(airseekerRegistry).setDapiNameUpdateParameters(
                 dapiName,
                 subscriptionIdToUpdateParameters(currentSubscriptionId)
             );
@@ -1079,7 +1076,7 @@ contract Api3Market is HashRegistry, ExtendedSelfMulticall, IApi3Market {
             "Data feed value stale"
         );
         require(
-            AirseekerRegistry(airseekerRegistry).dataFeedIsRegistered(
+            IAirseekerRegistry(airseekerRegistry).dataFeedIsRegistered(
                 dataFeedId
             ),
             "Data feed not registered"

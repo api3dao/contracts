@@ -2,14 +2,14 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { expect } from 'chai';
-import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
-import { artifacts, ethers } from 'hardhat';
+import { type AddressLike, type BigNumberish, type BytesLike, type HDNodeWallet } from 'ethers';
+import { ethers } from 'hardhat';
 
-import type { Api3Market } from '../../src/index';
+import { type Api3MarketV2 } from '../../src/index';
 import { signHash } from '../access/HashRegistry.sol';
 import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
 
-describe('Api3Market', function () {
+describe('Api3MarketV2', function () {
   const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
   const DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
     ['string'],
@@ -22,12 +22,12 @@ describe('Api3Market', function () {
   );
   const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
     ['string'],
-    ['Api3Market signature delegation']
+    ['Api3MarketV2 signature delegation']
   );
   const MAXIMUM_DAPI_UPDATE_AGE = 24 * 60 * 60;
 
   async function computeRequiredPaymentAmount(
-    api3Market: Api3Market,
+    api3MarketV2: Api3MarketV2,
     dapiName: BytesLike,
     updateParameters: BytesLike,
     duration: number,
@@ -35,7 +35,7 @@ describe('Api3Market', function () {
     sponsorWalletAddress: AddressLike
   ): Promise<BigNumberish> {
     const expectedSponsorWalletBalanceAfterSubscriptionIsAdded =
-      await api3Market.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
+      await api3MarketV2.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
         dapiName,
         updateParameters,
         duration,
@@ -109,30 +109,32 @@ describe('Api3Market', function () {
     const Api3ReaderProxyV1Factory = await ethers.getContractFactory('Api3ReaderProxyV1Factory', roles.deployer);
     const api3ReaderProxyV1Factory = await Api3ReaderProxyV1Factory.deploy(
       roles.api3ServerV1Manager!.address,
-      api3ServerV1.getAddress(),
       api3ServerV1OevExtension.getAddress()
     );
 
-    const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
-    const api3Market = await Api3Market.deploy(
+    const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
+    const api3MarketV2 = await Api3MarketV2.deploy(
       roles.owner!.address,
       api3ReaderProxyV1Factory.getAddress(),
       MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
     );
+    const AirseekerRegistry = await ethers.getContractFactory('AirseekerRegistry', roles.deployer);
+    const airseekerRegistry = await AirseekerRegistry.deploy(api3MarketV2.getAddress(), api3ServerV1.getAddress());
+    await api3MarketV2.connect(roles.owner).setAirseekerRegistry(airseekerRegistry.getAddress());
 
-    await api3Market.connect(roles.owner).setSigners(
+    await api3MarketV2.connect(roles.owner).setSigners(
       DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE,
       sortedDapiManagementMerkleRootSigners.map(
         (sortedDapiManagementMerkleRootSigner) => sortedDapiManagementMerkleRootSigner.address
       )
     );
-    await api3Market.connect(roles.owner).setSigners(
+    await api3MarketV2.connect(roles.owner).setSigners(
       DAPI_PRICING_MERKLE_ROOT_HASH_TYPE,
       sortedDapiPricingMerkleRootSigners.map(
         (sortedDapiPricingMerkleRootSigner) => sortedDapiPricingMerkleRootSigner.address
       )
     );
-    await api3Market.connect(roles.owner).setSigners(
+    await api3MarketV2.connect(roles.owner).setSigners(
       SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE,
       sortedSignedApiUrlMerkleRootSigners.map(
         (sortedSignedApiUrlMerkleRootSigner) => sortedSignedApiUrlMerkleRootSigner.address
@@ -150,14 +152,7 @@ describe('Api3Market', function () {
       .initializeRoleAndGrantToSender(await api3ServerV1.adminRole(), 'dAPI name setter');
     await accessControlRegistry
       .connect(roles.api3ServerV1Manager)
-      .grantRole(await api3ServerV1.dapiNameSetterRole(), api3Market.getAddress());
-
-    const AirseekerRegistry = await artifacts.readArtifact('AirseekerRegistry');
-    const airseekerRegistry: any = await ethers.getContractAt(
-      AirseekerRegistry.abi,
-      await api3Market.airseekerRegistry(),
-      roles.deployer
-    );
+      .grantRole(await api3ServerV1.dapiNameSetterRole(), api3MarketV2.getAddress());
 
     const MockContractWithNoDefaultPayable = await ethers.getContractFactory(
       'MockContractWithNoDefaultPayable',
@@ -250,7 +245,7 @@ describe('Api3Market', function () {
       ]);
     });
     const dapiManagementMerkleRoot = dapiManagementMerkleTree.root;
-    await api3Market.registerHash(
+    await api3MarketV2.registerHash(
       DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE,
       dapiManagementMerkleTree.root,
       hashTimestamp,
@@ -392,7 +387,7 @@ describe('Api3Market', function () {
       ]);
     });
     const dapiPricingMerkleRoot = dapiPricingMerkleTree.root;
-    await api3Market.registerHash(
+    await api3MarketV2.registerHash(
       DAPI_PRICING_MERKLE_ROOT_HASH_TYPE,
       dapiPricingMerkleTree.root,
       hashTimestamp,
@@ -444,7 +439,7 @@ describe('Api3Market', function () {
       ]);
     });
     const signedApiUrlMerkleRoot = signedApiUrlMerkleTree.root;
-    await api3Market.registerHash(
+    await api3MarketV2.registerHash(
       SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE,
       signedApiUrlMerkleTree.root,
       hashTimestamp,
@@ -460,7 +455,8 @@ describe('Api3Market', function () {
       accessControlRegistry,
       airnodes,
       airseekerRegistry,
-      api3Market,
+      api3MarketV2,
+      api3ReaderProxyV1Factory,
       api3ServerV1,
       beaconIds,
       dapiManagementMerkleLeaves,
@@ -471,7 +467,6 @@ describe('Api3Market', function () {
       dataFeedDetails,
       dataFeedId,
       mockContractWithNoDefaultPayable,
-      proxyFactory: api3ReaderProxyV1Factory,
       roles,
       signedApiUrlMerkleLeaves,
       signedApiUrlMerkleRoot,
@@ -483,40 +478,40 @@ describe('Api3Market', function () {
     context('Maximum subscription queue length is not zero', function () {
       context('ProxyFactory address belongs to a contract with the expected interface', function () {
         it('constructs', async function () {
-          const { roles, api3ServerV1, proxyFactory, api3Market, airseekerRegistry } =
+          const { roles, api3ServerV1, api3ReaderProxyV1Factory, api3MarketV2, airseekerRegistry } =
             await helpers.loadFixture(deploy);
-          expect(await api3Market.DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE()).to.equal(
+          expect(await api3MarketV2.DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE()).to.equal(
             DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE
           );
-          expect(await api3Market.DAPI_PRICING_MERKLE_ROOT_HASH_TYPE()).to.equal(DAPI_PRICING_MERKLE_ROOT_HASH_TYPE);
-          expect(await api3Market.SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE()).to.equal(
+          expect(await api3MarketV2.DAPI_PRICING_MERKLE_ROOT_HASH_TYPE()).to.equal(DAPI_PRICING_MERKLE_ROOT_HASH_TYPE);
+          expect(await api3MarketV2.SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE()).to.equal(
             SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE
           );
-          expect(await api3Market.MAXIMUM_DAPI_UPDATE_AGE()).to.equal(MAXIMUM_DAPI_UPDATE_AGE);
-          expect(await api3Market.signatureDelegationHashType()).to.equal(SIGNATURE_DELEGATION_HASH_TYPE);
-          expect(await api3Market.owner()).to.equal(roles.owner!.address);
-          expect(await api3Market.proxyFactory()).to.equal(await proxyFactory.getAddress());
-          expect(await api3Market.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
-          expect(await airseekerRegistry.owner()).to.equal(await api3Market.getAddress());
+          expect(await api3MarketV2.MAXIMUM_DAPI_UPDATE_AGE()).to.equal(MAXIMUM_DAPI_UPDATE_AGE);
+          expect(await api3MarketV2.signatureDelegationHashType()).to.equal(SIGNATURE_DELEGATION_HASH_TYPE);
+          expect(await api3MarketV2.owner()).to.equal(roles.owner!.address);
+          expect(await api3MarketV2.api3ReaderProxyV1Factory()).to.equal(await api3ReaderProxyV1Factory.getAddress());
+          expect(await api3MarketV2.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
+          expect(await airseekerRegistry.owner()).to.equal(await api3MarketV2.getAddress());
           expect(await airseekerRegistry.api3ServerV1()).to.equal(await api3ServerV1.getAddress());
-          expect(await api3Market.maximumSubscriptionQueueLength()).to.equal(MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH);
+          expect(await api3MarketV2.maximumSubscriptionQueueLength()).to.equal(MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH);
         });
       });
       context('ProxyFactory address belongs to a contract without the expected interface', function () {
         it('reverts', async function () {
           const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
-          const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
+          const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
           await expect(
-            Api3Market.deploy(roles.owner!.address, api3ServerV1.getAddress(), MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
+            Api3MarketV2.deploy(roles.owner!.address, api3ServerV1.getAddress(), MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
           ).to.be.revertedWithoutReason();
         });
       });
       context('ProxyFactory address does not belong to a contract', function () {
         it('reverts', async function () {
           const { roles } = await helpers.loadFixture(deploy);
-          const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
+          const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
           await expect(
-            Api3Market.deploy(roles.owner!.address, roles.randomPerson!.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
+            Api3MarketV2.deploy(roles.owner!.address, roles.randomPerson!.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
           ).to.be.revertedWithoutReason();
         });
       });
@@ -524,8 +519,8 @@ describe('Api3Market', function () {
     context('Maximum subscription queue length is zero', function () {
       it('reverts', async function () {
         const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
-        const Api3Market = await ethers.getContractFactory('Api3Market', roles.deployer);
-        await expect(Api3Market.deploy(roles.owner!.address, await api3ServerV1.getAddress(), 0)).to.be.revertedWith(
+        const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
+        await expect(Api3MarketV2.deploy(roles.owner!.address, await api3ServerV1.getAddress(), 0)).to.be.revertedWith(
           'Maximum queue length zero'
         );
       });
@@ -534,8 +529,8 @@ describe('Api3Market', function () {
 
   describe('renounceOwnership', function () {
     it('reverts', async function () {
-      const { roles, api3Market } = await helpers.loadFixture(deploy);
-      await expect(api3Market.connect(roles.owner).renounceOwnership()).to.be.revertedWith(
+      const { roles, api3MarketV2 } = await helpers.loadFixture(deploy);
+      await expect(api3MarketV2.connect(roles.owner).renounceOwnership()).to.be.revertedWith(
         'Ownership cannot be renounced'
       );
     });
@@ -543,8 +538,8 @@ describe('Api3Market', function () {
 
   describe('transferOwnership', function () {
     it('reverts', async function () {
-      const { roles, api3Market } = await helpers.loadFixture(deploy);
-      await expect(api3Market.connect(roles.owner).transferOwnership(roles.randomPerson!.address)).to.be.revertedWith(
+      const { roles, api3MarketV2 } = await helpers.loadFixture(deploy);
+      await expect(api3MarketV2.connect(roles.owner).transferOwnership(roles.randomPerson!.address)).to.be.revertedWith(
         'Ownership cannot be transferred'
       );
     });
@@ -564,16 +559,16 @@ describe('Api3Market', function () {
                       api3ServerV1,
                       beaconIds,
                       dataFeedDetails,
-                      api3Market,
+                      api3MarketV2,
                       airseekerRegistry,
                       dapiManagementMerkleLeaves,
                       dapiManagementMerkleRoot,
                       dapiPricingMerkleLeaves,
                       dapiPricingMerkleRoot,
                     } = await helpers.loadFixture(deploy);
-                    await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                    await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                     const paymentAmount = await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -587,7 +582,7 @@ describe('Api3Market', function () {
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
                     );
                     expect(
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription.staticCall(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -611,7 +606,7 @@ describe('Api3Market', function () {
                         )
                     ).to.equal(subscriptionId);
                     await expect(
-                      api3Market
+                      api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -634,7 +629,7 @@ describe('Api3Market', function () {
                           }
                         )
                     )
-                      .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                      .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         computeSubscriptionId(
@@ -653,9 +648,9 @@ describe('Api3Market', function () {
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-                        await api3Market.getAddress()
+                        await api3MarketV2.getAddress()
                       )
-                      .to.emit(api3Market, 'BoughtSubscription')
+                      .to.emit(api3MarketV2, 'BoughtSubscription')
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         subscriptionId,
@@ -670,7 +665,7 @@ describe('Api3Market', function () {
                       dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                     );
                     const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                    const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                    const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
                     expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                     expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                     expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -701,17 +696,17 @@ describe('Api3Market', function () {
                       api3ServerV1,
                       beaconIds,
                       dataFeedDetails,
-                      api3Market,
+                      api3MarketV2,
                       airseekerRegistry,
                       dapiManagementMerkleLeaves,
                       dapiManagementMerkleRoot,
                       dapiPricingMerkleLeaves,
                       dapiPricingMerkleRoot,
                     } = await helpers.loadFixture(deploy);
-                    await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                    await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                     const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
                     await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-                    await api3Market
+                    await api3MarketV2
                       .connect(roles.randomPerson)
                       .buySubscription(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -731,7 +726,7 @@ describe('Api3Market', function () {
                         ),
                         {
                           value: await computeRequiredPaymentAmount(
-                            api3Market,
+                            api3MarketV2,
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                             dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                             dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -741,7 +736,7 @@ describe('Api3Market', function () {
                         }
                       );
                     const paymentAmount2 = await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -755,7 +750,7 @@ describe('Api3Market', function () {
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
                     );
                     expect(
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription.staticCall(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -777,7 +772,7 @@ describe('Api3Market', function () {
                         )
                     ).to.be.equal(subscriptionId);
                     await expect(
-                      api3Market
+                      api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -798,7 +793,7 @@ describe('Api3Market', function () {
                           { value: paymentAmount2 }
                         )
                     )
-                      .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                      .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         computeSubscriptionId(
@@ -811,7 +806,7 @@ describe('Api3Market', function () {
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
                       )
-                      .to.emit(api3Market, 'BoughtSubscription')
+                      .to.emit(api3MarketV2, 'BoughtSubscription')
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         subscriptionId,
@@ -828,7 +823,7 @@ describe('Api3Market', function () {
                       dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                     );
                     const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                    const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                    const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
                     expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                     expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                     expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -859,7 +854,7 @@ describe('Api3Market', function () {
                     // The same subscription can be purchased again after some time passes
                     await helpers.time.increaseTo((await helpers.time.latest()) + 1);
                     const paymentAmount3 = await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -867,7 +862,7 @@ describe('Api3Market', function () {
                       dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress
                     );
                     await expect(
-                      api3Market
+                      api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -888,7 +883,7 @@ describe('Api3Market', function () {
                           { value: paymentAmount3 }
                         )
                     )
-                      .to.emit(api3Market, 'BoughtSubscription')
+                      .to.emit(api3MarketV2, 'BoughtSubscription')
                       .withArgs(
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         subscriptionId,
@@ -899,7 +894,7 @@ describe('Api3Market', function () {
                         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
                         paymentAmount3
                       )
-                      .to.not.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                      .to.not.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                       .to.not.emit(airseekerRegistry, 'UpdatedDapiNameUpdateParameters')
                       .to.not.emit(airseekerRegistry, 'ActivatedDapiName')
                       .to.not.emit(api3ServerV1, 'SetDapiName');
@@ -915,17 +910,17 @@ describe('Api3Market', function () {
                         api3ServerV1,
                         beaconIds,
                         dataFeedDetails,
-                        api3Market,
+                        api3MarketV2,
                         airseekerRegistry,
                         dapiManagementMerkleLeaves,
                         dapiManagementMerkleRoot,
                         dapiPricingMerkleLeaves,
                         dapiPricingMerkleRoot,
                       } = await helpers.loadFixture(deploy);
-                      await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                      await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                       const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -945,7 +940,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -955,7 +950,7 @@ describe('Api3Market', function () {
                           }
                         );
                       const paymentAmount2 = await computeRequiredPaymentAmount(
-                        api3Market,
+                        api3MarketV2,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -972,7 +967,7 @@ describe('Api3Market', function () {
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters
                       );
                       expect(
-                        await api3Market
+                        await api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription.staticCall(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -994,7 +989,7 @@ describe('Api3Market', function () {
                           )
                       ).to.equal(subscriptionId);
                       await expect(
-                        api3Market
+                        api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1019,9 +1014,9 @@ describe('Api3Market', function () {
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-                          await api3Market.getAddress()
+                          await api3MarketV2.getAddress()
                         )
-                        .to.emit(api3Market, 'BoughtSubscription')
+                        .to.emit(api3MarketV2, 'BoughtSubscription')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           subscriptionId,
@@ -1032,14 +1027,16 @@ describe('Api3Market', function () {
                           dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.price,
                           paymentAmount2
                         )
-                        .to.not.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                        .to.not.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                         .to.not.emit(airseekerRegistry, 'UpdatedDapiNameUpdateParameters')
                         .to.not.emit(airseekerRegistry, 'ActivatedDapiName');
                       const dataFeedReading = await api3ServerV1.dataFeeds(
                         dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                       );
                       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                      const dapiData = await api3MarketV2.getDapiData(
+                        dapiManagementMerkleLeaves.ethUsd!.values.dapiName
+                      );
                       expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                       expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                       expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -1076,17 +1073,17 @@ describe('Api3Market', function () {
                         api3ServerV1,
                         beaconIds,
                         dataFeedDetails,
-                        api3Market,
+                        api3MarketV2,
                         airseekerRegistry,
                         dapiManagementMerkleLeaves,
                         dapiManagementMerkleRoot,
                         dapiPricingMerkleLeaves,
                         dapiPricingMerkleRoot,
                       } = await helpers.loadFixture(deploy);
-                      await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                      await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                       const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1106,7 +1103,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1116,7 +1113,7 @@ describe('Api3Market', function () {
                           }
                         );
                       const paymentAmount2 = await computeRequiredPaymentAmount(
-                        api3Market,
+                        api3MarketV2,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -1130,7 +1127,7 @@ describe('Api3Market', function () {
                         dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters
                       );
                       expect(
-                        await api3Market
+                        await api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription.staticCall(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1152,7 +1149,7 @@ describe('Api3Market', function () {
                           )
                       ).to.equal(subscriptionId);
                       await expect(
-                        api3Market
+                        api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1173,7 +1170,7 @@ describe('Api3Market', function () {
                             { value: paymentAmount2 }
                           )
                       )
-                        .to.emit(api3Market, 'BoughtSubscription')
+                        .to.emit(api3MarketV2, 'BoughtSubscription')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           subscriptionId,
@@ -1184,7 +1181,7 @@ describe('Api3Market', function () {
                           dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.price,
                           paymentAmount2
                         )
-                        .to.not.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                        .to.not.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                         .to.not.emit(airseekerRegistry, 'UpdatedDapiNameUpdateParameters')
                         .to.not.emit(airseekerRegistry, 'ActivatedDapiName')
                         .to.not.emit(api3ServerV1, 'SetDapiName');
@@ -1192,7 +1189,9 @@ describe('Api3Market', function () {
                         dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                       );
                       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                      const dapiData = await api3MarketV2.getDapiData(
+                        dapiManagementMerkleLeaves.ethUsd!.values.dapiName
+                      );
                       expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                       expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                       expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -1232,17 +1231,17 @@ describe('Api3Market', function () {
                         api3ServerV1,
                         beaconIds,
                         dataFeedDetails,
-                        api3Market,
+                        api3MarketV2,
                         airseekerRegistry,
                         dapiManagementMerkleLeaves,
                         dapiManagementMerkleRoot,
                         dapiPricingMerkleLeaves,
                         dapiPricingMerkleRoot,
                       } = await helpers.loadFixture(deploy);
-                      await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                      await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                       const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1262,7 +1261,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1273,7 +1272,7 @@ describe('Api3Market', function () {
                         );
                       const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1293,7 +1292,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -1303,7 +1302,7 @@ describe('Api3Market', function () {
                           }
                         );
                       const paymentAmount3 = await computeRequiredPaymentAmount(
-                        api3Market,
+                        api3MarketV2,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -1330,7 +1329,7 @@ describe('Api3Market', function () {
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters
                       );
                       expect(
-                        await api3Market
+                        await api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription.staticCall(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1353,7 +1352,7 @@ describe('Api3Market', function () {
                           )
                       ).to.equal(subscriptionId);
                       await expect(
-                        api3Market
+                        api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1375,7 +1374,7 @@ describe('Api3Market', function () {
                             { value: paymentAmount3 }
                           )
                       )
-                        .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                        .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           computeSubscriptionId(
@@ -1392,9 +1391,9 @@ describe('Api3Market', function () {
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-                          await api3Market.getAddress()
+                          await api3MarketV2.getAddress()
                         )
-                        .to.emit(api3Market, 'BoughtSubscription')
+                        .to.emit(api3MarketV2, 'BoughtSubscription')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           subscriptionId,
@@ -1410,7 +1409,9 @@ describe('Api3Market', function () {
                         dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                       );
                       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                      const dapiData = await api3MarketV2.getDapiData(
+                        dapiManagementMerkleLeaves.ethUsd!.values.dapiName
+                      );
                       expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                       expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                       expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -1448,17 +1449,17 @@ describe('Api3Market', function () {
                         api3ServerV1,
                         beaconIds,
                         dataFeedDetails,
-                        api3Market,
+                        api3MarketV2,
                         airseekerRegistry,
                         dapiManagementMerkleLeaves,
                         dapiManagementMerkleRoot,
                         dapiPricingMerkleLeaves,
                         dapiPricingMerkleRoot,
                       } = await helpers.loadFixture(deploy);
-                      await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                      await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                       const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1478,7 +1479,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1489,7 +1490,7 @@ describe('Api3Market', function () {
                         );
                       const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
                       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-                      await api3Market
+                      await api3MarketV2
                         .connect(roles.randomPerson)
                         .buySubscription(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1509,7 +1510,7 @@ describe('Api3Market', function () {
                           ),
                           {
                             value: await computeRequiredPaymentAmount(
-                              api3Market,
+                              api3MarketV2,
                               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -1519,7 +1520,7 @@ describe('Api3Market', function () {
                           }
                         );
                       const paymentAmount3 = await computeRequiredPaymentAmount(
-                        api3Market,
+                        api3MarketV2,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -1543,7 +1544,7 @@ describe('Api3Market', function () {
                         dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters
                       );
                       expect(
-                        await api3Market
+                        await api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription.staticCall(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1566,7 +1567,7 @@ describe('Api3Market', function () {
                           )
                       ).to.equal(subscriptionId);
                       await expect(
-                        api3Market
+                        api3MarketV2
                           .connect(roles.randomPerson)
                           .buySubscription(
                             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1588,7 +1589,7 @@ describe('Api3Market', function () {
                             { value: paymentAmount3 }
                           )
                       )
-                        .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+                        .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           computeSubscriptionId(
@@ -1601,7 +1602,7 @@ describe('Api3Market', function () {
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters
                         )
-                        .to.emit(api3Market, 'BoughtSubscription')
+                        .to.emit(api3MarketV2, 'BoughtSubscription')
                         .withArgs(
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           subscriptionId,
@@ -1618,7 +1619,9 @@ describe('Api3Market', function () {
                         dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                       );
                       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-                      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+                      const dapiData = await api3MarketV2.getDapiData(
+                        dapiManagementMerkleLeaves.ethUsd!.values.dapiName
+                      );
                       expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
                       expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
                       expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -1656,15 +1659,15 @@ describe('Api3Market', function () {
                 const {
                   roles,
                   dataFeedDetails,
-                  api3Market,
+                  api3MarketV2,
                   dapiManagementMerkleLeaves,
                   dapiManagementMerkleRoot,
                   dapiPricingMerkleLeaves,
                   dapiPricingMerkleRoot,
                 } = await helpers.loadFixture(deploy);
-                await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                 await expect(
-                  api3Market
+                  api3MarketV2
                     .connect(roles.randomPerson)
                     .buySubscription(
                       dapiManagementMerkleLeaves.ethUsdWithNoDefaultPayableSponsorWallet!.values.dapiName,
@@ -1684,7 +1687,7 @@ describe('Api3Market', function () {
                       ),
                       {
                         value: await computeRequiredPaymentAmount(
-                          api3Market,
+                          api3MarketV2,
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1704,14 +1707,14 @@ describe('Api3Market', function () {
                 api3ServerV1,
                 beaconIds,
                 dataFeedDetails,
-                api3Market,
+                api3MarketV2,
                 mockContractWithNoDefaultPayable,
                 dapiManagementMerkleLeaves,
                 dapiManagementMerkleRoot,
                 dapiPricingMerkleLeaves,
                 dapiPricingMerkleRoot,
               } = await helpers.loadFixture(deploy);
-              await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+              await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
               await mockContractWithNoDefaultPayable.customPayable({
                 value: dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.price,
               });
@@ -1722,7 +1725,7 @@ describe('Api3Market', function () {
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
               );
               expect(
-                await api3Market
+                await api3MarketV2
                   .connect(roles.randomPerson)
                   .buySubscription.staticCall(
                     dapiManagementMerkleLeaves.ethUsdWithNoDefaultPayableSponsorWallet!.values.dapiName,
@@ -1743,7 +1746,7 @@ describe('Api3Market', function () {
                   )
               ).to.equal(subscriptionId);
               await expect(
-                api3Market
+                api3MarketV2
                   .connect(roles.randomPerson)
                   .buySubscription(
                     dapiManagementMerkleLeaves.ethUsdWithNoDefaultPayableSponsorWallet!.values.dapiName,
@@ -1763,7 +1766,7 @@ describe('Api3Market', function () {
                     )
                   )
               )
-                .to.emit(api3Market, 'BoughtSubscription')
+                .to.emit(api3MarketV2, 'BoughtSubscription')
                 .withArgs(
                   dapiManagementMerkleLeaves.ethUsdWithNoDefaultPayableSponsorWallet!.values.dapiName,
                   subscriptionId,
@@ -1778,7 +1781,7 @@ describe('Api3Market', function () {
                 dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
               );
               const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-              const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+              const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
               expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
               expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
               expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -1806,15 +1809,15 @@ describe('Api3Market', function () {
             const {
               roles,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1836,7 +1839,7 @@ describe('Api3Market', function () {
                     value:
                       BigInt(
                         await computeRequiredPaymentAmount(
-                          api3Market,
+                          api3MarketV2,
                           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1856,14 +1859,14 @@ describe('Api3Market', function () {
             const {
               roles,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-            await api3Market
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1883,7 +1886,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1893,7 +1896,7 @@ describe('Api3Market', function () {
                 }
               );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1931,14 +1934,14 @@ describe('Api3Market', function () {
               const {
                 roles,
                 dataFeedDetails,
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves,
                 dapiManagementMerkleRoot,
                 dapiPricingMerkleLeaves,
                 dapiPricingMerkleRoot,
               } = await helpers.loadFixture(deploy);
-              await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-              await api3Market
+              await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+              await api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -1958,7 +1961,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -1968,7 +1971,7 @@ describe('Api3Market', function () {
                   }
                 );
               await expect(
-                api3Market
+                api3MarketV2
                   .connect(roles.randomPerson)
                   .buySubscription(
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2005,14 +2008,14 @@ describe('Api3Market', function () {
             const {
               roles,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-            await api3Market
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2033,7 +2036,7 @@ describe('Api3Market', function () {
                 { value: dapiPricingMerkleLeaves.sixPercentDeviationThresholdForSixMonths!.values.price }
               );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2061,14 +2064,14 @@ describe('Api3Market', function () {
             const {
               roles,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-            await api3Market
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2088,7 +2091,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2097,7 +2100,7 @@ describe('Api3Market', function () {
                   ),
                 }
               );
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2117,7 +2120,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -2126,7 +2129,7 @@ describe('Api3Market', function () {
                   ),
                 }
               );
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2146,7 +2149,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -2155,7 +2158,7 @@ describe('Api3Market', function () {
                   ),
                 }
               );
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2175,7 +2178,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.fourPercentDeviationThresholdForFourMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.fourPercentDeviationThresholdForFourMonths!.values.duration,
@@ -2184,7 +2187,7 @@ describe('Api3Market', function () {
                   ),
                 }
               );
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2204,7 +2207,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.fivePercentDeviationThresholdForFiveMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.fivePercentDeviationThresholdForFiveMonths!.values.duration,
@@ -2214,7 +2217,7 @@ describe('Api3Market', function () {
                 }
               );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2243,17 +2246,17 @@ describe('Api3Market', function () {
               roles,
               api3ServerV1,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
             const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
             await helpers.time.setNextBlockTimestamp(dataFeedReading.timestamp + BigInt(MAXIMUM_DAPI_UPDATE_AGE + 1));
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2273,7 +2276,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2289,14 +2292,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2316,7 +2319,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2329,7 +2332,7 @@ describe('Api3Market', function () {
           });
         });
         context(
-          '...because doing so requires Api3Market to set a dAPI name and Api3Market does not have the respective Api3ServerV1 role',
+          '...because doing so requires Api3MarketV2 to set a dAPI name and Api3MarketV2 does not have the respective Api3ServerV1 role',
           function () {
             it('reverts', async function () {
               const {
@@ -2337,7 +2340,7 @@ describe('Api3Market', function () {
                 accessControlRegistry,
                 api3ServerV1,
                 dataFeedDetails,
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves,
                 dapiManagementMerkleRoot,
                 dapiPricingMerkleLeaves,
@@ -2345,10 +2348,10 @@ describe('Api3Market', function () {
               } = await helpers.loadFixture(deploy);
               await accessControlRegistry
                 .connect(roles.api3ServerV1Manager)
-                .revokeRole(await api3ServerV1.dapiNameSetterRole(), api3Market.getAddress());
-              await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                .revokeRole(await api3ServerV1.dapiNameSetterRole(), api3MarketV2.getAddress());
+              await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
               await expect(
-                api3Market
+                api3MarketV2
                   .connect(roles.randomPerson)
                   .buySubscription(
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2368,7 +2371,7 @@ describe('Api3Market', function () {
                     ),
                     {
                       value: await computeRequiredPaymentAmount(
-                        api3Market,
+                        api3MarketV2,
                         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2388,14 +2391,14 @@ describe('Api3Market', function () {
         it('reverts', async function () {
           const {
             roles,
-            api3Market,
+            api3MarketV2,
             dapiManagementMerkleLeaves,
             dapiManagementMerkleRoot,
             dapiPricingMerkleLeaves,
             dapiPricingMerkleRoot,
           } = await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2415,7 +2418,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2431,14 +2434,14 @@ describe('Api3Market', function () {
         it('reverts', async function () {
           const {
             roles,
-            api3Market,
+            api3MarketV2,
             dapiManagementMerkleLeaves,
             dapiManagementMerkleRoot,
             dapiPricingMerkleLeaves,
             dapiPricingMerkleRoot,
           } = await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2458,7 +2461,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2475,14 +2478,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   ethers.ZeroHash,
@@ -2502,7 +2505,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2516,10 +2519,10 @@ describe('Api3Market', function () {
         });
         context('...because dAPI management Merkle data cannot be decoded', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } =
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } =
               await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2531,7 +2534,7 @@ describe('Api3Market', function () {
                   '0x',
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2545,10 +2548,10 @@ describe('Api3Market', function () {
         });
         context('...because dAPI management Merkle root is not registered', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves, dapiPricingMerkleRoot } =
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves, dapiPricingMerkleRoot } =
               await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2568,7 +2571,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2584,14 +2587,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2611,7 +2614,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2629,14 +2632,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2656,7 +2659,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2672,14 +2675,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2699,7 +2702,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2715,14 +2718,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2742,7 +2745,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2756,10 +2759,10 @@ describe('Api3Market', function () {
         });
         context('...because dAPI pricing Merkle data cannot be decoded', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } =
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } =
               await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2771,7 +2774,7 @@ describe('Api3Market', function () {
                   '0x',
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2785,10 +2788,15 @@ describe('Api3Market', function () {
         });
         context('...because dAPI pricing Merkle root is not registered', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot, dapiPricingMerkleLeaves } =
-              await helpers.loadFixture(deploy);
+            const {
+              roles,
+              api3MarketV2,
+              dapiManagementMerkleLeaves,
+              dapiManagementMerkleRoot,
+              dapiPricingMerkleLeaves,
+            } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2808,7 +2816,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2824,14 +2832,14 @@ describe('Api3Market', function () {
           it('reverts', async function () {
             const {
               roles,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .buySubscription(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2851,7 +2859,7 @@ describe('Api3Market', function () {
                   ),
                   {
                     value: await computeRequiredPaymentAmount(
-                      api3Market,
+                      api3MarketV2,
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                       dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2876,15 +2884,15 @@ describe('Api3Market', function () {
             api3ServerV1,
             beaconIds,
             dataFeedDetails,
-            api3Market,
+            api3MarketV2,
             airseekerRegistry,
             dapiManagementMerkleLeaves,
             dapiManagementMerkleRoot,
             dapiPricingMerkleLeaves,
             dapiPricingMerkleRoot,
           } = await helpers.loadFixture(deploy);
-          await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-          await api3Market
+          await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+          await api3MarketV2
             .connect(roles.randomPerson)
             .buySubscription(
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2904,7 +2912,7 @@ describe('Api3Market', function () {
               ),
               {
                 value: await computeRequiredPaymentAmount(
-                  api3Market,
+                  api3MarketV2,
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                   dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                   dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -2913,7 +2921,7 @@ describe('Api3Market', function () {
                 ),
               }
             );
-          await api3Market
+          await api3MarketV2
             .connect(roles.randomPerson)
             .buySubscription(
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -2933,7 +2941,7 @@ describe('Api3Market', function () {
               ),
               {
                 value: await computeRequiredPaymentAmount(
-                  api3Market,
+                  api3MarketV2,
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                   dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                   dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -2943,15 +2951,15 @@ describe('Api3Market', function () {
               }
             );
           await expect(
-            api3Market.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+            api3MarketV2.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
           )
-            .to.emit(api3Market, 'CanceledSubscriptions')
+            .to.emit(api3MarketV2, 'CanceledSubscriptions')
             .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
             .to.emit(airseekerRegistry, 'DeactivatedDapiName')
             .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
           const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
           const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-          const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+          const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
           expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
           expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
           expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -2966,18 +2974,20 @@ describe('Api3Market', function () {
       });
       context('dAPI subscription queue is empty', function () {
         it('reverts', async function () {
-          const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+          const { roles, api3MarketV2, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
           await expect(
-            api3Market.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+            api3MarketV2.connect(roles.owner).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
           ).to.be.revertedWith('Subscription queue empty');
         });
       });
     });
     context('Sender is not the owner', function () {
       it('reverts', async function () {
-        const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+        const { roles, api3MarketV2, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
         await expect(
-          api3Market.connect(roles.randomPerson).cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+          api3MarketV2
+            .connect(roles.randomPerson)
+            .cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
         ).to.be.revertedWith('Ownable: caller is not the owner');
       });
     });
@@ -2993,15 +3003,15 @@ describe('Api3Market', function () {
               api3ServerV1,
               beaconIds,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               airseekerRegistry,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-            await api3Market
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3021,7 +3031,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -3030,7 +3040,7 @@ describe('Api3Market', function () {
                   ),
                 }
               );
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3050,7 +3060,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -3061,7 +3071,7 @@ describe('Api3Market', function () {
               );
             const subscriptionTimestamp3 = (await helpers.time.latest()) + 1;
             await helpers.time.setNextBlockTimestamp(subscriptionTimestamp3);
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3081,7 +3091,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -3095,17 +3105,17 @@ describe('Api3Market', function () {
                 dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration
             );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateCurrentSubscriptionId(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
             )
-              .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+              .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
               .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName, ethers.ZeroHash)
               .to.emit(airseekerRegistry, 'DeactivatedDapiName')
               .withArgs(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
             const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
             const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-            const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+            const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
             expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
             expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
             expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -3125,17 +3135,17 @@ describe('Api3Market', function () {
               api3ServerV1,
               beaconIds,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               airseekerRegistry,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
               dapiPricingMerkleLeaves,
               dapiPricingMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
             const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
             await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3155,7 +3165,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                     dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -3166,7 +3176,7 @@ describe('Api3Market', function () {
               );
             const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
             await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3186,7 +3196,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -3197,7 +3207,7 @@ describe('Api3Market', function () {
               );
             const subscriptionTimestamp3 = (await helpers.time.latest()) + 1;
             await helpers.time.setNextBlockTimestamp(subscriptionTimestamp3);
-            await api3Market
+            await api3MarketV2
               .connect(roles.randomPerson)
               .buySubscription(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3217,7 +3227,7 @@ describe('Api3Market', function () {
                 ),
                 {
                   value: await computeRequiredPaymentAmount(
-                    api3Market,
+                    api3MarketV2,
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                     dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -3230,11 +3240,11 @@ describe('Api3Market', function () {
               subscriptionTimestamp1 + dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration
             );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateCurrentSubscriptionId(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
             )
-              .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+              .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
               .withArgs(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 computeSubscriptionId(
@@ -3250,7 +3260,7 @@ describe('Api3Market', function () {
 
             const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
             const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-            const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+            const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
             expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
             expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
             expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -3284,14 +3294,14 @@ describe('Api3Market', function () {
           const {
             roles,
             dataFeedDetails,
-            api3Market,
+            api3MarketV2,
             dapiManagementMerkleLeaves,
             dapiManagementMerkleRoot,
             dapiPricingMerkleLeaves,
             dapiPricingMerkleRoot,
           } = await helpers.loadFixture(deploy);
-          await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-          await api3Market
+          await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+          await api3MarketV2
             .connect(roles.randomPerson)
             .buySubscription(
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3311,7 +3321,7 @@ describe('Api3Market', function () {
               ),
               {
                 value: await computeRequiredPaymentAmount(
-                  api3Market,
+                  api3MarketV2,
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                   dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                   dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -3321,7 +3331,7 @@ describe('Api3Market', function () {
               }
             );
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateCurrentSubscriptionId(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
           ).to.be.revertedWith('Current subscription not ended');
@@ -3330,9 +3340,9 @@ describe('Api3Market', function () {
     });
     context('dAPI subscription queue is empty', function () {
       it('reverts', async function () {
-        const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+        const { roles, api3MarketV2, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
         await expect(
-          api3Market
+          api3MarketV2
             .connect(roles.randomPerson)
             .updateCurrentSubscriptionId(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
         ).to.be.revertedWith('Subscription queue empty');
@@ -3350,13 +3360,13 @@ describe('Api3Market', function () {
                 roles,
                 dataFeedDetails,
                 api3ServerV1,
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves,
                 dapiManagementMerkleRoot,
               } = await helpers.loadFixture(deploy);
-              await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+              await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
               await expect(
-                api3Market
+                api3MarketV2
                   .connect(roles.randomPerson)
                   .updateDapiName(
                     dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3372,7 +3382,7 @@ describe('Api3Market', function () {
                 .withArgs(
                   dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-                  await api3Market.getAddress()
+                  await api3MarketV2.getAddress()
                 );
             });
           });
@@ -3383,11 +3393,11 @@ describe('Api3Market', function () {
                   roles,
                   dataFeedDetails,
                   api3ServerV1,
-                  api3Market,
+                  api3MarketV2,
                   dapiManagementMerkleLeaves,
                   dapiManagementMerkleRoot,
                 } = await helpers.loadFixture(deploy);
-                await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+                await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
                 const dataFeedReading = await api3ServerV1.dataFeeds(
                   dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId
                 );
@@ -3395,7 +3405,7 @@ describe('Api3Market', function () {
                   dataFeedReading.timestamp + BigInt(MAXIMUM_DAPI_UPDATE_AGE + 1)
                 );
                 await expect(
-                  api3Market
+                  api3MarketV2
                     .connect(roles.randomPerson)
                     .updateDapiName(
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3411,10 +3421,10 @@ describe('Api3Market', function () {
             });
             context('Data feed has not been registered', function () {
               it('reverts', async function () {
-                const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+                const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
                   await helpers.loadFixture(deploy);
                 await expect(
-                  api3Market
+                  api3MarketV2
                     .connect(roles.randomPerson)
                     .updateDapiName(
                       dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3436,12 +3446,12 @@ describe('Api3Market', function () {
               roles,
               api3ServerV1,
               dataFeedDetails,
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves,
               dapiManagementMerkleRoot,
             } = await helpers.loadFixture(deploy);
-            await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-            await api3Market
+            await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+            await api3MarketV2
               .connect(roles.randomPerson)
               .updateDapiName(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3453,7 +3463,7 @@ describe('Api3Market', function () {
                 )
               );
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateDapiName(
                   dapiManagementMerkleLeaves.ethUsdWithZeroDataFeedIdAndSponsorWalletAddress!.values.dapiName,
@@ -3473,17 +3483,17 @@ describe('Api3Market', function () {
               .withArgs(
                 dapiManagementMerkleLeaves.ethUsdWithZeroDataFeedIdAndSponsorWalletAddress!.values.dataFeedId,
                 dapiManagementMerkleLeaves.ethUsdWithZeroDataFeedIdAndSponsorWalletAddress!.values.dapiName,
-                await api3Market.getAddress()
+                await api3MarketV2.getAddress()
               );
           });
         });
       });
       context('Data feed ID is not different than what the dAPI name is currently set to', function () {
         it('reverts', async function () {
-          const { roles, dataFeedDetails, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+          const { roles, dataFeedDetails, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
             await helpers.loadFixture(deploy);
-          await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
-          await api3Market
+          await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+          await api3MarketV2
             .connect(roles.randomPerson)
             .updateDapiName(
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3495,7 +3505,7 @@ describe('Api3Market', function () {
               )
             );
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateDapiName(
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3513,10 +3523,10 @@ describe('Api3Market', function () {
     context('Arguments are not valid', function () {
       context('Sponsor wallet address is zero while data feed ID is not', function () {
         it('reverts', async function () {
-          const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+          const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
             await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateDapiName(
                 dapiManagementMerkleLeaves.ethUsdWithZeroSponsorWalletAddress!.values.dapiName,
@@ -3532,10 +3542,10 @@ describe('Api3Market', function () {
       });
       context('Data feed ID is zero while sponsor wallet address is not', function () {
         it('reverts', async function () {
-          const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+          const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
             await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateDapiName(
                 dapiManagementMerkleLeaves.ethUsdWithZeroDataFeedId!.values.dapiName,
@@ -3552,10 +3562,10 @@ describe('Api3Market', function () {
       context('dAPI management Merkle proof verification is not successful...', function () {
         context('...because dAPI name is zero', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
               await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateDapiName(
                   ethers.ZeroHash,
@@ -3571,9 +3581,9 @@ describe('Api3Market', function () {
         });
         context('...because dAPI management Merkle data cannot be decoded', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateDapiName(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3586,9 +3596,9 @@ describe('Api3Market', function () {
         });
         context('...because dAPI management Merkle root is not registered', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves } = await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateDapiName(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3604,10 +3614,10 @@ describe('Api3Market', function () {
         });
         context('... dAPI management Merkle proof is not valid', function () {
           it('reverts', async function () {
-            const { roles, api3Market, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
+            const { roles, api3MarketV2, dapiManagementMerkleLeaves, dapiManagementMerkleRoot } =
               await helpers.loadFixture(deploy);
             await expect(
-              api3Market
+              api3MarketV2
                 .connect(roles.randomPerson)
                 .updateDapiName(
                   dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -3629,10 +3639,10 @@ describe('Api3Market', function () {
     context('Signed API URL Merkle proof verification is successful', function () {
       context('Signed API URL is different than that the signed API URL is currently set to', function () {
         it('updates signed API URL', async function () {
-          const { roles, airnodes, airseekerRegistry, api3Market, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
+          const { roles, airnodes, airseekerRegistry, api3MarketV2, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
             await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateSignedApiUrl(
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3652,9 +3662,9 @@ describe('Api3Market', function () {
       });
       context('Signed API URL is not different than that the signed API URL is currently set to', function () {
         it('reverts', async function () {
-          const { roles, airnodes, api3Market, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
+          const { roles, airnodes, api3MarketV2, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
             await helpers.loadFixture(deploy);
-          await api3Market
+          await api3MarketV2
             .connect(roles.randomPerson)
             .updateSignedApiUrl(
               signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3665,7 +3675,7 @@ describe('Api3Market', function () {
               )
             );
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateSignedApiUrl(
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3682,9 +3692,9 @@ describe('Api3Market', function () {
     context('Signed API URL Merkle proof verification is not successful...', function () {
       context('...because signed API URL Merkle data cannot be decoded', function () {
         it('reverts', async function () {
-          const { roles, airnodes, api3Market, signedApiUrlMerkleLeaves } = await helpers.loadFixture(deploy);
+          const { roles, airnodes, api3MarketV2, signedApiUrlMerkleLeaves } = await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateSignedApiUrl(
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3696,9 +3706,9 @@ describe('Api3Market', function () {
       });
       context('...because signed API URL Merkle root is not registered', function () {
         it('reverts', async function () {
-          const { roles, airnodes, api3Market, signedApiUrlMerkleLeaves } = await helpers.loadFixture(deploy);
+          const { roles, airnodes, api3MarketV2, signedApiUrlMerkleLeaves } = await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateSignedApiUrl(
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3713,10 +3723,10 @@ describe('Api3Market', function () {
       });
       context('... signed API URL Merkle proof is not valid', function () {
         it('reverts', async function () {
-          const { roles, airnodes, api3Market, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
+          const { roles, airnodes, api3MarketV2, signedApiUrlMerkleLeaves, signedApiUrlMerkleRoot } =
             await helpers.loadFixture(deploy);
           await expect(
-            api3Market
+            api3MarketV2
               .connect(roles.randomPerson)
               .updateSignedApiUrl(
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.airnodeAddress,
@@ -3737,7 +3747,7 @@ describe('Api3Market', function () {
       const {
         airnodes,
         airseekerRegistry,
-        api3Market,
+        api3MarketV2,
         api3ServerV1,
         beaconIds,
         dapiManagementMerkleLeaves,
@@ -3760,7 +3770,7 @@ describe('Api3Market', function () {
       // dAPI management Merkle data comes from the dAPI management package
       // dAPI pricing Merkle data comes from the dAPI pricing API
       const paymentAmount = await computeRequiredPaymentAmount(
-        api3Market,
+        api3MarketV2,
         dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
         dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -3782,10 +3792,10 @@ describe('Api3Market', function () {
       const updateBeacons = Array.from({ length: airnodes.length }).fill(false);
       let updateBeaconSet = false;
       // Data feed ID and data feed details come from the dAPI management package
-      const staticCallReturndata = await api3Market.multicall.staticCall([
-        api3Market.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
-        api3Market.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]),
-        api3Market.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
+      const staticCallReturndata = await api3MarketV2.multicall.staticCall([
+        api3MarketV2.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
+        api3MarketV2.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]),
+        api3MarketV2.interface.encodeFunctionData('getDataFeedData', [dataFeedId]),
       ]);
       const staticCallFirstDataFeedData = ethers.AbiCoder.defaultAbiCoder().decode(
         ['bytes', 'int224', 'uint32', 'int224[]', 'uint32[]'],
@@ -3820,7 +3830,7 @@ describe('Api3Market', function () {
       // Construct the multicall calldata based on the findings above
       const multicallCalldata = [];
       if (registerDataFeed) {
-        multicallCalldata.push(api3Market.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]));
+        multicallCalldata.push(api3MarketV2.interface.encodeFunctionData('registerDataFeed', [dataFeedDetails]));
       }
       if (updateBeaconSet) {
         const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [ethers.parseEther('2200')]);
@@ -3828,7 +3838,7 @@ describe('Api3Market', function () {
           if (updateBeacon) {
             // Signed data comes from the signed APIs
             multicallCalldata.push(
-              api3Market.interface.encodeFunctionData('updateBeaconWithSignedData', [
+              api3MarketV2.interface.encodeFunctionData('updateBeaconWithSignedData', [
                 airnodes[i]!.address,
                 templateIds[i],
                 timestampNow,
@@ -3845,10 +3855,10 @@ describe('Api3Market', function () {
             );
           }
         }
-        multicallCalldata.push(api3Market.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
+        multicallCalldata.push(api3MarketV2.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
       }
       // First estimate the gas limit using `multicallAndBuySubscription()`...
-      const gasLimit = await api3Market
+      const gasLimit = await api3MarketV2
         .connect(roles.randomPerson)
         .multicallAndBuySubscription.estimateGas(
           multicallCalldata,
@@ -3882,7 +3892,7 @@ describe('Api3Market', function () {
       const subscriptionTimestamp = (await helpers.time.latest()) + 1;
       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp);
       await expect(
-        api3Market
+        api3MarketV2
           .connect(roles.randomPerson)
           .tryMulticallAndBuySubscription(
             multicallCalldata,
@@ -3907,7 +3917,7 @@ describe('Api3Market', function () {
             }
           )
       )
-        .to.emit(api3Market, 'UpdatedCurrentSubscriptionId')
+        .to.emit(api3MarketV2, 'UpdatedCurrentSubscriptionId')
         .withArgs(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
           computeSubscriptionId(
@@ -3926,9 +3936,9 @@ describe('Api3Market', function () {
         .withArgs(
           dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId,
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
-          await api3Market.getAddress()
+          await api3MarketV2.getAddress()
         )
-        .to.emit(api3Market, 'BoughtSubscription')
+        .to.emit(api3MarketV2, 'BoughtSubscription')
         .withArgs(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
           subscriptionId,
@@ -3941,7 +3951,7 @@ describe('Api3Market', function () {
         );
       const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-      const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+      const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
       expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
       expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
       expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -3962,7 +3972,7 @@ describe('Api3Market', function () {
 
   describe('updateBeaconWithSignedData', function () {
     it('updates Beacon with signed data', async function () {
-      const { roles, airnodes, api3ServerV1, templateIds, beaconIds, api3Market } = await helpers.loadFixture(deploy);
+      const { roles, airnodes, api3ServerV1, templateIds, beaconIds, api3MarketV2 } = await helpers.loadFixture(deploy);
       const timestamp = await helpers.time.latest();
       const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(['int224'], [123]);
       const signature = await airnodes[0]!.signMessage(
@@ -3971,7 +3981,7 @@ describe('Api3Market', function () {
         )
       );
       await expect(
-        api3Market
+        api3MarketV2
           .connect(roles.randomPerson)
           .updateBeaconWithSignedData(airnodes[0]!.address, templateIds[0]!, timestamp, encodedValue, signature)
       )
@@ -3982,9 +3992,9 @@ describe('Api3Market', function () {
 
   describe('updateBeaconSetWithBeacons', function () {
     it('updates Beacon set with Beacons', async function () {
-      const { roles, api3ServerV1, beaconIds, api3Market } = await helpers.loadFixture(deploy);
+      const { roles, api3ServerV1, beaconIds, api3MarketV2 } = await helpers.loadFixture(deploy);
       const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-      await expect(api3Market.connect(roles.randomPerson).updateBeaconSetWithBeacons([beaconIds[0]!, beaconIds[1]!]))
+      await expect(api3MarketV2.connect(roles.randomPerson).updateBeaconSetWithBeacons([beaconIds[0]!, beaconIds[1]!]))
         .to.emit(api3ServerV1, 'UpdatedBeaconSetWithBeacons')
         .withArgs(
           ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(['bytes32[]'], [[beaconIds[0], beaconIds[1]]])),
@@ -3994,29 +4004,10 @@ describe('Api3Market', function () {
     });
   });
 
-  describe('deployDapiProxy', function () {
-    it('reverts', async function () {
-      const { roles, dapiName, api3Market } = await helpers.loadFixture(deploy);
-      await expect(api3Market.connect(roles.randomPerson).deployDapiProxy(dapiName, '0x12345678')).to.be
-        .revertedWithoutReason;
-    });
-  });
-
-  describe('deployDapiProxyWithOev', function () {
-    it('reverts', async function () {
-      const { roles, dapiName, api3Market } = await helpers.loadFixture(deploy);
-      await expect(
-        api3Market
-          .connect(roles.randomPerson)
-          .deployDapiProxyWithOev(dapiName, roles.randomPerson!.address, '0x12345678')
-      ).to.be.revertedWithoutReason;
-    });
-  });
-
   describe('registerDataFeed', function () {
     it('registers data feed', async function () {
-      const { roles, dataFeedId, dataFeedDetails, api3Market, airseekerRegistry } = await helpers.loadFixture(deploy);
-      await expect(api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails))
+      const { roles, dataFeedId, dataFeedDetails, api3MarketV2, airseekerRegistry } = await helpers.loadFixture(deploy);
+      await expect(api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails))
         .to.emit(airseekerRegistry, 'RegisteredDataFeed')
         .withArgs(dataFeedId, dataFeedDetails);
     });
@@ -4027,16 +4018,16 @@ describe('Api3Market', function () {
       const {
         roles,
         dataFeedDetails,
-        api3Market,
+        api3MarketV2,
         dapiManagementMerkleLeaves,
         dapiManagementMerkleRoot,
         dapiPricingMerkleLeaves,
         dapiPricingMerkleRoot,
       } = await helpers.loadFixture(deploy);
-      await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+      await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
       const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-      await api3Market
+      await api3MarketV2
         .connect(roles.randomPerson)
         .buySubscription(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4056,7 +4047,7 @@ describe('Api3Market', function () {
           ),
           {
             value: await computeRequiredPaymentAmount(
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
               dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4068,7 +4059,7 @@ describe('Api3Market', function () {
 
       const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-      await api3Market
+      await api3MarketV2
         .connect(roles.randomPerson)
         .buySubscription(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4088,7 +4079,7 @@ describe('Api3Market', function () {
           ),
           {
             value: await computeRequiredPaymentAmount(
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
               dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -4099,7 +4090,7 @@ describe('Api3Market', function () {
         );
       const subscriptionTimestamp3 = (await helpers.time.latest()) + 1;
       await helpers.time.setNextBlockTimestamp(subscriptionTimestamp3);
-      await api3Market
+      await api3MarketV2
         .connect(roles.randomPerson)
         .buySubscription(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4119,7 +4110,7 @@ describe('Api3Market', function () {
           ),
           {
             value: await computeRequiredPaymentAmount(
-              api3Market,
+              api3MarketV2,
               dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
               dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
               dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -4157,7 +4148,7 @@ describe('Api3Market', function () {
       const expectedSponsorWalletBalance =
         BigInt(expectedSponsorWalletBalanceFromSubscription2) + BigInt(expectedSponsorWalletBalanceFromSubscription3);
       expect(
-        await api3Market.computeExpectedSponsorWalletBalance(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
+        await api3MarketV2.computeExpectedSponsorWalletBalance(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
       ).to.equal(expectedSponsorWalletBalance);
     });
   });
@@ -4168,16 +4159,16 @@ describe('Api3Market', function () {
         const {
           roles,
           dataFeedDetails,
-          api3Market,
+          api3MarketV2,
           dapiManagementMerkleLeaves,
           dapiManagementMerkleRoot,
           dapiPricingMerkleLeaves,
           dapiPricingMerkleRoot,
         } = await helpers.loadFixture(deploy);
-        await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
         const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4197,7 +4188,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4209,7 +4200,7 @@ describe('Api3Market', function () {
 
         const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4229,7 +4220,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -4267,7 +4258,7 @@ describe('Api3Market', function () {
         const expectedSponsorWalletBalanceAfterSubscriptionIsAdded =
           expectedSponsorWalletBalanceFromSubscription2 + expectedSponsorWalletBalanceFromSubscription3;
         expect(
-          await api3Market.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
+          await api3MarketV2.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
             dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
             dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -4281,16 +4272,16 @@ describe('Api3Market', function () {
         const {
           roles,
           dataFeedDetails,
-          api3Market,
+          api3MarketV2,
           dapiManagementMerkleLeaves,
           dapiManagementMerkleRoot,
           dapiPricingMerkleLeaves,
           dapiPricingMerkleRoot,
         } = await helpers.loadFixture(deploy);
-        await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
         const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4310,7 +4301,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4319,7 +4310,7 @@ describe('Api3Market', function () {
               ),
             }
           );
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4339,7 +4330,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -4357,7 +4348,7 @@ describe('Api3Market', function () {
         );
         await helpers.time.increaseTo(currentTimestamp);
         await expect(
-          api3Market.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
+          api3MarketV2.computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
             '0x',
             dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -4376,16 +4367,16 @@ describe('Api3Market', function () {
           api3ServerV1,
           beaconIds,
           dataFeedDetails,
-          api3Market,
+          api3MarketV2,
           dapiManagementMerkleLeaves,
           dapiManagementMerkleRoot,
           dapiPricingMerkleLeaves,
           dapiPricingMerkleRoot,
         } = await helpers.loadFixture(deploy);
-        await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
         const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4405,7 +4396,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4416,7 +4407,7 @@ describe('Api3Market', function () {
           );
         const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4436,7 +4427,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -4447,7 +4438,7 @@ describe('Api3Market', function () {
           );
         const subscriptionTimestamp3 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp3);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4467,7 +4458,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -4478,7 +4469,7 @@ describe('Api3Market', function () {
           );
         const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
         const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-        const dapiData = await api3Market.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
+        const dapiData = await api3MarketV2.getDapiData(dapiManagementMerkleLeaves.ethUsd!.values.dapiName);
         expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
         expect(dapiData.dapiValue).to.equal(dataFeedReading.value);
         expect(dapiData.dapiTimestamp).to.equal(dataFeedReading.timestamp);
@@ -4516,7 +4507,7 @@ describe('Api3Market', function () {
           api3ServerV1,
           templateIds,
           beaconIds,
-          api3Market,
+          api3MarketV2,
           dapiManagementMerkleLeaves,
           dapiManagementMerkleRoot,
           dapiPricingMerkleLeaves,
@@ -4526,10 +4517,10 @@ describe('Api3Market', function () {
           ['address', 'bytes32'],
           [airnodes[0]!.address, templateIds[0]]
         );
-        await api3Market.connect(roles.randomPerson).registerDataFeed(beaconDataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(beaconDataFeedDetails);
         const subscriptionTimestamp1 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp1);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dapiName,
@@ -4549,7 +4540,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4561,7 +4552,7 @@ describe('Api3Market', function () {
 
         const subscriptionTimestamp2 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp2);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dapiName,
@@ -4581,7 +4572,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.twoPercentDeviationThresholdForTwoMonths!.values.duration,
@@ -4592,7 +4583,7 @@ describe('Api3Market', function () {
           );
         const subscriptionTimestamp3 = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(subscriptionTimestamp3);
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dapiName,
@@ -4612,7 +4603,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.updateParameters,
                 dapiPricingMerkleLeaves.threePercentDeviationThresholdForThreeMonths!.values.duration,
@@ -4625,7 +4616,7 @@ describe('Api3Market', function () {
           dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dataFeedId
         );
         const beaconReadings = await readBeacons(api3ServerV1, [beaconIds[0]!]);
-        const dapiData = await api3Market.getDapiData(
+        const dapiData = await api3MarketV2.getDapiData(
           dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dapiName
         );
         expect(dapiData.dataFeedDetails).to.equal(beaconDataFeedDetails);
@@ -4662,12 +4653,12 @@ describe('Api3Market', function () {
   describe('getDataFeedData', function () {
     context('Data feed ID belongs to a Beacon set', function () {
       it('gets data feed data', async function () {
-        const { roles, api3ServerV1, beaconIds, dataFeedDetails, api3Market, dapiManagementMerkleLeaves } =
+        const { roles, api3ServerV1, beaconIds, dataFeedDetails, api3MarketV2, dapiManagementMerkleLeaves } =
           await helpers.loadFixture(deploy);
-        await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
         const dataFeedReading = await api3ServerV1.dataFeeds(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
         const beaconReadings = await readBeacons(api3ServerV1, beaconIds);
-        const dapiData = await api3Market.getDataFeedData(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
+        const dapiData = await api3MarketV2.getDataFeedData(dapiManagementMerkleLeaves.ethUsd!.values.dataFeedId);
         expect(dapiData.dataFeedDetails).to.equal(dataFeedDetails);
         expect(dapiData.dataFeedValue).to.equal(dataFeedReading.value);
         expect(dapiData.dataFeedTimestamp).to.equal(dataFeedReading.timestamp);
@@ -4677,20 +4668,20 @@ describe('Api3Market', function () {
     });
     context('Data feed ID belongs to a Beacon', function () {
       it('gets data feed data', async function () {
-        const { roles, airnodes, api3ServerV1, templateIds, api3Market, dapiManagementMerkleLeaves } =
+        const { roles, airnodes, api3ServerV1, templateIds, api3MarketV2, dapiManagementMerkleLeaves } =
           await helpers.loadFixture(deploy);
         const beaconDataFeedDetails = ethers.AbiCoder.defaultAbiCoder().encode(
           ['address', 'bytes32'],
           [airnodes[0]!.address, templateIds[0]]
         );
-        await api3Market.connect(roles.randomPerson).registerDataFeed(beaconDataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(beaconDataFeedDetails);
         const dataFeedReading = await api3ServerV1.dataFeeds(
           dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dataFeedId
         );
         const beaconReadings = await readBeacons(api3ServerV1, [
           dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dataFeedId,
         ]);
-        const dapiData = await api3Market.getDataFeedData(
+        const dapiData = await api3MarketV2.getDataFeedData(
           dapiManagementMerkleLeaves.ethUsdWithASingleBeacon!.values.dataFeedId
         );
         expect(dapiData.dataFeedDetails).to.equal(beaconDataFeedDetails);
@@ -4708,18 +4699,18 @@ describe('Api3Market', function () {
         const {
           roles,
           dataFeedDetails,
-          api3Market,
+          api3MarketV2,
           dapiManagementMerkleLeaves,
           dapiManagementMerkleRoot,
           dapiPricingMerkleLeaves,
           dapiPricingMerkleRoot,
         } = await helpers.loadFixture(deploy);
-        await api3Market.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
+        await api3MarketV2.connect(roles.randomPerson).registerDataFeed(dataFeedDetails);
         const subscriptionId = computeSubscriptionId(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
         );
-        await api3Market
+        await api3MarketV2
           .connect(roles.randomPerson)
           .buySubscription(
             dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
@@ -4739,7 +4730,7 @@ describe('Api3Market', function () {
             ),
             {
               value: await computeRequiredPaymentAmount(
-                api3Market,
+                api3MarketV2,
                 dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters,
                 dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.duration,
@@ -4748,19 +4739,19 @@ describe('Api3Market', function () {
               ),
             }
           );
-        expect(await api3Market.subscriptionIdToUpdateParameters(subscriptionId)).to.equal(
+        expect(await api3MarketV2.subscriptionIdToUpdateParameters(subscriptionId)).to.equal(
           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
         );
       });
     });
     context('Subscription does not exist', function () {
       it('returns empty bytes string', async function () {
-        const { api3Market, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } = await helpers.loadFixture(deploy);
+        const { api3MarketV2, dapiManagementMerkleLeaves, dapiPricingMerkleLeaves } = await helpers.loadFixture(deploy);
         const subscriptionId = computeSubscriptionId(
           dapiManagementMerkleLeaves.ethUsd!.values.dapiName,
           dapiPricingMerkleLeaves.onePercentDeviationThresholdForOneMonth!.values.updateParameters
         );
-        expect(await api3Market.subscriptionIdToUpdateParameters(subscriptionId)).to.equal('0x');
+        expect(await api3MarketV2.subscriptionIdToUpdateParameters(subscriptionId)).to.equal('0x');
       });
     });
   });
