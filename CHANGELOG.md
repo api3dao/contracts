@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 9.0.0
+
+### Major Changes
+
+- 581511f: Remove deployment block numbers
+
+### Minor Changes
+
+- 67cd34c: Add dAPI and Market support to soneium-sepolia-testnet
+
 ## 8.0.0
 
 ### Major Changes
