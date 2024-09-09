@@ -14,7 +14,6 @@ import managerMultisigAddresses from '../data/manager-multisig.json';
 
 module.exports = () => {
   const references: Record<string, Record<string, AddressLike>> = {};
-  const deploymentBlockNumbers: Record<string, Record<string, number>> = {};
 
   const networks = new Set([
     ...Object.keys(managerMultisigAddresses),
@@ -39,17 +38,9 @@ module.exports = () => {
     for (const contractName of contractNames) {
       const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
       references[contractName] = { ...references[contractName], [chainId]: deployment.address };
-      if (!deployment.receipt) {
-        throw new Error(`${network} ${contractName} missing deployment tx receipt`);
-      }
-      deploymentBlockNumbers[contractName] = {
-        ...deploymentBlockNumbers[contractName],
-        [chainId]: deployment.receipt.blockNumber,
-      };
     }
   }
   fs.writeFileSync(join('deployments', 'addresses.json'), `${JSON.stringify(references, null, 2)}\n`);
-  fs.writeFileSync(join('deployments', 'block-numbers.json'), `${JSON.stringify(deploymentBlockNumbers, null, 2)}\n`);
   fs.writeFileSync(
     join('deployments', 'manager-multisig-addresses.json'),
     `${JSON.stringify(
