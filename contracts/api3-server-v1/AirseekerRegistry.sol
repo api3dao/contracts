@@ -83,17 +83,17 @@ contract AirseekerRegistry is
 
     mapping(bytes32 => bytes) private updateParametersHashToValue;
 
-    // Length of abi.encode(address, bytes32)
+    // Length of `abi.encode(address, bytes32)`
     uint256 private constant DATA_FEED_DETAILS_LENGTH_FOR_SINGLE_BEACON =
         32 + 32;
 
-    // Length of abi.encode(address[2], bytes32[2])
+    // Length of `abi.encode(address[2], bytes32[2])`
     uint256
         private constant DATA_FEED_DETAILS_LENGTH_FOR_BEACON_SET_WITH_TWO_BEACONS =
         32 + 32 + (32 + 2 * 32) + (32 + 2 * 32);
 
     // Length of
-    // abi.encode(address[MAXIMUM_BEACON_COUNT_IN_SET], bytes32[MAXIMUM_BEACON_COUNT_IN_SET])
+    // `abi.encode(address[MAXIMUM_BEACON_COUNT_IN_SET], bytes32[MAXIMUM_BEACON_COUNT_IN_SET])`
     uint256 private constant MAXIMUM_DATA_FEED_DETAILS_LENGTH =
         32 +
             32 +
@@ -337,11 +337,11 @@ contract AirseekerRegistry is
         }
     }
 
-    /// @notice In an imaginary array consisting of the the active data feed
-    /// IDs and active dAPI names, picks the index-th identifier, and returns
-    /// all data about the respective data feed that is available. Whenever
-    /// data is not available (including the case where index does not
-    /// correspond to an active data feed), returns empty values.
+    /// @notice In an imaginary array consisting of the active data feed IDs
+    /// and active dAPI names, picks the index-th identifier, and returns all
+    /// data about the respective data feed that is available. Whenever data is
+    /// not available (including the case where index does not correspond to an
+    /// active data feed), returns empty values.
     /// @dev Airseeker uses this function to get all the data it needs about an
     /// active data feed with a single RPC call
     /// @param index Index

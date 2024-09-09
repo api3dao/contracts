@@ -12,7 +12,7 @@ import "./interfaces/IApi3ServerV1.sol";
 /// @notice Api3ServerV1 contract supports base data feeds and OEV
 /// functionality. This contract implements the updated OEV design, and thus
 /// supersedes the OEV-related portion of Api3ServerV1. As before, the users
-/// are intended to read API3 data feeds through the standardized proxy, which
+/// are intended to read API3 data feeds through a standardized proxy, which
 /// abstracts this change away.
 contract Api3ServerV1OevExtension is
     AccessControlRegistryAdminnedWithManager,
@@ -95,9 +95,9 @@ contract Api3ServerV1OevExtension is
     /// @notice Called by the updater account specified in the details of the
     /// winning bid to pay the bid amount and claim update allowance for the
     /// period that was being auctioned off
-    /// @param dappId dApp ID for which the bid was placed
+    /// @param dappId ID of the dApp for which the bid was placed
     /// @param updateAllowanceEndTimestamp End timestamp of the period for
-    /// which the update allowance was being auctioned off
+    /// which update allowance was being auctioned off
     /// @param signature Signature provided by the auctioneer attesting that
     /// the sender has won the auction
     function payOevBid(
@@ -106,8 +106,7 @@ contract Api3ServerV1OevExtension is
         bytes calldata signature
     ) external payable override {
         require(dappId != 0, "dApp ID zero");
-        // Do not allow the bid to be paid if the update allowance will be
-        // useless
+        // Do not allow the bid to be paid if the update allowance is of no use
         require(
             updateAllowanceEndTimestamp > block.timestamp,
             "Timestamp stale"
@@ -240,7 +239,7 @@ contract Api3ServerV1OevExtension is
     /// `simulateDappOevDataFeedUpdate()` multiple times to update the relevant
     /// feeds, followed by an external call to the liquidator contract of the
     /// searcher, which is built to return the revenue from the liquidation.
-    /// The returned value would then used to determine the bid amount.
+    /// The returned value would then be used to determine the bid amount.
     /// @param target Target address of the external call
     /// @param data Calldata of the external call
     /// @return Returndata of the external call
@@ -282,7 +281,7 @@ contract Api3ServerV1OevExtension is
     /// feed value and signature belonging to each Beacon. Similar to base feed
     /// updates, OEV feed updates allow individual Beacon updates to be omitted
     /// (in this case by leaving the signature empty) in case signed data for
-    /// some of the Beacons are unavailable.
+    /// some of the Beacons is not available.
     /// @return baseDataFeedId Base data feed ID
     /// @return updatedValue Updated value
     /// @return updatedTimestamp Updated timestamp
@@ -314,7 +313,7 @@ contract Api3ServerV1OevExtension is
             baseDataFeedId = deriveBeaconId(airnode, templateId);
             // Each base feed has an OEV equivalent specific to each dApp. The
             // ID of these OEV feeds are simply the dApp ID and the base data
-            // feed ID hashed together, indepenent from if the base feed is a
+            // feed ID hashed together, independent from if the base feed is a
             // Beacon or Beacon set.
             bytes32 oevBeaconId = keccak256(
                 abi.encodePacked(dappId, baseDataFeedId)

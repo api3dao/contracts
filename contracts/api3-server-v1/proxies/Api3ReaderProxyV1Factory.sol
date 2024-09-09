@@ -4,8 +4,8 @@ pragma solidity 0.8.27;
 import "../../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
 import "./interfaces/IApi3ReaderProxyV1Factory.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/ERC1967/ERC1967Proxy.sol";
-import "./Api3ReaderProxyV1.sol";
 import "../../vendor/@openzeppelin/contracts@5.0.2/utils/Create2.sol";
+import "./Api3ReaderProxyV1.sol";
 
 /// @title Factory contract that deploys Api3ReaderProxyV1 implementations and
 /// their upgradeable proxies

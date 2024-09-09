@@ -4,20 +4,20 @@ pragma solidity 0.8.27;
 import "../access/HashRegistry.sol";
 import "../utils/ExtendedSelfMulticall.sol";
 import "./interfaces/IApi3MarketV2.sol";
-import "./interfaces/IAirseekerRegistry.sol";
 import "../vendor/@openzeppelin/contracts@5.0.2/utils/math/SafeCast.sol";
 import "../vendor/@openzeppelin/contracts@5.0.2/utils/cryptography/MerkleProof.sol";
 import "./interfaces/IApi3ServerV1.sol";
-import "./proxies/interfaces/IApi3ReaderProxyV1Factory.sol";
 import "./interfaces/IApi3ServerV1OevExtension.sol";
+import "./proxies/interfaces/IApi3ReaderProxyV1Factory.sol";
+import "./interfaces/IAirseekerRegistry.sol";
 
 /// @title The contract that API3 users interact with using the API3 Market
 /// frontend to purchase data feed subscriptions
 /// @notice API3 aims to streamline and protocolize its integration processes
 /// through the API3 Market (https://market.api3.org), which is a data feed
-/// subscription marketplace. The Api3Market contract is the on-chain portion
+/// subscription marketplace. The Api3MarketV2 contract is the on-chain portion
 /// of this system.
-/// Api3Market enables API3 to predetermine the decisions related to its data
+/// Api3MarketV2 enables API3 to predetermine the decisions related to its data
 /// feed services (such as the curation of data feed sources or subscription
 /// prices) and publish them on-chain. This streamlines the intergation flow,
 /// as it allows the users to initiate subscriptions immediately, without
@@ -29,7 +29,7 @@ import "./interfaces/IApi3ServerV1OevExtension.sol";
 /// @dev The user is strongly recommended to use the API3 Market frontend while
 /// interacting with this contract, mostly because doing so successfully
 /// requires some amount of knowledge of other API3 contracts. Specifically,
-/// Api3Market requires the data feed for which the subscription is being
+/// Api3MarketV2 requires the data feed for which the subscription is being
 /// purchased to be "readied", the correct Merkle proofs to be provided, and
 /// enough payment to be made. The API3 Market frontend will fetch the
 /// appropriate Merkle proofs, create a multicall transaction that will ready
@@ -78,7 +78,7 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// @notice Api3ServerV1 contract address
     address public immutable override api3ServerV1;
 
-    /// @notice ProxyFactory contract address
+    /// @notice Api3ReaderProxyV1Factory contract address
     address public immutable override api3ReaderProxyV1Factory;
 
     /// @notice AirseekerRegistry contract address
@@ -112,14 +112,11 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     // Length of abi.encode(uint256, int224, uint256)
     uint256 private constant UPDATE_PARAMETERS_LENGTH = 32 + 32 + 32;
 
-    bytes32 private constant API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE =
+    bytes32 private constant API3MARKETV2_SIGNATURE_DELEGATION_HASH_TYPE =
         keccak256(abi.encodePacked("Api3MarketV2 signature delegation"));
 
-    /// @dev Api3Market deploys its own AirseekerRegistry deterministically.
-    /// This implies that Api3Market-specific Airseekers should be operated by
-    /// pointing at this contract.
-    /// The maximum subscription queue length should be large enough to not
-    /// obstruct subscription purchases under usual conditions, and small
+    /// @dev The maximum subscription queue length should be large enough to
+    /// not obstruct subscription purchases under usual conditions, and small
     /// enough to keep the queue at an iterable size. For example, if the
     /// number of unique update parameters in the dAPI pricing Merkle trees
     /// that are being used is around 5, a maximum subscription queue length of
@@ -139,11 +136,10 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
             "Maximum queue length zero"
         );
         api3ReaderProxyV1Factory = api3ReaderProxyV1Factory_;
-        address api3ServerV1_ = IApi3ServerV1OevExtension(
+        api3ServerV1 = IApi3ServerV1OevExtension(
             IApi3ReaderProxyV1Factory(api3ReaderProxyV1Factory_)
                 .api3ServerV1OevExtension()
         ).api3ServerV1();
-        api3ServerV1 = api3ServerV1_;
         maximumSubscriptionQueueLength = maximumSubscriptionQueueLength_;
     }
 
@@ -171,6 +167,16 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     }
 
     /// @notice Called once by the owner to set the AirseekerRegistry address
+    /// @dev There is a circular dependency between an Api3MarketV2 and its
+    /// respective AirseekerRegistry. In a previous implementation,
+    /// Api3MarketV2 deployed its AirseekerRegistry in its constructor, yet the
+    /// resulting deployment transaction required too much gas, which ended up
+    /// being an issue on some chains. Instead, the current deployment flow is
+    /// for Api3MarketV2 to be deployed with a transaction, AirseekerRegistry
+    /// to be deployed with another transaction with the Api3MarketV2 address
+    /// as an argument, and finally, for the Api3MarketV2 owner to set the
+    /// AirseekerRegister address with a third transaction.
+    /// Once the AirseekerRegister address is set, it cannot be updated.
     /// @param airseekerRegistry_ AirseekerRegistry address
     function setAirseekerRegistry(
         address airseekerRegistry_
@@ -522,9 +528,11 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
             IApi3ServerV1(api3ServerV1).updateBeaconSetWithBeacons(beaconIds);
     }
 
-    /// @notice Calls Api3ReaderProxyV1Factory to deterministically deploy Api3ReaderProxyV1
+    /// @notice Calls Api3ReaderProxyV1Factory to deterministically deploy an
+    /// Api3ReaderProxyV1
     /// @dev It is recommended for the users to read data feeds through proxies
-    /// deployed by ProxyFactory, rather than calling Api3ServerV1 directly.
+    /// deployed by Api3ReaderProxyV1Factory, rather than calling Api3ServerV1
+    /// directly.
     /// Even though proxy deployment is not a condition for purchasing
     /// subscriptions, the interface is implemented here to allow the user to
     /// purchase a dAPI subscription and deploy the respective proxy in the
@@ -813,7 +821,7 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
         override(HashRegistry, IHashRegistry)
         returns (bytes32)
     {
-        return API3MARKET_SIGNATURE_DELEGATION_HASH_TYPE;
+        return API3MARKETV2_SIGNATURE_DELEGATION_HASH_TYPE;
     }
 
     /// @notice Adds the subscription to the queue if applicable
@@ -928,7 +936,7 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// added.
     /// It reverts if no suitable position can be found, which would be because
     /// the addition of the subscription to the queue does not upgrade its
-    /// specs unambiguously or addition of it results in the maximum queue
+    /// specs unambiguously or the addition of it results in the maximum queue
     /// length to be exceeded.
     /// @param dapiName dAPI name
     /// @param updateParameters Update parameters

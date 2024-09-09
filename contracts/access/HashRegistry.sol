@@ -18,10 +18,10 @@ import "../vendor/@openzeppelin/contracts@5.0.2/utils/cryptography/ECDSA.sol";
 /// override previously registered hashes.
 /// A signer can sign a delegation message that allows the delegate to sign
 /// hashes on their behalf across all instances of this contract until the
-/// specified time. This delegation is irrevocable by design (as revoking across
-/// all instances would be error-prone). To undo an unwanted delegation, the
-/// signer must be swapped out by the contract owner until the delegation runs
-/// out.
+/// specified time. This delegation is irrevocable by design (as revoking
+/// across all instances would be error-prone). To undo an unwanted delegation,
+/// the signer must be swapped out by the contract owner until the delegation
+/// runs out.
 /// @dev This contract can be used in standalone form to be referred to through
 /// external calls, or inherited by the contract that will access the
 /// registered hashes internally.

@@ -3,7 +3,7 @@ pragma solidity 0.8.27;
 
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
 import "../../vendor/@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
-import {AggregatorV2V3Interface} from "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
+import "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "./interfaces/IApi3ReaderProxyV1.sol";
 import "../interfaces/IApi3ServerV1.sol";
 import "../interfaces/IApi3ServerV1OevExtension.sol";
@@ -172,7 +172,7 @@ contract Api3ReaderProxyV1 is
         revert FunctionIsNotSupported();
     }
 
-    /// @dev Rounds IDs are returned as `0` as invalid round IDs.
+    /// @dev Rounds IDs are returned as `0` as invalid values.
     /// Similar to `latestAnswer()`, we leave the validation of the returned
     /// value to the caller.
     function latestRoundData()
