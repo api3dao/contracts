@@ -614,9 +614,9 @@ describe('Api3MarketV2', function () {
     context('Sender is not the owner', function () {
       it('reverts', async function () {
         const { roles, airseekerRegistry, api3MarketV2 } = await helpers.loadFixture(deploy);
-        await expect(
-          api3MarketV2.connect(roles.randomPerson).setAirseekerRegistry(airseekerRegistry.getAddress())
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(api3MarketV2.connect(roles.randomPerson).setAirseekerRegistry(airseekerRegistry.getAddress()))
+          .to.be.revertedWithCustomError(api3MarketV2, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -3064,7 +3064,9 @@ describe('Api3MarketV2', function () {
           api3MarketV2
             .connect(roles.randomPerson)
             .cancelSubscriptions(dapiManagementMerkleLeaves.ethUsd!.values.dapiName)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        )
+          .to.be.revertedWithCustomError(api3MarketV2, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });

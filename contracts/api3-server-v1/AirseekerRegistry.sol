@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity 0.8.20;
 
-import "../vendor/@openzeppelin/contracts@4.9.5/access/Ownable.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
 import "../utils/ExtendedSelfMulticall.sol";
 import "./interfaces/IAirseekerRegistry.sol";
-import "../vendor/@openzeppelin/contracts@4.9.5/utils/structs/EnumerableSet.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/utils/structs/EnumerableSet.sol";
 import "./interfaces/IApi3ServerV1.sol";
 
 /// @title A contract where active data feeds and their specs are registered by
@@ -126,10 +126,8 @@ contract AirseekerRegistry is
 
     /// @param owner_ Owner address
     /// @param api3ServerV1_ Api3ServerV1 contract address
-    constructor(address owner_, address api3ServerV1_) {
-        require(owner_ != address(0), "Owner address zero");
+    constructor(address owner_, address api3ServerV1_) Ownable(owner_) {
         require(api3ServerV1_ != address(0), "Api3ServerV1 address zero");
-        _transferOwnership(owner_);
         api3ServerV1 = api3ServerV1_;
     }
 

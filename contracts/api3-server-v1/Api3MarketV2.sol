@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity 0.8.20;
 
 import "../access/HashRegistry.sol";
 import "../utils/ExtendedSelfMulticall.sol";
 import "./interfaces/IApi3MarketV2.sol";
 import "./interfaces/IAirseekerRegistry.sol";
-import "../vendor/@openzeppelin/contracts@4.9.5/utils/math/SafeCast.sol";
-import "../vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/MerkleProof.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/utils/math/SafeCast.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/utils/cryptography/MerkleProof.sol";
 import "./interfaces/IApi3ServerV1.sol";
 import "./proxies/interfaces/IApi3ReaderProxyV1Factory.sol";
 import "./interfaces/IApi3ServerV1OevExtension.sol";

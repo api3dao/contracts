@@ -111,9 +111,9 @@ describe('AirseekerRegistry', function () {
       it('reverts', async function () {
         const { roles, api3ServerV1 } = await helpers.loadFixture(deploy);
         const AirseekerRegistry = await ethers.getContractFactory('AirseekerRegistry', roles.deployer);
-        await expect(AirseekerRegistry.deploy(ethers.ZeroAddress, api3ServerV1.getAddress())).to.be.revertedWith(
-          'Owner address zero'
-        );
+        await expect(AirseekerRegistry.deploy(ethers.ZeroAddress, api3ServerV1.getAddress()))
+          .to.be.revertedWithCustomError(AirseekerRegistry, 'OwnableInvalidOwner')
+          .withArgs(ethers.ZeroAddress);
       });
     });
   });
@@ -180,9 +180,9 @@ describe('AirseekerRegistry', function () {
     context('Sender is not the owner', function () {
       it('reverts', async function () {
         const { roles, dataFeedId, airseekerRegistry } = await helpers.loadFixture(deploy);
-        await expect(
-          airseekerRegistry.connect(roles.randomPerson).setDataFeedIdToBeActivated(dataFeedId)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(airseekerRegistry.connect(roles.randomPerson).setDataFeedIdToBeActivated(dataFeedId))
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -231,9 +231,9 @@ describe('AirseekerRegistry', function () {
     context('Sender is not the owner', function () {
       it('reverts', async function () {
         const { roles, dapiName, airseekerRegistry } = await helpers.loadFixture(deploy);
-        await expect(
-          airseekerRegistry.connect(roles.randomPerson).setDapiNameToBeActivated(dapiName)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(airseekerRegistry.connect(roles.randomPerson).setDapiNameToBeActivated(dapiName))
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -276,9 +276,9 @@ describe('AirseekerRegistry', function () {
     context('Sender is not the owner', function () {
       it('reverts', async function () {
         const { roles, dataFeedId, airseekerRegistry } = await helpers.loadFixture(deploy);
-        await expect(
-          airseekerRegistry.connect(roles.randomPerson).setDataFeedIdToBeDeactivated(dataFeedId)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(airseekerRegistry.connect(roles.randomPerson).setDataFeedIdToBeDeactivated(dataFeedId))
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -321,9 +321,9 @@ describe('AirseekerRegistry', function () {
     context('Sender is not the owner', function () {
       it('reverts', async function () {
         const { roles, dapiName, airseekerRegistry } = await helpers.loadFixture(deploy);
-        await expect(
-          airseekerRegistry.connect(roles.randomPerson).setDapiNameToBeDeactivated(dapiName)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(airseekerRegistry.connect(roles.randomPerson).setDapiNameToBeDeactivated(dapiName))
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -399,7 +399,9 @@ describe('AirseekerRegistry', function () {
         const updateParameters = encodeUpdateParameters(1_000_000, 0, 24 * 60 * 60);
         await expect(
           airseekerRegistry.connect(roles.randomPerson).setDataFeedIdUpdateParameters(dataFeedId, updateParameters)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        )
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -477,7 +479,9 @@ describe('AirseekerRegistry', function () {
         const updateParameters = encodeUpdateParameters(1_000_000, 0, 24 * 60 * 60);
         await expect(
           airseekerRegistry.connect(roles.randomPerson).setDapiNameUpdateParameters(dapiName, updateParameters)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        )
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -537,9 +541,9 @@ describe('AirseekerRegistry', function () {
         const { roles, airseekerRegistry } = await helpers.loadFixture(deploy);
         const airnodeAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
         const signedApiUrl = 'https://signed-api.airnode.com';
-        await expect(
-          airseekerRegistry.connect(roles.randomPerson).setSignedApiUrl(airnodeAddress, signedApiUrl)
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        await expect(airseekerRegistry.connect(roles.randomPerson).setSignedApiUrl(airnodeAddress, signedApiUrl))
+          .to.be.revertedWithCustomError(airseekerRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });

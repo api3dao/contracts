@@ -103,7 +103,9 @@ describe('HashRegistry', function () {
       it('reverts', async function () {
         const { roles } = await helpers.loadFixture(deploy);
         const HashRegistry = await ethers.getContractFactory('HashRegistry', roles.deployer);
-        await expect(HashRegistry.deploy(ethers.ZeroAddress)).to.be.revertedWith('Owner address zero');
+        await expect(HashRegistry.deploy(ethers.ZeroAddress))
+          .to.be.revertedWithCustomError(HashRegistry, 'OwnableInvalidOwner')
+          .withArgs(ethers.ZeroAddress);
       });
     });
   });
@@ -217,7 +219,9 @@ describe('HashRegistry', function () {
             hashTypeA,
             sortedHashTypeASigners.map((signer) => signer.address)
           )
-        ).to.be.revertedWith('Ownable: caller is not the owner');
+        )
+          .to.be.revertedWithCustomError(hashRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });
@@ -246,9 +250,9 @@ describe('HashRegistry', function () {
       it('reverts', async function () {
         const { hashTypeA, roles, hashRegistry } = await helpers.loadFixture(deployAndSetSigners);
         const hash = ethers.hexlify(ethers.randomBytes(32));
-        await expect(hashRegistry.connect(roles.randomPerson).setHash(hashTypeA, hash)).to.be.revertedWith(
-          'Ownable: caller is not the owner'
-        );
+        await expect(hashRegistry.connect(roles.randomPerson).setHash(hashTypeA, hash))
+          .to.be.revertedWithCustomError(hashRegistry, 'OwnableUnauthorizedAccount')
+          .withArgs(roles.randomPerson!.address);
       });
     });
   });

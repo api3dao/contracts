@@ -22,11 +22,6 @@ async function main() {
       packageContractsPath: '',
     },
     {
-      path: join('@openzeppelin', 'contracts@4.9.5'),
-      tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-4.9.5.tgz',
-      packageContractsPath: '',
-    },
-    {
       path: join('@openzeppelin', 'contracts@5.0.2'),
       tarballUrl: 'https://registry.npmjs.org/@openzeppelin/contracts/-/contracts-5.0.2.tgz',
       packageContractsPath: '',

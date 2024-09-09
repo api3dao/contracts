@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.17;
+pragma solidity 0.8.20;
 
-import "../vendor/@openzeppelin/contracts@4.9.5/access/Ownable.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/access/Ownable.sol";
 import "./interfaces/IHashRegistry.sol";
-import "../vendor/@openzeppelin/contracts@4.9.5/utils/cryptography/ECDSA.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/utils/cryptography/MessageHashUtils.sol";
+import "../vendor/@openzeppelin/contracts@5.0.2/utils/cryptography/ECDSA.sol";
 
 /// @title A contract where a value for each hash type can be registered using
 /// the signatures of the respective signers that are set by the contract owner
@@ -48,11 +49,8 @@ contract HashRegistry is Ownable, IHashRegistry {
     uint256 private constant DELEGATED_SIGNATURE_LENGTH =
         32 + 32 + 32 + (32 + 96) + (32 + 96);
 
-    /// @param owner_ Owner address
-    constructor(address owner_) {
-        require(owner_ != address(0), "Owner address zero");
-        _transferOwnership(owner_);
-    }
+    /// @param initialOwner Initial owner address
+    constructor(address initialOwner) Ownable(initialOwner) {}
 
     /// @notice Returns the owner address
     /// @return Owner address
@@ -143,7 +141,7 @@ contract HashRegistry is Ownable, IHashRegistry {
         require(signersHash != bytes32(0), "Signers not set");
         uint256 signaturesCount = signatures.length;
         address[] memory signers = new address[](signaturesCount);
-        bytes32 ethSignedMessageHash = ECDSA.toEthSignedMessageHash(
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(
             keccak256(abi.encodePacked(hashType, hashValue, hashTimestamp))
         );
         for (uint256 ind = 0; ind < signaturesCount; ind++) {
@@ -164,7 +162,7 @@ contract HashRegistry is Ownable, IHashRegistry {
                     "Delegation ended"
                 );
                 signers[ind] = ECDSA.recover(
-                    ECDSA.toEthSignedMessageHash(
+                    MessageHashUtils.toEthSignedMessageHash(
                         keccak256(
                             abi.encodePacked(
                                 signatureDelegationHashType(),
