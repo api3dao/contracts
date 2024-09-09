@@ -545,6 +545,82 @@ describe('Api3MarketV2', function () {
     });
   });
 
+  describe('setAirseekerRegistry', function () {
+    context('Sender is the owner', function () {
+      context('AirseekerRegistry address is not zero', function () {
+        context('AirseekerRegistry address is not set yet', function () {
+          context('AirseekerRegistry owner is Api3MarketV2', function () {
+            it('sets AirseekerRegistry address', async function () {
+              const { roles, api3ServerV1, api3ReaderProxyV1Factory } = await helpers.loadFixture(deploy);
+              const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
+              const api3MarketV2 = await Api3MarketV2.deploy(
+                roles.owner!.address,
+                api3ReaderProxyV1Factory.getAddress(),
+                MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
+              );
+              const AirseekerRegistry = await ethers.getContractFactory('AirseekerRegistry', roles.deployer);
+              const airseekerRegistry = await AirseekerRegistry.deploy(
+                api3MarketV2.getAddress(),
+                api3ServerV1.getAddress()
+              );
+              await expect(api3MarketV2.connect(roles.owner).setAirseekerRegistry(airseekerRegistry.getAddress()))
+                .to.emit(api3MarketV2, 'SetAirseekerRegistry')
+                .withArgs(await airseekerRegistry.getAddress());
+              expect(await api3MarketV2.airseekerRegistry()).to.equal(await airseekerRegistry.getAddress());
+            });
+          });
+          context('AirseekerRegistry owner is not Api3MarketV2', function () {
+            it('reverts', async function () {
+              const { roles, api3ReaderProxyV1Factory, api3ServerV1 } = await helpers.loadFixture(deploy);
+              const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
+              const api3MarketV2 = await Api3MarketV2.deploy(
+                roles.owner!.address,
+                api3ReaderProxyV1Factory.getAddress(),
+                MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH
+              );
+              const AirseekerRegistry = await ethers.getContractFactory('AirseekerRegistry', roles.deployer);
+              const airseekerRegistry = await AirseekerRegistry.deploy(
+                roles.randomPerson!.address,
+                api3ServerV1.getAddress()
+              );
+              await expect(
+                api3MarketV2.connect(roles.owner).setAirseekerRegistry(airseekerRegistry.getAddress())
+              ).to.be.revertedWith('Not AirseekerRegistry owner');
+              // Will revert without reason if the provided AirseekerRegistry address does not implement the Ownable interface
+              await expect(
+                api3MarketV2.connect(roles.owner).setAirseekerRegistry(api3ServerV1.getAddress())
+              ).to.be.revertedWithoutReason();
+            });
+          });
+        });
+        context('AirseekerRegistry address is already set', function () {
+          it('reverts', async function () {
+            const { roles, airseekerRegistry, api3MarketV2 } = await helpers.loadFixture(deploy);
+            await expect(
+              api3MarketV2.connect(roles.owner).setAirseekerRegistry(airseekerRegistry.getAddress())
+            ).to.be.revertedWith('AirseekerRegistry already set');
+          });
+        });
+      });
+      context('AirseekerRegistry address is zero', function () {
+        it('reverts', async function () {
+          const { roles, api3MarketV2 } = await helpers.loadFixture(deploy);
+          await expect(api3MarketV2.connect(roles.owner).setAirseekerRegistry(ethers.ZeroAddress)).to.be.revertedWith(
+            'AirseekerRegistry address zero'
+          );
+        });
+      });
+    });
+    context('Sender is not the owner', function () {
+      it('reverts', async function () {
+        const { roles, airseekerRegistry, api3MarketV2 } = await helpers.loadFixture(deploy);
+        await expect(
+          api3MarketV2.connect(roles.randomPerson).setAirseekerRegistry(airseekerRegistry.getAddress())
+        ).to.be.revertedWith('Ownable: caller is not the owner');
+      });
+    });
+  });
+
   describe('buySubscription', function () {
     context('Arguments are valid', function () {
       context('New subscription can be added to the queue', function () {
@@ -4000,6 +4076,22 @@ describe('Api3MarketV2', function () {
           ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(['bytes32[]'], [[beaconIds[0], beaconIds[1]]])),
           (beaconReadings[0]!.value + beaconReadings[1]!.value) / BigInt(2),
           (BigInt(beaconReadings[0]!.timestamp) + BigInt(beaconReadings[1]!.timestamp)) / BigInt(2)
+        );
+    });
+  });
+
+  describe('deployApi3ReaderProxyV1', function () {
+    it('deploys Api3ReaderProxyV1', async function () {
+      const { roles, api3ReaderProxyV1Factory, api3MarketV2, dapiName } = await helpers.loadFixture(deploy);
+      const dappId = 1;
+      const metadata = '0x12345678';
+      await expect(api3MarketV2.connect(roles.randomPerson).deployApi3ReaderProxyV1(dapiName, dappId, metadata))
+        .to.emit(api3ReaderProxyV1Factory, 'DeployedApi3ReaderProxyV1')
+        .withArgs(
+          await api3ReaderProxyV1Factory.computeApi3ReaderProxyV1Address(dapiName, dappId, metadata),
+          dapiName,
+          dappId,
+          metadata
         );
     });
   });

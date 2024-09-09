@@ -5,6 +5,8 @@ import "../../access/interfaces/IHashRegistry.sol";
 import "../../utils/interfaces/IExtendedSelfMulticall.sol";
 
 interface IApi3MarketV2 is IHashRegistry, IExtendedSelfMulticall {
+    event SetAirseekerRegistry(address airseekerRegistry);
+
     event BoughtSubscription(
         bytes32 indexed dapiName,
         bytes32 indexed subscriptionId,
@@ -22,6 +24,8 @@ interface IApi3MarketV2 is IHashRegistry, IExtendedSelfMulticall {
         bytes32 indexed dapiName,
         bytes32 indexed subscriptionId
     );
+
+    function setAirseekerRegistry(address airseekerRegistry_) external;
 
     function buySubscription(
         bytes32 dapiName,

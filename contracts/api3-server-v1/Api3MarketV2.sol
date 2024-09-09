@@ -147,22 +147,6 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
         maximumSubscriptionQueueLength = maximumSubscriptionQueueLength_;
     }
 
-    // override
-    function setAirseekerRegistry(
-        address airseekerRegistry_
-    ) external onlyOwner {
-        require(
-            airseekerRegistry == address(0),
-            "AirseekerRegistry already set"
-        );
-        require(
-            IAirseekerRegistry(airseekerRegistry_).owner() == address(this),
-            "Not AirseekerRegistry owner"
-        );
-        airseekerRegistry = airseekerRegistry_;
-        // emit
-    }
-
     /// @notice Returns the owner address
     /// @return Owner address
     function owner()
@@ -184,6 +168,27 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
         address
     ) public pure override(HashRegistry, IOwnable) {
         revert("Ownership cannot be transferred");
+    }
+
+    /// @notice Called once by the owner to set the AirseekerRegistry address
+    /// @param airseekerRegistry_ AirseekerRegistry address
+    function setAirseekerRegistry(
+        address airseekerRegistry_
+    ) external override onlyOwner {
+        require(
+            airseekerRegistry_ != address(0),
+            "AirseekerRegistry address zero"
+        );
+        require(
+            airseekerRegistry == address(0),
+            "AirseekerRegistry already set"
+        );
+        require(
+            IAirseekerRegistry(airseekerRegistry_).owner() == address(this),
+            "Not AirseekerRegistry owner"
+        );
+        airseekerRegistry = airseekerRegistry_;
+        emit SetAirseekerRegistry(airseekerRegistry_);
     }
 
     /// @notice Buys subscription and updates the current subscription ID if
