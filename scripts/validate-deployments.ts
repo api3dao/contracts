@@ -11,7 +11,7 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import managerMultisigAddresses from '../data/manager-multisig.json';
-import type { AccessControlRegistry, OwnableCallForwarder } from '../src/index';
+import type { /* AccessControlRegistry, */ OwnableCallForwarder } from '../src/index';
 
 async function validateDeployments(network: string) {
   if (Object.keys(managerMultisigAddresses).includes(network)) {

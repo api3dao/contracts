@@ -1,4 +1,4 @@
-import { config, deployments, getUnnamedAccounts, network, run } from 'hardhat';
+import { /* config, */ deployments, getUnnamedAccounts, network, run } from 'hardhat';
 
 import {
   chainsSupportedByDapis,
@@ -6,11 +6,11 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import managerMultisigAddresses from '../data/manager-multisig.json';
-import { computeApi3MarketAirseekerRegistryAddress } from '../src/index';
+// import { computeApi3MarketAirseekerRegistryAddress } from '../src/index';
 
 module.exports = async () => {
   const accounts = await getUnnamedAccounts();
-  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+  // const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (Object.keys(managerMultisigAddresses).includes(network.name)) {
     const OwnableCallForwarder = await deployments.get('OwnableCallForwarder');
