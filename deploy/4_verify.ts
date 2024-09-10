@@ -32,6 +32,7 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
+        /*
         const Api3Market = await deployments.get('Api3Market');
         await run('verify:verify', {
           address: Api3Market.address,
@@ -48,6 +49,7 @@ module.exports = async () => {
           address: airseekerRegistryAddress,
           constructorArguments: [Api3Market.address, Api3ServerV1.address],
         });
+        */
       }
 
       if (chainsSupportedByOevAuctions.includes(network.name)) {

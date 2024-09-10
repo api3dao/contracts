@@ -27,7 +27,7 @@ module.exports = () => {
     const contractNames = [
       ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network) ? ['AccessControlRegistry', 'Api3ServerV1'] : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
+      //...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {

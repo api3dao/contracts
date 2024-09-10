@@ -59,6 +59,7 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
+        /*
         await deployments.get('Api3Market').catch(async () => {
           log(`Deploying Api3Market`);
           return deploy('Api3Market', {
@@ -72,6 +73,7 @@ module.exports = async () => {
             deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
           });
         });
+        */
       }
 
       if (chainsSupportedByOevAuctions.includes(network.name)) {

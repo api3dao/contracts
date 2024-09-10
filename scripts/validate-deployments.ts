@@ -47,6 +47,7 @@ async function validateDeployments(network: string) {
       );
     }
     if (chainsSupportedByMarket.includes(network)) {
+      /*
       // Validate that Api3Market is a dAPI name setter
       const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
       const adminRole = ethers.solidityPackedKeccak256(
@@ -87,6 +88,7 @@ async function validateDeployments(network: string) {
       if (!goFetchApi3MarketDapiNameSetterRoleStatus.data) {
         throw new Error(`${network} Api3Market does not have the dAPI name setter role`);
       }
+        */
     }
   }
 }
