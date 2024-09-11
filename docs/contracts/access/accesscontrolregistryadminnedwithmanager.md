@@ -15,14 +15,6 @@ Here, Editor and Viewer are contract-specific roles that the inheriting contract
 Admin Role is an abstraction layer that can grant or revoke the contract-specific roles.
 In most cases, the admin role will only be granted to the manager, yet being able to grant it to other accounts provides flexibility.
 
-> **Warning**
->
-> The access control contracts in this repo uses the term "admin" in two different contexts:
->
-> 1. `adminRole` in AccessControlRegistry, in the same way that OpenZeppelin uses it in AccessControl (i.e., if Role A is the admin role of Role B, accounts that have Role A can grant and revoke Role B)
-> 1. `adminRole` in AccessControlRegistryAdminned and AccessControlRegistryAdminnedWithManager, referring to the abstraction layer between the root role and the contract-specific roles (as seen in the example tree above).
->    This is also what AccessControlRegistry**Adminned** and AccessControlRegistry**Adminned**WithManager refer to.
-
 ## Choosing a manager
 
 Contracts inheriting AccessControlRegistryAdminnedWithManager must specify an immutable manager at deployment.
