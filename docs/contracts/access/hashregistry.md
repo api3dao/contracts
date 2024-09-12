@@ -1,9 +1,9 @@
 # HashRegistry.sol
 
 HashRegistry is a contract that is designed to mirror the governance decisions of a set of EOAs across a large number of chains with minimal operational friction.
-For example, this governance decision could be the list of [Airnode addresses](../../specs/airnode-protocol.md#airnode-address) that are decided to be used for each [dAPI](../api3-server-v1/api3serverv1.md#dapi).
+For example, this governance decision could be the list of [Airnode addresses](../../glossary.md#airnode-address) that are decided to be used for each [dAPI](../../glossary.md#dapi).
 
-This governance decision can be formatted as a Merkle tree.
+This governance decision can be represented as a Merkle tree.
 The set of EOAs can then sign the respective Merkle root (e.g., as the ["dAPI management Merkle root" hash type](../api3-server-v1/api3market.md#dapi-management-merkle-tree)) and publish their signatures.
 This would allow anyone to be able to register the Merkle root at any HashRegistry on any chain.
 
@@ -16,22 +16,22 @@ As the name implies, HashRegistry allows any hash of `bytes32` type to be regist
 
 It is typical for a Safe multisig contract to be used for multi-party governance purposes, yet the default Safe has the following shortcomings:
 
-- Safe uses ERC-712, which does not allow signatures to be replayed across chains.
-  Although this is typically a good idea, in the use case mentioned above, it would require the EOAs to sign a message for each chain.
+- Safe uses [ERC-712](https://eips.ethereum.org/EIPS/eip-712), which does not allow signatures to be replayed across chains.
+  Although this is typically a good idea, in the use-case mentioned above, it would require the EOAs to sign a message for each chain.
 - It is a common occurrence for a signer to have to take time off from signing.
   In such cases, Safe requires signers to be swapped out and in through transactions.
   This process is highly security-critical and error-prone, and it would have to be repeated for each chain.
 
 Safe is highly modular, and arguably, the issues above can be resolved by extending it through custom plugins.
-That being said, in this case where our needs are highly specific and minimal, we opted for a standalone implementation.
-Note that despite being a pseudo-multisig, HashRegistry does not support many commonplace multisig features (ERC-1271, signature threshold, etc.) because the specific use-case it was designed for does not need them.
+That being said, in this case where our needs are highly specific and minimal, we opted for a bespoke implementation.
+Note that despite being a pseudo-multisig, HashRegistry does not support many commonplace multisig features ([ERC-1271](https://eips.ethereum.org/EIPS/eip-1271), signature threshold, etc.) because the specific use-case it was designed for does not need them.
 
 ## The owner
 
 HashRegistry has an owner, which can set signers for specific hash types and set specific hashes.
 The owner can override the decisions of the signers it sets, and thus should be trusted enough to be able to do so.
 
-The ownership can be transferred or revoked similar to a generic Ownable contract, unless this functionality overriden.
+The ownership can be transferred or revoked similar to a generic Ownable contract, unless this functionality is overriden.
 
 ### Setting the signers for a hash type
 
@@ -48,7 +48,7 @@ HashRegistry is functionally an M-of-M multisig factory, where each hash type re
 This means that if the owner sets signers for a hash type, all signers must sign the respective hashes for them to be registered.
 
 While registering the signers, the array of signer addresses must be provided in ascending order.
-This implies that duplicates are not allowed.
+This implies that duplicate signers are not allowed.
 
 ### Setting the hash for a hash type
 
@@ -67,20 +67,20 @@ Differently from [hash registration](#hash-registration), the owner can set a ha
 
 Signers are hash type-specific and set by the owner.
 The contract does not store a list of signer addresses to optimize the gas cost of setting signers and validating signatures.
-However, the signers do get emitted in the `SetSigners` event.
+However, the list of signers does get emitted in the `SetSigners` event.
 
 ### Hash signatures
 
-The signers sign the following Ethereum signed message hash to sign a hash
+The hash signatures are in the following [ERC-191](https://eips.ethereum.org/EIPS/eip-191) format:
 
 ```solidity
-ECDSA.toEthSignedMessageHash(
+bytes32 ethSignedMessageHash = toEthSignedMessageHash(
     keccak256(abi.encodePacked(
         hashType,
         hashValue,
         hashTimestamp
     ))
-)
+);
 ```
 
 Note that the signatures are created before the respective hash is registered, and it only matters if the signer is set as a signer during the registration transaction, and not while the signature is being created.
@@ -90,16 +90,16 @@ Instead, the signer can be swapped out to make their signatures invalid.
 
 ### Delegation signatures
 
-The signers sign the following Ethereum signed message hash to sign a delegation
+The delegation signatures are in the following [ERC-191](https://eips.ethereum.org/EIPS/eip-191) format:
 
 ```solidity
-ECDSA.toEthSignedMessageHash(
+bytes32 ethSignedMessageHash = toEthSignedMessageHash(
     keccak256(abi.encodePacked(
         signatureDelegationHashType(),
         delegate,
         delegationEndTimestamp
     ))
-)
+);
 ```
 
 This signature allows the hash signatures of the delegate to be used as a valid replacement of the (delegation) signer across all hash types until the delegation end timestamp.
@@ -132,14 +132,14 @@ function registerHash(
 
 The signatures must be provided by the respective signers of the hash type, sorted for the signer addresses to be in ascending order.
 
-Each signature can be an ECDSA signature by the signer, or the delegation end timestamp, delegation signature (by the signer of the hash type) and hash signature (by the delegate) as follows:
+Each signature can be an [ERC-191](https://eips.ethereum.org/EIPS/eip-191) signature by the signer, or the delegation end timestamp, delegation signature (by the signer of the hash type) and hash signature (by the delegate) as follows:
 
 ```solidity
-abi.encode(
+bytes memory delegateSignature = abi.encode(
     delegationEndTimestamp,
     delegationSignature,
     hashSignature
-)
+);
 ```
 
 ## Inheriting HashRegistry
@@ -148,14 +148,14 @@ HashRegistry allows its users to derive the hash types with any arbitrary conven
 If the user or inheriting contracts desire the hash types to be domain-specific, they can enforce them to be so.
 For example
 
-```sol
+```solidity
 bytes32 public constant DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE =
     keccak256(abi.encodePacked("dAPI management Merkle root"));
 ```
 
 is a generic hash type, while
 
-```sol
+```solidity
 bytes32 public constant DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE =
     keccak256(abi.encodePacked(block.chainid, "dAPI management Merkle root"));
 ```

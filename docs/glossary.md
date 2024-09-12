@@ -250,7 +250,7 @@ The ideal solution is to use a mix of both types.
 All [Airnode protocols](#airnode-protocol) include [Airnodes](#airnode) calling an API and signing the returned data to be ingested by a contract, where the signing scheme differs across protocols.
 However, this repo specifically refers to the kind of data signed by [Airnode feeds](#airnode-feed), served by [signed APIs](#signed-api) and used by [Airseekers](#airseeker) to update [data feeds](#data-feed) according to [update parameters](#update-parameters).
 
-The Airseeker protocol uses an ERC-191 signature of the [template](#template) ID, off-chain timestamp at the time of the API response and the data returned by the API processed and contract ABI-encoded in a `bytes` type by the respective [Airnode address](#airnode-address).
+The Airseeker protocol uses an [ERC-191](https://eips.ethereum.org/EIPS/eip-191) signature of the [template](#template) ID, off-chain timestamp at the time of the API response and the data returned by the API processed and contract ABI-encoded in a `bytes` type by the respective [Airnode address](#airnode-address).
 
 ```solidity
 bytes32 ethSignedMessageHash = keccak256(abi.encodePacked(templateId, timestamp, data)).toEthSignedMessageHash();
