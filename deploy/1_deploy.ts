@@ -61,11 +61,26 @@ module.exports = async () => {
         });
       });
 
-      await deployments.get('Api3ServerV1').catch(async () => {
+      const api3ServerV1 = await deployments.get('Api3ServerV1').catch(async () => {
         log(`Deploying Api3ServerV1`);
         return deploy('Api3ServerV1', {
           from: deployer!.address,
           args: [accessControlRegistry.address, 'Api3ServerV1 admin', await ownableCallForwarder.getAddress()],
+          log: true,
+          deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+        });
+      });
+
+      await deployments.get('Api3ServerV1OevExtension').catch(async () => {
+        log(`Deploying Api3ServerV1OevExtension`);
+        return deploy('Api3ServerV1OevExtension', {
+          from: deployer!.address,
+          args: [
+            accessControlRegistry.address,
+            'Api3ServerV1OevExtension admin',
+            await ownableCallForwarder.getAddress(),
+            api3ServerV1.address,
+          ],
           log: true,
           deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
         });

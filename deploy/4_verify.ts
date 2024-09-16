@@ -37,6 +37,17 @@ module.exports = async () => {
         constructorArguments: [AccessControlRegistry.address, 'Api3ServerV1 admin', OwnableCallForwarder.address],
       });
 
+      const Api3ServerV1OevExtension = await deployments.get('Api3ServerV1OevExtension');
+      await run('verify:verify', {
+        address: Api3ServerV1OevExtension.address,
+        constructorArguments: [
+          AccessControlRegistry.address,
+          'Api3ServerV1OevExtension admin',
+          OwnableCallForwarder.address,
+          Api3ServerV1.address,
+        ],
+      });
+
       if (chainsSupportedByMarket.includes(network.name)) {
         /*
         const Api3Market = await deployments.get('Api3Market');

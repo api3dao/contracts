@@ -27,7 +27,7 @@ async function verifyDeployments(network: string) {
   const contractNames = [
     ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
     ...(chainsSupportedByDapis.includes(network)
-      ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1']
+      ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension']
       : []),
     // ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
