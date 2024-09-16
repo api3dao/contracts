@@ -5,9 +5,18 @@ import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
-import { chainsSupportedByManagerMultisig, chainsSupportedByMarket } from '../data/chain-support.json';
+import {
+  chainsSupportedByManagerMultisig,
+  chainsSupportedByDapis,
+  chainsSupportedByMarket,
+} from '../data/chain-support.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
-import type { AccessControlRegistry, GnosisSafeWithoutProxy, OwnableCallForwarder } from '../src/index';
+import type {
+  AccessControlRegistry,
+  Api3ReaderProxyV1Factory,
+  GnosisSafeWithoutProxy,
+  OwnableCallForwarder,
+} from '../src/index';
 
 async function validateDeployments(network: string) {
   if (chainsSupportedByManagerMultisig.includes(network)) {
@@ -98,46 +107,78 @@ async function validateDeployments(network: string) {
         `${network} OwnableCallForwarder owner ${ethers.getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${ethers.getAddress(gnosisSafeWithoutProxyAddress)}`
       );
     }
-    if (chainsSupportedByMarket.includes(network)) {
-      // Validate that Api3MarketV2 is a dAPI name setter
-      const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
-      const adminRole = ethers.solidityPackedKeccak256(
-        ['bytes32', 'bytes32'],
-        [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1 admin'])]
+    if (chainsSupportedByDapis.includes(network)) {
+      // Validate that the Api3ReaderProxyV1Factory owner is OwnableCallForwarder
+      const { address: api3ReaderProxyV1FactoryAddress, abi: api3ReaderProxyV1FactoryAbi } = JSON.parse(
+        fs.readFileSync(join('deployments', network, `Api3ReaderProxyV1Factory.json`), 'utf8')
       );
-      const dapiNameSetterRole = ethers.solidityPackedKeccak256(
-        ['bytes32', 'bytes32'],
-        [adminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
-      );
-      const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
-        fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
-      );
-      const accessControlRegistry = new ethers.Contract(
-        accessControlRegistryAddress,
-        accessControlRegistryAbi,
+      const api3ReaderProxyV1Factory = new ethers.Contract(
+        api3ReaderProxyV1FactoryAddress,
+        api3ReaderProxyV1FactoryAbi,
         provider
-      ) as unknown as AccessControlRegistry;
-      const { address: api3MarketV2Address } = JSON.parse(
-        fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
-      );
-      const goFetchApi3MarketV2DapiNameSetterRoleStatus = await go(
-        async () => accessControlRegistry.hasRole(dapiNameSetterRole, api3MarketV2Address),
-        {
-          retries: 5,
-          attemptTimeoutMs: 10_000,
-          totalTimeoutMs: 50_000,
-          delay: {
-            type: 'random',
-            minDelayMs: 2000,
-            maxDelayMs: 5000,
-          },
-        }
-      );
-      if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.success) {
-        throw new Error(`${network} Api3MarketV2 dAPI name setter role status could not be fetched`);
+      ) as unknown as Api3ReaderProxyV1Factory;
+      const goFetchApi3ReaderProxyV1FactoryOwner = await go(async () => api3ReaderProxyV1Factory.owner(), {
+        retries: 5,
+        attemptTimeoutMs: 10_000,
+        totalTimeoutMs: 50_000,
+        delay: {
+          type: 'random',
+          minDelayMs: 2000,
+          maxDelayMs: 5000,
+        },
+      });
+      if (!goFetchApi3ReaderProxyV1FactoryOwner.success || !goFetchApi3ReaderProxyV1FactoryOwner.data) {
+        throw new Error(`${network} Api3ReaderProxyV1Factory owner could not be fetched`);
       }
-      if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.data) {
-        throw new Error(`${network} Api3MarketV2 does not have the dAPI name setter role`);
+      if (
+        ethers.getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data) !== ethers.getAddress(ownableCallForwarderAddress)
+      ) {
+        throw new Error(
+          `${network} Api3ReaderProxyV1Factory owner ${ethers.getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data)} is not the same as the OwnableCallForwarder address ${ethers.getAddress(ownableCallForwarderAddress)}`
+        );
+      }
+
+      if (chainsSupportedByMarket.includes(network)) {
+        // Validate that Api3MarketV2 is a dAPI name setter
+        const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
+        const adminRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1 admin'])]
+        );
+        const dapiNameSetterRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [adminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
+        );
+        const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
+        );
+        const accessControlRegistry = new ethers.Contract(
+          accessControlRegistryAddress,
+          accessControlRegistryAbi,
+          provider
+        ) as unknown as AccessControlRegistry;
+        const { address: api3MarketV2Address } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
+        );
+        const goFetchApi3MarketV2DapiNameSetterRoleStatus = await go(
+          async () => accessControlRegistry.hasRole(dapiNameSetterRole, api3MarketV2Address),
+          {
+            retries: 5,
+            attemptTimeoutMs: 10_000,
+            totalTimeoutMs: 50_000,
+            delay: {
+              type: 'random',
+              minDelayMs: 2000,
+              maxDelayMs: 5000,
+            },
+          }
+        );
+        if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.success) {
+          throw new Error(`${network} Api3MarketV2 dAPI name setter role status could not be fetched`);
+        }
+        if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.data) {
+          throw new Error(`${network} Api3MarketV2 does not have the dAPI name setter role`);
+        }
       }
     }
   }
