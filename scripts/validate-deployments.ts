@@ -6,11 +6,71 @@ import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
 import { chainsSupportedByManagerMultisig, chainsSupportedByMarket } from '../data/chain-support.json';
-import type { AccessControlRegistry, OwnableCallForwarder } from '../src/index';
+import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
+import type { AccessControlRegistry, GnosisSafeWithoutProxy, OwnableCallForwarder } from '../src/index';
 
 async function validateDeployments(network: string) {
   if (chainsSupportedByManagerMultisig.includes(network)) {
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+
+    // Validate the manager multisig owners and threshold
+    const { address: gnosisSafeWithoutProxyAddress, abi: gnosisSafeWithoutProxyAbi } = JSON.parse(
+      fs.readFileSync(join('deployments', network, `GnosisSafeWithoutProxy.json`), 'utf8')
+    );
+    const gnosisSafeWithoutProxy = new ethers.Contract(
+      gnosisSafeWithoutProxyAddress,
+      gnosisSafeWithoutProxyAbi,
+      provider
+    ) as unknown as GnosisSafeWithoutProxy;
+    const goFetchGnosisSafeWithoutProxyOwners = await go(async () => gnosisSafeWithoutProxy.getOwners(), {
+      retries: 5,
+      attemptTimeoutMs: 10_000,
+      totalTimeoutMs: 50_000,
+      delay: {
+        type: 'random',
+        minDelayMs: 2000,
+        maxDelayMs: 5000,
+      },
+    });
+    if (!goFetchGnosisSafeWithoutProxyOwners.success || !goFetchGnosisSafeWithoutProxyOwners.data) {
+      throw new Error(`${network} GnosisSafeWithoutProxy owners could not be fetched`);
+    }
+    const { owners: managerMultisigOwners, threshold: managerMultisigThreshold } =
+      managerMultisigMetadata[
+        CHAINS.find((chain) => chain.alias === process.env.NETWORK)?.testnet ? 'testnet' : 'mainnet'
+      ];
+    if (
+      managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
+      managerMultisigOwners.every(
+        (managerMultisigOwner: string, index: number) =>
+          ethers.getAddress(managerMultisigOwner) ===
+          ethers.getAddress(goFetchGnosisSafeWithoutProxyOwners.data[index]!)
+      )
+    ) {
+      throw new Error(
+        `${network} GnosisSafeWithoutProxy owners are expected to be\n${managerMultisigOwners}\nbut are\n${goFetchGnosisSafeWithoutProxyOwners.data}`
+      );
+    }
+
+    const goFetchGnosisSafeWithoutProxyThreshold = await go(async () => gnosisSafeWithoutProxy.getThreshold(), {
+      retries: 5,
+      attemptTimeoutMs: 10_000,
+      totalTimeoutMs: 50_000,
+      delay: {
+        type: 'random',
+        minDelayMs: 2000,
+        maxDelayMs: 5000,
+      },
+    });
+    if (!goFetchGnosisSafeWithoutProxyThreshold.success || !goFetchGnosisSafeWithoutProxyThreshold.data) {
+      throw new Error(`${network} GnosisSafeWithoutProxy threshold could not be fetched`);
+    }
+    if (BigInt(managerMultisigThreshold) !== goFetchGnosisSafeWithoutProxyThreshold.data) {
+      throw new Error(
+        `${network} GnosisSafeWithoutProxy threshold is expected to be ${managerMultisigThreshold} but is ${goFetchGnosisSafeWithoutProxyThreshold.data}`
+      );
+    }
+
     // Validate that the OwnableCallForwarder owner is the manager multisig
     const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = JSON.parse(
       fs.readFileSync(join('deployments', network, `OwnableCallForwarder.json`), 'utf8')
@@ -33,12 +93,9 @@ async function validateDeployments(network: string) {
     if (!goFetchOwnableCallForwarderOwner.success || !goFetchOwnableCallForwarderOwner.data) {
       throw new Error(`${network} OwnableCallForwarder owner could not be fetched`);
     }
-    const { address: managerMultisigAddress } = JSON.parse(
-      fs.readFileSync(join('deployments', network, `GnosisSafeWithoutProxy.json`), 'utf8')
-    );
-    if (ethers.getAddress(goFetchOwnableCallForwarderOwner.data) !== ethers.getAddress(managerMultisigAddress)) {
+    if (ethers.getAddress(goFetchOwnableCallForwarderOwner.data) !== ethers.getAddress(gnosisSafeWithoutProxyAddress)) {
       throw new Error(
-        `${network} OwnableCallForwarder owner ${ethers.getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${ethers.getAddress(managerMultisigAddress)}`
+        `${network} OwnableCallForwarder owner ${ethers.getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${ethers.getAddress(gnosisSafeWithoutProxyAddress)}`
       );
     }
     if (chainsSupportedByMarket.includes(network)) {
