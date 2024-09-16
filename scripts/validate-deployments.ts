@@ -140,7 +140,7 @@ async function validateDeployments(network: string) {
       }
 
       if (chainsSupportedByMarket.includes(network)) {
-        // Validate that Api3MarketV2 AirseekerRegistry is AirseekerRegistry
+        // Validate that the Api3MarketV2 AirseekerRegistry address belongs to AirseekerRegistry
         const { address: api3MarketV2Address, abi: api3MarketV2Abi } = JSON.parse(
           fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
         );
@@ -160,7 +160,7 @@ async function validateDeployments(network: string) {
           },
         });
         if (!goFetchApi3MarketV2AirseekerRegistry.success || !goFetchApi3MarketV2AirseekerRegistry.data) {
-          throw new Error(`${network} Api3MarketV2 AirseekerRegistry could not be fetched`);
+          throw new Error(`${network} Api3MarketV2 AirseekerRegistry address could not be fetched`);
         }
         const { address: airseekerRegistryAddress } = JSON.parse(
           fs.readFileSync(join('deployments', network, `AirseekerRegistry.json`), 'utf8')
