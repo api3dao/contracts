@@ -13,6 +13,7 @@ import {
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
 import type {
   AccessControlRegistry,
+  Api3MarketV2,
   Api3ReaderProxyV1Factory,
   GnosisSafeWithoutProxy,
   OwnableCallForwarder,
@@ -139,6 +140,39 @@ async function validateDeployments(network: string) {
       }
 
       if (chainsSupportedByMarket.includes(network)) {
+        // Validate that Api3MarketV2 AirseekerRegistry is AirseekerRegistry
+        const { address: api3MarketV2Address, abi: api3MarketV2Abi } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
+        );
+        const api3MarketV2 = new ethers.Contract(
+          api3MarketV2Address,
+          api3MarketV2Abi,
+          provider
+        ) as unknown as Api3MarketV2;
+        const goFetchApi3MarketV2AirseekerRegistry = await go(async () => api3MarketV2.airseekerRegistry(), {
+          retries: 5,
+          attemptTimeoutMs: 10_000,
+          totalTimeoutMs: 50_000,
+          delay: {
+            type: 'random',
+            minDelayMs: 2000,
+            maxDelayMs: 5000,
+          },
+        });
+        if (!goFetchApi3MarketV2AirseekerRegistry.success || !goFetchApi3MarketV2AirseekerRegistry.data) {
+          throw new Error(`${network} Api3MarketV2 AirseekerRegistry could not be fetched`);
+        }
+        const { address: airseekerRegistryAddress } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `AirseekerRegistry.json`), 'utf8')
+        );
+        if (
+          ethers.getAddress(goFetchApi3MarketV2AirseekerRegistry.data) !== ethers.getAddress(airseekerRegistryAddress)
+        ) {
+          throw new Error(
+            `${network} Api3MarketV2 AirseekerRegistry address ${ethers.getAddress(goFetchApi3MarketV2AirseekerRegistry.data)} is not the same as the AirseekerRegistry address ${airseekerRegistryAddress}`
+          );
+        }
+
         // Validate that Api3MarketV2 is a dAPI name setter
         const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
         const adminRole = ethers.solidityPackedKeccak256(
@@ -157,9 +191,6 @@ async function validateDeployments(network: string) {
           accessControlRegistryAbi,
           provider
         ) as unknown as AccessControlRegistry;
-        const { address: api3MarketV2Address } = JSON.parse(
-          fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
-        );
         const goFetchApi3MarketV2DapiNameSetterRoleStatus = await go(
           async () => accessControlRegistry.hasRole(dapiNameSetterRole, api3MarketV2Address),
           {
