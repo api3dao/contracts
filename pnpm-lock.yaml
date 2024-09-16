@@ -13,8 +13,8 @@ importers:
         version: 6.13.2
     devDependencies:
       '@api3/chains':
-        specifier: ^10.2.0
-        version: 10.2.0(typescript@5.5.4)
+        specifier: ^10.2.1
+        version: 10.2.1(typescript@5.5.4)
       '@api3/eslint-plugin-commons':
         specifier: ^1.0.1
         version: 1.0.1(eslint@8.57.0)(typescript@5.5.4)
@@ -118,8 +118,8 @@ packages:
   '@adraffy/ens-normalize@1.10.1':
     resolution: {integrity: sha512-96Z2IP3mYmF1Xg2cDm8f1gWGf/HUVedQ3FMifV4kG/PQ4yEP51xDtRAEfhVNt5f/uzpNkZHwWQuUcu6D6K+Ekw==}
 
-  '@api3/chains@10.2.0':
-    resolution: {integrity: sha512-83x5+nkn6CMGhvj5seYZhTgPKsYVflx7+akvyiKaJKziwW8wUi2B4QRAcPQcLMrF13qx/u6qwGVI9vmYbx/g7A==}
+  '@api3/chains@10.2.1':
+    resolution: {integrity: sha512-KN0lCj/l7OakpS+ZyB3jJm6lrPaT8GPwnjF0CfDl/OLmSx+frgfgfsCwYZ8YKtowO6OrzLE2oTxU48YwXToMeQ==}
 
   '@api3/eslint-plugin-commons@1.0.1':
     resolution: {integrity: sha512-KY46lDBa5QgqfYdD7D8kv0ZS8rtXgH2q1+7eeCvfDQD2jtWz9pzBoYXZ1Eu49P4e6NjeNn9PkYZElcdxXroVCg==}
@@ -3629,7 +3629,7 @@ snapshots:
 
   '@adraffy/ens-normalize@1.10.1': {}
 
-  '@api3/chains@10.2.0(typescript@5.5.4)':
+  '@api3/chains@10.2.1(typescript@5.5.4)':
     dependencies:
       viem: 2.21.3(typescript@5.5.4)(zod@3.23.8)
       zod: 3.23.8
@@ -4440,7 +4440,7 @@ snapshots:
     dependencies:
       '@noble/curves': 1.4.0
       '@noble/hashes': 1.4.0
-      '@scure/base': 1.1.7
+      '@scure/base': 1.1.8
 
   '@scure/bip39@1.1.1':
     dependencies:
@@ -7884,7 +7884,7 @@ snapshots:
   webauthn-p256@0.0.5:
     dependencies:
       '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
+      '@noble/hashes': 1.5.0
 
   which-boxed-primitive@1.0.2:
     dependencies:
