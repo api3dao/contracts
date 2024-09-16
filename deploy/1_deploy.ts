@@ -8,7 +8,7 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
-import type { OwnableCallForwarder } from '../src/index';
+import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
 
 module.exports = async () => {
   const { deploy, log } = deployments;
@@ -86,15 +86,35 @@ module.exports = async () => {
         });
       });
 
-      await deployments.get('Api3ReaderProxyV1Factory').catch(async () => {
-        log(`Deploying Api3ReaderProxyV1Factory`);
-        return deploy('Api3ReaderProxyV1Factory', {
-          from: deployer!.address,
-          args: [await ownableCallForwarder.getAddress(), api3ServerV1OevExtension.address],
-          log: true,
-          deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+      const { address: api3ReaderProxyV1FactoryAddress, abi: api3ReaderProxyV1FactoryAbi } = await deployments
+        .get('Api3ReaderProxyV1Factory')
+        .catch(async () => {
+          log(`Deploying Api3ReaderProxyV1Factory`);
+          return deploy('Api3ReaderProxyV1Factory', {
+            from: deployer!.address,
+            args: [await ownableCallForwarder.getAddress(), api3ServerV1OevExtension.address],
+            log: true,
+            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+          });
         });
-      });
+      const api3ReaderProxyV1Factory = new ethers.Contract(
+        api3ReaderProxyV1FactoryAddress,
+        api3ReaderProxyV1FactoryAbi,
+        deployer
+      ) as unknown as Api3ReaderProxyV1Factory;
+
+      const dapiName = ethers.encodeBytes32String('ETH/USD');
+      const dappId = 1;
+      const api3ReaderProxyV1Metadata = '0x';
+      const expectedApi3ReaderProxyV1Address = await api3ReaderProxyV1Factory.computeApi3ReaderProxyV1Address(
+        dapiName,
+        dappId,
+        api3ReaderProxyV1Metadata
+      );
+      if ((await ethers.provider.getCode(expectedApi3ReaderProxyV1Address)) === '0x') {
+        await api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(dapiName, dappId, api3ReaderProxyV1Metadata);
+        log(`Deployed example Api3ReaderProxyV1 at ${expectedApi3ReaderProxyV1Address}`);
+      }
 
       if (chainsSupportedByMarket.includes(network.name)) {
         /*

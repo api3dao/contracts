@@ -6,7 +6,7 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-// import { computeApi3MarketAirseekerRegistryAddress } from '../src/index';
+import { Api3ReaderProxyV1__factory } from '../src/index';
 
 module.exports = async () => {
   const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
@@ -52,6 +52,29 @@ module.exports = async () => {
       await run('verify:verify', {
         address: Api3ReaderProxyV1Factory.address,
         constructorArguments: [OwnableCallForwarder.address, Api3ServerV1OevExtension.address],
+      });
+
+      const dapiName = ethers.encodeBytes32String('ETH/USD');
+      const dappId = 1;
+      const api3ReaderProxyV1Metadata = '0x';
+      const api3ReaderProxyV1ImplementationInitcode = ethers.solidityPacked(
+        ['bytes', 'bytes'],
+        [
+          Api3ReaderProxyV1__factory.bytecode,
+          ethers.AbiCoder.defaultAbiCoder().encode(
+            ['address', 'bytes32', 'uint256'],
+            [Api3ServerV1OevExtension.address, dapiName, dappId]
+          ),
+        ]
+      );
+      const api3ReaderProxyV1ImplementationAddress = ethers.getCreate2Address(
+        Api3ReaderProxyV1Factory.address,
+        ethers.keccak256(api3ReaderProxyV1Metadata),
+        ethers.keccak256(api3ReaderProxyV1ImplementationInitcode)
+      );
+      await run('verify:verify', {
+        address: api3ReaderProxyV1ImplementationAddress,
+        constructorArguments: [Api3ServerV1OevExtension.address, dapiName, dappId],
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
