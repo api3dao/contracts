@@ -1,4 +1,4 @@
-import { /* config, */ deployments, ethers, network, run } from 'hardhat';
+import { deployments, ethers, network, run } from 'hardhat';
 
 import {
   chainsSupportedByManagerMultisig,
@@ -10,7 +10,7 @@ import { Api3ReaderProxyV1__factory } from '../src/index';
 
 module.exports = async () => {
   const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
-  // const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (chainsSupportedByManagerMultisig.includes(network.name)) {
     const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
@@ -78,24 +78,21 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        /*
-        const Api3Market = await deployments.get('Api3Market');
+        const AirseekerRegistry = await deployments.get('AirseekerRegistry');
         await run('verify:verify', {
-          address: Api3Market.address,
+          address: AirseekerRegistry.address,
+          constructorArguments: [OwnableCallForwarder.address, Api3ServerV1.address],
+        });
+
+        const Api3MarketV2 = await deployments.get('Api3MarketV2');
+        await run('verify:verify', {
+          address: Api3MarketV2.address,
           constructorArguments: [
             OwnableCallForwarder.address,
-            '0x9EB9798Dc1b602067DFe5A57c3bfc914B965acFD',
+            Api3ReaderProxyV1Factory.address,
             MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
           ],
         });
-        const airseekerRegistryAddress = computeApi3MarketAirseekerRegistryAddress(
-          config.networks[network.name]!.chainId!
-        );
-        await run('verify:verify', {
-          address: airseekerRegistryAddress,
-          constructorArguments: [Api3Market.address, Api3ServerV1.address],
-        });
-        */
       }
 
       if (chainsSupportedByOevAuctions.includes(network.name)) {

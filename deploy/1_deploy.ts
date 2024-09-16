@@ -13,7 +13,7 @@ import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/inde
 module.exports = async () => {
   const { deploy, log } = deployments;
   const [deployer] = await ethers.getSigners();
-  // const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (chainsSupportedByManagerMultisig.includes(network.name)) {
     const gnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy').catch(async () => {
@@ -117,21 +117,29 @@ module.exports = async () => {
       }
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        /*
-        await deployments.get('Api3Market').catch(async () => {
-          log(`Deploying Api3Market`);
-          return deploy('Api3Market', {
+        await deployments.get('AirseekerRegistry').catch(async () => {
+          log(`Deploying AirseekerRegistry`);
+          return deploy('AirseekerRegistry', {
+            from: deployer!.address,
+            args: [await ownableCallForwarder.getAddress(), api3ServerV1.address],
+            log: true,
+            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+          });
+        });
+
+        await deployments.get('Api3MarketV2').catch(async () => {
+          log(`Deploying Api3MarketV2`);
+          return deploy('Api3MarketV2', {
             from: deployer!.address,
             args: [
               await ownableCallForwarder.getAddress(),
-              '0x9EB9798Dc1b602067DFe5A57c3bfc914B965acFD',
+              api3ReaderProxyV1FactoryAddress,
               MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
             ],
             log: true,
             deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
           });
         });
-        */
       }
 
       if (chainsSupportedByOevAuctions.includes(network.name)) {

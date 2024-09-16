@@ -14,7 +14,7 @@ import { config, deployments, ethers } from 'hardhat';
 import {
   chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
-  /* chainsSupportedByMarket, */
+  chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 
@@ -29,7 +29,7 @@ async function verifyDeployments(network: string) {
     ...(chainsSupportedByDapis.includes(network)
       ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
       : []),
-    // ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
+    ...(chainsSupportedByMarket.includes(network) ? ['Api3MarketV2'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
   ];
 
