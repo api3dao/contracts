@@ -26,7 +26,7 @@ module.exports = () => {
     const contractNames = [
       ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network)
-        ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension']
+        ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
         : []),
       // ...(chainsSupportedByMarket.includes(network) ? ['Api3Market'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),

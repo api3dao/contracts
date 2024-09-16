@@ -48,6 +48,12 @@ module.exports = async () => {
         ],
       });
 
+      const Api3ReaderProxyV1Factory = await deployments.get('Api3ReaderProxyV1Factory');
+      await run('verify:verify', {
+        address: Api3ReaderProxyV1Factory.address,
+        constructorArguments: [OwnableCallForwarder.address, Api3ServerV1OevExtension.address],
+      });
+
       if (chainsSupportedByMarket.includes(network.name)) {
         /*
         const Api3Market = await deployments.get('Api3Market');
