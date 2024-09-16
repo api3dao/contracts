@@ -1,4 +1,4 @@
-import { /* config, */ deployments, network, run } from 'hardhat';
+import { /* config, */ deployments, ethers, network, run } from 'hardhat';
 
 import {
   chainsSupportedByManagerMultisig,
@@ -8,9 +8,8 @@ import {
 } from '../data/chain-support.json';
 // import { computeApi3MarketAirseekerRegistryAddress } from '../src/index';
 
-const DEPLOYER_ADDRESS = '0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1';
-
 module.exports = async () => {
+  const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
   // const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (chainsSupportedByManagerMultisig.includes(network.name)) {
@@ -23,7 +22,7 @@ module.exports = async () => {
     const OwnableCallForwarder = await deployments.get('OwnableCallForwarder');
     await run('verify:verify', {
       address: OwnableCallForwarder.address,
-      constructorArguments: [DEPLOYER_ADDRESS],
+      constructorArguments: [EXPECTED_DEPLOYER_ADDRESS],
     });
 
     if (chainsSupportedByDapis.includes(network.name)) {
