@@ -12,20 +12,20 @@ import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 
 import {
+  chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   /* chainsSupportedByMarket, */
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import managerMultisigAddresses from '../data/manager-multisig.json';
 
-const METADATA_HASH_LENGTH = 53 * 2;
+const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
 
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const contractNames = [
-    ...(Object.keys(managerMultisigAddresses).includes(network) ? ['OwnableCallForwarder'] : []),
+    ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
     ...(chainsSupportedByDapis.includes(network)
       ? ['AccessControlRegistry', 'OwnableCallForwarder', 'Api3ServerV1']
       : []),
@@ -96,7 +96,6 @@ async function verifyDeployments(network: string) {
       const expectedCreationBytecode = artifact.bytecode;
       const expectedBytecodeWithoutMetadataHash = expectedCreationBytecode.slice(0, -METADATA_HASH_LENGTH);
       const expectedMetadataHash = `0x${expectedCreationBytecode.slice(-METADATA_HASH_LENGTH)}`;
-
       if (creationBytecodeWithoutMetadataHash !== expectedBytecodeWithoutMetadataHash) {
         throw new Error(`${network} ${contractName} deployment bytecode does not match`);
       }
@@ -112,9 +111,7 @@ async function verifyDeployments(network: string) {
 }
 
 async function main() {
-  const networks = process.env.NETWORK
-    ? [process.env.NETWORK]
-    : [...new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions])];
+  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByManagerMultisig;
 
   const erroredMainnets: string[] = [];
   const erroredTestnets: string[] = [];

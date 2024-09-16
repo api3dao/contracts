@@ -6,15 +6,15 @@ import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
 import {
+  chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import managerMultisigAddresses from '../data/manager-multisig.json';
 import type { /* AccessControlRegistry, */ OwnableCallForwarder } from '../src/index';
 
 async function validateDeployments(network: string) {
-  if (Object.keys(managerMultisigAddresses).includes(network)) {
+  if (chainsSupportedByManagerMultisig.includes(network)) {
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
     // Validate that the OwnableCallForwarder owner is the manager multisig
     const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = JSON.parse(
@@ -38,12 +38,12 @@ async function validateDeployments(network: string) {
     if (!goFetchOwnableCallForwarderOwner.success || !goFetchOwnableCallForwarderOwner.data) {
       throw new Error(`${network} OwnableCallForwarder owner could not be fetched`);
     }
-    if (
-      goFetchOwnableCallForwarderOwner.data.toLowerCase() !==
-      managerMultisigAddresses[network as keyof typeof managerMultisigAddresses].toLowerCase()
-    ) {
+    const { address: managerMultisigAddress } = JSON.parse(
+      fs.readFileSync(join('deployments', network, `GnosisSafeWithoutProxy.json`), 'utf8')
+    );
+    if (ethers.getAddress(goFetchOwnableCallForwarderOwner.data) !== ethers.getAddress(managerMultisigAddress)) {
       throw new Error(
-        `${network} OwnableCallForwarder owner ${goFetchOwnableCallForwarderOwner.data.toLowerCase()} is not the same as the manager multisig address ${managerMultisigAddresses[network as keyof typeof managerMultisigAddresses].toLowerCase()}`
+        `${network} OwnableCallForwarder owner ${ethers.getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${ethers.getAddress(managerMultisigAddress)}`
       );
     }
     if (chainsSupportedByMarket.includes(network)) {
@@ -94,9 +94,7 @@ async function validateDeployments(network: string) {
 }
 
 async function main() {
-  const networks = process.env.NETWORK
-    ? [process.env.NETWORK]
-    : [...new Set([...chainsSupportedByDapis, ...chainsSupportedByOevAuctions])];
+  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByManagerMultisig;
 
   const erroredMainnets: string[] = [];
   const erroredTestnets: string[] = [];

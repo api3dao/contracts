@@ -1,37 +1,26 @@
 import { CHAINS } from '@api3/chains';
-import { ethers } from 'hardhat';
 
 import {
+  chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import managerMultisigAddresses from '../data/manager-multisig.json';
 
 function main() {
   const chainAliases = new Set(CHAINS.map((chain) => chain.alias));
-  [
-    Object.keys(managerMultisigAddresses),
-    chainsSupportedByDapis,
-    chainsSupportedByMarket,
-    chainsSupportedByOevAuctions,
-  ].map((supportedChainAliases) => {
-    supportedChainAliases.map((supportedChainAlias) => {
-      if (!chainAliases.has(supportedChainAlias)) {
-        throw new Error(`Supported chain with alias ${supportedChainAlias} does not exist`);
-      }
-    });
-  });
-  Object.entries(managerMultisigAddresses).map(([alias, address]) => {
-    if (!ethers.isAddress(address)) {
-      throw new Error(`Manager multisig address of ${alias}, ${address as string}, is not valid`);
+  [chainsSupportedByManagerMultisig, chainsSupportedByDapis, chainsSupportedByMarket, chainsSupportedByOevAuctions].map(
+    (supportedChainAliases) => {
+      supportedChainAliases.map((supportedChainAlias) => {
+        if (!chainAliases.has(supportedChainAlias)) {
+          throw new Error(`Supported chain with alias ${supportedChainAlias} does not exist`);
+        }
+      });
     }
-  });
-  chainsSupportedByDapis.map((chainsSupportedByDapi) => {
-    if (!Object.keys(managerMultisigAddresses).includes(chainsSupportedByDapi)) {
-      throw new Error(
-        `dAPI-supported chain with alias ${chainsSupportedByDapi} does not have a manager multisig address`
-      );
+  );
+  chainsSupportedByDapis.map((chainSupportedByDapis) => {
+    if (!chainsSupportedByManagerMultisig.includes(chainSupportedByDapis)) {
+      throw new Error(`dAPI-supported chain with alias ${chainSupportedByDapis} is not manager multisig-supported`);
     }
   });
   chainsSupportedByMarket.map((chainSupportedByMarket) => {
