@@ -5,12 +5,7 @@ import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
-import {
-  chainsSupportedByManagerMultisig,
-  chainsSupportedByDapis,
-  chainsSupportedByMarket,
-  chainsSupportedByOevAuctions,
-} from '../data/chain-support.json';
+import { chainsSupportedByManagerMultisig, chainsSupportedByMarket } from '../data/chain-support.json';
 import type { /* AccessControlRegistry, */ OwnableCallForwarder } from '../src/index';
 
 async function validateDeployments(network: string) {

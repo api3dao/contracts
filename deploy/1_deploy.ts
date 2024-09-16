@@ -1,11 +1,13 @@
+import { CHAINS } from '@api3/chains';
 import { deployments, ethers, network } from 'hardhat';
 
 import {
+  chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import managerMultisigAddresses from '../data/manager-multisig.json';
+import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
 import type { OwnableCallForwarder } from '../src/index';
 
 module.exports = async () => {
@@ -13,7 +15,19 @@ module.exports = async () => {
   const [deployer] = await ethers.getSigners();
   // const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
-  if (Object.keys(managerMultisigAddresses).includes(network.name)) {
+  if (chainsSupportedByManagerMultisig.includes(network.name)) {
+    const gnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy').catch(async () => {
+      log(`Deploying GnosisSafeWithoutProxy`);
+      return deploy('GnosisSafeWithoutProxy', {
+        args: CHAINS.find((chain) => chain.alias === process.env.NETWORK)?.testnet
+          ? [managerMultisigMetadata.testnet.owners, managerMultisigMetadata.testnet.threshold]
+          : [managerMultisigMetadata.mainnet.owners, managerMultisigMetadata.mainnet.threshold],
+        from: deployer!.address,
+        log: true,
+        deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+      });
+    });
+
     const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = await deployments
       .get('OwnableCallForwarder')
       .catch(async () => {
@@ -31,11 +45,10 @@ module.exports = async () => {
       deployer
     ) as unknown as OwnableCallForwarder;
 
-    const managerMultisigAddress = managerMultisigAddresses[network.name as keyof typeof managerMultisigAddresses];
     if ((await ownableCallForwarder.owner()) === deployer!.address) {
-      const transaction = await ownableCallForwarder.transferOwnership(managerMultisigAddress);
+      const transaction = await ownableCallForwarder.transferOwnership(gnosisSafeWithoutProxy.address);
       await transaction.wait();
-      log(`Transferred OwnableCallForwarder ownership to ${managerMultisigAddress}`);
+      log(`Transferred OwnableCallForwarder ownership to ${gnosisSafeWithoutProxy.address}`);
     }
 
     if (chainsSupportedByDapis.includes(network.name)) {
