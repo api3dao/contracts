@@ -21,9 +21,9 @@ contract Api3ServerV1OevExtension is
 {
     using ECDSA for bytes32;
 
-    struct UpdateAllowance {
+    struct LastPaidBid {
         address updater;
-        uint32 endTimestamp;
+        uint32 signedDataTimestampCutoff;
     }
 
     /// @notice Withdrawer role description
@@ -41,8 +41,9 @@ contract Api3ServerV1OevExtension is
     /// @notice Api3ServerV1 contract address
     address public immutable override api3ServerV1;
 
-    /// @notice Returns the update allowance status for the dApp with ID
-    mapping(uint256 => UpdateAllowance) public override dappIdToUpdateAllowance;
+    /// @notice Returns the parameters of the last paid bid for the dApp with
+    /// ID
+    mapping(uint256 => LastPaidBid) public override dappIdToLastPaidBid;
 
     /// @param accessControlRegistry_ AccessControlRegistry contract address
     /// @param adminRoleDescription_ Admin role description
@@ -92,27 +93,29 @@ contract Api3ServerV1OevExtension is
         emit Withdrew(recipient, amount, msg.sender);
     }
 
-    /// @notice Called by the updater account specified in the details of the
-    /// winning bid to pay the bid amount and claim update allowance for the
-    /// period that was being auctioned off
-    /// @param dappId ID of the dApp for which the bid was placed
-    /// @param updateAllowanceEndTimestamp End timestamp of the period for
-    /// which update allowance was being auctioned off
-    /// @param signature Signature provided by the auctioneer attesting that
-    /// the sender has won the auction
+    /// @notice An OEV auction bid specifies a dApp ID, a signed data timestamp
+    /// cut-off, a bid amount and an updater account. To award the winning bid,
+    /// an auctioneer signs a message that includes the hash of these
+    /// parameters and publishes it. Then, the updater account calls this
+    /// function to pay the bid amount and claim the privilege to execute
+    /// updates for the dApp with ID using the signed data whose timestamps are
+    /// limited by the cut-off.
+    /// @param dappId dApp ID
+    /// @param signedDataTimestampCutoff Signed data timestamp cut-off
+    /// @param signature Signature provided by an auctioneer
     function payOevBid(
         uint256 dappId,
-        uint32 updateAllowanceEndTimestamp,
+        uint32 signedDataTimestampCutoff,
         bytes calldata signature
     ) external payable override {
         require(dappId != 0, "dApp ID zero");
-        require(updateAllowanceEndTimestamp != 0, "Timestamp zero");
+        require(signedDataTimestampCutoff != 0, "Timestamp zero");
         // It is intended for the auction periods to be in the order of a
-        // minute. To prevent erroneously large update allowance end timestamps
-        // from causing an irreversible state change to the contract, we do not
-        // allow timestamps that are too far in the future.
+        // minute. To prevent erroneously large cut-off timestamps from causing
+        // an irreversible state change to the contract, we do not allow
+        // cut-off values that are too far in the future.
         require(
-            updateAllowanceEndTimestamp < block.timestamp + 1 hours,
+            signedDataTimestampCutoff < block.timestamp + 1 hours,
             "Timestamp too far from future"
         );
         address auctioneer = (
@@ -122,7 +125,7 @@ contract Api3ServerV1OevExtension is
                     dappId,
                     msg.sender,
                     msg.value,
-                    updateAllowanceEndTimestamp
+                    signedDataTimestampCutoff
                 )
             ).toEthSignedMessageHash()
         ).recover(signature);
@@ -134,19 +137,19 @@ contract Api3ServerV1OevExtension is
             "Signature mismatch"
         );
         require(
-            dappIdToUpdateAllowance[dappId].endTimestamp <
-                updateAllowanceEndTimestamp,
+            dappIdToLastPaidBid[dappId].signedDataTimestampCutoff <
+                signedDataTimestampCutoff,
             "Timestamp not more recent"
         );
-        dappIdToUpdateAllowance[dappId] = UpdateAllowance({
+        dappIdToLastPaidBid[dappId] = LastPaidBid({
             updater: msg.sender,
-            endTimestamp: updateAllowanceEndTimestamp
+            signedDataTimestampCutoff: signedDataTimestampCutoff
         });
         emit PaidOevBid(
             dappId,
             msg.sender,
             msg.value,
-            updateAllowanceEndTimestamp,
+            signedDataTimestampCutoff,
             auctioneer
         );
     }
@@ -171,17 +174,15 @@ contract Api3ServerV1OevExtension is
             uint32 updatedTimestamp
         )
     {
-        UpdateAllowance storage updateAllowance = dappIdToUpdateAllowance[
-            dappId
-        ];
-        require(msg.sender == updateAllowance.updater, "Sender cannot update");
+        LastPaidBid storage lastPaidBid = dappIdToLastPaidBid[dappId];
+        require(msg.sender == lastPaidBid.updater, "Sender cannot update");
         (
             baseDataFeedId,
             updatedValue,
             updatedTimestamp
         ) = _updateDappOevDataFeed(
             dappId,
-            updateAllowance.endTimestamp,
+            lastPaidBid.signedDataTimestampCutoff,
             signedData
         );
         emit UpdatedDappOevDataFeed(
@@ -267,7 +268,7 @@ contract Api3ServerV1OevExtension is
     /// the signature for OEV updates use the hash of the respective template
     /// ID (while the base feed updates use the template ID as is).
     /// @param dappId dApp ID
-    /// @param updateAllowanceEndTimestamp Update allowance end timestamp
+    /// @param signedDataTimestampCutoff Signed data timestamp cut-off
     /// @param signedData Signed data that is a bytes array. Each item in the
     /// array is the Airnode address, template ID, data feed timestamp, data
     /// feed value and signature belonging to each Beacon. Similar to base feed
@@ -279,7 +280,7 @@ contract Api3ServerV1OevExtension is
     /// @return updatedTimestamp Updated timestamp
     function _updateDappOevDataFeed(
         uint256 dappId,
-        uint256 updateAllowanceEndTimestamp,
+        uint256 signedDataTimestampCutoff,
         bytes[] calldata signedData
     )
         private
@@ -324,8 +325,8 @@ contract Api3ServerV1OevExtension is
                 "Signature mismatch"
             );
             require(
-                timestamp < updateAllowanceEndTimestamp,
-                "Timestamp not allowed"
+                timestamp <= signedDataTimestampCutoff,
+                "Timestamp exceeds cut-off"
             );
             require(
                 timestamp > _dataFeeds[oevBeaconId].timestamp,
@@ -374,8 +375,8 @@ contract Api3ServerV1OevExtension is
                         "Signature mismatch"
                     );
                     require(
-                        timestamp < updateAllowanceEndTimestamp,
-                        "Timestamp not allowed"
+                        timestamp <= signedDataTimestampCutoff,
+                        "Timestamp exceeds cut-off"
                     );
                     require(
                         timestamp > _dataFeeds[oevBeaconIds[ind]].timestamp,

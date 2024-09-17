@@ -14,7 +14,7 @@ interface IApi3ServerV1OevExtension is
         uint256 indexed dappId,
         address indexed updater,
         uint256 bidAmount,
-        uint256 updateAllowanceEndTimestamp,
+        uint256 signedDataTimestampCutoff,
         address auctioneer
     );
 
@@ -30,7 +30,7 @@ interface IApi3ServerV1OevExtension is
 
     function payOevBid(
         uint256 dappId,
-        uint32 updateAllowanceEndTimestamp,
+        uint32 signedDataTimestampCutoff,
         bytes calldata signature
     ) external payable;
 
@@ -84,7 +84,7 @@ interface IApi3ServerV1OevExtension is
 
     function api3ServerV1() external view returns (address);
 
-    function dappIdToUpdateAllowance(
+    function dappIdToLastPaidBid(
         uint256 dappId
     ) external view returns (address updater, uint32 endTimestamp);
 }

@@ -127,9 +127,9 @@ describe('Api3ReaderProxyV1', function () {
             } = await helpers.loadFixture(deploy);
             const oevBeaconValue = baseBeaconValue * 2;
             const oevBeaconTimestamp = baseBeaconTimestamp + 1;
-            const updateAllowanceTimestamp = oevBeaconTimestamp + 10;
+            const signedDataTimestampCutoff = oevBeaconTimestamp + 10;
             await helpers.time.setNextBlockTimestamp(oevBeaconTimestamp + 1);
-            await payOevBid(roles, api3ServerV1OevExtension, dappId, updateAllowanceTimestamp, 1);
+            await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, 1);
             const signature = await signDataWithAlternateTemplateId(
               roles.airnode as any,
               templateId,
