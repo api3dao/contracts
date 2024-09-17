@@ -175,10 +175,6 @@ contract Api3ServerV1OevExtension is
             dappId
         ];
         require(msg.sender == updateAllowance.updater, "Sender cannot update");
-        require(
-            block.timestamp < updateAllowance.endTimestamp,
-            "Sender cannot update anymore"
-        );
         (
             baseDataFeedId,
             updatedValue,
