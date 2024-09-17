@@ -8,7 +8,7 @@ import "../vendor/@openzeppelin/contracts@5.0.2/utils/structs/EnumerableSet.sol"
 import "./interfaces/IApi3ServerV1.sol";
 
 /// @title A contract where active data feeds and their specs are registered by
-/// the contract owner for the Airseeker that serves them to refer to
+/// the contract owner for the respective Airseeker to refer to
 /// @notice Airseeker is an application that pushes API provider-signed data to
 /// chain when certain conditions are met so that the data feeds served on the
 /// Api3ServerV1 contract are updated according to the respective specs. In

@@ -109,14 +109,14 @@ contract Api3ServerV1OevExtension is
         bytes calldata signature
     ) external payable override {
         require(dappId != 0, "dApp ID zero");
-        require(signedDataTimestampCutoff != 0, "Timestamp zero");
+        require(signedDataTimestampCutoff != 0, "Cut-off zero");
         // It is intended for the auction periods to be in the order of a
         // minute. To prevent erroneously large cut-off timestamps from causing
         // an irreversible state change to the contract, we do not allow
         // cut-off values that are too far in the future.
         require(
             signedDataTimestampCutoff < block.timestamp + 1 hours,
-            "Timestamp too far from future"
+            "Cut-off too far in the future"
         );
         address auctioneer = (
             keccak256(
@@ -139,7 +139,7 @@ contract Api3ServerV1OevExtension is
         require(
             dappIdToLastPaidBid[dappId].signedDataTimestampCutoff <
                 signedDataTimestampCutoff,
-            "Timestamp not more recent"
+            "Cut-off not more recent"
         );
         dappIdToLastPaidBid[dappId] = LastPaidBid({
             updater: msg.sender,
@@ -175,7 +175,10 @@ contract Api3ServerV1OevExtension is
         )
     {
         LastPaidBid storage lastPaidBid = dappIdToLastPaidBid[dappId];
-        require(msg.sender == lastPaidBid.updater, "Sender cannot update");
+        require(
+            msg.sender == lastPaidBid.updater,
+            "Sender not last bid updater"
+        );
         (
             baseDataFeedId,
             updatedValue,

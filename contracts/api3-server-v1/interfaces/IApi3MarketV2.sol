@@ -102,7 +102,7 @@ interface IApi3MarketV2 is IHashRegistry, IExtendedSelfMulticall {
         bytes32 dapiName,
         uint256 dappId,
         bytes calldata metadata
-    ) external returns (address proxyAddress);
+    ) external returns (address api3ReaderProxyV1);
 
     function registerDataFeed(
         bytes calldata dataFeedDetails

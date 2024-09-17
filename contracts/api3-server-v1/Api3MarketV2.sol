@@ -13,8 +13,8 @@ import "./interfaces/IAirseekerRegistry.sol";
 
 /// @title The contract that API3 users interact with using the API3 Market
 /// frontend to purchase data feed subscriptions
-/// @notice API3 aims to streamline and protocolize its integration processes
-/// through the API3 Market (https://market.api3.org), which is a data feed
+/// @notice API3 streamlines and protocolizes its integration processes through
+/// the API3 Market (https://market.api3.org), which is a data feed
 /// subscription marketplace. The Api3MarketV2 contract is the on-chain portion
 /// of this system.
 /// Api3MarketV2 enables API3 to predetermine the decisions related to its data
@@ -120,7 +120,7 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// enough to keep the queue at an iterable size. For example, if the
     /// number of unique update parameters in the dAPI pricing Merkle trees
     /// that are being used is around 5, a maximum subscription queue length of
-    /// 10 would be acceptable for a typical chain.
+    /// 10 would be acceptable for a chain with typical gas costs.
     /// @param owner_ Owner address
     /// @param api3ReaderProxyV1Factory_ Api3ReaderProxyV1Factory contract
     /// address
@@ -189,6 +189,10 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
             airseekerRegistry == address(0),
             "AirseekerRegistry already set"
         );
+        // The following check does not guarantee that `airseekerRegistry_`
+        // belongs to a valid AirseekerRegistry instance. The Api3MarketV2
+        // owner is responsible with verifying that it is before calling this
+        // function.
         require(
             IAirseekerRegistry(airseekerRegistry_).owner() == address(this),
             "Not AirseekerRegistry owner"
@@ -531,8 +535,8 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// @notice Calls Api3ReaderProxyV1Factory to deterministically deploy an
     /// Api3ReaderProxyV1
     /// @dev It is recommended for the users to read data feeds through proxies
-    /// deployed by Api3ReaderProxyV1Factory, rather than calling Api3ServerV1
-    /// directly.
+    /// deployed by Api3ReaderProxyV1Factory, rather than calling the
+    /// underlying contracts directly.
     /// Even though proxy deployment is not a condition for purchasing
     /// subscriptions, the interface is implemented here to allow the user to
     /// purchase a dAPI subscription and deploy the respective proxy in the
@@ -540,13 +544,13 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// @param dapiName dAPI name
     /// @param dappId dApp ID
     /// @param metadata Metadata associated with the proxy
-    /// @return proxyAddress Proxy address
+    /// @return api3ReaderProxyV1 Api3ReaderProxyV1 address
     function deployApi3ReaderProxyV1(
         bytes32 dapiName,
         uint256 dappId,
         bytes calldata metadata
-    ) external override returns (address proxyAddress) {
-        proxyAddress = IApi3ReaderProxyV1Factory(api3ReaderProxyV1Factory)
+    ) external override returns (address api3ReaderProxyV1) {
+        api3ReaderProxyV1 = IApi3ReaderProxyV1Factory(api3ReaderProxyV1Factory)
             .deployApi3ReaderProxyV1(dapiName, dappId, metadata);
     }
 

@@ -316,7 +316,7 @@ describe('Api3ServerV1OevExtension', function () {
                 await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                 await expect(
                   payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount)
-                ).to.be.revertedWith('Timestamp not more recent');
+                ).to.be.revertedWith('Cut-off not more recent');
               });
             });
           });
@@ -355,7 +355,7 @@ describe('Api3ServerV1OevExtension', function () {
             const bidAmount = ethers.parseEther('1');
             await expect(
               payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount)
-            ).to.be.revertedWith('Timestamp too far from future');
+            ).to.be.revertedWith('Cut-off too far in the future');
           });
         });
       });
@@ -365,7 +365,7 @@ describe('Api3ServerV1OevExtension', function () {
           const dappId = 1;
           const bidAmount = ethers.parseEther('1');
           await expect(payOevBid(roles, api3ServerV1OevExtension, dappId, 0, bidAmount)).to.be.revertedWith(
-            'Timestamp zero'
+            'Cut-off zero'
           );
         });
       });
@@ -1103,7 +1103,7 @@ describe('Api3ServerV1OevExtension', function () {
         await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
         await expect(
           api3ServerV1OevExtension.connect(roles.randomPerson).updateDappOevDataFeed(dappId, signedData)
-        ).to.be.revertedWith('Sender cannot update');
+        ).to.be.revertedWith('Sender not last bid updater');
       });
     });
   });
