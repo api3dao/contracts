@@ -106,11 +106,7 @@ contract Api3ServerV1OevExtension is
         bytes calldata signature
     ) external payable override {
         require(dappId != 0, "dApp ID zero");
-        // Do not allow the bid to be paid if the update allowance is of no use
-        require(
-            updateAllowanceEndTimestamp > block.timestamp,
-            "Timestamp stale"
-        );
+        require(updateAllowanceEndTimestamp != 0, "Timestamp zero");
         // It is intended for the auction periods to be in the order of a
         // minute. To prevent erroneously large update allowance end timestamps
         // from causing an irreversible state change to the contract, we do not

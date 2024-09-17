@@ -278,7 +278,7 @@ describe('Api3ServerV1OevExtension', function () {
 
   describe('payOevBid', function () {
     context('dApp ID is not zero', function () {
-      context('Timestamp is not stale', function () {
+      context('Timestamp is not zero', function () {
         context('Timestamp is not too far from the future', function () {
           context('Signature is valid', function () {
             context('Update allowance end timestamp is more recent than the current one', function () {
@@ -359,17 +359,14 @@ describe('Api3ServerV1OevExtension', function () {
           });
         });
       });
-      context('Timestamp is stale', function () {
+      context('Timestamp is zero', function () {
         it('reverts', async function () {
           const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
           const dappId = 1;
-          const nextTimestamp = (await helpers.time.latest()) + 1;
-          const updateAllowanceEndTimestamp = nextTimestamp;
-          await helpers.time.setNextBlockTimestamp(nextTimestamp);
           const bidAmount = ethers.parseEther('1');
-          await expect(
-            payOevBid(roles, api3ServerV1OevExtension, dappId, updateAllowanceEndTimestamp, bidAmount)
-          ).to.be.revertedWith('Timestamp stale');
+          await expect(payOevBid(roles, api3ServerV1OevExtension, dappId, 0, bidAmount)).to.be.revertedWith(
+            'Timestamp zero'
+          );
         });
       });
     });
