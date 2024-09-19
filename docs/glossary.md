@@ -46,10 +46,6 @@ In the case that the signed APIs are publicly accessible, anyone can operate an 
 
 An API provider is a business that has productized their services in the form of an API.
 
-## API3 DAO
-
-An Aragon 1 DAO living on Ethereum that represents API3 Foundation (https://api3.eth.limo).
-
 ## API3 Market
 
 API3 Market is a dApp where users can purchase [dAPI](#dapi) plans, which get reflected on-chain immediately.
