@@ -41,7 +41,7 @@ Inheriting contracts should implement contract-specific roles (e.g., Editor and 
 
 ## Initializing role trees
 
-AccessControlRegistry inherits [SelfMulticall](./utils/SelfMulticall) to allow a manager or admin to configure their portion of the tree in a single transaction.
+AccessControlRegistry inherits [SelfMulticall](../utils/selfmulticall.md) to allow a manager or admin to configure their portion of the tree in a single transaction.
 An example multicall transaction by the manager may be:
 
 1. Initialize Admin Role A and grant it to the manager (also initializes Root Role)

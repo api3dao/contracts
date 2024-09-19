@@ -39,7 +39,7 @@ Some examples are:
 
 ## Airseeker
 
-[Airseeker](https://github.com/api3dao/airseeker) is an application that periodically fetches [signed data](#signed-data) from [signed APIs](#signed-api) to update [data feeds](#data-feed) whenever the conditions specified by the [update parameters](#update-parameters) in the respective [AirseekerRegistry](../contracts/api3-server-v1/airseekerregistry.md) are satisfied.
+[Airseeker](https://github.com/api3dao/airseeker) is an application that periodically fetches [signed data](#signed-data) from [signed APIs](#signed-api) to update [data feeds](#data-feed) whenever the conditions specified by the [update parameters](#update-parameters) in the respective [AirseekerRegistry](./contracts/api3-server-v1/airseekerregistry.md) are satisfied.
 In the case that the signed APIs are publicly accessible, anyone can operate an Airseeker against any AirseekerRegistry for redundancy.
 
 ## API provider
@@ -221,8 +221,8 @@ This is followed by an [auction cop](#auction-cop) confirming the fulfillment, w
 Although the [base feeds](#base-feed) and [OEV feeds](#oev-feed) are readable from [Api3ServerV1](./contracts/api3-server-v1/api3serverv1.md) and [Api3ServerV1OevExtension](./contracts/api3-server-v1/api3serverv1oevextension.md), respectively, [dApps](#dapp) are advised to call the proxy contract that abstracts away the complexity of correctly doing so.
 
 A previous version of the contracts implemented four proxy types ([DataFeed](#data-feed)Proxy, [Dapi](#dapi)Proxy, DataFeedProxyWithOev, DapiProxyWithOev), which were deployed by a ProxyFactory contract.
-In the current iteration, this is streamlined down to a single proxy contract ([Api3ReaderProxyV1](./contracts/api3-server-v1/proxies/Api3ReaderProxyV1)), which implements the [IApi3Reader](./contracts/interfaces/IApi3Reader) interface and the AggregatorV2V3Interface interface of Chainlink.
-The dApps are advised to only use Api3ReaderProxyV1 contracts deployed by [Api3ReaderProxyV1Factory](./contracts/api3-server-v1/proxies/Api3ReaderProxyV1Factory).
+In the current iteration, this is streamlined down to a single proxy contract ([Api3ReaderProxyV1](./contracts/api3-server-v1/proxies/api3readerproxyv1)), which implements the [IApi3ReaderProxy](./contracts/interfaces/iapi3readerproxy) interface and the AggregatorV2V3Interface interface of Chainlink.
+The dApps are advised to only use Api3ReaderProxyV1 contracts deployed by [Api3ReaderProxyV1Factory](./contracts/api3-server-v1/proxies/api3readerproxyv1factory).
 
 ## Root role
 
