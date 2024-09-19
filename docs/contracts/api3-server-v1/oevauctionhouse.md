@@ -1,4 +1,4 @@
-# OevAuctionHouse.sol
+# OevAuctionHouse
 
 [Oracle extractable value (OEV)](https://medium.com/api3/oracle-extractable-value-oev-13c1b6d53c5b) is a subset of MEV that oracles have exclusive priority of extraction.
 API3 monetizes the data feed services it facilitates by holding OEV auctions and forwarding the proceeds to the respective user dApps.

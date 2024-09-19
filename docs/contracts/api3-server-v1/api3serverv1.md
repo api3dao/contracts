@@ -1,4 +1,4 @@
-# Api3ServerV1.sol
+# Api3ServerV1
 
 > [!NOTE]  
 > This document includes the documentation for DataFeedServer, BeaconUpdatesWithSignedData, DapiServer, OevDataFeedServer and OevDapiServer, which together constitute Api3ServerV1.

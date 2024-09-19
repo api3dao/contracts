@@ -1,4 +1,4 @@
-# AirseekerRegistry.sol
+# AirseekerRegistry
 
 All API3 data feeds are served over the [Api3ServerV1](./api3serverv1.md) contract.
 [Airseeker](../../infrastructure/airseeker.md) is a piece of API3 data feed infrastructure that pushes API provider-signed data to Api3ServerV1 when the conditions specified on AirseekerRegistry are satisfied.

@@ -1,4 +1,4 @@
-# Api3Market.sol
+# Api3Market
 
 API3 users interact with Api3Market over the [API3 market frontend](https://market.api3.org) to purchase data feed subscriptions.
 Api3Market deploys an [AirseekerRegistry](./airseekerregistry.md) that it owns in its constructor.
