@@ -4,7 +4,7 @@ HashRegistry is a contract that is designed to mirror the governance decisions o
 For example, this governance decision could be the list of [Airnode addresses](../../glossary.md#airnode-address) that are decided to be used for each [dAPI](../../glossary.md#dapi).
 
 This governance decision can be represented as a Merkle tree.
-The set of EOAs can then sign the respective Merkle root (e.g., as the ["dAPI management Merkle root" hash type](../api3-server-v1/api3market.md#dapi-management-merkle-tree)) and publish their signatures.
+The set of EOAs can then sign the respective Merkle root (e.g., as the ["dAPI management Merkle root" hash type](../api3-server-v1/api3marketv2.md#dapi-management-merkle-tree)) and publish their signatures.
 This would allow anyone to be able to register the Merkle root at any HashRegistry on any chain.
 
 The governance decisions that are registered at HashRegistry can be referred to by other contracts.

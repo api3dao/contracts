@@ -221,8 +221,8 @@ This is followed by an [auction cop](#auction-cop) confirming the fulfillment, w
 Although the [base feeds](#base-feed) and [OEV feeds](#oev-feed) are readable from [Api3ServerV1](./contracts/api3-server-v1/api3serverv1.md) and [Api3ServerV1OevExtension](./contracts/api3-server-v1/api3serverv1oevextension.md), respectively, [dApps](#dapp) are advised to call the proxy contract that abstracts away the complexity of correctly doing so.
 
 A previous version of the contracts implemented four proxy types ([DataFeed](#data-feed)Proxy, [Dapi](#dapi)Proxy, DataFeedProxyWithOev, DapiProxyWithOev), which were deployed by a ProxyFactory contract.
-In the current iteration, this is streamlined down to a single proxy contract ([Api3ReaderProxyV1](./contracts/api3-server-v1/proxies/api3readerproxyv1)), which implements the [IApi3ReaderProxy](./contracts/interfaces/iapi3readerproxy) interface and the AggregatorV2V3Interface interface of Chainlink.
-The dApps are advised to only use Api3ReaderProxyV1 contracts deployed by [Api3ReaderProxyV1Factory](./contracts/api3-server-v1/proxies/api3readerproxyv1factory).
+In the current iteration, this is streamlined down to a single proxy contract ([Api3ReaderProxyV1](./contracts/api3-server-v1/proxies/api3readerproxyv1.md)), which implements the [IApi3ReaderProxy](./contracts/interfaces/iapi3readerproxy.md) interface and the AggregatorV2V3Interface interface of Chainlink.
+The dApps are advised to only use Api3ReaderProxyV1 contracts deployed by [Api3ReaderProxyV1Factory](./contracts/api3-server-v1/proxies/api3readerproxyv1factory.md).
 
 ## Root role
 
