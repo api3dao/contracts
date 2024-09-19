@@ -1,42 +1,42 @@
-# Api3Market
+# Api3MarketV2
 
-API3 users interact with Api3Market over the [API3 market frontend](https://market.api3.org) to purchase data feed subscriptions.
-Api3Market deploys an [AirseekerRegistry](./airseekerregistry.md) that it owns in its constructor.
-User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../../infrastructure/airseeker.md).
-For example, buying a subscription for a [dAPI](./api3serverv1.md#dapi) that is currently deactivated will activate it and set its update parameters to the ones from the subscription, causing Airseeker to immediately start executing updates as specified.
+API3 users interact with Api3MarketV2 over the [API3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
+Api3MarketV2 has an accompanying [AirseekerRegistry](./airseekerregistry.md) that it owns.
+User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../../glossary.md#airseeker).
+For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is currently deactivated will activate it and set its [update parameters](../../glossary.md#update-parameters) to the ones from the subscription, causing Airseeker to immediately start executing updates as specified.
 
 ## The owner
 
-Api3Market inherits [HashRegistry](../access/hashregistry.md), which inherits Ownable, which means Api3Market has an owner.
-Unlike HashRegistry, the Api3Market ownership cannot be transferred or renounced (i.e., the owner specified at the deployment is immutable).
-In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3Market allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decomissioned urgently, without waiting for the ongoing subscriptions to end.
+Api3MarketV2 inherits [HashRegistry](../access/hashregistry.md), which inherits Ownable, which means Api3MarketV2 has an owner.
+Unlike HashRegistry, the Api3MarketV2 ownership cannot be transferred or renounced (i.e., the owner specified at the deployment is immutable).
+In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3MarketV2 allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decomissioned urgently, without waiting for the ongoing subscriptions to end.
 
 ## Merkle roots as HashRegistry hash types
 
-Api3Market uses three types of HashRegistry hash types:
+Api3MarketV2 uses three types of HashRegistry hash types:
 
 - dAPI management Merkle root
 - dAPI pricing Merkle root
 - Signed API URL Merkle root
 
 As the names imply, each is the root of a Merkle tree that contains the respective data.
-The Api3Market owner can set different signers for each of these.
+The Api3MarketV2 owner can set different signers for each of these.
 
 ## Merkle trees
 
-Api3Market enables API3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
-These Merkle trees are then published for the users to be able to provide the respective Merkle proofs while interacting with Api3Market.
+Api3MarketV2 enables API3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
+These Merkle trees are then published for the users to be able to provide the respective Merkle proofs while interacting with Api3MarketV2.
 
-`@openzeppelin/merkle-tree` is used to generate the Merkle trees, and Api3Market uses OpenZeppelin's MerkleProof contract library to verify the proofs.
+`@openzeppelin/merkle-tree` is used to generate the Merkle trees, and Api3MarketV2 uses OpenZeppelin's MerkleProof contract library to verify the proofs.
 
 ### dAPI management Merkle tree
 
 The leaves of the dAPI management Merkle tree is the hash of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`).
-- Data feed ID (`bytes32`): The ID of the [data feed](./api3serverv1.md#data-feeds) that the dAPI is to be pointed at.
-  Cannot specify a [Beacon set](./api3serverv1.md#beacon-set) with more than 21 [Beacons](./api3serverv1.md#beacon).
-- dAPI sponsor wallet address (`address`): The address of the [sponsor wallet](../../specs/airnode-protocol.md#sponsor-wallets) that will send the dAPI update transactions.
+- Data feed ID (`bytes32`): The ID of the data feed that the dAPI is to be pointed at.
+  Cannot specify a [Beacon set](../../glossary.md#beacon-set) with more than 21 [Beacons](../../glossary.md#beacon).
+- dAPI [sponsor wallet](../../glossary.md#sponsor-wallet) address (`address`): The address of the sponsor wallet that will send the dAPI update transactions.
 
 Each dAPI name in a dAPI management Merkle tree is intended to be unique.
 
@@ -50,7 +50,8 @@ The leaves of the dAPI pricing Merkle tree is the hash of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`)
 - Chain ID (`uint256`): The ID of the chain for which the price will apply
-- dAPI update parameters (`bytes`): Encoded update parameters. Unlike AirseekerRegistry, Api3Market expects the update parameters to have an exact format.
+- dAPI update parameters (`bytes`): Encoded update parameters.
+  Unlike AirseekerRegistry, Api3MarketV2 expects the update parameters to have an exact format.
   Refer to the [example `updateParameters` format in AirseekerRegistry docs](./airseekerregistry.md#how-airseeker-uses-airseekerregistry).
 - Duration (`uint256`): Subscription duration in seconds.
 - Price (`uint256`): Subscription price in Wei, denominated in the native currency of the chain with the ID.
@@ -71,8 +72,8 @@ In the case of overpricing, the funds will roll over to the next subscription pu
 
 The leaves of the signed API URL Merkle tree is the hash of the following values:
 
-- Airnode address (`address`): [Airnode address](../../specs/airnode-protocol.md#airnode-address)
-- Signed API URL (`string`): The URL of the [signed API](../../infrastructure/signed-api.md) that serves the data signed by the Airnode.
+- [Airnode address](../../glossary.md#airnode-address) (`address`)
+- Signed API URL (`string`): The URL of the [signed API](../../glossary.md#signed-api) that serves the data signed by the [Airnode feed](../../glossary.md#airnode-feed).
   Cannot be longer than 256 characters.
 
 Each Airnode address in a signed API URL Merkle tree is intended to be unique.
@@ -80,13 +81,13 @@ Each Airnode address in a signed API URL Merkle tree is intended to be unique.
 ## Buying a subscription
 
 The user needs to prepare the states of [Api3ServerV1](./api3serverv1.md) and [AirseekerRegistry](./airseekerregistry.md), and provide the respective Merkle proofs to buy a subscription.
-Since this is too complex for most users, they are recommended to interact with Api3Market over the API3 Market frontend, which abstracts away this complexity.
+Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the API3 Market frontend, which abstracts away this complexity.
 This section describes what happens under the hood of the API3 Market frontend.
 
 The requirements for a `buySubscription()` call to succeed are as follow:
 
-- The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3Market, are valid
-- The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3Market deployment) items
+- The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3MarketV2, are valid
+- The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3MarketV2 deployment) items
 - The data feed is registered at AirseekerRegistry
 - The data feed has been updated at most a day ago
 - The call sends enough funds that when forwarded to the sponsor wallet, the balance of the sponsor wallet exceeds what `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` returns
@@ -104,10 +105,10 @@ For that, they can do a static multicall to `[getDataFeedData(), registerDataFee
 If the data feed needs to be registered and/or updated, these can be done in a single multicall that finally calls `buySubscription()`.
 The data feed details needed to register the data feed would most likely be fetched from the same source that serves the Merkle tree data, and the signed data needed to update the data feed would be fetched from a signed API.
 
-One thing to note here is that data feed updates revert when they are not successful (e.g., because another party updated the data feed with data whose timestamp is more recent than what the user has attempted to use), and thus the multicall should be done with `tryMulticallAndBuySubscription()`.
+One thing to note here is that data feed updates revert when they are not successful (e.g., because another party updated the data feed with data whose [timestamp](./api3serverv1.md#data-feed-timestamps) is more recent than what the user has attempted to use), and thus the multicall should be done with `tryMulticallAndBuySubscription()`.
 Another pitfall here is that calling `eth_estimateGas` with `tryMulticallAndBuySubscription()` will return an arbitrary amount (because `eth_estimateGas` looks for a gas limit that causes the transaction to not revert and `tryMulticallAndBuySubscription()` never reverts in the multicall phase by design), which is why the `eth_estimateGas` call should be done with `multicallAndBuySubscription()`.
 
-## Operating Api3Market
+## Operating Api3MarketV2
 
 As the [HashRegistry docs](../access/hashregistry.md#operating-a-hashregistry) instruct, it is a best practice to register each newly signed [Merkle root](#merkle-roots-as-hashregistry-hash-types) as soon as possible (and simultaneously update the sources from which the users will [fetch Merkle tree data to buy subscriptions](#buying-a-subscription)).
 Although doing so ensures that following subscription purchases will use the new Merkle tree data, the update does not apply to previous subscriptions automatically.
