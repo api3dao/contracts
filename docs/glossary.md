@@ -211,6 +211,9 @@ Maximal extractable value (MEV) is a superset of [OEV](#oev) that can be extract
 
 Oracle extractable value (OEV) is a subset of [MEV](#mev) that can be extracted by guaranteeing a specific relative order of oracle updates and related interactions within a transaction.
 
+API3 monetizes its [dAPI](#dapi) services by holding [OEV auctions](#oev-auction) and forwarding the proceeds to the respective [dApps](#dapp).
+This is both a net gain for the dApps (which otherwise would have bled these funds to [MEV](#mev) bots and validators), and a fair and scalable business model for API3.
+
 ## OEV auction
 
 API3 periodically holds time-limited [OEV](#oev) auctions at [OEV Network](#oev-network) where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.

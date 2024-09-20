@@ -1,35 +1,9 @@
 # OevAuctionHouse
 
-API3 monetizes the [data feed](../../glossary.md#data-feed) services it facilitates by holding [OEV auctions](../../glossary.md#oev-auction) and forwarding the proceeds to the respective user [dApps](../../glossary.md#dapp).
-This is both a net gain for the dApps (which otherwise would have bled these funds to [MEV](../../glossary.md#mev) bots and validators), and a fair and scalable business model for API3.
+OevAuctionHouse implements a general purpose auction platform for a centralized entity to auction off data in a transparent and retrospectively verifiable manner.
+API3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) on [OEV Network](../../glossary.md#oev-network), where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
 
-OevAuctionHouse is the contract that lives on [OEV Network](../../glossary.md#oev-network) where these auctions happen.
-On OevAuctionHouse, OEV [searchers](../../glossary.md#searcher) place [bids](../../glossary.md#bid), get notified of winning auctions, and get slashed if they fail to follow through on the auctions that they won.
-
-## How it works
-
-A dApp reads a [dAPI](../../glossary.md#dapi) through a [Api3ReaderProxyV1](./proxies/api3readerproxyv1.md) contract.
-This [proxy](../../glossary.md#proxy) reads two different feeds that represent the dAPI, and returns the value of the one that was updated more recently.
-
-1. The first of these feeds is the [base feed](../../glossary.md#base-feed), which lives in [Api3ServerV1](./api3serverv1.md).
-   For example, if the dAPI name `ETH/USD` is set to the [data feed](../../glossary.md#data-feed) ID `0x4385...151d` on Api3ServerV1, the base feed value for this dAPI can be obtained by reading the data feed in Api3ServerV1 with this ID.
-2. The second of these is the [OEV feed](../../glossary.md#oev-feed), which is dApp-specific and lives in [Api3ServerV1OevExtension](./api3serverv1oevextension.md).
-   The dAPI name configuration of this feed refers to Api3ServerV1, yet the data feed ID is made dApp-specific by hashing it with the dApp ID.
-   The OEV feed value of a specific dApp for this dAPI can be obtained by reading the data feed in Api3ServerV1OevExtension with the ID `keccak256(abi.encodePacked(dappId, 0x4385...151d))`.
-
-Base and OEV data feeds are updated using [signed data](../../glossary.md#signed-data) that is made publicly available through [signed APIs](../../glossary.md#signed-api).
-Api3ServerV1 allows base data feeds to be updated by anyone.
-This half of the dAPI provides the strongest availability guarantees possible, and exposes all OEV opportunities to the public for free as a side effect.
-
-Unlike the base feed, Api3ServerV1OevExtension allows OEV feeds to only be updated by the winners of the respective auctions.
-When an auctioneer determines that a bid won an auction, it calls `awardBid()` on OevAuctionHouse to publish a signature, which states that a specific account can update the OEV feeds of a specific dApp with signed data whose timestamps go up to a specific cut-off value.
-
-Anyone can update the base feed, while only the auction winner can update the OEV feed.
-For OEV to work, the OEV feed updates need to be given priority over the base feed updates.
-This can be guaranteed by signed APIs serving the signed data used in base feed updates with some delay.
-Since Api3ReaderProxyV1 prefers the feed that is more recently updated, this results in the auction winners to consistently be able to frontrun third parties and extract the entirety of the OEV.
-
-### On-chain auctions
+## On-chain auctions
 
 OEV auctions are done on-chain to address two issues:
 
@@ -59,23 +33,6 @@ During the award phase, the auctioneer considers the bids, chooses the winner, a
 Bids confirmed during the award phase are not considered, and the auctioneer's award transaction is expected to be confirmed before the award phase ends.
 The award allows the winner to execute OEV updates until the end of the next bid phase.
 For example, if a searcher won `A1`, they are allowed to execute OEV updates as soon as they fetch the award (which is expected to happen during the award phase, i.e. `t=25–30`), and continue doing so until `t=55`, which is when the bid phase of `A2` ends.
-
-### Signed data timing
-
-Being able to determine the OEV opportunities accurately enables searchers to bid competitively, which is critical for effective OEV extraction.
-There are two requirements for this:
-
-1. The searcher needs to know exactly what updates they are bidding for.
-1. The OEV opportunities that the bid amount calculation is based on should not be capturable through base feed updates or by the winner of the previous auction.
-
-To achieve this, the signed API endpoint that serves the signed data used to execute base feed updates delay the data by `2T`, and the award signature is signed in a way that Api3ServerV1OevExtension allows the auction winner to execute OEV updates with signed data that is at least `T`-old.
-In other words, there are three uses of signed data across time:
-
-1. Signed API publishes real-time data signed to allow the auction winner to execute OEV feed updates.
-   Searchers use this to simulate OEV feed updates to determine their bid amounts.
-1. Searchers that have placed any bids based on the data above store the published data, and use them to execute OEV updates in case they win the auction.
-1. Signed API publishes `2T`-delayed data signed to allow anyone to execute base feed updates.
-   This is used for regular MEV extraction and upholding data feed specs such as deviation threshold and heartbeat interval.
 
 ### Staggered auctions
 
@@ -145,20 +102,6 @@ If the withdrawal is initiated while the award transaction is pending, the bid s
 To prevent the second, bids cannot be cancelled, but only be expedited to expire at least in the next `MINIMUM_BID_LIFETIME`.
 Auctioneers will not attempt to award bids that will expire soon.
 If the bid expiration gets expedited while the award transaction is pending, the bid still gets awarded and collateral gets locked up.
-
-### Extracting OEV with a multicall
-
-The winning searcher makes three calls:
-
-1. Using the account whose address that they have specified in their bid details, call `payOevBid()` of Api3ServerV1OevExtension to assume OEV update privileges
-1. Using the same account, call `updateDappOevDataFeedWithAllowedSignedData()` to execute an OEV update
-1. Call the target dApp to extract OEV
-
-Steps 2 and 3 must be done in a multicall to prevent third-parties from interjecting between and stealing the OEV.
-Furthermore, steps 1 and 3 must be done in the same multicall to utilize a flash loan to cover the bid amount.
-Therefore, steps 1, 2 and 3 are intended to be done in the same multicall, where steps 2 and 3 can be repeated with different updates.
-
-Since the bid only specifies the address of the contract that is intended to make this multicall, that contract needs to be personalized (e.g., put its interface behind `onlyOwner`) for third-parties to not be able to action on the awarded bid.
 
 ## Auctioneer flow
 
