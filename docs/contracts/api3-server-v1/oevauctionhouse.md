@@ -1,34 +1,33 @@
 # OevAuctionHouse
 
-[Oracle extractable value (OEV)](https://medium.com/api3/oracle-extractable-value-oev-13c1b6d53c5b) is a subset of MEV that oracles have exclusive priority of extraction.
-API3 monetizes the data feed services it facilitates by holding OEV auctions and forwarding the proceeds to the respective user dApps.
-This is both a net gain for the dApps (which otherwise would have bled these funds to MEV bots and validators), and a fair and scalable business model for API3.
+API3 monetizes the [data feed](../../glossary.md#data-feed) services it facilitates by holding [OEV auctions](../../glossary.md#oev-auction) and forwarding the proceeds to the respective user [dApps](../../glossary.md#dapp).
+This is both a net gain for the dApps (which otherwise would have bled these funds to [MEV](../../glossary.md#mev) bots and validators), and a fair and scalable business model for API3.
 
-OevAuctionHouse is the contract that lives on OEV Network where these auctions happen.
-On OevAuctionHouse, OEV searchers place bids, get notified of winning auctions, and get slashed if they fail to follow through on the auctions that they won.
+OevAuctionHouse is the contract that lives on [OEV Network](../../glossary.md#oev-network) where these auctions happen.
+On OevAuctionHouse, OEV [searchers](../../glossary.md#searcher) place [bids](../../glossary.md#bid), get notified of winning auctions, and get slashed if they fail to follow through on the auctions that they won.
 
 ## How it works
 
-A dApp reads a [dAPI](api3serverv1.md#dapi) through a [DapiProxyWithOevV2](../../../contracts/api3-server-v1/proxies/DapiProxyWithOevV2.sol) contract.
-This dAPI proxy reads two different feeds that represent the dAPI, and return the value of the one that was updated more recently.
+A dApp reads a [dAPI](../../glossary.md#dapi) through a [Api3ReaderProxyV1](./proxies/api3readerproxyv1.md) contract.
+This [proxy](../../glossary.md#proxy) reads two different feeds that represent the dAPI, and returns the value of the one that was updated more recently.
 
-1. The first of these feeds is the _base feed_, which lives in [Api3ServerV1](./api3serverv1.md).
-   For example, if the dAPI name `ETH/USD` is set to the [data feed ID](./api3serverv1.md#data-feeds) `0x4385...151d` on Api3ServerV1, the base feed value for this dAPI can be obtained by reading the data feed in Api3ServerV1 with this ID.
-2. The second of these is the _OEV feed_, which is dApp-specific and lives in [Api3ServerV1OevExtension](../../../contracts/api3-server-v1/Api3ServerV1OevExtension.sol).
+1. The first of these feeds is the [base feed](../../glossary.md#base-feed), which lives in [Api3ServerV1](./api3serverv1.md).
+   For example, if the dAPI name `ETH/USD` is set to the [data feed](../../glossary.md#data-feed) ID `0x4385...151d` on Api3ServerV1, the base feed value for this dAPI can be obtained by reading the data feed in Api3ServerV1 with this ID.
+2. The second of these is the [OEV feed](../../glossary.md#oev-feed), which is dApp-specific and lives in [Api3ServerV1OevExtension](./api3serverv1oevextension.md).
    The dAPI name configuration of this feed refers to Api3ServerV1, yet the data feed ID is made dApp-specific by hashing it with the dApp ID.
    The OEV feed value of a specific dApp for this dAPI can be obtained by reading the data feed in Api3ServerV1OevExtension with the ID `keccak256(abi.encodePacked(dappId, 0x4385...151d))`.
 
-Base and OEV data feeds are updated using data that is made publicly available through [signed APIs](../../infrastructure/signed-api.md).
+Base and OEV data feeds are updated using [signed data](../../glossary.md#signed-data) that is made publicly available through [signed APIs](../../glossary.md#signed-api).
 Api3ServerV1 allows base data feeds to be updated by anyone.
 This half of the dAPI provides the strongest availability guarantees possible, and exposes all OEV opportunities to the public for free as a side effect.
 
 Unlike the base feed, Api3ServerV1OevExtension allows OEV feeds to only be updated by the winners of the respective auctions.
-When an auctioneer determines that a bid won an auction, it calls `awardBid()` on OevAuctionHouse to publish a signature, which states that a specific account can update the OEV feeds of a specific dApp until a deadline.
+When an auctioneer determines that a bid won an auction, it calls `awardBid()` on OevAuctionHouse to publish a signature, which states that a specific account can update the OEV feeds of a specific dApp with signed data whose timestamps go up to a specific cut-off value.
 
 Anyone can update the base feed, while only the auction winner can update the OEV feed.
 For OEV to work, the OEV feed updates need to be given priority over the base feed updates.
 This can be guaranteed by signed APIs serving the signed data used in base feed updates with some delay.
-Since DapiProxyWithOevV2 prefers the feed that is more recently updated, this results in the auction winners to consistently be able to frontrun third parties and extract the entirety of the OEV.
+Since Api3ReaderProxyV1 prefers the feed that is more recently updated, this results in the auction winners to consistently be able to frontrun third parties and extract the entirety of the OEV.
 
 ### On-chain auctions
 
@@ -37,10 +36,10 @@ OEV auctions are done on-chain to address two issues:
 1. An OEV auction platform greatly incentivizes the participants to create, update and cancel bids at a large volume.
    Considering that we are building the OEV auction platform for all dApps living on all chains, simply scaling up the infrastructure to meet this demand is not realistic, and we should have a mechanism to downregulate the demand.
    This is a long-solved problem in blockchain transactions through the gas fee, and thus hosting the auctions on-chain is an obvious solution to this problem.
-1. An OEV auction is an oracle service in essence, for which it is important to be able to prove a good track record.
-   For this, a paper trail of the entire communication between the auctioneer and the searchers need to be kept, and a blockchain is a natural solution to this.
+2. An OEV auction is an oracle service in essence, for which it is important to be able to prove a good track record.
+   For this, a paper trail of the entire communication between the [auctioneer](../../glossary.md#auctioneer) and the searchers need to be kept, and a blockchain is a natural solution to this.
    Consider this for a counterexample:
-   A searcher claims that they call the auctioneer API to make bids that should win, but the auctioneer keeps awarding the updates to other, smaller bids.
+   A searcher claims that they call the auctioneer API to make bids that should win, but the auctioneer keeps [awarding](../../glossary.md#award) the updates to other, smaller bids.
    The auctioneer would not be able to disprove this claim, as it is not possible to prove that an API call has not been received, yet whether an on-chain transaction has been confirmed is conclusively verifiable.
 
 ## Auction schedule
@@ -50,11 +49,11 @@ When a searcher wins an auction for a dApp, they gain OEV feed update privileges
 Therefore, this section describes the schedule of a single auction track, which covers all OEV opportunities of a dApp.
 
 Auctions take a fixed amount of time, happen periodically, and are packed tightly.
-For example, if the auction period is `T=30`, there will be auctions in `t=0–30`, `t=30–60`, `t=60–90`, etc.
+For example, if the [auction period](../../glossary.md#auction-period) is `T=30`, there will be auctions in `t=0–30`, `t=30–60`, `t=60–90`, etc.
 During each auction, searchers bid for OEV update privileges that will be valid during the following auction period.
 For example, if a searcher bids during `A1` (which happened in `t=0–30`) and won, they are awarded the right to do OEV updates during `A2`, which will happen in`t=30–60`.
 
-An auction period is split into two phases, bid and award phases, which are packed tightly (e.g., `Tb=25` and `Ta=5`, which add up to `T=30`).
+An auction period is split into two phases, [bid](../../glossary.md#bid-phase) and [award phases](../../glossary.md#award-phase), which are packed tightly (e.g., `Tb=25` and `Ta=5`, which add up to `T=30`).
 During the bid phase, searchers place their bids.
 During the award phase, the auctioneer considers the bids, chooses the winner, and announces the award.
 Bids confirmed during the award phase are not considered, and the auctioneer's award transaction is expected to be confirmed before the award phase ends.

@@ -61,6 +61,11 @@ Auction cop is an application that confirms or contradicts [fulfillments](#fulfi
 In other words, it slashes the [collateral](#collateral) of winning OEV auction participants that did not pay their [bid](#bid) amounts.
 An auction cop controls a hot wallet that has the [auctioneer](#auctioneer) role on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md).
 
+## Auction period
+
+OEV auctions take a fixed amount of time, happen periodically, and are packed tightly.
+The amount of time that an auction takes is called the auction period.
+
 ## Auction resolver
 
 Auction resolver is an application that [awards](#award) [bids](#bid) placed on an [OEV auction](#oev-auction).
@@ -70,6 +75,11 @@ An auction resolver controls a hot wallet that has the [auctioneer](#auctioneer)
 
 At the end of an [OEV auction](#oev-auction), the respective [auction resolver](#auction-resolver) responds with an award transaction.
 This award transaction provides a signature that allows the [searcher](#searcher) that has placed the winning [bid](#bid) to be able to update [OEV feeds](#oev-feed) on [Api3ServerV1OevExtension](./contracts/api3-server-v1/api3serverv1oevextension.md), given that they have paid their bid amount.
+
+## Award phase
+
+Award phase is the second phase of an [OEV auction](#oev-auction) where [auction resolves](#auction-resolver) are supposed to [award](#award) [searchers'](#searcher) [bids](#bid).
+It is preceded by the [bid phase](#bid-phase).
 
 ## Base feed
 
@@ -109,6 +119,11 @@ In short, the beneficiary is the account that a dApp specified as the recipient 
 
 By placing a bid on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md), a [searcher](#searcher) signals to the [auctioneers](#auctioneer) that they want to participate in an [OEV auction](#oev-auction).
 Most generally, the bid specifies what update the searcher wants to do and how much they are willing to pay for that.
+
+## Bid phase
+
+Bid phase is the first phase of an [OEV auction](#oev-auction) where [searchers](#searcher) are supposed to place their [bids](#bid).
+It is followed by the [award phase](#award-phase).
 
 ## Collateral
 
