@@ -145,6 +145,12 @@ The [Api3ServerV1](./contracts/api3-server-v1/api3serverv1.md) implementation of
 
 We use the term dApp interchangeably to refer to the whole entity, its implementation, or specifically, its contract implementation.
 
+## dApp ID
+
+API3 holds separate [OEV auctions](#oev-auction) for different [dApps](#dapp) to be able to keep their proceeds isolated.
+In this scheme, dApps are identified by IDs that are assigned by API3.
+The dApps are required to use [proxies](#proxy) with the respective dApp IDs to receive any OEV proceeds.
+
 ## Data feed
 
 Where whether we are referring to a [Beacon](#beacon) or a [Beacon set](#beacon-set) does not matter, we use the term data feed.
