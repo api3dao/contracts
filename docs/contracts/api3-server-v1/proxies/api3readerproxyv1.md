@@ -1,6 +1,6 @@
 # Api3ReaderProxyV1
 
-Api3ReaderProxyV1 is the [proxy](../../../glossary.md#proxy) that should be used to read API3 [dAPIs](../../../glossary.md#dapi).
+Api3ReaderProxyV1 is an upgradeable [proxy](../../../glossary.md#proxy) that should be used to read API3 [dAPIs](../../../glossary.md#dapi).
 It implements [IApi3ReaderProxy](../../interfaces/iapi3readerproxy.md) as a first-class citizen, and partially implements Chainlink's AggregatorV2V3Interface for convenience (refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more information about the latter).
 
 Api3ReaderProxyV1 is a UUPS-upgradeable proxy with a proxy-specific implementation.
