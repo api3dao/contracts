@@ -29,14 +29,14 @@ async function main(fieldLists: Record<string, string[]>): Promise<void> {
         try {
           await validation(list);
         } catch (error) {
-          errors.push(new Error(String((error as Error).message) + ` in field: ${field}`));
+          errors.push(new Error(`${(error as Error).message} in field: ${field}`));
         }
       })
     );
   }
   if (errors.length > 0) {
     // eslint-disable-next-line no-console
-    console.error('Validation failed with the following error(s):\n' + errors.join('\n'));
+    console.error(`Validation failed with the following error(s):\n${errors.join('\n')}`);
     // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
