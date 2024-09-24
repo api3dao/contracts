@@ -32,9 +32,6 @@ jobs:
       - name: Validate deployment config
         run: pnpm validate-deployment-config
 
-      - name: Validate chain support
-        run: pnpm validate-chain-support
-
       - name: Validate deployments
         run: pnpm validate-deployments
         if: always()

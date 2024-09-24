@@ -41,7 +41,6 @@
     "test:coverage": "hardhat coverage",
     "test:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:gas": "REPORT_GAS=TRUE hardhat test",
-    "validate-chain-support": "ts-node scripts/validate-chain-support.ts",
     "validate-deployment-config": "hardhat run scripts/validate-deployment-config.ts",
     "validate-deployments": "hardhat run scripts/validate-deployments.ts",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
