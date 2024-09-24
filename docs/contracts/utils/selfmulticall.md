@@ -13,7 +13,7 @@ SelfMulticall also has an extended version, [ExtendedSelfMulticall](./extendedse
 ## Reading
 
 For a batch read operation, one should use `tryMulticall()` to receive a best effort response.
-If all calls are guaranteed to succeed, `multicall()` can also be used instead.
+If all calls are guaranteed to succeed, `multicall()` can also be used to the same effect.
 
 ## Writing
 

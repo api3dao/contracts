@@ -1,24 +1,24 @@
 # AirseekerRegistry
 
-All API3 [data feeds](../../glossary.md#data-feed) are served over the [Api3ServerV1](./api3serverv1.md) contract.
-[Airseeker](../../glossary.md#airseeker) is a piece of API3 data feed infrastructure that pushes [API provider](../../glossary.md#api-provider)-[signed data](../../glossary.md#signed-data) to Api3ServerV1 when the conditions specified on AirseekerRegistry are satisfied.
+[Base feeds](../../glossary.md#base-feed) are served over the [Api3ServerV1](./api3serverv1.md) contract.
+[Airseeker](../../glossary.md#airseeker) is a piece of API3 infrastructure that pushes [API provider](../../glossary.md#api-provider)-[signed data](../../glossary.md#signed-data) to Api3ServerV1 when the conditions specified on AirseekerRegistry are satisfied.
 In other words, AirseekerRegistry is an on-chain configuration file for Airseeker.
 This is preferred for two reasons:
 
 - The reconfiguration of data feed infrastructure through a redeployment or an API call is error-prone and should be avoided.
   On-chain reconfiguration is preferable because it can be restricted according to rules enforced by a contract (e.g., a multisig would require a specific number of signatures), which may reduce the probability of errors and severity of consequences.
 - The on-chain reconfiguration can be integrated to other contracts to streamline the process.
-  For example, [Api3MarketV2](./api3marketv2.md) automatically updates AirseekerRegistry based on user payments, removing the need for any manual steps.
+  For example, [Api3MarketV2](./api3marketv2.md) automatically updates AirseekerRegistry based on user payments made over the [API3 Market](../../glossary.md#api3-market) frontend, removing the need for any manual steps.
 
 ## How Airseeker uses AirseekerRegistry
 
 Airseeker periodically checks if any of the active data feeds on AirseekerRegistry needs to be updated (according to the on-chain state and respective [update parameters](../../glossary.md#update-parameters)), and updates the ones that do.
 `activeDataFeed()` is used for this, which returns all data that Airseeker needs about a data feed with a specific index.
-To reduce the number of RPC calls, Airseeker batches these calls using `multicall()`.
-The first of these multicalls includes an `activeDataFeedCount()` call, which tells Airseeker how many multicalls it should make to fetch data for all active data feeds (e.g., if Airseeker is making calls in batches of 10 and there are 44 active data feeds, 5 multicalls would need to be made).
+To reduce the number of RPC calls, Airseeker batches these calls using [SelfMulticall](../utils/selfmulticall.md)'s `multicall()`.
+The first of these multicalls includes an `activeDataFeedCount()` call, which tells Airseeker how many multicalls it should make to fetch data for all active data feeds (e.g., if Airseeker is making calls in batches of 10 and there are 44 active data feeds, 5 multicalls would need to be made.)
 
 In the case that the active data feeds change (in that they become activated/deactivated) while Airseeker is making these multicalls, Airseeker may fetch the same feed in two separate batches, or miss a data feed.
-This is deemed acceptable, assuming that active data feeds will not change very frequently and Airseeker will run its update loop very frequently (meaning that any missed data feed will be handled on the next iteration).
+This is deemed acceptable, assuming that active data feeds will not change very frequently and Airseeker will run its update loop very frequently (meaning that any missed data feed will be handled on the next iteration.)
 
 Let us go over what `activeDataFeed()` returns.
 
@@ -41,7 +41,7 @@ function activeDataFeed(uint256 index)
 
 `activeDataFeed()` returns `dataFeedId` and `dapiName`.
 `dataFeedId` and `dapiName` are not needed for the update functionality, and are only provided for Airseeker to refer to in its logs.
-`dataFeedDetails` is contract ABI-encoded [Airnode addresses](../../glossary.md#airnode-address) and [template](../../glossary.md#template) IDs belonging to the data feed identified by `dataFeedId`.
+`dataFeedDetails` is contract ABI-encoded [Airnode addresses](../../glossary.md#airnode-address) and [template](../../glossary.md#template) IDs belonging to the [data feed](../../glossary.md#data-feed) identified by `dataFeedId`.
 When a [signed API](../../glossary.md#signed-api) is called through the URL `$SIGNED_API_URL/public/$AIRNODE_ADDRESS`, it returns an array of signed data, which is keyed by template IDs (e.g., https://signed-api.api3.org/public/0xc52EeA00154B4fF1EbbF8Ba39FDe37F1AC3B9Fd4).
 Therefore, `dataFeedDetails` is all Airseeker needs to fetch the signed data it will use to update the data feed.
 
@@ -49,7 +49,7 @@ Therefore, `dataFeedDetails` is all Airseeker needs to fetch the signed data it 
 These values are compared with the aggregation of the values returned by the signed APIs to determine if an update is necessary.
 `beaconValues` and `beaconTimestamps` are the current values of the constituent [Beacons](../../glossary.md#beacon) of the data feed identified by `dataFeedId`.
 Airseeker updates data feeds through a multicall of individual calls that update each underlying Beacon, followed by a call that updates the [Beacon set](../../glossary.md#beacon-set) using the Beacons.
-Having the Beacon readings allows Airseeker to predict the outcome of the individual Beacon updates and omit them as necessary (e.g., if the on-chain Beacon value is fresher than what the signed API returns, which guarantees that that Beacon update will revert, Airseeker does not attempt to update that Beacon).
+Having the Beacon readings allows Airseeker to predict the outcome of the individual Beacon updates and omit them as necessary (e.g., if the on-chain Beacon value is fresher than what the signed API returns, which guarantees that that Beacon update will revert, Airseeker does not attempt to update that Beacon.)
 
 `updateParameters` is contract ABI-encoded update parameters in a format that Airseeker recognizes.
 Currently, the only format used is
@@ -94,14 +94,14 @@ The owner is responsible with leaving the state of this contract in a way that A
 Otherwise, Airseeker behavior is not defined (but it can be expected that the respective data feed will not be updated under any condition).
 The points to consider while activating a data feed name are as follow:
 
-- If a [dAPI](../../glossary.md#dapi) name is being used, it should be set at [Api3ServerV1](./api3serverv1.md)
+- If a [dAPI](../../glossary.md#dapi) name is being used, it should be set at [Api3ServerV1](./api3serverv1.md).
 - The data feed should be registered by calling `registerDataFeed()`.
   If a dAPI name has been used, this should be repeated whenever the dAPI name is updated.
-- The update parameters of the data feed should be set by calling `setDataFeedIdUpdateParameters()` or `setDapiNameUpdateParameters()`
+- The update parameters of the data feed should be set by calling `setDataFeedIdUpdateParameters()` or `setDapiNameUpdateParameters()`.
 - The signed API URLs of the respective Airnodes should be set by calling `setSignedApiUrl()`.
   If a dAPI name has been used, this should be repeated whenever the dAPI name is updated.
   The signed API URL of an Airnode may change, in which case this should be reflected on AirseekerRegistry by calling `setSignedApiUrl()` again.
-- The respective [sponsor wallet](../../glossary.md#sponsor-wallet) should be funded
+- The respective [sponsor wallet](../../glossary.md#sponsor-wallet) should be funded.
 
 Note that some of the steps above imply a need for maintenance when dAPI names change, signed API URLs change and sponsor wallets run out.
 It is recommended to run automated workers to handle these cases, or at least these aspects should be monitored and responsible parties should be alerted when an intervention is needed.

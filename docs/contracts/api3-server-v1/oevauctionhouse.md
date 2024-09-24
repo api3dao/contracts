@@ -11,15 +11,15 @@ OEV auctions are done on-chain to address two issues:
    Considering that we are building the OEV auction platform for all dApps living on all chains, simply scaling up the infrastructure to meet this demand is not realistic, and we should have a mechanism to downregulate the demand.
    This is a long-solved problem in blockchain transactions through the gas fee, and thus hosting the auctions on-chain is an obvious solution to this problem.
 2. An OEV auction is an oracle service in essence, for which it is important to be able to prove a good track record.
-   For this, a paper trail of the entire communication between the [auctioneer](../../glossary.md#auctioneer) and the searchers need to be kept, and a blockchain is a natural solution to this.
+   For this, a paper trail of the entire communication between the [auctioneers](../../glossary.md#auctioneer) and the searchers need to be kept, and a blockchain is a natural solution to this.
    Consider this for a counterexample:
-   A searcher claims that they call the auctioneer API to make bids that should win, but the auctioneer keeps [awarding](../../glossary.md#award) the updates to other, smaller bids.
+   A searcher claims that they call the (hypothetical) auctioneer API to make bids that should win, but the auctioneer keeps [awarding](../../glossary.md#award) the updates to other, smaller bids.
    The auctioneer would not be able to disprove this claim, as it is not possible to prove that an API call has not been received, yet whether an on-chain transaction has been confirmed is conclusively verifiable.
 
 ## Auction schedule
 
 Each dApp has a single, independent auction track.
-When a searcher wins an auction for a dApp, they gain OEV feed update privileges across all dAPIs that the dApp uses.
+When a searcher wins an auction for a dApp, they gain OEV feed update privileges across all [dAPIs](../../glossary.md#dapi) that the dApp uses.
 Therefore, this section describes the schedule of a single auction track, which covers all OEV opportunities of a dApp.
 
 Auctions take a fixed amount of time, happen periodically, and are packed tightly.
@@ -45,21 +45,22 @@ Therefore, for this dApp, a new auction will start at every UNIX timestamp `k * 
 
 ## Collateral and protocol fee
 
-Whenever a bidder wins an auction, OevAuctionHouse locks up some of their funds to charge either a collateral or a protocol fee.
+Whenever a bidder wins an auction, OevAuctionHouse locks up some of their funds to charge either a [collateral](../../glossary.md#collateral) or a [protocol fee](../../glossary.md#protocol-fee).
 In the case that the winner promptly pays their bid and report that they have done so, they are charged a protocol fee out of the locked funds and the rest of the funds gets released.
 Failing to do so results in them being charged a collateral amount and the rest of the funds gets released.
 
-Since the initial implementation, we have decided to implement the protocol monetization logic elsewhere.
-As a result, the protocol fee in this contract will be set to zero.
-In the rest of the documentation, we omit the protocol fee, as it has no effect to the flow when it is set to zero.
+> [!WARNING]  
+> Since the initial implementation, we have decided to implement the protocol monetization logic elsewhere.
+> As a result, the protocol fee in this contract will be set to zero.
+> In the rest of the documentation, we omit the protocol fee, as it has no effect to the flow when it is set to zero.
 
 ## Searcher flow
 
 - Call `deposit()` at OevAuctionHouse to deposit funds to be used as collateral.
-- Continuously poll the signed API to find and store signed data that can be used to extract OEV.
+- Continuously poll the [signed API](../../glossary.md#signed-api) to find and store [signed data](../../glossary.md#signed-data) that can be used to extract OEV.
 - Towards the end of each bid phase, calculate the total OEV amount that can be extracted during the next bid phase, and call `placeBid()` to place a bid for it if profitable.
 - For each placed bid, check for an award at the end of the respective award phase by listening for the `AwardedBid` event.
-- For each award, call `payOevBid()` at Api3ServerV1OevExtension of the respective chain to pay the bid and assume OEV update privileges.
+- For each award, call `payOevBid()` at [Api3ServerV1OevExtension](./api3serverv1oevextension.md) of the respective chain to pay the bid and assume OEV update privileges.
 - Use the previously stored signed data that can extract OEV during the bid phase of the next auction to capture the detected OEV opportunities.
 - For each paid bid, call `reportFulfillment()` at OevAuctionHouse to request for the collateral that was locked during the award to be released.
 
@@ -92,7 +93,7 @@ In the case that `T` is much smaller than `MAXIMUM_BID_LIFETIME`, `MAXIMUM_BID_L
 Bidders can attempt to deny service by placing winning bids that satisfy all conditions required to win, and do one of the following while the award transaction is pending:
 
 1. Withdraw deposited collateral
-1. Cancel the bid
+2. Cancel the bid
 
 To prevent the first, withdrawals are done in two steps:
 `initiateWithdrawal()` is called first, and `withdraw()` gets called `WITHDRAWAL_WAITING_PERIOD` after that.
@@ -109,12 +110,12 @@ OevAuctionHouse inherits [AccessControlRegistryAdminnedWithManager](../access/ac
 Multiple accounts can be granted this role, which is allowed to:
 
 1. Award bids (which locks up collateral)
-1. Confirm fulfillments, i.e., confirm that awarded bids have been paid for (which releases the collateral)
-1. Contradict fulfillments, i.e., contradict that awarded bids have been paid for (which slashes the collateral)
+2. Confirm [fulfillments](../../glossary.md#fulfillment), i.e., confirm that awarded bids have been paid for (which releases the collateral)
+3. Contradict fulfillments, i.e., contradict that awarded bids have been paid for (which slashes the collateral)
 
-The first of these is done by the [auction creator](https://github.com/api3dao/oev-auctioneer/tree/main/src/auction-creator) and the last two are done by the [auction cop](https://github.com/api3dao/oev-auctioneer/tree/main/src/auction-cop).
+The first of these is done by the "auction resolver" and the last two are done by the "auction cop".
 
-### Auction creator flow
+### Auction resolver flow
 
 - At the start of each award phase, fetch `PlacedBid` and `ExpeditedBidExpiration` logs during the respective bid phase.
 - Select the highest bid that satisfies all of the following:
@@ -131,20 +132,20 @@ The first of these is done by the [auction creator](https://github.com/api3dao/o
 
 ### Finality considerations
 
-- While determining the winner of an auction, the auction creator checks if the highest bidder has sufficient deposit to cover the collateral requirement of their bid.
+- While determining the winner of an auction, the auction resolver checks if the highest bidder has sufficient deposit to cover the collateral requirement of their bid.
   However, the bidder can receive another award between this check and the confirmation of the award transaction, which can result in the bidder not having sufficient deposit when the award transaction gets confirmed.
   In this case, the auctioneer should not try awarding another bidder, as the awarded signature will already have been exposed in the reverting award transaction.
 
-- Normally, the auction creator is expected to deliver the award within the award phase.
+- Normally, the auction resolver is expected to deliver the award within the award phase.
   In the case that the delivery is delayed due to networking or finality issues, it is preferable to not lock up the collateral of the bidder.
-  For this, auction creators should use a sufficiently small `awardExpirationTimestamp` while calling `awardBid()`.
+  For this, auction resolvers should use a sufficiently small `awardExpirationTimestamp` while calling `awardBid()`.
 
 - It is assumed that the bidder has waited for sufficient finality before reporting their fulfillment.
   If the auction cop fails to confirm the bid payment due to a finality issue, it will contradict the fulfillment.
 
 ### Security implications
 
-An auctioneer is trusted to facilitate the auction honestly (as an alternative to a trustless, on-chain order book, which has drawbacks of its own), which enables the following unwanted scenarios:
+An auctioneer is trusted to facilitate the auction honestly (as an alternative to an on-chain order book), which enables the following unwanted scenarios:
 
 - It can deny service (selectively or to everyone) by not awarding bids or not confirming fulfillments.
 - It can contradict fulfillments that have been correctly reported.
@@ -154,7 +155,7 @@ An auctioneer is trusted to facilitate the auction honestly (as an alternative t
 The purpose of doing the auctions on-chain is for such events (or their lack thereof) to be decisively provable.
 
 Based on the fact that the scenarios above are possible, starting from the moment a bid is created and until the fulfillment is confirmed, the respective collateral is under risk of being slashed unjustly.
-Note that the auctioneer role is intended to be given to a hot wallet that a bot controls, while the contract manager is intended to be a multisig.
+Note that the auctioneer role is intended to be given to a hot wallet that a bot controls, while the contract [manager](../../glossary.md#manager) is intended to be a [multisig](../../glossary.md#manager-multisig).
 Therefore, in the event of an unjust slashing, the funds become accessible to the multisig, and not the hot wallet.
 In such an occasion, the issue is intended to be resolved retrospectively by the multisig based on the on-chain records through an off-chain dispute resolution mechanism.
 
@@ -173,10 +174,10 @@ The following parameters are used to calculate the bid topic:
 
 - `majorVersion`: A positive integer that specifies the major version of the auctioneer.
   Any breaking change in the behavior of the auctioneer, which can involve changes in auction rules or off-chain protocol specs, is denoted by this major version being incremented.
-- `dappId`: A positive integer that specifies a dApp on a specific chain.
+- [`dappId`](../../glossary.md#dapp-id): A positive integer that specifies a dApp on a specific chain.
   A single dApp deployed on multiple chains will have a different `dappId` for each chain deployment.
-- `startTimestamp`: The start timestamp of the bid phase during which the bidder wants to execute OEV updates.
-- `endTimestamp`: The end timestamp of the bid phase during which the bidder wants to execute OEV updates.
+- `auctionLength`: The [auction period](../../glossary.md#auction-period) in seconds.
+- `signedDataTimestampCutoff`: The largest signed data timestamp that the searcher will be allowed to use to update the respective OEV feeds if they win the auction.
 
 The bid topic is calculated as follows:
 
@@ -184,13 +185,13 @@ The bid topic is calculated as follows:
 ethers.utils.keccak256(
   ethers.utils.solidityPack(
     ['uint256', 'uint256', 'uint256', 'uint256'],
-    [majorVersion, dappId, startTimestamp, endTimestamp]
+    [majorVersion, dappId, auctionLength, signedDataTimestampCutoff]
   )
 );
 ```
 
-By using this bid topic, the bidder confirms the major version that they are operating on, the dApp they are bidding for, and between which timestamps they want to be able to execute OEV updates.
-Note that the addition of the timestamps to the bid topic implies that the bid topic changes for every auction.
+By using this bid topic, the bidder confirms the major version that they are operating on, the dApp they are bidding for, and the period during which they will be able to execute OEV updates.
+Note that the `signedDataTimestampCutoff` in the bid topic implies that the bid topic changes for every auction.
 
 ### `bidDetails`
 
@@ -221,8 +222,8 @@ The fulfillment report is the hash of the transaction that the winner has sent w
 ### Sealed bids
 
 In a future major version, sealed bids may be supported.
-For this, `dappId`, `startTimestamp` and `endTimestamp` would need to be transferred to `bidDetails`, and a non-auction specific `bidTopic` convention would need to be chosen (e.g., `keccak256(abi.encodePacked(majorVersion, auctioneerId))`).
-Then, `bidDetails` can simply be `abi.encode(dappId, startTimestamp, endTimestamp, nonce)` encrypted using the public key that the auctioneer has announced, e.g., using RSA-4096.
+For this, `dappId` and `signedDataTimestampCutoff` would need to be transferred to `bidDetails`, and a non-auction specific `bidTopic` convention would need to be chosen (e.g., `keccak256(abi.encodePacked(majorVersion, auctionLength, auctioneerId))`).
+Then, `bidDetails` can simply be `abi.encode(dappId, signedDataTimestampCutoff, updateSenderAddress, nonce)` encrypted using the public key that the auctioneer has announced, e.g., using RSA-4096.
 This disables auctioneers from being able to filter logs at the RPC level, which creates the need for a centralized indexer.
 
 ## Privileged accounts
@@ -266,7 +267,6 @@ Optionally, the manager can delegate the proxy setting and withdrawing responsib
 
 ## On interacting with OevAuctionHouse through a contract
 
-As with all contracts, interactions with OevAuctionHouse are originated from an EOA sending a transaction (assuming a pre-[EIP-3074](https://eips.ethereum.org/EIPS/eip-3074) world).
 In the case that an EOA calls OevAuctionHouse directly, `bidder` is the address of this EOA.
 This means that the EOA will be able to place bids (by calling `placeBidWithExpiration()` or `placeBid()`), report fulfillments (by calling `reportFulfillment()`), withdraw (by calling `initiateWithdrawal()` and `withdraw()` in succession), or cancel ongoing withdrawals (by calling `cancelWithdrawal()`).
 
@@ -274,7 +274,7 @@ In case that the user wants to limit the privileges of the EOA that interacts wi
 As a toy example, say we have lended our capital to a searcher bot operator to capture OEV on our behalf.
 However, we do not want the bot operator to be able to withdraw our capital.
 We could implement a contract that forwards the `placeBidWithExpiration()`, `placeBid()` and `reportFulfillment()` calls from the bot operator EOA, and the `initiateWithdrawal()`, `withdraw()` and `cancelWithdrawal()` calls from our EOA.
-(As a note, this does not prevent the bot operator from burning through the funds by placing invalid bids, nor does it guarantee that the bot operator will share the revenue, which is why this is called a toy example.)
+(As a note, this does not prevent the bot operator from burning through the funds by placing invalid bids, nor does it guarantee that the bot operator will share the revenue.)
 
 Below are the important points to consider while implementing a contract that calls `placeBidWithExpiration()` and/or `placeBid()`:
 

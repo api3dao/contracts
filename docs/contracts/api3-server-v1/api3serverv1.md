@@ -20,11 +20,11 @@ In practice, downtime and latency of individual parties is a common issue, and t
 However, the alternative to requiring full participation causes a critical vulnerability.
 
 Say that the data from 21 parties are aggregated in a synchronous manner.
-It is generally understood that this aggregation can be compromised with at least 11 malicious parties.
-However, to avoid data feed-level downtime, data feeds that are updated synchronously are often configured to be able to update even if some of the parties are late or unavailable.
-For example, Chainlink deems 14 responses to be adequate to come to an initial consensus in such a setting.
-This means that in the case that 7 parties are coincidentally unresponsive or even only late (due to a node bug, a global Cloudflare outage, etc.), 14 parties will be allowed to form a consensus, where 7 malicious parties are enough to compromise the data feed.
-Therefore, the security guarantees of synchronously updated data feeds are much lower than what the general public is led to believe (in this case, a 34% attack suffices to control the data feed rather than the implied 51%).
+It is generally misunderstood that this aggregation can be compromised with at least 11 malicious parties.
+However, to avoid data feed-level downtime, data feeds that are updated synchronously are often configured to be able to come to an initial consensus even if some of the parties are late or unavailable.
+(For example, 14 out of 21 is often deemed to be adequate for an initial consensus in such a setting.)
+This means that in the case that 7 parties are coincidentally unresponsive or even merely late (due to a node bug, a global Cloudflare outage, etc.), 14 parties will be allowed to form an initial consensus, where 7 malicious parties are enough to compromise the data feed.
+Therefore, the security guarantees of synchronously updated data feeds are much lower than what the general public is led to believe (in this example, a 34% attack suffices to control the data feed rather than the implied 51%).
 
 As a solution to this issue, Api3ServerV1 enables each [API provider](../../glossary.md#api-provider) to maintain a single-source data feed of their own, a [Beacon](../../glossary.md#beacon), and enables arbitrary combinations of these Beacons to be aggregated on-chain to form [Beacon sets](../../glossary.md#beacon-set).
 In the case that an issue debilitates the infrastructure of an API provider, their individual Beacon will stop getting updated, yet its most recent value will continue contributing to the Beacon set aggregation.
@@ -43,19 +43,19 @@ Each Beacon can only be updated with signed data whose timestamp is larger than 
 Since Beacon sets can only be aggregated out of Beacons and the Beacon set timestamp is the median of the timestamps of the respective Beacons, Beacon set timestamps also never decrease.
 (As a note, Beacon set updates that keep the timestamp the same are allowed if the aggregation result changes, considering that the contributing Beacon timestamps must have increased.)
 
-Although data feed timestamps are mainly nonces that prevent replay attacks, they have a secondary functionality of indicating the freshness of the data.
+Although data feed timestamps are mainly nonces that prevent replay attacks, they have a secondary function of indicating the freshness of the data.
 For example, if one expects the [heartbeat](../../glossary.md#heartbeat) interval of a data feed to be one day, they can safely require the respective timestamp to be no older than one day.
 
 As a note, some alternative data feed implementations use the timestamp of the block in which the data feed is updated as the update timestamp.
-Since our data feed timestamp is a more realistic measure of freshness, it will lag a few seconds behind this value, which allows them to be used interchangeably in most cases.
+Since our data feed timestamp is a more realistic measure of freshness, it will lag a few seconds behind this value, which still allows them to be used interchangeably in most cases.
 However, this may not be the case if the chain time drifts or the data feed timestamps are misreported.
 Since understanding the implications of this difference to the full extent is difficult, the users are not recommended to use the data feed timestamp in their contract logic beyond validating a heartbeat interval requirement.
 
 ## dAPIs
 
-The data feed IDs in Api3ServerV1 immutably define a specific aggregation of calls to respective API providers.
-This is fully trust-minimized, [first-party oracle](../../glossary.md#first-party-oracles)-based setup.
-However, [dApps](../../glossary.md#dapp) often require a fully-managed solution, where the API provider curation and the maintenance of API provider integrations are handled by experts.
+The data feed IDs in Api3ServerV1 immutably define a specific aggregation of API calls to respective API providers.
+This is the trust-minimized, [first-party oracle](../../glossary.md#first-party-oracles)-based setup.
+However, [dApps](../../glossary.md#dapp) often require a fully-managed solution, where the API provider curation and the maintenance of API provider integrations are handled by domain experts.
 
 Api3ServerV1 implements [dAPI](../../glossary.md#dapi) names, which are `bytes32`-type strings that are mapped to the immutable data feed IDs mentioned above.
 Accounts that have the "dAPI name setter" role are able to update this mapping, which at this moment are the [manager multisig](../../glossary.md#manager-multisig) and [Api3MarketV2](./api3marketv2.md).

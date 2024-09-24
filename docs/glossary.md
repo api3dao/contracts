@@ -183,6 +183,7 @@ endpointId = keccak256(abi.encode(oisTitle, endpointName));
 ## First-party oracles
 
 An [API provider](#api-provider) that provides oracle services without the use of any middlemen is a first-party oracle.
+Compare to [third-party oracles](#third-party-oracles).
 
 ## Fulfillment
 

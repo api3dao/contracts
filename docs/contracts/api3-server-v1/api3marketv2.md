@@ -3,7 +3,7 @@
 API3 users interact with Api3MarketV2 over the [API3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
 Api3MarketV2 has an accompanying [AirseekerRegistry](./airseekerregistry.md) that it owns.
 User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../../glossary.md#airseeker).
-For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is currently deactivated will activate it and set its [update parameters](../../glossary.md#update-parameters) to the ones from the subscription, causing Airseeker to immediately start executing updates as specified.
+For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is currently deactivated will activate it and set its [update parameters](../../glossary.md#update-parameters) as the ones from the subscription plan, causing Airseeker to immediately start executing updates as specified.
 
 ## The owner
 
@@ -86,24 +86,26 @@ This section describes what happens under the hood of the API3 Market frontend.
 
 The requirements for a `buySubscription()` call to succeed are as follow:
 
-- The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3MarketV2, are valid
-- The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3MarketV2 deployment) items
-- The data feed is registered at AirseekerRegistry
-- The data feed has been updated at most a day ago
-- The call sends enough funds that when forwarded to the sponsor wallet, the balance of the sponsor wallet exceeds what `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` returns
+- The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3MarketV2, are valid.
+- The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3MarketV2 deployment) items.
+- The data feed is registered at AirseekerRegistry.
+- The data feed has been updated at most a day ago.
+- The call sends enough funds that when forwarded to the sponsor wallet, the balance of the sponsor wallet exceeds what `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` returns.
 
-The user should first fetch the Merkle leaf values and proofs for the subscription they wish to purchase, and call `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` with the arguments.
+The client should first fetch the Merkle leaf values and proofs for the subscription they wish to purchase, and call `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` with the arguments.
 This call reverting indicates that the subscription cannot be added to the queue of the dAPI, so the subscription cannot be purchased.
-In the case that it does not revert, the user should check the sponsor wallet balance to find out how much they need to pay for the subscription (if any).
+In the case that it does not revert, the client should check the sponsor wallet balance to find out how much they need to pay for the subscription (if any).
 Here, it is a good practice to overestimate for the probability of the sponsor wallet sending a transaction before the subscription purchase can be confirmed.
 For example, say the sponsor wallet balance is `1 ETH`, `computeExpectedSponsorWalletBalanceAfterSubscriptionIsAdded()` returns `2 ETH`, and the user is buying a 30 day subscription whose price is `1.5 ETH`.
 The daily price of the subscription would be `1.5 / 30 = 0.05 ETH`, which would be a decent headroom.
 Then, instead of sending `2 - 1 = 1 ETH`, the user could send `1 + 0.05 = 1.05 ETH`, which would be very unlikely to revert if the price is accurate.
 
-Before making the `buySubscription()` call, the user should make sure that the data feed is registered at AirseekerRegistry and the data feed has been updated in the last day at Api3ServerV1.
+Before making the `buySubscription()` call, the client should make sure that the data feed is registered at AirseekerRegistry and the data feed has been updated in the last day at Api3ServerV1.
 For that, they can do a static multicall to `[getDataFeedData(), registerDataFeed(), getDataFeedData()]`, where the returndata of the first `getDataFeedData()` indicate if the data feed needs to be registered, and the returndata of the second `getDataFeedData()` indicate if respective Beacons or Beacon set need to be updated.
 If the data feed needs to be registered and/or updated, these can be done in a single multicall that finally calls `buySubscription()`.
 The data feed details needed to register the data feed would most likely be fetched from the same source that serves the Merkle tree data, and the signed data needed to update the data feed would be fetched from a signed API.
+
+For convenience, the client can also add the [Api3ReaderProxyV1](./proxies/api3readerproxyv1.md) deployment to the subscription purchase multicall by calling `deployApi3ReaderProxyV1()`.
 
 One thing to note here is that data feed updates revert when they are not successful (e.g., because another party updated the data feed with data whose [timestamp](./api3serverv1.md#data-feed-timestamps) is more recent than what the user has attempted to use), and thus the multicall should be done with `tryMulticallAndBuySubscription()`.
 Another pitfall here is that calling `eth_estimateGas` with `tryMulticallAndBuySubscription()` will return an arbitrary amount (because `eth_estimateGas` looks for a gas limit that causes the transaction to not revert and `tryMulticallAndBuySubscription()` never reverts in the multicall phase by design), which is why the `eth_estimateGas` call should be done with `multicallAndBuySubscription()`.

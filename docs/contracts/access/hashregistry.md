@@ -90,7 +90,7 @@ Instead, the signer can be swapped out to make their signatures invalid.
 
 ### Delegation signatures
 
-The delegation signatures are in the following [ERC-191](https://eips.ethereum.org/EIPS/eip-191) format:
+The [delegation](../../glossary.md#delegation) signatures are in the following [ERC-191](https://eips.ethereum.org/EIPS/eip-191) format:
 
 ```solidity
 bytes32 ethSignedMessageHash = toEthSignedMessageHash(
