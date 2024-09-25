@@ -10,18 +10,28 @@ import managerMultisigAddresses from '../data/manager-multisig.json';
 
 function main() {
   const chainAliases = new Set(CHAINS.map((chain) => chain.alias));
-  [
-    Object.keys(managerMultisigAddresses),
+  const records: Record<string, string[]> = {
+    managerMultisigAddresses: Object.keys(managerMultisigAddresses),
     chainsSupportedByDapis,
     chainsSupportedByMarket,
     chainsSupportedByOevAuctions,
-  ].map((supportedChainAliases) => {
-    supportedChainAliases.map((supportedChainAlias) => {
+  };
+
+  Object.entries(records).forEach(([fieldName, supportedChainAliases]) => {
+    supportedChainAliases.forEach((supportedChainAlias) => {
       if (!chainAliases.has(supportedChainAlias)) {
-        throw new Error(`Supported chain with alias ${supportedChainAlias} does not exist`);
+        throw new Error(`Supported chain in ${fieldName} with alias ${supportedChainAlias} does not exist`);
       }
     });
+    if (new Set(supportedChainAliases).size !== supportedChainAliases.length) {
+      throw new Error(`Duplicates found in ${fieldName}`);
+    }
+    const sortedSupportedChainAliases = [...supportedChainAliases].sort();
+    if (JSON.stringify(supportedChainAliases) !== JSON.stringify(sortedSupportedChainAliases)) {
+      throw new Error(`${fieldName} is not sorted`);
+    }
   });
+
   Object.entries(managerMultisigAddresses).map(([alias, address]) => {
     if (!ethers.isAddress(address)) {
       throw new Error(`Manager multisig address of ${alias}, ${address as string}, is not valid`);
