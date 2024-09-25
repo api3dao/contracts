@@ -12,7 +12,16 @@ import {
 } from '../data/chain-support.json';
 
 module.exports = () => {
-  const references: Record<string, Record<string, AddressLike>> = {};
+  const references: Record<string, Record<string, AddressLike>> = {
+    GnosisSafeWithoutProxy: {},
+    OwnableCallForwarder: {},
+    AccessControlRegistry: {},
+    Api3ServerV1: {},
+    Api3ServerV1OevExtension: {},
+    Api3ReaderProxyV1Factory: {},
+    Api3MarketV2: {},
+    OevAuctionHouse: {},
+  };
 
   const networks = new Set([
     ...chainsSupportedByManagerMultisig,
