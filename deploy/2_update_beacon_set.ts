@@ -5,13 +5,22 @@ import { deployments, ethers, network } from 'hardhat';
 import { chainsSupportedByDapis } from '../data/chain-support.json';
 import { Api3ServerV1__factory } from '../src/index';
 
-async function signMessage(value: number, templateId: BytesLike, deployer: HardhatEthersSigner): Promise<BytesLike> {
-  const data = `0x${value.toString().padStart(64, '0')}` as BytesLike;
-  const encodeFunctionData = ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, value, data]);
-  const signature = await deployer.signMessage(ethers.getBytes(encodeFunctionData));
+async function signData(
+  deployer: HardhatEthersSigner,
+  templateId: BytesLike,
+  timestamp: number,
+  value: number
+): Promise<BytesLike> {
+  const signature = await deployer.signMessage(
+    ethers.getBytes(
+      ethers.solidityPackedKeccak256(
+        ['bytes32', 'uint256', 'bytes'],
+        [templateId, timestamp, `0x${value.toString().padStart(64, '0')}`]
+      )
+    )
+  );
   // In case that the signature is by a Ledger device, 27 is subtracted from v
-  // https://github.com/LedgerHQ/ledgerjs/issues/466
-  // Undo that here
+  // https://github.com/LedgerHQ/ledgerjs/issues/466. Undo that here.
   const v = Number.parseInt(signature.slice(-2), 16);
   let updatedV;
   if (v === 0 || v === 1) {
@@ -64,7 +73,7 @@ module.exports = async () => {
   If the signer is the expected deployer, initial update signatures are created as such
   for (const [ind, templateId] of templateIds.entries()) {
     if (dataFeedReadings[ind] === initialValue) {
-      const signature = await signMessage(ind + 1, templateId, deployer!);
+      const signature = await signData(deployer!, templateId, ind + 1);
       ...
     }
   }
@@ -115,12 +124,12 @@ module.exports = async () => {
   const estimateGasMulticallData = [] as BytesLike[];
 
   for (const [ind, templateId] of templateIds.entries()) {
-    const signature = await signMessage(ind + 102, templateId, deployer!);
+    const signature = await signData(deployer!, templateId, ind + 102, ind + 102);
     estimateGasMulticallData.push(
       api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', [
         EXPECTED_DEPLOYER_ADDRESS,
         templateId,
-        ind + 1,
+        ind + 102,
         `0x${(ind + 102).toString().padStart(64, '0')}`,
         signature,
       ])
