@@ -57,7 +57,13 @@ async function signMessage(value: number, templateId: BytesLike, deployer: Hardh
 module.exports = async () => {
   const { log } = deployments;
   const [deployer] = await ethers.getSigners();
-  const airnodeAddress = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
+  // This script does two things:
+  // 1 - Updates a Beacon set composed of Beacons that are updated by the expected deployer address
+  // 2 - Estimates the gas cost of updating the same Beacon set again
+  // If the first signer returned by ethers is the expected deployer address, it will do both (1) and (2).
+  // Otherwise, it will only do (1). In both cases, (1) is done using hardcoded signatures by the expected
+  // deployer address.
+  const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
   const BEACON_SET_BEACON_COUNT = 7;
 
   if (!chainsSupportedByDapis.includes(network.name)) {
@@ -69,7 +75,7 @@ module.exports = async () => {
     log('Deployer not provided');
     return;
   }
-  const isDeployer = airnodeAddress === deployer.address;
+  const isExpectedDeployer = EXPECTED_DEPLOYER_ADDRESS === deployer.address;
 
   const Api3ServerV1 = await deployments.get('Api3ServerV1');
   const api3ServerV1 = Api3ServerV1__factory.connect(Api3ServerV1.address, deployer);
@@ -78,7 +84,7 @@ module.exports = async () => {
     (index) => `0x${(index + 1).toString(16).padStart(64, '0')}`
   ) as BytesLike[];
   const beaconIds = templateIds.map((templateId) =>
-    ethers.solidityPackedKeccak256(['address', 'bytes32'], [airnodeAddress, templateId])
+    ethers.solidityPackedKeccak256(['address', 'bytes32'], [EXPECTED_DEPLOYER_ADDRESS, templateId])
   );
   const beaconSetId = ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(['bytes32[]'], [beaconIds]));
   const dataFeedReadings = await api3ServerV1.multicall.staticCall([
@@ -92,8 +98,10 @@ module.exports = async () => {
 
   for (const [ind, templateId] of templateIds.entries()) {
     if (dataFeedReadings[ind] === initialValue) {
-      const signature = isDeployer ? await signMessage(ind + 1, templateId, deployer) : getUpdateSignature(ind);
-      updateMulticallData.push(await getCallData(api3ServerV1, airnodeAddress, ind + 1, templateId, signature));
+      const signature = isExpectedDeployer ? await signMessage(ind + 1, templateId, deployer) : getUpdateSignature(ind);
+      updateMulticallData.push(
+        await getCallData(api3ServerV1, EXPECTED_DEPLOYER_ADDRESS, ind + 1, templateId, signature)
+      );
     }
   }
 
@@ -109,8 +117,8 @@ module.exports = async () => {
     log('Beacon set update already executed');
   }
 
-  if (!isDeployer) {
-    log('Skipping gas estimation for non-deployer');
+  if (!isExpectedDeployer) {
+    log('Skipping gas estimation for non-expected deployer');
     return;
   }
 
@@ -118,13 +126,15 @@ module.exports = async () => {
 
   for (const [ind, templateId] of templateIds.entries()) {
     const signature = await signMessage(ind + 102, templateId, deployer);
-    estimateGasMulticallData.push(await getCallData(api3ServerV1, airnodeAddress, ind + 102, templateId, signature));
+    estimateGasMulticallData.push(
+      await getCallData(api3ServerV1, EXPECTED_DEPLOYER_ADDRESS, ind + 102, templateId, signature)
+    );
   }
 
   estimateGasMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
   const estimateGasCalldata = api3ServerV1.interface.encodeFunctionData('multicall', [estimateGasMulticallData]);
   // log(`Beacon set update estimate gas calldata:\n${estimateGasCalldata}`);
-  const voidSigner = new ethers.VoidSigner(airnodeAddress, ethers.provider);
+  const voidSigner = new ethers.VoidSigner(EXPECTED_DEPLOYER_ADDRESS, ethers.provider);
   const gasCost = await voidSigner?.estimateGas({ to: api3ServerV1.getAddress(), data: estimateGasCalldata });
   log(`Estimated Beacon set update gas cost: ${gasCost}`);
 };
