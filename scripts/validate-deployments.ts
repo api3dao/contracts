@@ -47,7 +47,7 @@ async function validateDeployments(network: string) {
       );
     }
     if (chainsSupportedByDapis.includes(network)) {
-      // Validate that the Beacon set used to estimate gas is initialized
+      // Validate that the Beacons and the Beacon set used to estimate gas is initialized
       const { address: api3ServerV1Address, abi: api3ServerV1Abi } = JSON.parse(
         fs.readFileSync(join('deployments', network, `Api3ServerV1.json`), 'utf8')
       );
@@ -56,21 +56,56 @@ async function validateDeployments(network: string) {
         api3ServerV1Abi,
         provider
       ) as unknown as Api3ServerV1;
+      const gasEstimationBeaconIds = [
+        '0x04e74298b57a8feb27fa268064e8d82362f536506b436a11919a56d62a9614e4',
+        '0xc36aef164807ec0212be5a5e88f96f6f08efa52aa619850f2aebbb57bbb05f5c',
+        '0xc62860a80328b5a6f1ac0bb0efd47a561d49131ddd199d6c7aa7ba8b26c6808e',
+        '0x9b9aa53f09673621edbcec5881ae4a096020da721cd46294e2cde433fa6a9002',
+        '0xe3c8ef47ce467ab45e0aa204f1c82e77ca343866d188832bec0b454870df39db',
+        '0x24350cc64cc0cda334222168c57d557e97c5831a896e4ccb7f1f2e3a19a3750a',
+        '0x41b67b850cfdeddb613686eba44522aa6b9713cdb7027ff01ba10d2b522a7e73',
+      ];
       const gasEstimationBeaconSetId = '0xfee26235840c5bb25159e649ff825d97f1446de6042291b57755bb94f6e19e97';
-      const goFetchGasEstimationBeaconSet = await go(async () => api3ServerV1.dataFeeds(gasEstimationBeaconSetId), {
-        retries: 5,
-        attemptTimeoutMs: 10_000,
-        totalTimeoutMs: 50_000,
-        delay: {
-          type: 'random',
-          minDelayMs: 2000,
-          maxDelayMs: 5000,
-        },
-      });
+      const goFetchGasEstimationBeaconSet = await go(
+        async () =>
+          api3ServerV1.multicall.staticCall([
+            ...gasEstimationBeaconIds.map((gasEstimationBeaconId) =>
+              api3ServerV1.interface.encodeFunctionData('dataFeeds', [gasEstimationBeaconId])
+            ),
+            api3ServerV1.interface.encodeFunctionData('dataFeeds', [gasEstimationBeaconSetId]),
+          ]),
+        {
+          retries: 5,
+          attemptTimeoutMs: 10_000,
+          totalTimeoutMs: 50_000,
+          delay: {
+            type: 'random',
+            minDelayMs: 2000,
+            maxDelayMs: 5000,
+          },
+        }
+      );
       if (!goFetchGasEstimationBeaconSet.success || !goFetchGasEstimationBeaconSet.data) {
         throw new Error(`${network} gas estimation Beacon set could not be fetched`);
       }
-      if (goFetchGasEstimationBeaconSet.data[0] !== 4n || goFetchGasEstimationBeaconSet.data[1] !== 4n) {
+      for (let beaconInd = 0; beaconInd < gasEstimationBeaconIds.length; beaconInd++) {
+        const [value, timestamp] = ethers.AbiCoder.defaultAbiCoder().decode(
+          ['int224', 'uint32'],
+          goFetchGasEstimationBeaconSet.data[beaconInd]!
+        );
+        if (value !== BigInt(beaconInd + 1) || timestamp !== BigInt(beaconInd + 1)) {
+          // We know that avalanche-testnet Beacons are initialized and accidentally updated again
+          // eslint-disable-next-line unicorn/no-lonely-if
+          if (network !== 'avalanche-testnet') {
+            throw new Error(`${network} gas estimation Beacon #${beaconInd + 1} is not initialized as expected`);
+          }
+        }
+      }
+      const [beaconSetValue, beaconSetTimestamp] = ethers.AbiCoder.defaultAbiCoder().decode(
+        ['int224', 'uint32'],
+        goFetchGasEstimationBeaconSet.data[gasEstimationBeaconIds.length]!
+      );
+      if (beaconSetValue !== 4n || beaconSetTimestamp !== 4n) {
         throw new Error(`${network} gas estimation Beacon set is not initialized as expected`);
       }
       if (chainsSupportedByMarket.includes(network)) {
