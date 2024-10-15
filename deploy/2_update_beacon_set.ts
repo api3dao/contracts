@@ -33,12 +33,16 @@ function getUpdateSignature(ind: number): BytesLike {
   return updateSignatures[ind] as BytesLike;
 }
 
-function signatureCorrection(signature: string) {
+async function signMessage(value: number, templateId: BytesLike, deployer: HardhatEthersSigner): Promise<BytesLike> {
+  const data = `0x${value.toString().padStart(64, '0')}` as BytesLike;
+  const encodeFunctionData = ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, value, data]);
+  const signature = await deployer.signMessage(ethers.getBytes(encodeFunctionData));
+  // In case that the signature is by a Ledger device, 27 is subtracted from v
+  // https://github.com/LedgerHQ/ledgerjs/issues/466
+  // Undo that here
   const v = Number.parseInt(signature.slice(-2), 16);
   let updatedV;
   if (v === 0 || v === 1) {
-    // Ledger subtracts 27 from v, undo that
-    // https://github.com/LedgerHQ/ledgerjs/issues/466
     updatedV = v + 27;
   } else if (v === 27 || v === 28) {
     updatedV = v;
@@ -46,12 +50,6 @@ function signatureCorrection(signature: string) {
     throw new Error(`Unexpected v in signature: ${v}`);
   }
   return signature.slice(0, -2) + updatedV.toString(16).padStart(2, '0');
-}
-
-async function signMessage(value: number, templateId: BytesLike, deployer: HardhatEthersSigner): Promise<BytesLike> {
-  const data = `0x${value.toString().padStart(64, '0')}` as BytesLike;
-  const encodeFunctionData = ethers.solidityPackedKeccak256(['bytes32', 'uint256', 'bytes'], [templateId, value, data]);
-  return signatureCorrection(await deployer.signMessage(ethers.getBytes(encodeFunctionData)));
 }
 
 module.exports = async () => {
