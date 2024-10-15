@@ -104,7 +104,7 @@ module.exports = async () => {
     }
   }
 
-  if (dataFeedReadings[BEACON_SET_BEACON_COUNT] === initialValue) {
+  if (dataFeedReadings[BEACON_SET_BEACON_COUNT] === initialValue || updateMulticallData.length > 0) {
     updateMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
   }
 
