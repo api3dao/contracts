@@ -1,16 +1,15 @@
 import { type HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
+import type { AddressLike, BytesLike } from 'ethers';
 import { deployments, ethers, network } from 'hardhat';
 
 import { chainsSupportedByDapis } from '../data/chain-support.json';
 import { type Api3ServerV1, Api3ServerV1__factory } from '../src/index';
 
-type Address = string | `0x${string}`;
-type BytesLike = string | Uint8Array;
-type UpdateBeaconWithSignedDataArgsType = [Address, BytesLike, number, BytesLike, BytesLike];
+type UpdateBeaconWithSignedDataArgsType = [AddressLike, BytesLike, number, BytesLike, BytesLike];
 
 async function getCallData(
   api3ServerV1: Api3ServerV1,
-  airnodeAddress: Address,
+  airnodeAddress: AddressLike,
   value: number,
   templateId: BytesLike,
   signature: BytesLike
