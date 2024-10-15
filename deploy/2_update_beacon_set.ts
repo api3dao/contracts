@@ -57,7 +57,7 @@ async function signMessage(value: number, templateId: BytesLike, deployer: Hardh
 module.exports = async () => {
   const { log } = deployments;
   const [deployer] = await ethers.getSigners();
-  const airnodeAddress = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1') as Address;
+  const airnodeAddress = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
   const BEACON_SET_BEACON_COUNT = 7;
 
   if (!chainsSupportedByDapis.includes(network.name)) {
