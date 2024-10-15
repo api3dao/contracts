@@ -71,14 +71,10 @@ module.exports = async () => {
     return;
   }
 
-  if (!deployer) {
-    log('Deployer not provided');
-    return;
-  }
-  const isExpectedDeployer = EXPECTED_DEPLOYER_ADDRESS === deployer.address;
+  const isExpectedDeployer = EXPECTED_DEPLOYER_ADDRESS === deployer!.address;
 
   const Api3ServerV1 = await deployments.get('Api3ServerV1');
-  const api3ServerV1 = Api3ServerV1__factory.connect(Api3ServerV1.address, deployer);
+  const api3ServerV1 = Api3ServerV1__factory.connect(Api3ServerV1.address, deployer!);
 
   const templateIds = [...Array.from({ length: BEACON_SET_BEACON_COUNT }).keys()].map(
     (index) => `0x${(index + 1).toString(16).padStart(64, '0')}`
@@ -98,7 +94,9 @@ module.exports = async () => {
 
   for (const [ind, templateId] of templateIds.entries()) {
     if (dataFeedReadings[ind] === initialValue) {
-      const signature = isExpectedDeployer ? await signMessage(ind + 1, templateId, deployer) : getUpdateSignature(ind);
+      const signature = isExpectedDeployer
+        ? await signMessage(ind + 1, templateId, deployer!)
+        : getUpdateSignature(ind);
       updateMulticallData.push(
         await getCallData(api3ServerV1, EXPECTED_DEPLOYER_ADDRESS, ind + 1, templateId, signature)
       );
@@ -125,7 +123,7 @@ module.exports = async () => {
   const estimateGasMulticallData = [] as BytesLike[];
 
   for (const [ind, templateId] of templateIds.entries()) {
-    const signature = await signMessage(ind + 102, templateId, deployer);
+    const signature = await signMessage(ind + 102, templateId, deployer!);
     estimateGasMulticallData.push(
       await getCallData(api3ServerV1, EXPECTED_DEPLOYER_ADDRESS, ind + 102, templateId, signature)
     );
