@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 9.1.0
+
+### Minor Changes
+
+- 96c4e9e: Add dAPI and Market support to unichain-sepolia-testnet, odyssey-sepolia-testnet
+
 ## 9.0.0
 
 ### Major Changes
