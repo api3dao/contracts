@@ -10,7 +10,7 @@ import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevEx
 // See Api3ReaderProxyV1Factory tests for the upgrade flow
 describe('Api3ReaderProxyV1', function () {
   async function deploy() {
-    const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'updater'];
+    const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'searcher'];
     const accounts = await ethers.getSigners();
     const roles: Record<string, HardhatEthersSigner> = roleNames.reduce((acc, roleName, index) => {
       return { ...acc, [roleName]: accounts[index] };
@@ -35,6 +35,19 @@ describe('Api3ReaderProxyV1', function () {
       roles.manager!.address,
       api3ServerV1.getAddress()
     );
+
+    const api3ServerV1OevExtensionOevBidPayerFactory = await ethers.getContractFactory(
+      'MockApi3ServerV1OevExtensionOevBidPayer',
+      roles.deployer
+    );
+    const api3ServerV1OevExtensionOevBidPayer = await api3ServerV1OevExtensionOevBidPayerFactory.deploy(
+      roles.searcher!.address,
+      api3ServerV1OevExtension.getAddress()
+    );
+    await roles.searcher!.sendTransaction({
+      to: api3ServerV1OevExtensionOevBidPayer.getAddress(),
+      value: ethers.parseEther('10'),
+    });
 
     const managerRootRole = testUtils.deriveRootRole(roles.manager!.address);
     const adminRole = testUtils.deriveRole(managerRootRole, api3ServerV1OevExtensionAdminRoleDescription);
@@ -78,15 +91,16 @@ describe('Api3ReaderProxyV1', function () {
     );
 
     return {
-      roles,
+      api3ReaderProxyV1,
       api3ServerV1,
       api3ServerV1OevExtension,
-      api3ReaderProxyV1,
+      api3ServerV1OevExtensionOevBidPayer,
+      baseBeaconTimestamp,
+      baseBeaconValue,
       dapiName,
       dappId,
+      roles,
       templateId,
-      baseBeaconValue,
-      baseBeaconTimestamp,
     };
   }
 
@@ -118,7 +132,7 @@ describe('Api3ReaderProxyV1', function () {
           it('reads OEV feed', async function () {
             const {
               roles,
-              api3ServerV1OevExtension,
+              api3ServerV1OevExtensionOevBidPayer,
               api3ReaderProxyV1,
               dappId,
               templateId,
@@ -129,7 +143,7 @@ describe('Api3ReaderProxyV1', function () {
             const oevBeaconTimestamp = baseBeaconTimestamp + 1;
             const signedDataTimestampCutoff = oevBeaconTimestamp + 10;
             await helpers.time.setNextBlockTimestamp(oevBeaconTimestamp + 1);
-            await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, 1);
+            await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, 1);
             const signature = await signDataWithAlternateTemplateId(
               roles.airnode as any,
               templateId,
@@ -141,7 +155,9 @@ describe('Api3ReaderProxyV1', function () {
               [roles.airnode!.address, templateId, oevBeaconTimestamp, encodeData(oevBeaconValue), signature]
             );
             await helpers.time.setNextBlockTimestamp(oevBeaconTimestamp + 2);
-            await api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData]);
+            await api3ServerV1OevExtensionOevBidPayer
+              .connect(roles.searcher)
+              .updateDappOevDataFeed(dappId, [signedData]);
             const dataFeed = await api3ReaderProxyV1.read();
             expect(dataFeed.value).to.equal(oevBeaconValue);
             expect(dataFeed.timestamp).to.equal(oevBeaconTimestamp);

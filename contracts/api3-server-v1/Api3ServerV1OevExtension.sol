@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
+import "../vendor/@openzeppelin/contracts@4.8.2/security/ReentrancyGuard.sol";
 import "../access/AccessControlRegistryAdminnedWithManager.sol";
 import "./DataFeedServer.sol";
 import "./interfaces/IApi3ServerV1OevExtension.sol";
 import "../vendor/@openzeppelin/contracts@4.8.2/utils/Address.sol";
 import "../vendor/@openzeppelin/contracts@4.8.2/utils/cryptography/ECDSA.sol";
 import "./interfaces/IApi3ServerV1.sol";
+import "./interfaces/IApi3ServerV1OevExtensionOevBidPayer.sol";
 
 /// @title Api3ServerV1 extension for OEV support
 /// @notice Api3ServerV1 contract supports base data feeds and OEV
@@ -15,6 +17,7 @@ import "./interfaces/IApi3ServerV1.sol";
 /// are intended to read API3 data feeds through a standardized proxy, which
 /// abstracts this change away.
 contract Api3ServerV1OevExtension is
+    ReentrancyGuard,
     AccessControlRegistryAdminnedWithManager,
     DataFeedServer,
     IApi3ServerV1OevExtension
@@ -45,6 +48,9 @@ contract Api3ServerV1OevExtension is
     /// ID
     mapping(uint256 => LastPaidBid) public override dappIdToLastPaidBid;
 
+    bytes32 private constant OEV_BID_PAYMENT_CALLBACK_SUCCESS =
+        keccak256("Api3ServerV1OevExtensionOevBidPayer.onOevBidPayment");
+
     /// @param accessControlRegistry_ AccessControlRegistry contract address
     /// @param adminRoleDescription_ Admin role description
     /// @param manager_ Manager address
@@ -73,11 +79,19 @@ contract Api3ServerV1OevExtension is
         );
     }
 
+    /// @dev Used to receive the bid amount in the OEV bid payment callback
+    receive() external payable {}
+
     /// @notice Called by the contract manager or a withdrawer to withdraw the
     /// accumulated OEV auction proceeds
+    /// @dev This function has a reentrancy guard to prevent it from being
+    /// called in an OEV bid payment callback
     /// @param recipient Recipient address
     /// @param amount Amount
-    function withdraw(address recipient, uint256 amount) external override {
+    function withdraw(
+        address recipient,
+        uint256 amount
+    ) external override nonReentrant {
         require(recipient != address(0), "Recipient address zero");
         require(amount != 0, "Amount zero");
         require(
@@ -99,15 +113,23 @@ contract Api3ServerV1OevExtension is
     /// parameters and publishes it. Then, the updater account calls this
     /// function to pay the bid amount and claim the privilege to execute
     /// updates for the dApp with ID using the signed data whose timestamps are
-    /// limited by the cut-off.
+    /// limited by the cut-off. At least the bid amount must be sent to this
+    /// contract with empty calldata in the `onOevBidPayment` callback, which
+    /// will be checked upon succesful return.
+    /// As a result of the reentrancy guard, nesting OEV bid payments is not
+    /// allowed.
     /// @param dappId dApp ID
+    /// @param bidAmount Bid amount
     /// @param signedDataTimestampCutoff Signed data timestamp cut-off
     /// @param signature Signature provided by an auctioneer
+    /// @param data Data that will be passed through the callback
     function payOevBid(
         uint256 dappId,
+        uint256 bidAmount,
         uint32 signedDataTimestampCutoff,
-        bytes calldata signature
-    ) external payable override {
+        bytes calldata signature,
+        bytes calldata data
+    ) external override nonReentrant {
         require(dappId != 0, "dApp ID zero");
         require(signedDataTimestampCutoff != 0, "Cut-off zero");
         // It is intended for the auction periods to be in the order of a
@@ -124,7 +146,7 @@ contract Api3ServerV1OevExtension is
                     block.chainid,
                     dappId,
                     msg.sender,
-                    msg.value,
+                    bidAmount,
                     signedDataTimestampCutoff
                 )
             ).toEthSignedMessageHash()
@@ -145,10 +167,22 @@ contract Api3ServerV1OevExtension is
             updater: msg.sender,
             signedDataTimestampCutoff: signedDataTimestampCutoff
         });
+        uint256 balanceBefore = address(this).balance;
+        require(
+            IApi3ServerV1OevExtensionOevBidPayer(msg.sender).onOevBidPayment(
+                bidAmount,
+                data
+            ) == OEV_BID_PAYMENT_CALLBACK_SUCCESS,
+            "OEV bid payment callback failed"
+        );
+        require(
+            address(this).balance - balanceBefore >= bidAmount,
+            "OEV bid payment amount short"
+        );
         emit PaidOevBid(
             dappId,
             msg.sender,
-            msg.value,
+            bidAmount,
             signedDataTimestampCutoff,
             auctioneer
         );

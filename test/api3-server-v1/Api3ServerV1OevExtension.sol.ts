@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import type { BaseWallet, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
 import { ethers } from 'hardhat';
 
-import type { Api3ServerV1OevExtension } from '../../src/index';
+import type { MockApi3ServerV1OevExtensionOevBidPayer } from '../../src/index';
 import * as testUtils from '../test-utils';
 
 import { encodeData, median, updateBeacon } from './Api3ServerV1.sol';
@@ -25,7 +25,7 @@ export async function signDataWithAlternateTemplateId(
 
 export async function payOevBid(
   roles: Record<string, HardhatEthersSigner>,
-  api3ServerV1OevExtension: Api3ServerV1OevExtension,
+  api3ServerV1OevExtensionOevBidPayer: MockApi3ServerV1OevExtensionOevBidPayer,
   dappId: BigNumberish,
   signedDataTimestampCutoff: BigNumberish,
   bidAmount: BigNumberish
@@ -35,18 +35,18 @@ export async function payOevBid(
     ethers.getBytes(
       ethers.solidityPackedKeccak256(
         ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
-        [chainId, dappId, roles.updater!.address, bidAmount, signedDataTimestampCutoff]
+        [chainId, dappId, await api3ServerV1OevExtensionOevBidPayer.getAddress(), bidAmount, signedDataTimestampCutoff]
       )
     )
   );
-  return api3ServerV1OevExtension
-    .connect(roles.updater)
-    .payOevBid(dappId, signedDataTimestampCutoff, signature, { value: bidAmount });
+  return api3ServerV1OevExtensionOevBidPayer
+    .connect(roles.searcher)
+    .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, '0x');
 }
 
 describe('Api3ServerV1OevExtension', function () {
   async function deploy() {
-    const roleNames = ['deployer', 'manager', 'withdrawer', 'auctioneer', 'updater', 'randomPerson'];
+    const roleNames = ['deployer', 'manager', 'withdrawer', 'auctioneer', 'searcher', 'randomPerson'];
     const accounts = await ethers.getSigners();
     const roles: Record<string, HardhatEthersSigner> = roleNames.reduce((acc, roleName, index) => {
       return { ...acc, [roleName]: accounts[index] };
@@ -72,6 +72,19 @@ describe('Api3ServerV1OevExtension', function () {
       roles.manager!.address,
       api3ServerV1.getAddress()
     );
+
+    const api3ServerV1OevExtensionOevBidPayerFactory = await ethers.getContractFactory(
+      'MockApi3ServerV1OevExtensionOevBidPayer',
+      roles.deployer
+    );
+    const api3ServerV1OevExtensionOevBidPayer = await api3ServerV1OevExtensionOevBidPayerFactory.deploy(
+      roles.searcher!.address,
+      api3ServerV1OevExtension.getAddress()
+    );
+    await roles.searcher!.sendTransaction({
+      to: api3ServerV1OevExtensionOevBidPayer.getAddress(),
+      value: ethers.parseEther('10'),
+    });
 
     const managerRootRole = testUtils.deriveRootRole(roles.manager!.address);
     const adminRole = testUtils.deriveRole(managerRootRole, api3ServerV1OevExtensionAdminRoleDescription);
@@ -131,15 +144,16 @@ describe('Api3ServerV1OevExtension', function () {
     };
 
     return {
-      roles,
       accessControlRegistry,
       api3ServerV1,
       api3ServerV1OevExtension,
       api3ServerV1OevExtensionAdminRoleDescription,
-      withdrawerRole,
+      api3ServerV1OevExtensionOevBidPayer,
       auctioneerRole,
-      beacons,
       beaconSet,
+      beacons,
+      roles,
+      withdrawerRole,
     };
   }
 
@@ -188,198 +202,364 @@ describe('Api3ServerV1OevExtension', function () {
   });
 
   describe('withdraw', function () {
-    context('Recipient is not zero address', function () {
-      context('Amount is not zero', function () {
-        context('Sender is the manager', function () {
-          context('Withdrawal is successful', function () {
-            it('withdraws', async function () {
-              const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-              const amount = ethers.parseEther('1');
-              const nextTimestamp = (await helpers.time.latest()) + 1;
-              await helpers.time.setNextBlockTimestamp(nextTimestamp);
-              await payOevBid(roles, api3ServerV1OevExtension, 1, nextTimestamp + 1, amount);
-              const recipientBalanceBefore = await ethers.provider.getBalance(roles.randomPerson!.address);
-              await expect(
-                api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, amount)
-              )
-                .to.emit(api3ServerV1OevExtension, 'Withdrew')
-                .withArgs(roles.randomPerson!.address, amount, roles.manager!.address);
-              const recipientBalanceAfter = await ethers.provider.getBalance(roles.randomPerson!.address);
-              expect(recipientBalanceAfter - recipientBalanceBefore).to.equal(amount);
+    context('Is not a re-entered from an OEV bid payment callback', function () {
+      context('Recipient is not zero address', function () {
+        context('Amount is not zero', function () {
+          context('Sender is the manager', function () {
+            context('Withdrawal is successful', function () {
+              it('withdraws', async function () {
+                const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer } =
+                  await helpers.loadFixture(deploy);
+                const amount = ethers.parseEther('1');
+                const nextTimestamp = (await helpers.time.latest()) + 1;
+                await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, 1, nextTimestamp + 1, amount);
+                const recipientBalanceBefore = await ethers.provider.getBalance(roles.randomPerson!.address);
+                await expect(
+                  api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, amount)
+                )
+                  .to.emit(api3ServerV1OevExtension, 'Withdrew')
+                  .withArgs(roles.randomPerson!.address, amount, roles.manager!.address);
+                const recipientBalanceAfter = await ethers.provider.getBalance(roles.randomPerson!.address);
+                expect(recipientBalanceAfter - recipientBalanceBefore).to.equal(amount);
+              });
+            });
+            context('Withdrawal is not successful', function () {
+              it('reverts', async function () {
+                const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+                const amount = ethers.parseEther('1');
+                await expect(
+                  api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, amount)
+                ).to.be.revertedWith('Withdrawal reverted');
+              });
             });
           });
-          context('Withdrawal is not successful', function () {
+          context('Sender is a withdrawer', function () {
+            context('Withdrawal is successful', function () {
+              it('withdraws', async function () {
+                const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer } =
+                  await helpers.loadFixture(deploy);
+                const amount = ethers.parseEther('1');
+                const nextTimestamp = (await helpers.time.latest()) + 1;
+                await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, 1, nextTimestamp + 1, amount);
+                const recipientBalanceBefore = await ethers.provider.getBalance(roles.randomPerson!.address);
+                await expect(
+                  api3ServerV1OevExtension.connect(roles.withdrawer).withdraw(roles.randomPerson!.address, amount)
+                )
+                  .to.emit(api3ServerV1OevExtension, 'Withdrew')
+                  .withArgs(roles.randomPerson!.address, amount, roles.withdrawer!.address);
+                const recipientBalanceAfter = await ethers.provider.getBalance(roles.randomPerson!.address);
+                expect(recipientBalanceAfter - recipientBalanceBefore).to.equal(amount);
+              });
+            });
+            context('Withdrawal is not successful', function () {
+              it('reverts', async function () {
+                const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+                const amount = ethers.parseEther('1');
+                await expect(
+                  api3ServerV1OevExtension.connect(roles.withdrawer).withdraw(roles.randomPerson!.address, amount)
+                ).to.be.revertedWith('Withdrawal reverted');
+              });
+            });
+          });
+          context('Sender is not the manager or a sender', function () {
             it('reverts', async function () {
               const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
               const amount = ethers.parseEther('1');
               await expect(
-                api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, amount)
-              ).to.be.revertedWith('Withdrawal reverted');
+                api3ServerV1OevExtension.connect(roles.randomPerson).withdraw(roles.randomPerson!.address, amount)
+              ).to.be.revertedWith('Sender cannot withdraw');
             });
           });
         });
-        context('Sender is a withdrawer', function () {
-          context('Withdrawal is successful', function () {
-            it('withdraws', async function () {
-              const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-              const amount = ethers.parseEther('1');
-              const nextTimestamp = (await helpers.time.latest()) + 1;
-              await helpers.time.setNextBlockTimestamp(nextTimestamp);
-              await payOevBid(roles, api3ServerV1OevExtension, 1, nextTimestamp + 1, amount);
-              const recipientBalanceBefore = await ethers.provider.getBalance(roles.randomPerson!.address);
-              await expect(
-                api3ServerV1OevExtension.connect(roles.withdrawer).withdraw(roles.randomPerson!.address, amount)
-              )
-                .to.emit(api3ServerV1OevExtension, 'Withdrew')
-                .withArgs(roles.randomPerson!.address, amount, roles.withdrawer!.address);
-              const recipientBalanceAfter = await ethers.provider.getBalance(roles.randomPerson!.address);
-              expect(recipientBalanceAfter - recipientBalanceBefore).to.equal(amount);
-            });
-          });
-          context('Withdrawal is not successful', function () {
-            it('reverts', async function () {
-              const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-              const amount = ethers.parseEther('1');
-              await expect(
-                api3ServerV1OevExtension.connect(roles.withdrawer).withdraw(roles.randomPerson!.address, amount)
-              ).to.be.revertedWith('Withdrawal reverted');
-            });
-          });
-        });
-        context('Sender is not the manager or a sender', function () {
+        context('Amount is zero', function () {
           it('reverts', async function () {
             const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-            const amount = ethers.parseEther('1');
             await expect(
-              api3ServerV1OevExtension.connect(roles.randomPerson).withdraw(roles.randomPerson!.address, amount)
-            ).to.be.revertedWith('Sender cannot withdraw');
+              api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, 0)
+            ).to.be.revertedWith('Amount zero');
           });
         });
       });
-      context('Amount is zero', function () {
+      context('Recipient is zero address', function () {
         it('reverts', async function () {
           const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+          const amount = ethers.parseEther('1');
           await expect(
-            api3ServerV1OevExtension.connect(roles.manager).withdraw(roles.randomPerson!.address, 0)
-          ).to.be.revertedWith('Amount zero');
+            api3ServerV1OevExtension.connect(roles.manager).withdraw(ethers.ZeroAddress, amount)
+          ).to.be.revertedWith('Recipient address zero');
         });
       });
     });
-    context('Recipient is zero address', function () {
+    context('Is re-entered from an OEV bid payment callback', function () {
       it('reverts', async function () {
-        const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-        const amount = ethers.parseEther('1');
+        const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer } =
+          await helpers.loadFixture(deploy);
+        const dappId = 1;
+        const nextTimestamp = (await helpers.time.latest()) + 1;
+        const signedDataTimestampCutoff = nextTimestamp + 1;
+        await helpers.time.setNextBlockTimestamp(nextTimestamp);
+        const bidAmount = ethers.parseEther('1');
+        const { chainId } = await ethers.provider.getNetwork();
+        const signature = await roles.auctioneer!.signMessage(
+          ethers.getBytes(
+            ethers.solidityPackedKeccak256(
+              ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+              [
+                chainId,
+                dappId,
+                await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                bidAmount,
+                signedDataTimestampCutoff,
+              ]
+            )
+          )
+        );
+        const data = api3ServerV1OevExtension.interface.encodeFunctionData('withdraw', [
+          roles.randomPerson!.address,
+          bidAmount,
+        ]);
         await expect(
-          api3ServerV1OevExtension.connect(roles.manager).withdraw(ethers.ZeroAddress, amount)
-        ).to.be.revertedWith('Recipient address zero');
+          api3ServerV1OevExtensionOevBidPayer
+            .connect(roles.searcher)
+            .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, data)
+        ).to.be.revertedWith('ReentrancyGuard: reentrant call');
       });
     });
   });
 
   describe('payOevBid', function () {
-    context('dApp ID is not zero', function () {
-      context('Timestamp is not zero', function () {
-        context('Timestamp is not too far from the future', function () {
-          context('Signature is valid', function () {
-            context('Last paid bid timestamp cut-off is more recent than the current one', function () {
-              it('pays OEV bid', async function () {
-                const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+    context('Is not a re-entered from an OEV bid payment callback', function () {
+      context('dApp ID is not zero', function () {
+        context('Timestamp is not zero', function () {
+          context('Timestamp is not too far from the future', function () {
+            context('Signature is valid', function () {
+              context('Last paid bid timestamp cut-off is more recent than the current one', function () {
+                context('OEV bid payment callback does not fail', function () {
+                  context('OEV bid payment is not short', function () {
+                    it('pays OEV bid', async function () {
+                      const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer } =
+                        await helpers.loadFixture(deploy);
+                      const dappId = 1;
+                      const nextTimestamp = (await helpers.time.latest()) + 1;
+                      const signedDataTimestampCutoff = nextTimestamp + 1;
+                      await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                      const bidAmount = ethers.parseEther('1');
+                      await expect(
+                        payOevBid(
+                          roles,
+                          api3ServerV1OevExtensionOevBidPayer,
+                          dappId,
+                          signedDataTimestampCutoff,
+                          bidAmount
+                        )
+                      )
+                        .to.emit(api3ServerV1OevExtension, 'PaidOevBid')
+                        .withArgs(
+                          dappId,
+                          await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                          bidAmount,
+                          signedDataTimestampCutoff,
+                          roles.auctioneer!.address
+                        );
+                      expect(await ethers.provider.getBalance(api3ServerV1OevExtension.getAddress())).to.equal(
+                        bidAmount
+                      );
+                      const lastPaidBid = await api3ServerV1OevExtension.dappIdToLastPaidBid(dappId);
+                      expect(lastPaidBid.updater).to.equal(await api3ServerV1OevExtensionOevBidPayer.getAddress());
+                      expect(lastPaidBid.signedDataTimestampCutoff).to.equal(signedDataTimestampCutoff);
+                    });
+                  });
+                  context('OEV bid payment is short', function () {
+                    it('reverts', async function () {
+                      const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
+                      const dappId = 1;
+                      const nextTimestamp = (await helpers.time.latest()) + 1;
+                      const signedDataTimestampCutoff = nextTimestamp + 1;
+                      await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                      const bidAmount = ethers.parseEther('1');
+                      const { chainId } = await ethers.provider.getNetwork();
+                      const signature = await roles.auctioneer!.signMessage(
+                        ethers.getBytes(
+                          ethers.solidityPackedKeccak256(
+                            ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+                            [
+                              chainId,
+                              dappId,
+                              await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                              bidAmount,
+                              signedDataTimestampCutoff,
+                            ]
+                          )
+                        )
+                      );
+                      await expect(
+                        api3ServerV1OevExtensionOevBidPayer
+                          .connect(roles.searcher)
+                          .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, '0x5678')
+                      ).to.be.revertedWith('OEV bid payment amount short');
+                    });
+                  });
+                });
+                context('OEV bid payment callback fails', function () {
+                  it('reverts', async function () {
+                    const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
+                    const dappId = 1;
+                    const nextTimestamp = (await helpers.time.latest()) + 1;
+                    const signedDataTimestampCutoff = nextTimestamp + 1;
+                    await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                    const bidAmount = ethers.parseEther('1');
+                    const { chainId } = await ethers.provider.getNetwork();
+                    const signature = await roles.auctioneer!.signMessage(
+                      ethers.getBytes(
+                        ethers.solidityPackedKeccak256(
+                          ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+                          [
+                            chainId,
+                            dappId,
+                            await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                            bidAmount,
+                            signedDataTimestampCutoff,
+                          ]
+                        )
+                      )
+                    );
+                    await expect(
+                      api3ServerV1OevExtensionOevBidPayer
+                        .connect(roles.searcher)
+                        .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, '0x1234')
+                    ).to.be.revertedWith('OEV bid payment callback failed');
+                  });
+                });
+              });
+              context('Last paid bid timestamp cut-off is not more recent than the current one', function () {
+                it('reverts', async function () {
+                  const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
+                  const dappId = 1;
+                  const nextTimestamp = (await helpers.time.latest()) + 1;
+                  const signedDataTimestampCutoff = nextTimestamp + 2;
+                  await helpers.time.setNextBlockTimestamp(nextTimestamp);
+                  const bidAmount = ethers.parseEther('1');
+                  await payOevBid(
+                    roles,
+                    api3ServerV1OevExtensionOevBidPayer,
+                    dappId,
+                    signedDataTimestampCutoff,
+                    bidAmount
+                  );
+                  await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
+                  await expect(
+                    payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, bidAmount)
+                  ).to.be.revertedWith('Cut-off not more recent');
+                });
+              });
+            });
+            context('Signature is not valid', function () {
+              it('reverts', async function () {
+                const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
                 const dappId = 1;
                 const nextTimestamp = (await helpers.time.latest()) + 1;
                 const signedDataTimestampCutoff = nextTimestamp + 1;
                 await helpers.time.setNextBlockTimestamp(nextTimestamp);
                 const bidAmount = ethers.parseEther('1');
-                await expect(payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount))
-                  .to.emit(api3ServerV1OevExtension, 'PaidOevBid')
-                  .withArgs(
-                    dappId,
-                    roles.updater!.address,
-                    bidAmount,
-                    signedDataTimestampCutoff,
-                    roles.auctioneer!.address
-                  );
-                expect(await ethers.provider.getBalance(api3ServerV1OevExtension.getAddress())).to.equal(bidAmount);
-                const lastPaidBid = await api3ServerV1OevExtension.dappIdToLastPaidBid(dappId);
-                expect(lastPaidBid.updater).to.equal(roles.updater!.address);
-                expect(lastPaidBid.signedDataTimestampCutoff).to.equal(signedDataTimestampCutoff);
-              });
-            });
-            context('Last paid bid timestamp cut-off is not more recent than the current one', function () {
-              it('reverts', async function () {
-                const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-                const dappId = 1;
-                const nextTimestamp = (await helpers.time.latest()) + 1;
-                const signedDataTimestampCutoff = nextTimestamp + 2;
-                await helpers.time.setNextBlockTimestamp(nextTimestamp);
-                const bidAmount = ethers.parseEther('1');
-                await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
-                await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
+                const { chainId } = await ethers.provider.getNetwork();
+                const signatureByRandomPerson = await roles.randomPerson!.signMessage(
+                  ethers.getBytes(
+                    ethers.solidityPackedKeccak256(
+                      ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+                      [
+                        chainId,
+                        dappId,
+                        await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                        bidAmount,
+                        signedDataTimestampCutoff,
+                      ]
+                    )
+                  )
+                );
                 await expect(
-                  payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount)
-                ).to.be.revertedWith('Cut-off not more recent');
+                  api3ServerV1OevExtensionOevBidPayer
+                    .connect(roles.searcher)
+                    .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signatureByRandomPerson, '0x')
+                ).to.be.revertedWith('Signature mismatch');
               });
             });
           });
-          context('Signature is not valid', function () {
+          context('Timestamp is too far from the future', function () {
             it('reverts', async function () {
-              const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+              const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
               const dappId = 1;
               const nextTimestamp = (await helpers.time.latest()) + 1;
-              const signedDataTimestampCutoff = nextTimestamp + 1;
+              const signedDataTimestampCutoff = nextTimestamp + 60 * 60;
               await helpers.time.setNextBlockTimestamp(nextTimestamp);
               const bidAmount = ethers.parseEther('1');
-              const { chainId } = await ethers.provider.getNetwork();
-              const signatureByRandomPerson = await roles.randomPerson!.signMessage(
-                ethers.getBytes(
-                  ethers.solidityPackedKeccak256(
-                    ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
-                    [chainId, dappId, roles.updater!.address, bidAmount, signedDataTimestampCutoff]
-                  )
-                )
-              );
               await expect(
-                api3ServerV1OevExtension
-                  .connect(roles.updater)
-                  .payOevBid(dappId, signedDataTimestampCutoff, signatureByRandomPerson, { value: bidAmount })
-              ).to.be.revertedWith('Signature mismatch');
+                payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, bidAmount)
+              ).to.be.revertedWith('Cut-off too far in the future');
             });
           });
         });
-        context('Timestamp is too far from the future', function () {
+        context('Timestamp is zero', function () {
           it('reverts', async function () {
-            const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+            const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
             const dappId = 1;
-            const nextTimestamp = (await helpers.time.latest()) + 1;
-            const signedDataTimestampCutoff = nextTimestamp + 60 * 60;
-            await helpers.time.setNextBlockTimestamp(nextTimestamp);
             const bidAmount = ethers.parseEther('1');
             await expect(
-              payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount)
-            ).to.be.revertedWith('Cut-off too far in the future');
+              payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, 0, bidAmount)
+            ).to.be.revertedWith('Cut-off zero');
           });
         });
       });
-      context('Timestamp is zero', function () {
+      context('dApp ID is zero', function () {
         it('reverts', async function () {
-          const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
-          const dappId = 1;
+          const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
+          const nextTimestamp = (await helpers.time.latest()) + 1;
+          const signedDataTimestampCutoff = nextTimestamp + 1;
+          await helpers.time.setNextBlockTimestamp(nextTimestamp);
           const bidAmount = ethers.parseEther('1');
-          await expect(payOevBid(roles, api3ServerV1OevExtension, dappId, 0, bidAmount)).to.be.revertedWith(
-            'Cut-off zero'
-          );
+          await expect(
+            payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, 0, signedDataTimestampCutoff, bidAmount)
+          ).to.be.revertedWith('dApp ID zero');
         });
       });
     });
-    context('dApp ID is zero', function () {
+    context('Is re-entered from an OEV bid payment callback', function () {
       it('reverts', async function () {
-        const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+        const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer } =
+          await helpers.loadFixture(deploy);
+        const dappId = 1;
         const nextTimestamp = (await helpers.time.latest()) + 1;
         const signedDataTimestampCutoff = nextTimestamp + 1;
         await helpers.time.setNextBlockTimestamp(nextTimestamp);
         const bidAmount = ethers.parseEther('1');
+        const { chainId } = await ethers.provider.getNetwork();
+        const signature = await roles.auctioneer!.signMessage(
+          ethers.getBytes(
+            ethers.solidityPackedKeccak256(
+              ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+              [
+                chainId,
+                dappId,
+                await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                bidAmount,
+                signedDataTimestampCutoff,
+              ]
+            )
+          )
+        );
+        const data = api3ServerV1OevExtension.interface.encodeFunctionData('payOevBid', [
+          dappId,
+          bidAmount,
+          signedDataTimestampCutoff,
+          signature,
+          '0x',
+        ]);
         await expect(
-          payOevBid(roles, api3ServerV1OevExtension, 0, signedDataTimestampCutoff, bidAmount)
-        ).to.be.revertedWith('dApp ID zero');
+          api3ServerV1OevExtensionOevBidPayer
+            .connect(roles.searcher)
+            .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, data)
+        ).to.be.revertedWith('ReentrancyGuard: reentrant call');
       });
     });
   });
@@ -392,13 +572,20 @@ describe('Api3ServerV1OevExtension', function () {
             context('Timestamp is smaller than or equal to the cut-off', function () {
               context('Timestamp updates', function () {
                 it('updates dApp OEV data feed', async function () {
-                  const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                  const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer, beacons } =
+                    await helpers.loadFixture(deploy);
                   const dappId = 1;
                   const nextTimestamp = (await helpers.time.latest()) + 1;
                   const signedDataTimestampCutoff = nextTimestamp + 2;
                   await helpers.time.setNextBlockTimestamp(nextTimestamp);
                   const bidAmount = ethers.parseEther('1');
-                  await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                  await payOevBid(
+                    roles,
+                    api3ServerV1OevExtensionOevBidPayer,
+                    dappId,
+                    signedDataTimestampCutoff,
+                    bidAmount
+                  );
                   const beacon = beacons[0]!;
                   const beaconValue = Math.floor(Math.random() * 200 - 100);
                   const beaconTimestamp = signedDataTimestampCutoff - 1;
@@ -414,10 +601,18 @@ describe('Api3ServerV1OevExtension', function () {
                   );
                   await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                   await expect(
-                    api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData])
+                    api3ServerV1OevExtensionOevBidPayer
+                      .connect(roles.searcher)
+                      .updateDappOevDataFeed(dappId, [signedData])
                   )
                     .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
-                    .withArgs(dappId, roles.updater!.address, beacon.beaconId, beaconValue, beaconTimestamp);
+                    .withArgs(
+                      dappId,
+                      await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                      beacon.beaconId,
+                      beaconValue,
+                      beaconTimestamp
+                    );
                   const oevDataFeed = await api3ServerV1OevExtension.oevDataFeed(dappId, beacon.beaconId);
                   expect(oevDataFeed.value).to.equal(beaconValue);
                   expect(oevDataFeed.timestamp).to.equal(beaconTimestamp);
@@ -425,13 +620,19 @@ describe('Api3ServerV1OevExtension', function () {
               });
               context('Timestamp does not update', function () {
                 it('reverts', async function () {
-                  const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                  const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
                   const dappId = 1;
                   const nextTimestamp = (await helpers.time.latest()) + 1;
                   const signedDataTimestampCutoff = nextTimestamp + 3;
                   await helpers.time.setNextBlockTimestamp(nextTimestamp);
                   const bidAmount = ethers.parseEther('1');
-                  await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                  await payOevBid(
+                    roles,
+                    api3ServerV1OevExtensionOevBidPayer,
+                    dappId,
+                    signedDataTimestampCutoff,
+                    bidAmount
+                  );
                   const beacon = beacons[0]!;
                   const beaconValue = Math.floor(Math.random() * 200 - 100);
                   const beaconTimestamp = signedDataTimestampCutoff - 1;
@@ -446,23 +647,33 @@ describe('Api3ServerV1OevExtension', function () {
                     [beacon.airnode.address, beacon.templateId, beaconTimestamp, encodeData(beaconValue), signature]
                   );
                   await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
-                  await api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData]);
+                  await api3ServerV1OevExtensionOevBidPayer
+                    .connect(roles.searcher)
+                    .updateDappOevDataFeed(dappId, [signedData]);
                   await helpers.time.setNextBlockTimestamp(nextTimestamp + 2);
                   await expect(
-                    api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData])
+                    api3ServerV1OevExtensionOevBidPayer
+                      .connect(roles.searcher)
+                      .updateDappOevDataFeed(dappId, [signedData])
                   ).to.be.revertedWith('Does not update timestamp');
                 });
               });
             });
             context('Timestamp is larger than the cut-off', function () {
               it('reverts', async function () {
-                const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
                 const dappId = 1;
                 const nextTimestamp = (await helpers.time.latest()) + 1;
                 const signedDataTimestampCutoff = nextTimestamp + 2;
                 await helpers.time.setNextBlockTimestamp(nextTimestamp);
                 const bidAmount = ethers.parseEther('1');
-                await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                await payOevBid(
+                  roles,
+                  api3ServerV1OevExtensionOevBidPayer,
+                  dappId,
+                  signedDataTimestampCutoff,
+                  bidAmount
+                );
                 const beacon = beacons[0]!;
                 const beaconValue = Math.floor(Math.random() * 200 - 100);
                 const beaconTimestamp = signedDataTimestampCutoff + 1;
@@ -478,20 +689,22 @@ describe('Api3ServerV1OevExtension', function () {
                 );
                 await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                 await expect(
-                  api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData])
+                  api3ServerV1OevExtensionOevBidPayer
+                    .connect(roles.searcher)
+                    .updateDappOevDataFeed(dappId, [signedData])
                 ).to.be.revertedWith('Timestamp exceeds cut-off');
               });
             });
           });
           context('Signature is not valid', function () {
             it('reverts', async function () {
-              const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+              const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
               const dappId = 1;
               const nextTimestamp = (await helpers.time.latest()) + 1;
               const signedDataTimestampCutoff = nextTimestamp + 2;
               await helpers.time.setNextBlockTimestamp(nextTimestamp);
               const bidAmount = ethers.parseEther('1');
-              await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+              await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, bidAmount);
               const beacon = beacons[0]!;
               const beaconValue = Math.floor(Math.random() * 200 - 100);
               const beaconTimestamp = signedDataTimestampCutoff - 1;
@@ -507,7 +720,7 @@ describe('Api3ServerV1OevExtension', function () {
               );
               await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
               await expect(
-                api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [signedData])
+                api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData])
               ).to.be.revertedWith('Signature mismatch');
             });
           });
@@ -520,14 +733,25 @@ describe('Api3ServerV1OevExtension', function () {
                   context('All timestamps are larger than the base counterparts', function () {
                     context('Updates OEV Beacon set timestamp', function () {
                       it('updates dApp OEV data feed', async function () {
-                        const { roles, api3ServerV1OevExtension, beacons, beaconSet } =
-                          await helpers.loadFixture(deploy);
+                        const {
+                          roles,
+                          api3ServerV1OevExtension,
+                          api3ServerV1OevExtensionOevBidPayer,
+                          beacons,
+                          beaconSet,
+                        } = await helpers.loadFixture(deploy);
                         const dappId = 1;
                         const nextTimestamp = (await helpers.time.latest()) + 1;
                         const signedDataTimestampCutoff = nextTimestamp + 2;
                         await helpers.time.setNextBlockTimestamp(nextTimestamp);
                         const bidAmount = ethers.parseEther('1');
-                        await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                        await payOevBid(
+                          roles,
+                          api3ServerV1OevExtensionOevBidPayer,
+                          dappId,
+                          signedDataTimestampCutoff,
+                          bidAmount
+                        );
                         const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
                         const beaconTimestamps = beacons.map(() =>
                           Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -556,12 +780,14 @@ describe('Api3ServerV1OevExtension', function () {
                         );
                         await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                         await expect(
-                          api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData)
+                          api3ServerV1OevExtensionOevBidPayer
+                            .connect(roles.searcher)
+                            .updateDappOevDataFeed(dappId, signedData)
                         )
                           .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
                           .withArgs(
                             dappId,
-                            roles.updater!.address,
+                            await api3ServerV1OevExtensionOevBidPayer.getAddress(),
                             beaconSet.beaconSetId,
                             beaconSetValue,
                             beaconSetTimestamp
@@ -582,8 +808,13 @@ describe('Api3ServerV1OevExtension', function () {
                           // As a note, this is under the "no signatures omitted" context, yet it omits signatures
                           // to be able to change the Beacon set value without changing its timestamp. This nesting
                           // feels tidier, albeit factually incorrect.
-                          const { roles, api3ServerV1OevExtension, beacons, beaconSet } =
-                            await helpers.loadFixture(deploy);
+                          const {
+                            roles,
+                            api3ServerV1OevExtension,
+                            api3ServerV1OevExtensionOevBidPayer,
+                            beacons,
+                            beaconSet,
+                          } = await helpers.loadFixture(deploy);
                           const dappId = 1;
                           const nextTimestamp = (await helpers.time.latest()) + 1;
                           const signedDataTimestampCutoff = nextTimestamp + 3;
@@ -591,7 +822,7 @@ describe('Api3ServerV1OevExtension', function () {
                           const bidAmount = ethers.parseEther('1');
                           await payOevBid(
                             roles,
-                            api3ServerV1OevExtension,
+                            api3ServerV1OevExtensionOevBidPayer,
                             dappId,
                             signedDataTimestampCutoff,
                             bidAmount
@@ -623,8 +854,8 @@ describe('Api3ServerV1OevExtension', function () {
                             })
                           );
                           await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
-                          await api3ServerV1OevExtension
-                            .connect(roles.updater)
+                          await api3ServerV1OevExtensionOevBidPayer
+                            .connect(roles.searcher)
                             .updateDappOevDataFeed(dappId, signedData);
                           await helpers.time.setNextBlockTimestamp(nextTimestamp + 2);
                           beaconValues[0] = 3;
@@ -659,14 +890,14 @@ describe('Api3ServerV1OevExtension', function () {
                             })
                           );
                           await expect(
-                            api3ServerV1OevExtension
-                              .connect(roles.updater)
+                            api3ServerV1OevExtensionOevBidPayer
+                              .connect(roles.searcher)
                               .updateDappOevDataFeed(dappId, signedDataThatUpdatedBeaconSetValueButNotTimestamp)
                           )
                             .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
                             .withArgs(
                               dappId,
-                              roles.updater!.address,
+                              await api3ServerV1OevExtensionOevBidPayer.getAddress(),
                               beaconSet.beaconSetId,
                               beaconSetValue,
                               beaconSetTimestamp
@@ -683,7 +914,8 @@ describe('Api3ServerV1OevExtension', function () {
                       });
                       context('Does not update OEV Beacon set value', function () {
                         it('reverts', async function () {
-                          const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                          const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } =
+                            await helpers.loadFixture(deploy);
                           const dappId = 1;
                           const nextTimestamp = (await helpers.time.latest()) + 1;
                           const signedDataTimestampCutoff = nextTimestamp + 3;
@@ -691,7 +923,7 @@ describe('Api3ServerV1OevExtension', function () {
                           const bidAmount = ethers.parseEther('1');
                           await payOevBid(
                             roles,
-                            api3ServerV1OevExtension,
+                            api3ServerV1OevExtensionOevBidPayer,
                             dappId,
                             signedDataTimestampCutoff,
                             bidAmount
@@ -723,8 +955,8 @@ describe('Api3ServerV1OevExtension', function () {
                             })
                           );
                           await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
-                          await api3ServerV1OevExtension
-                            .connect(roles.updater)
+                          await api3ServerV1OevExtensionOevBidPayer
+                            .connect(roles.searcher)
                             .updateDappOevDataFeed(dappId, signedData);
                           await helpers.time.setNextBlockTimestamp(nextTimestamp + 2);
                           beaconValues[0] = 2;
@@ -757,8 +989,8 @@ describe('Api3ServerV1OevExtension', function () {
                             })
                           );
                           await expect(
-                            api3ServerV1OevExtension
-                              .connect(roles.updater)
+                            api3ServerV1OevExtensionOevBidPayer
+                              .connect(roles.searcher)
                               .updateDappOevDataFeed(dappId, signedDataThatUpdatedBeaconSetValueButNotTimestamp)
                           ).to.be.revertedWith('Does not update Beacon set');
                         });
@@ -767,14 +999,26 @@ describe('Api3ServerV1OevExtension', function () {
                   });
                   context('Not all timestamps are larger than the base counterparts', function () {
                     it('updates dApp OEV data feed by using base Beacon values as necessary', async function () {
-                      const { roles, api3ServerV1, api3ServerV1OevExtension, beacons, beaconSet } =
-                        await helpers.loadFixture(deploy);
+                      const {
+                        roles,
+                        api3ServerV1,
+                        api3ServerV1OevExtension,
+                        api3ServerV1OevExtensionOevBidPayer,
+                        beacons,
+                        beaconSet,
+                      } = await helpers.loadFixture(deploy);
                       const dappId = 1;
                       const nextTimestamp = (await helpers.time.latest()) + 1;
                       const signedDataTimestampCutoff = nextTimestamp + 2 + beacons.length;
                       await helpers.time.setNextBlockTimestamp(nextTimestamp);
                       const bidAmount = ethers.parseEther('1');
-                      await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                      await payOevBid(
+                        roles,
+                        api3ServerV1OevExtensionOevBidPayer,
+                        dappId,
+                        signedDataTimestampCutoff,
+                        bidAmount
+                      );
                       const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
                       const beaconTimestamps = beacons.map(() =>
                         Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -824,12 +1068,14 @@ describe('Api3ServerV1OevExtension', function () {
                       );
                       await helpers.time.setNextBlockTimestamp(nextTimestamp + 1 + beacons.length);
                       await expect(
-                        api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData)
+                        api3ServerV1OevExtensionOevBidPayer
+                          .connect(roles.searcher)
+                          .updateDappOevDataFeed(dappId, signedData)
                       )
                         .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
                         .withArgs(
                           dappId,
-                          roles.updater!.address,
+                          await api3ServerV1OevExtensionOevBidPayer.getAddress(),
                           beaconSet.beaconSetId,
                           beaconSetValue,
                           beaconSetTimestamp
@@ -847,13 +1093,19 @@ describe('Api3ServerV1OevExtension', function () {
                 });
                 context('Not all timestamps update', function () {
                   it('reverts', async function () {
-                    const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                    const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
                     const dappId = 1;
                     const nextTimestamp = (await helpers.time.latest()) + 1;
                     const signedDataTimestampCutoff = nextTimestamp + 3;
                     await helpers.time.setNextBlockTimestamp(nextTimestamp);
                     const bidAmount = ethers.parseEther('1');
-                    await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                    await payOevBid(
+                      roles,
+                      api3ServerV1OevExtensionOevBidPayer,
+                      dappId,
+                      signedDataTimestampCutoff,
+                      bidAmount
+                    );
                     const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
                     const beaconTimestamps = beacons.map(() =>
                       Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -879,25 +1131,33 @@ describe('Api3ServerV1OevExtension', function () {
                       })
                     );
                     await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
-                    await api3ServerV1OevExtension
-                      .connect(roles.updater)
+                    await api3ServerV1OevExtensionOevBidPayer
+                      .connect(roles.searcher)
                       .updateDappOevDataFeed(dappId, [signedData[Math.floor(Math.random() * beacons.length)]!]);
                     await helpers.time.setNextBlockTimestamp(nextTimestamp + 2);
                     await expect(
-                      api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData)
+                      api3ServerV1OevExtensionOevBidPayer
+                        .connect(roles.searcher)
+                        .updateDappOevDataFeed(dappId, signedData)
                     ).to.be.revertedWith('Does not update timestamp');
                   });
                 });
               });
               context('Some timestamps are larger than the cut-off', function () {
                 it('reverts', async function () {
-                  const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                  const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
                   const dappId = 1;
                   const nextTimestamp = (await helpers.time.latest()) + 1;
                   const signedDataTimestampCutoff = nextTimestamp + 2;
                   await helpers.time.setNextBlockTimestamp(nextTimestamp);
                   const bidAmount = ethers.parseEther('1');
-                  await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                  await payOevBid(
+                    roles,
+                    api3ServerV1OevExtensionOevBidPayer,
+                    dappId,
+                    signedDataTimestampCutoff,
+                    bidAmount
+                  );
                   const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
                   const beaconTimestamps = beacons.map(() =>
                     Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -925,20 +1185,28 @@ describe('Api3ServerV1OevExtension', function () {
                   );
                   await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                   await expect(
-                    api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData)
+                    api3ServerV1OevExtensionOevBidPayer
+                      .connect(roles.searcher)
+                      .updateDappOevDataFeed(dappId, signedData)
                   ).to.be.revertedWith('Timestamp exceeds cut-off');
                 });
               });
             });
             context('Not all signatures are valid', function () {
               it('reverts', async function () {
-                const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+                const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
                 const dappId = 1;
                 const nextTimestamp = (await helpers.time.latest()) + 1;
                 const signedDataTimestampCutoff = nextTimestamp + 2;
                 await helpers.time.setNextBlockTimestamp(nextTimestamp);
                 const bidAmount = ethers.parseEther('1');
-                await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+                await payOevBid(
+                  roles,
+                  api3ServerV1OevExtensionOevBidPayer,
+                  dappId,
+                  signedDataTimestampCutoff,
+                  bidAmount
+                );
                 const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
                 const beaconTimestamps = beacons.map(() =>
                   Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -974,21 +1242,27 @@ describe('Api3ServerV1OevExtension', function () {
                 );
                 await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
                 await expect(
-                  api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData)
+                  api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, signedData)
                 ).to.be.revertedWith('Signature mismatch');
               });
             });
           });
           context('Some signatures have been omitted', function () {
             it('updates dApp OEV data feed', async function () {
-              const { roles, api3ServerV1, api3ServerV1OevExtension, beacons, beaconSet } =
-                await helpers.loadFixture(deploy);
+              const {
+                roles,
+                api3ServerV1,
+                api3ServerV1OevExtension,
+                api3ServerV1OevExtensionOevBidPayer,
+                beacons,
+                beaconSet,
+              } = await helpers.loadFixture(deploy);
               const dappId = 1;
               const nextTimestamp = (await helpers.time.latest()) + 1;
               const signedDataTimestampCutoff = nextTimestamp + 2 + beacons.length;
               await helpers.time.setNextBlockTimestamp(nextTimestamp);
               const bidAmount = ethers.parseEther('1');
-              await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+              await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, bidAmount);
               const beaconValues = beacons.map(() => Math.floor(Math.random() * 200 - 100));
               const beaconTimestamps = beacons.map(() =>
                 Math.floor(signedDataTimestampCutoff - Math.random() * 5 * 60)
@@ -1041,9 +1315,17 @@ describe('Api3ServerV1OevExtension', function () {
                 })
               );
               await helpers.time.setNextBlockTimestamp(nextTimestamp + 1 + beacons.length);
-              await expect(api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, signedData))
+              await expect(
+                api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, signedData)
+              )
                 .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
-                .withArgs(dappId, roles.updater!.address, beaconSet.beaconSetId, beaconSetValue, beaconSetTimestamp);
+                .withArgs(
+                  dappId,
+                  await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+                  beaconSet.beaconSetId,
+                  beaconSetValue,
+                  beaconSetTimestamp
+                );
               const oevDataFeed = await api3ServerV1OevExtension.oevDataFeed(dappId, beaconSet.beaconSetId);
               expect(oevDataFeed.value).to.equal(beaconSetValue);
               expect(oevDataFeed.timestamp).to.equal(beaconSetTimestamp);
@@ -1058,23 +1340,23 @@ describe('Api3ServerV1OevExtension', function () {
       });
       context('Signed data is empty', function () {
         it('reverts', async function () {
-          const { roles, api3ServerV1OevExtension } = await helpers.loadFixture(deploy);
+          const { roles, api3ServerV1OevExtensionOevBidPayer } = await helpers.loadFixture(deploy);
           const dappId = 1;
           const nextTimestamp = (await helpers.time.latest()) + 1;
           const signedDataTimestampCutoff = nextTimestamp + 2;
           await helpers.time.setNextBlockTimestamp(nextTimestamp);
           const bidAmount = ethers.parseEther('1');
-          await payOevBid(roles, api3ServerV1OevExtension, dappId, signedDataTimestampCutoff, bidAmount);
+          await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, bidAmount);
           await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
           await expect(
-            api3ServerV1OevExtension.connect(roles.updater).updateDappOevDataFeed(dappId, [])
+            api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [])
           ).to.be.revertedWith('Signed data empty');
         });
       });
     });
     context('Sender is not the last bid payer for the dApp', function () {
       it('reverts', async function () {
-        const { roles, api3ServerV1OevExtension, beacons } = await helpers.loadFixture(deploy);
+        const { roles, api3ServerV1OevExtensionOevBidPayer, beacons } = await helpers.loadFixture(deploy);
         const dappId = 1;
         const nextTimestamp = (await helpers.time.latest()) + 1;
         await helpers.time.setNextBlockTimestamp(nextTimestamp);
@@ -1102,7 +1384,7 @@ describe('Api3ServerV1OevExtension', function () {
         );
         await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
         await expect(
-          api3ServerV1OevExtension.connect(roles.randomPerson).updateDappOevDataFeed(dappId, signedData)
+          api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, signedData)
         ).to.be.revertedWith('Sender not last bid updater');
       });
     });
@@ -1302,6 +1584,74 @@ describe('Api3ServerV1OevExtension', function () {
           ).to.be.revertedWith('Sender address not zero');
         });
       });
+    });
+  });
+
+  describe('intended OEV bid payment flow', function () {
+    it('works', async function () {
+      // The intended OEV bid payment flow is for `updateDappOevDataFeed()` to
+      // be called back in `payOevBid()` callback.
+      const { roles, api3ServerV1OevExtension, api3ServerV1OevExtensionOevBidPayer, beacons } =
+        await helpers.loadFixture(deploy);
+      const dappId = 1;
+      const nextTimestamp = (await helpers.time.latest()) + 1;
+      const signedDataTimestampCutoff = nextTimestamp + 1;
+      await helpers.time.setNextBlockTimestamp(nextTimestamp);
+      const bidAmount = ethers.parseEther('1');
+      const { chainId } = await ethers.provider.getNetwork();
+      const signature = await roles.auctioneer!.signMessage(
+        ethers.getBytes(
+          ethers.solidityPackedKeccak256(
+            ['uint256', 'uint256', 'address', 'uint256', 'uint32'],
+            [
+              chainId,
+              dappId,
+              await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+              bidAmount,
+              signedDataTimestampCutoff,
+            ]
+          )
+        )
+      );
+      const beacon = beacons[0]!;
+      const beaconValue = Math.floor(Math.random() * 200 - 100);
+      const beaconTimestamp = signedDataTimestampCutoff - 1;
+      const signedData = ethers.AbiCoder.defaultAbiCoder().encode(
+        ['address', 'bytes32', 'uint256', 'bytes', 'bytes'],
+        [
+          beacon.airnode.address,
+          beacon.templateId,
+          beaconTimestamp,
+          encodeData(beaconValue),
+          await signDataWithAlternateTemplateId(
+            beacon.airnode,
+            beacon.templateId,
+            beaconTimestamp,
+            encodeData(beaconValue)
+          ),
+        ]
+      );
+      await helpers.time.setNextBlockTimestamp(nextTimestamp + 1);
+      const data = api3ServerV1OevExtension.interface.encodeFunctionData('updateDappOevDataFeed', [
+        dappId,
+        [signedData],
+      ]);
+      await expect(
+        api3ServerV1OevExtensionOevBidPayer
+          .connect(roles.searcher)
+          .payOevBid(dappId, bidAmount, signedDataTimestampCutoff, signature, data)
+      )
+        .to.emit(api3ServerV1OevExtension, 'UpdatedDappOevDataFeed')
+        .withArgs(
+          dappId,
+          await api3ServerV1OevExtensionOevBidPayer.getAddress(),
+          beacon.beaconId,
+          beaconValue,
+          beaconTimestamp
+        );
+      const oevDataFeed = await api3ServerV1OevExtension.oevDataFeed(dappId, beacon.beaconId);
+      expect(oevDataFeed.value).to.equal(beaconValue);
+      expect(oevDataFeed.timestamp).to.equal(beaconTimestamp);
     });
   });
 });

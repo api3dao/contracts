@@ -9,7 +9,7 @@ import * as testUtils from '../../test-utils';
 
 describe('Api3ReaderProxyV1Factory', function () {
   async function deploy() {
-    const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'updater', 'randomPerson'];
+    const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'randomPerson'];
     const accounts = await ethers.getSigners();
     const roles: Record<string, HardhatEthersSigner> = roleNames.reduce((acc, roleName, index) => {
       return { ...acc, [roleName]: accounts[index] };
