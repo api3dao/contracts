@@ -343,7 +343,11 @@ contract AirseekerRegistry is
     /// not available (including the case where index does not correspond to an
     /// active data feed), returns empty values.
     /// @dev Airseeker uses this function to get all the data it needs about an
-    /// active data feed with a single RPC call
+    /// active data feed with a single RPC call.
+    /// Since active data feed IDs and dAPI names are kept in respective
+    /// EnumerableSet types, addition and removal of items to these may change
+    /// the order of the remaining items. Therefore, do not depend on an index
+    /// to address a specific data feed consistently.
     /// @param index Index
     /// @return dataFeedId Data feed ID
     /// @return dapiName dAPI name (`bytes32(0)` if the active data feed is

@@ -19,6 +19,7 @@ The first of these multicalls includes an `activeDataFeedCount()` call, which te
 
 In the case that the active data feeds change (in that they become activated/deactivated) while Airseeker is making these multicalls, Airseeker may fetch the same feed in two separate batches, or miss a data feed.
 This is deemed acceptable, assuming that active data feeds will not change very frequently and Airseeker will run its update loop very frequently (meaning that any missed data feed will be handled on the next iteration.)
+For example, if the owner of an AirseekerRegistry is an [Api3MarketV2](./api3marketv2.md), active data feeds would only change through the purchases and expiration of subscriptions, which are sufficiently throttled.
 
 Let us go over what `activeDataFeed()` returns.
 
@@ -108,3 +109,8 @@ It is recommended to run automated workers to handle these cases, or at least th
 
 In the case that the AirseekerRegistry owner is a contract (e.g., Api3MarketV2), it should be implemented in a way to enforce these, at least partially (e.g., Api3MarketV2 does not force the user to set signed API URLs while activating a data feed by buying a subscription).
 In the case that the AirseekerRegistry owner is a multisig or an EOA, either care needs to be taken, or more ideally, a frontend that abstracts these requirements away (by creating a multicall transaction that satisfies all requirements) should be used.
+
+> [!WARNING]
+> A possible pitfall is expecting `activeDataFeed()` to return the same data feed for a specific index.
+> Since the index belongs to an `EnumerableSet` type, addition and removal of active data feeds may cause the indices of all the remaining active data feeds to change.
+> Refer to the [Airseeker-related section](#how-airseeker-uses-airseekerregistry) for an example of how `activeDataFeed()` can be used correctly.
