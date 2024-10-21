@@ -139,6 +139,8 @@ The first of these is done by the "auction resolver" and the last two are done b
 - Normally, the auction resolver is expected to deliver the award within the award phase.
   In the case that the delivery is delayed due to networking or finality issues, it is preferable to not lock up the collateral of the bidder.
   For this, auction resolvers should use a sufficiently small `awardExpirationTimestamp` while calling `awardBid()`.
+  On the other hand, `awardExpirationTimestamp` should be large enough to ensure that `awardBid()` does not revert erroneously.
+  The recommended `awardExpirationTimestamp` value here is the start of the respective award phase plus `T` (the auction length).
 
 - It is assumed that the bidder has waited for sufficient finality before reporting their fulfillment.
   If the auction cop fails to confirm the bid payment due to a finality issue, it will contradict the fulfillment.
