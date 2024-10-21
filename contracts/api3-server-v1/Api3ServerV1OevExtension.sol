@@ -446,7 +446,7 @@ contract Api3ServerV1OevExtension is
             baseDataFeedId = deriveBeaconSetId(baseBeaconIds);
             (updatedValue, updatedTimestamp) = aggregateBeacons(oevBeaconIds);
             bytes32 oevBeaconSetId = keccak256(
-                abi.encodePacked(dappId, deriveBeaconSetId(baseBeaconIds))
+                abi.encodePacked(dappId, baseDataFeedId)
             );
             DataFeed storage oevBeaconSet = _dataFeeds[oevBeaconSetId];
             if (oevBeaconSet.timestamp == updatedTimestamp) {
