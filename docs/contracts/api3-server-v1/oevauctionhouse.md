@@ -201,7 +201,7 @@ The bid placement transaction specifies the chain ID and bid amount.
 The major version, dApp ID and timestamps are implied by the bid topic.
 This means that the bid details need to include the following remaining parameters:
 
-- `updateSenderAddress`: The `msg.sender` address that the Api3ServerV1OevExtension contract will see while `payOevBid()` is being called to pay the bid, and `updateDappOevDataFeedWithAllowedSignedData()` is being called to update the OEV feed.
+- `updateSenderAddress`: The `msg.sender` address that the Api3ServerV1OevExtension contract will see while `payOevBid()` is being called to pay the bid, and `updateDappOevDataFeed()` is being called to update the OEV feed.
 - `nonce`: A unique value added to prevent duplicate bid IDs.
 
 The bid details are encoded as follows:
