@@ -49,6 +49,9 @@ contract HashRegistry is Ownable, IHashRegistry {
     uint256 private constant DELEGATED_SIGNATURE_LENGTH =
         32 + 32 + 32 + (32 + 96) + (32 + 96);
 
+    bytes32 private constant HASHREGISTRY_SIGNATURE_DELEGATION_HASH_TYPE =
+        keccak256(abi.encodePacked("HashRegistry signature delegation"));
+
     /// @param initialOwner Initial owner address
     constructor(address initialOwner) Ownable(initialOwner) {}
 
@@ -203,7 +206,7 @@ contract HashRegistry is Ownable, IHashRegistry {
         override
         returns (bytes32)
     {
-        return keccak256(abi.encodePacked("HashRegistry signature delegation"));
+        return HASHREGISTRY_SIGNATURE_DELEGATION_HASH_TYPE;
     }
 
     /// @notice Returns get the hash value for the type
