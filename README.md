@@ -1,6 +1,3 @@
-> [!NOTE]  
-> This is a private fork of https://github.com/api3dao/contracts for an upcoming Quantstamp audit.
-
 # @api3/contracts
 
 <div align="center">
@@ -23,7 +20,7 @@ This package provides the tools to integrate data feeds that can be found at the
 
 A more complete list of what this package includes is as follows:
 
-- All contracts that facilitate API3 data feed services
+- All contracts that facilitate API3 data feed services, including OEV auctions
 - `@typechain/ethers-v6` typings of these contracts
 - Addresses of the API3 deployments of these contracts
 - Proxy address computation utility functions
