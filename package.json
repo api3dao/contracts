@@ -1,5 +1,5 @@
 {
-  "name": "@api3/contracts",
+  "name": "@bbenligiray/api3-contracts-v10",
   "description": "Contracts through which API3 services are delivered",
   "keywords": [
     "api3",
@@ -8,7 +8,7 @@
     "oev"
   ],
   "license": "MIT",
-  "version": "5.1.0",
+  "version": "10.0.0-rc.1",
   "engines": {
     "node": ">=18.14.0"
   },
