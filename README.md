@@ -33,6 +33,7 @@ A more complete list of what this package includes is as follows:
 We have conducted 10+ audits of our contracts and their off-chain components.
 Below are the reports of the ones that are directly related to the contracts in this repo (or in some cases, earlier versions of them).
 
+- [2024-10-24 Quantstamp](./audit-reports/2024-10-24%20Quantstamp.pdf) (refer to [here](https://github.com/api3dao/contracts-qs/tree/final-report) for the commit hash)
 - [2024-02-20 Quantstamp](./audit-reports/2024-02-20%20Quantstamp.pdf)
 - [2023-12-20 Quantstamp](./audit-reports/2023-12-20%20Quantstamp.pdf)
 - [2023-03-02 Sigma Prime](./audit-reports/2023-03-02%20Sigma%20Prime.pdf)
