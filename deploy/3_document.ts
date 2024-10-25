@@ -37,7 +37,7 @@ module.exports = () => {
       ...(chainsSupportedByDapis.includes(network)
         ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
         : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['Api3MarketV2'] : []),
+      ...(chainsSupportedByMarket.includes(network) ? ['AirseekerRegistry', 'Api3MarketV2'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {
