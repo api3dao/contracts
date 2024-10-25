@@ -169,7 +169,7 @@ contract Api3MarketV2 is HashRegistry, ExtendedSelfMulticall, IApi3MarketV2 {
     /// @notice Called once by the owner to set the AirseekerRegistry address
     /// @dev There is a circular dependency between an Api3MarketV2 and its
     /// respective AirseekerRegistry. In a previous implementation,
-    /// Api3MarketV2 deployed its AirseekerRegistry in its constructor, yet the
+    /// Api3Market deployed its AirseekerRegistry in its constructor, yet the
     /// resulting deployment transaction required too much gas, which ended up
     /// being an issue on some chains. Instead, the current deployment flow is
     /// for Api3MarketV2 to be deployed with a transaction, AirseekerRegistry
