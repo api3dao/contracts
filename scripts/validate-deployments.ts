@@ -51,11 +51,13 @@ async function validateDeployments(network: string) {
         CHAINS.find((chain) => chain.alias === process.env.NETWORK)?.testnet ? 'testnet' : 'mainnet'
       ];
     if (
-      managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
-      managerMultisigOwners.every(
-        (managerMultisigOwner: string, index: number) =>
-          ethers.getAddress(managerMultisigOwner) ===
-          ethers.getAddress(goFetchGnosisSafeWithoutProxyOwners.data[index]!)
+      !(
+        managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
+        managerMultisigOwners.every((managerMultisigOwner: string) =>
+          goFetchGnosisSafeWithoutProxyOwners.data
+            .map((owner) => ethers.getAddress(owner))
+            .includes(ethers.getAddress(managerMultisigOwner))
+        )
       )
     ) {
       throw new Error(
