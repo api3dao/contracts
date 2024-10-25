@@ -5,10 +5,12 @@ import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
+import * as auctioneerMetadata from '../data/auctioneer-metadata.json';
 import {
   chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   chainsSupportedByMarket,
+  chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import { dapiManagementMerkleRootSigners, dapiPricingMerkleRootSigners } from '../data/dapi-management-metadata.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
@@ -242,13 +244,13 @@ async function validateDeployments(network: string) {
 
         // Validate that Api3MarketV2 is a dAPI name setter
         const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
-        const adminRole = ethers.solidityPackedKeccak256(
+        const api3ServerV1AdminRole = ethers.solidityPackedKeccak256(
           ['bytes32', 'bytes32'],
           [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1 admin'])]
         );
         const dapiNameSetterRole = ethers.solidityPackedKeccak256(
           ['bytes32', 'bytes32'],
-          [adminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
+          [api3ServerV1AdminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
         );
         const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
           fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
@@ -276,6 +278,106 @@ async function validateDeployments(network: string) {
         }
         if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.data) {
           throw new Error(`${network} Api3MarketV2 does not have the dAPI name setter role`);
+        }
+
+        // Validate that auction resolvers have the auctioneer role
+        const api3ServerV1OevExtensionAdminRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
+        );
+        const auctioneerRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [api3ServerV1OevExtensionAdminRole, ethers.solidityPackedKeccak256(['string'], ['Auctioneer'])]
+        );
+
+        const goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus = await go(
+          async () =>
+            accessControlRegistry.multicall.staticCall(
+              auctioneerMetadata['auction-resolvers'].map((auctioneerResolverAddress) =>
+                accessControlRegistry.interface.encodeFunctionData('hasRole', [
+                  auctioneerRole,
+                  auctioneerResolverAddress,
+                ])
+              )
+            ),
+          {
+            retries: 5,
+            attemptTimeoutMs: 10_000,
+            totalTimeoutMs: 50_000,
+            delay: {
+              type: 'random',
+              minDelayMs: 2000,
+              maxDelayMs: 5000,
+            },
+          }
+        );
+        if (!goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.success) {
+          throw new Error(`${network} Api3ServerV1OevExtension auctioneer role status could not be fetched`);
+        }
+        if (
+          !goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.every(
+            (auctioneerRoleStatus) => auctioneerRoleStatus !== ethers.ZeroHash
+          )
+        ) {
+          throw new Error(
+            `${network} (${auctioneerMetadata['auction-resolvers']}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ethers.ZeroHash ? false : true))})`
+          );
+        }
+      }
+
+      if (chainsSupportedByOevAuctions.includes(network)) {
+        // Validate that auction resolvers and auction cops have the auctioneer role
+        const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
+        );
+        const accessControlRegistry = new ethers.Contract(
+          accessControlRegistryAddress,
+          accessControlRegistryAbi,
+          provider
+        ) as unknown as AccessControlRegistry;
+        const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
+        const api3ServerV1OevExtensionAdminRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
+        );
+        const auctioneerRole = ethers.solidityPackedKeccak256(
+          ['bytes32', 'bytes32'],
+          [api3ServerV1OevExtensionAdminRole, ethers.solidityPackedKeccak256(['string'], ['Auctioneer'])]
+        );
+
+        const goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus = await go(
+          async () =>
+            accessControlRegistry.multicall.staticCall(
+              [...auctioneerMetadata['auction-resolvers'], ...auctioneerMetadata['auction-cops']].map(
+                (auctioneerResolverAddress) =>
+                  accessControlRegistry.interface.encodeFunctionData('hasRole', [
+                    auctioneerRole,
+                    auctioneerResolverAddress,
+                  ])
+              )
+            ),
+          {
+            retries: 5,
+            attemptTimeoutMs: 10_000,
+            totalTimeoutMs: 50_000,
+            delay: {
+              type: 'random',
+              minDelayMs: 2000,
+              maxDelayMs: 5000,
+            },
+          }
+        );
+        if (!goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.success) {
+          throw new Error(`${network} Api3ServerV1OevExtension auctioneer role status could not be fetched`);
+        }
+        if (
+          !goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.every(
+            (auctioneerRoleStatus) => auctioneerRoleStatus !== ethers.ZeroHash
+          )
+        ) {
+          throw new Error(
+            `${network} (${[...auctioneerMetadata['auction-resolvers'], ...auctioneerMetadata['auction-cops']]}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ethers.ZeroHash ? false : true))})`
+          );
         }
       }
     }
