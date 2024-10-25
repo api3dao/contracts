@@ -1,5 +1,5 @@
 {
-  "name": "@bbenligiray/api3-contracts-v10",
+  "name": "api3-contracts-v10",
   "description": "Contracts through which API3 services are delivered",
   "keywords": [
     "api3",
