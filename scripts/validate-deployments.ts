@@ -206,7 +206,7 @@ async function validateDeployments(network: string) {
         }
         if (
           goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data !==
-          ethers.solidityPackedKeccak256(['address'], [dapiManagementMerkleRootSigners])
+          ethers.solidityPackedKeccak256(['address[]'], [dapiManagementMerkleRootSigners])
         ) {
           throw new Error(`${network} Api3MarketV2 dAPI management Merkle root signers are set incorrectly`);
         }
@@ -237,7 +237,7 @@ async function validateDeployments(network: string) {
         }
         if (
           goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data !==
-          ethers.solidityPackedKeccak256(['address'], [dapiPricingMerkleRootSigners])
+          ethers.solidityPackedKeccak256(['address[]'], [dapiPricingMerkleRootSigners])
         ) {
           throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are set incorrectly`);
         }
