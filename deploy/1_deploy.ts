@@ -117,17 +117,7 @@ module.exports = async () => {
       }
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        await deployments.get('AirseekerRegistry').catch(async () => {
-          log(`Deploying AirseekerRegistry`);
-          return deploy('AirseekerRegistry', {
-            from: deployer!.address,
-            args: [await ownableCallForwarder.getAddress(), api3ServerV1.address],
-            log: true,
-            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
-          });
-        });
-
-        await deployments.get('Api3MarketV2').catch(async () => {
+        const api3MarketV2 = await deployments.get('Api3MarketV2').catch(async () => {
           log(`Deploying Api3MarketV2`);
           return deploy('Api3MarketV2', {
             from: deployer!.address,
@@ -136,6 +126,16 @@ module.exports = async () => {
               api3ReaderProxyV1FactoryAddress,
               MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
             ],
+            log: true,
+            deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+          });
+        });
+
+        await deployments.get('AirseekerRegistry').catch(async () => {
+          log(`Deploying AirseekerRegistry`);
+          return deploy('AirseekerRegistry', {
+            from: deployer!.address,
+            args: [api3MarketV2.address, api3ServerV1.address],
             log: true,
             deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
           });
