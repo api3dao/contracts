@@ -276,5 +276,5 @@
     "zircuit",
     "zircuit-sepolia-testnet"
   ],
-  "chainsSupportedByOevAuctions": ["arbitrum-sepolia-testnet", "oev-network"]
+  "chainsSupportedByOevAuctions": ["oev-network"]
 }
