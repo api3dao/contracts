@@ -236,7 +236,7 @@ async function validateDeployments(network: string) {
           throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are not set`);
         }
         if (
-          goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data !==
+          goFetchApi3MarketV2DapiPricingMerkleRootSignersHash.data !==
           ethers.solidityPackedKeccak256(['address[]'], [dapiPricingMerkleRootSigners])
         ) {
           throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are set incorrectly`);
