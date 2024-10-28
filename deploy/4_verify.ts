@@ -78,12 +78,6 @@ module.exports = async () => {
       });
 
       if (chainsSupportedByMarket.includes(network.name)) {
-        const AirseekerRegistry = await deployments.get('AirseekerRegistry');
-        await run('verify:verify', {
-          address: AirseekerRegistry.address,
-          constructorArguments: [OwnableCallForwarder.address, Api3ServerV1.address],
-        });
-
         const Api3MarketV2 = await deployments.get('Api3MarketV2');
         await run('verify:verify', {
           address: Api3MarketV2.address,
@@ -92,6 +86,12 @@ module.exports = async () => {
             Api3ReaderProxyV1Factory.address,
             MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
           ],
+        });
+
+        const AirseekerRegistry = await deployments.get('AirseekerRegistry');
+        await run('verify:verify', {
+          address: AirseekerRegistry.address,
+          constructorArguments: [Api3MarketV2.address, Api3ServerV1.address],
         });
       }
 
