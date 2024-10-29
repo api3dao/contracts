@@ -23,6 +23,7 @@
     "access",
     "api3-server-v1",
     "interfaces",
+    "mock",
     "utils",
     "vendor",
     "dist"
