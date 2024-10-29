@@ -31,7 +31,7 @@ function computeApi3ReaderProxyV1Address(
         Api3ReaderProxyV1__factory.bytecode,
         ethers.AbiCoder.defaultAbiCoder().encode(
           ['address', 'bytes32', 'uint256'],
-          [api3ServerV1OevExtensionAddress, dapiName, dappId]
+          [api3ServerV1OevExtensionAddress, ethers.encodeBytes32String(dapiName), dappId]
         ),
       ]
     )
