@@ -61,16 +61,16 @@
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
     "@types/chai": "^4.3.20",
-    "@types/mocha": "^10.0.8",
-    "@types/node": "^20.16.10",
+    "@types/mocha": "^10.0.9",
+    "@types/node": "^20.17.6",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "chai": "^4.5.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.1",
     "glob": "^11.0.0",
-    "hardhat": "^2.22.12",
-    "hardhat-deploy": "^0.12.4",
+    "hardhat": "^2.22.15",
+    "hardhat-deploy": "^0.14.0",
     "hardhat-gas-reporter": "^2.2.1",
     "prettier": "^3.3.3",
     "prettier-plugin-solidity": "^1.4.1",
@@ -78,7 +78,7 @@
     "solidity-coverage": "^0.8.13",
     "ts-node": "^10.9.2",
     "typechain": "^8.3.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "ethers": "^6.13.2"
