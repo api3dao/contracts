@@ -77,7 +77,7 @@ module.exports = async () => {
         constructorArguments: [Api3ServerV1OevExtension.address, dapiName, dappId],
       });
 
-      const erc1967ProxyInitCode = ethers.solidityPacked(
+      const api3ReaderProxyV1Initcode = ethers.solidityPacked(
         ['bytes', 'bytes'],
         [
           ERC1967Proxy__factory.bytecode,
@@ -87,15 +87,13 @@ module.exports = async () => {
           ),
         ]
       );
-
-      const expectedApi3ReaderProxyV1Address = ethers.getCreate2Address(
+      const api3ReaderProxyV1Address = ethers.getCreate2Address(
         Api3ReaderProxyV1Factory.address,
         ethers.keccak256(api3ReaderProxyV1Metadata),
-        ethers.keccak256(erc1967ProxyInitCode)
+        ethers.keccak256(api3ReaderProxyV1Initcode)
       );
-
       await run('verify:verify', {
-        address: expectedApi3ReaderProxyV1Address,
+        address: api3ReaderProxyV1Address,
         constructorArguments: [api3ReaderProxyV1ImplementationAddress, api3ReaderProxyV1Metadata],
       });
 
