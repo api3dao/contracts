@@ -13,8 +13,8 @@ importers:
         version: 6.13.4
     devDependencies:
       '@api3/chains':
-        specifier: ^10.6.1
-        version: 10.6.1(typescript@5.6.3)
+        specifier: ^10.7.0
+        version: 10.7.0(typescript@5.6.3)
       '@api3/eslint-plugin-commons':
         specifier: ^1.0.1
         version: 1.0.1(eslint@8.57.1)(typescript@5.6.3)
@@ -121,8 +121,8 @@ packages:
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
 
-  '@api3/chains@10.6.1':
-    resolution: {integrity: sha512-k9BMMXxVKrmzakqF34XJAw2pa2b+pQijbxr1Iwd8FWuUQx/3j8zK2ztQN0eN7HqXly2QoKWcA5cP05DjsyN8Gw==}
+  '@api3/chains@10.7.0':
+    resolution: {integrity: sha512-fqJ96PqdFlMswF6NGQIy/a5GWzemzlsm1FKge1YZZqeR/4Y5/hs5eUr9F9N9FP0Nd14w8OJQepAnm2PUZkrtyw==}
 
   '@api3/eslint-plugin-commons@1.0.1':
     resolution: {integrity: sha512-KY46lDBa5QgqfYdD7D8kv0ZS8rtXgH2q1+7eeCvfDQD2jtWz9pzBoYXZ1Eu49P4e6NjeNn9PkYZElcdxXroVCg==}
@@ -3649,7 +3649,7 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.0': {}
 
-  '@api3/chains@10.6.1(typescript@5.6.3)':
+  '@api3/chains@10.7.0(typescript@5.6.3)':
     dependencies:
       viem: 2.21.32(typescript@5.6.3)(zod@3.23.8)
       zod: 3.23.8
@@ -5569,7 +5569,7 @@ snapshots:
       debug: 4.3.4(supports-color@8.1.1)
       enhanced-resolve: 5.15.1
       eslint: 8.57.1
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.1)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.3
@@ -5581,7 +5581,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.1):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
