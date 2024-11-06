@@ -13,8 +13,8 @@ importers:
         version: 6.13.2
     devDependencies:
       '@api3/chains':
-        specifier: ^10.6.0
-        version: 10.6.0(typescript@5.6.2)
+        specifier: ^10.6.1
+        version: 10.6.1(typescript@5.6.2)
       '@api3/eslint-plugin-commons':
         specifier: ^1.0.1
         version: 1.0.1(eslint@8.57.1)(typescript@5.6.2)
@@ -121,8 +121,8 @@ packages:
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
 
-  '@api3/chains@10.6.0':
-    resolution: {integrity: sha512-WRdoXesr0wH11MX1d9pDybdJ2G0Eif6QfFoASZ7buzFa6/1pksBkR5DdNlvH28XKTpXoPjuPqDCAMBh4d8+CWw==}
+  '@api3/chains@10.6.1':
+    resolution: {integrity: sha512-k9BMMXxVKrmzakqF34XJAw2pa2b+pQijbxr1Iwd8FWuUQx/3j8zK2ztQN0eN7HqXly2QoKWcA5cP05DjsyN8Gw==}
 
   '@api3/eslint-plugin-commons@1.0.1':
     resolution: {integrity: sha512-KY46lDBa5QgqfYdD7D8kv0ZS8rtXgH2q1+7eeCvfDQD2jtWz9pzBoYXZ1Eu49P4e6NjeNn9PkYZElcdxXroVCg==}
@@ -1765,6 +1765,7 @@ packages:
 
   ethereumjs-abi@0.6.8:
     resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
+    deprecated: This library has been deprecated and usage is discouraged.
 
   ethereumjs-util@6.2.1:
     resolution: {integrity: sha512-W2Ktez4L01Vexijrm5EB6w7dg4n/TgpoYU4avuT5T3Vmnw/eCRtiBrJfQYS/DCSvDIOLn2k57GcHdeBcgVxAqw==}
@@ -3633,7 +3634,7 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.0': {}
 
-  '@api3/chains@10.6.0(typescript@5.6.2)':
+  '@api3/chains@10.6.1(typescript@5.6.2)':
     dependencies:
       viem: 2.21.30(typescript@5.6.2)(zod@3.23.8)
       zod: 3.23.8
