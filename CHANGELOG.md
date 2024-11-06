@@ -1,5 +1,26 @@
 # @api3/contracts
 
+## 10.0.0
+
+### Major Changes
+
+- ae1de2d: Changed the Solidity versions of contracts HashRegistry and AirseekerRegistry
+- ae1de2d: Retracted OEV auction support from arbitrum-sepolia-testnet
+- 0ee865c: Manager multisig addresses are no longer exported under `managerMultisigAddresses`.
+  You can find them under `deploymentAddresses.GnosisSafeWithoutProxy`.
+- ae1de2d: Removed contracts Api3Market, DapiProxy, DapiProxyWithOev DataFeedProxy DataFeedProxyWithOev, ExternalMulticallSimulator, OevSearcherMulticallV1, ProxyFactory
+- ae1de2d: Removed `computeDapiProxyAddress()`, `computeDapiProxyWithOevAddress()`, `computeDataFeedProxyAddress()`, `computeDataFeedProxyWithOevAddress()`.
+  Added `computeApi3ReaderProxyV1Address()` instead.
+- ae1de2d: Retracted dAPI and Market support from bsquared, neon-evm, neon-evm-testnet, rsk
+- ae1de2d: AirseekerRegistry addresses belonging to the market contracts are no longer exported under `computeApi3MarketAirseekerRegistryAddress()`.
+  You can find them under `deploymentAddresses.AirseekerRegistry`.
+
+### Minor Changes
+
+- ae1de2d: Exported auctioneer addresses under auctioneerMetadata
+- ae1de2d: Deployed all newly added contracts on the respective networks
+- ae1de2d: Added contracts GnosisSafeWithoutProxy, Api3MarketV2, Api3ServerV1OevExtension, Api3ReaderProxyV1, Api3ReaderProxyV1Factory, IApi3ServerV1OevExtensionOevBidPayer, IApi3ReaderProxy, MockApi3ReaderProxy
+
 ## 9.1.0
 
 ### Minor Changes
