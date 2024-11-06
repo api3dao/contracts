@@ -1,5 +1,64 @@
 # @api3/contracts
 
+## 9.1.0
+
+### Minor Changes
+
+- 96c4e9e: Add dAPI and Market support to unichain-sepolia-testnet, odyssey-sepolia-testnet
+
+## 9.0.0
+
+### Major Changes
+
+- 581511f: Remove deployment block numbers
+
+### Minor Changes
+
+- 67cd34c: Add dAPI and Market support to soneium-sepolia-testnet
+
+## 8.0.0
+
+### Major Changes
+
+- d73336d: Remove bsquared-testnet support
+
+### Minor Changes
+
+- ed1655d: Add dAPI and Market support to sonic-testnet
+
+## 7.0.0
+
+### Major Changes
+
+- daf2511: - Removed dAPI and Market support from deprecated BOB testnet and added to active BOB testnet (with the same alias)
+
+### Minor Changes
+
+- 071da83: - Add dAPI and Market support to lumia and Lumia-sepolia-testnet
+
+## 6.2.0
+
+### Minor Changes
+
+- a1a4044: Add dAPI and Market support to conflux and conflux-testnet
+
+## 6.1.0
+
+### Minor Changes
+
+- e7feb59: Add dAPI and Market support to manta and manta-sepolia-testnet
+
+## 6.0.0
+
+### Major Changes
+
+- 44b57a4: Removed dAPI and Market support from Sei devnet and added to Sei testnet (with the same alias)
+- 44b57a4: Removed dAPI and Market support from ApeChain "Jenkins" testnet and added to ApeChain "Curtis" testnet (with the same alias)
+
+### Minor Changes
+
+- 44b57a4: Add dAPI and Market support to camp-sepolia-testnet
+
 ## 5.1.0
 
 ### Minor Changes
