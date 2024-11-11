@@ -1,5 +1,16 @@
 # @api3/contracts
 
+## 10.1.0
+
+### Minor Changes
+
+- b8fb92d: Add dAPI and Market support to:
+
+  - apechain
+  - atleta-testnet
+  - world
+  - world-sepolia-testnet
+
 ## 10.0.0
 
 ### Major Changes
