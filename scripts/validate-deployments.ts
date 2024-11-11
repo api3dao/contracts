@@ -49,9 +49,7 @@ async function validateDeployments(network: string) {
       throw new Error(`${network} GnosisSafeWithoutProxy owners could not be fetched`);
     }
     const { owners: managerMultisigOwners, threshold: managerMultisigThreshold } =
-      managerMultisigMetadata[
-        CHAINS.find((chain) => chain.alias === process.env.NETWORK)?.testnet ? 'testnet' : 'mainnet'
-      ];
+      managerMultisigMetadata[CHAINS.find((chain) => chain.alias === network)?.testnet ? 'testnet' : 'mainnet'];
     if (
       !(
         managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
