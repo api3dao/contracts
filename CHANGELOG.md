@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 10.2.0
+
+### Minor Changes
+
+- 428e8fe: Add dAPI and Market support to ink-sepolia-testnet
+
 ## 10.1.0
 
 ### Minor Changes
