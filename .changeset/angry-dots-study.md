@@ -2,4 +2,4 @@
 '@api3/contracts': minor
 ---
 
-Exports a list of dApps with IDs
+Exports a list of dApps
