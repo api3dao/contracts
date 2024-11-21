@@ -15,7 +15,7 @@
 This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
 
 1. Purchase data feed subscriptions and get the respective proxy addresses at the API3 Market
-2. Use the proxy address computation utility function provided by this package (`computeApi3ReaderProxyV1Address()`) to validate the proxy addresses being used
+2. Use the proxy address computation utility function provided by this package (`computeCommunalApi3ReaderProxyV1Address()`) to validate the proxy addresses being used
 3. Use the proxy contract interfaces provided by this package in the reader contract, as demonstrated in https://github.com/api3dao/data-feed-reader-example
 
 A more complete list of what this package includes is as follows:

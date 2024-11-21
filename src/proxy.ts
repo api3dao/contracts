@@ -49,4 +49,8 @@ function computeApi3ReaderProxyV1Address(
   );
 }
 
-export { computeApi3ReaderProxyV1Address };
+function computeCommunalApi3ReaderProxyV1Address(chainId: ethers.BigNumberish, dapiName: string) {
+  return computeApi3ReaderProxyV1Address(chainId, dapiName, 1, '0x');
+}
+
+export { computeApi3ReaderProxyV1Address, computeCommunalApi3ReaderProxyV1Address };
