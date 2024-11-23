@@ -57,9 +57,7 @@ function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
   if (!DAPPS.some((dapp) => dapp.alias === dappAlias)) {
     throw new Error(`dApp with alias ${dappAlias} not registered to the package`);
   }
-  // Chain ID is a string to also support non-numerical (i.e., non-EVM) chain IDs.
-  // We use the BigNumberish type for now, until we need to support more arbitrary strings.
-  return ethers.solidityPackedKeccak256(['string', 'string'], [dappAlias, chainId.toString()]);
+  return ethers.solidityPackedKeccak256(['string', 'uint256'], [dappAlias, chainId]);
 }
 
 function computeDappSpecificApi3ReaderProxyV1Address(
