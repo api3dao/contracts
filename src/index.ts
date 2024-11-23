@@ -4,3 +4,4 @@ export { auctioneerMetadata };
 import deploymentAddresses from '../deployments/addresses.json';
 export { deploymentAddresses };
 export * from './proxy';
+export { DAPPS } from './generated/dapps';
