@@ -57,7 +57,10 @@ function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
   if (!DAPPS.some((dapp) => dapp.alias === dappAlias)) {
     throw new Error(`dApp with alias ${dappAlias} not registered to the package`);
   }
-  return ethers.solidityPackedKeccak256(['string', 'uint256'], [dappAlias, chainId]);
+  return ethers.solidityPackedKeccak256(
+    ['bytes32', 'uint256'],
+    [ethers.solidityPackedKeccak256(['string'], [dappAlias]), chainId]
+  );
 }
 
 function computeDappSpecificApi3ReaderProxyV1Address(
