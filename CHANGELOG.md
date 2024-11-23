@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 10.3.1
+
+### Patch Changes
+
+- 30c63ca: Have computeDappId() return a BigInt instead of a hex string
+
 ## 10.3.0
 
 ### Minor Changes
