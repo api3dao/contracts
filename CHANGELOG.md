@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 10.3.0
+
+### Minor Changes
+
+- 7824fce: Exports a list of dApps
+- 82bebb0: Add computeDappId() to compute the dApp ID with a dApp alias and chain ID, and add computeDappSpecificApi3ReaderProxyV1Address() to compute the Api3ReaderProxyV1 address with this dApp ID
+- 06050ab: Add computeCommunalApi3ReaderProxyV1Address() to compute the address of the Api3ReaderProxyV1 with dApp ID 1 and empty metadata
+
 ## 10.2.0
 
 ### Minor Changes
