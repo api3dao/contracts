@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 11.0.0
+
+### Major Changes
+
+- ab06250: Removed dAPI and Market support from deprecated Sonic testnet and added active Sonic testnet (with the same alias)
+
 ## 10.3.1
 
 ### Patch Changes
