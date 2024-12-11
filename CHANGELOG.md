@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 11.1.0
+
+### Minor Changes
+
+- 0483e03: Add dAPI and Market support to sonic chain
+
 ## 11.0.0
 
 ### Major Changes
