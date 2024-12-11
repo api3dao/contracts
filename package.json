@@ -51,7 +51,7 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^11.0.0",
+    "@api3/chains": "^11.1.0",
     "@api3/eslint-plugin-commons": "^1.0.1",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.27.10",
