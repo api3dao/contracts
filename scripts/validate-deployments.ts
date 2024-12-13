@@ -22,6 +22,8 @@ import type {
   OwnableCallForwarder,
 } from '../src/index';
 
+import { goAsyncOptions } from './constants';
+
 async function validateDeployments(network: string) {
   if (chainsSupportedByManagerMultisig.includes(network)) {
     const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
@@ -35,16 +37,10 @@ async function validateDeployments(network: string) {
       gnosisSafeWithoutProxyAbi,
       provider
     ) as unknown as GnosisSafeWithoutProxy;
-    const goFetchGnosisSafeWithoutProxyOwners = await go(async () => gnosisSafeWithoutProxy.getOwners(), {
-      retries: 5,
-      attemptTimeoutMs: 10_000,
-      totalTimeoutMs: 50_000,
-      delay: {
-        type: 'random',
-        minDelayMs: 2000,
-        maxDelayMs: 5000,
-      },
-    });
+    const goFetchGnosisSafeWithoutProxyOwners = await go(
+      async () => gnosisSafeWithoutProxy.getOwners(),
+      goAsyncOptions
+    );
     if (!goFetchGnosisSafeWithoutProxyOwners.success || !goFetchGnosisSafeWithoutProxyOwners.data) {
       throw new Error(`${network} GnosisSafeWithoutProxy owners could not be fetched`);
     }
@@ -65,16 +61,10 @@ async function validateDeployments(network: string) {
       );
     }
 
-    const goFetchGnosisSafeWithoutProxyThreshold = await go(async () => gnosisSafeWithoutProxy.getThreshold(), {
-      retries: 5,
-      attemptTimeoutMs: 10_000,
-      totalTimeoutMs: 50_000,
-      delay: {
-        type: 'random',
-        minDelayMs: 2000,
-        maxDelayMs: 5000,
-      },
-    });
+    const goFetchGnosisSafeWithoutProxyThreshold = await go(
+      async () => gnosisSafeWithoutProxy.getThreshold(),
+      goAsyncOptions
+    );
     if (!goFetchGnosisSafeWithoutProxyThreshold.success || !goFetchGnosisSafeWithoutProxyThreshold.data) {
       throw new Error(`${network} GnosisSafeWithoutProxy threshold could not be fetched`);
     }
@@ -93,16 +83,7 @@ async function validateDeployments(network: string) {
       ownableCallForwarderAbi,
       provider
     ) as unknown as OwnableCallForwarder;
-    const goFetchOwnableCallForwarderOwner = await go(async () => ownableCallForwarder.owner(), {
-      retries: 5,
-      attemptTimeoutMs: 10_000,
-      totalTimeoutMs: 50_000,
-      delay: {
-        type: 'random',
-        minDelayMs: 2000,
-        maxDelayMs: 5000,
-      },
-    });
+    const goFetchOwnableCallForwarderOwner = await go(async () => ownableCallForwarder.owner(), goAsyncOptions);
     if (!goFetchOwnableCallForwarderOwner.success || !goFetchOwnableCallForwarderOwner.data) {
       throw new Error(`${network} OwnableCallForwarder owner could not be fetched`);
     }
@@ -121,16 +102,10 @@ async function validateDeployments(network: string) {
         api3ReaderProxyV1FactoryAbi,
         provider
       ) as unknown as Api3ReaderProxyV1Factory;
-      const goFetchApi3ReaderProxyV1FactoryOwner = await go(async () => api3ReaderProxyV1Factory.owner(), {
-        retries: 5,
-        attemptTimeoutMs: 10_000,
-        totalTimeoutMs: 50_000,
-        delay: {
-          type: 'random',
-          minDelayMs: 2000,
-          maxDelayMs: 5000,
-        },
-      });
+      const goFetchApi3ReaderProxyV1FactoryOwner = await go(
+        async () => api3ReaderProxyV1Factory.owner(),
+        goAsyncOptions
+      );
       if (!goFetchApi3ReaderProxyV1FactoryOwner.success || !goFetchApi3ReaderProxyV1FactoryOwner.data) {
         throw new Error(`${network} Api3ReaderProxyV1Factory owner could not be fetched`);
       }
@@ -152,16 +127,10 @@ async function validateDeployments(network: string) {
           api3MarketV2Abi,
           provider
         ) as unknown as Api3MarketV2;
-        const goFetchApi3MarketV2AirseekerRegistry = await go(async () => api3MarketV2.airseekerRegistry(), {
-          retries: 5,
-          attemptTimeoutMs: 10_000,
-          totalTimeoutMs: 50_000,
-          delay: {
-            type: 'random',
-            minDelayMs: 2000,
-            maxDelayMs: 5000,
-          },
-        });
+        const goFetchApi3MarketV2AirseekerRegistry = await go(
+          async () => api3MarketV2.airseekerRegistry(),
+          goAsyncOptions
+        );
         if (!goFetchApi3MarketV2AirseekerRegistry.success || !goFetchApi3MarketV2AirseekerRegistry.data) {
           throw new Error(`${network} Api3MarketV2 AirseekerRegistry address could not be fetched`);
         }
@@ -182,16 +151,7 @@ async function validateDeployments(network: string) {
             api3MarketV2.hashTypeToSignersHash(
               ethers.solidityPackedKeccak256(['string'], ['dAPI management Merkle root'])
             ),
-          {
-            retries: 5,
-            attemptTimeoutMs: 10_000,
-            totalTimeoutMs: 50_000,
-            delay: {
-              type: 'random',
-              minDelayMs: 2000,
-              maxDelayMs: 5000,
-            },
-          }
+          goAsyncOptions
         );
         if (
           !goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.success ||
@@ -213,16 +173,7 @@ async function validateDeployments(network: string) {
             api3MarketV2.hashTypeToSignersHash(
               ethers.solidityPackedKeccak256(['string'], ['dAPI pricing Merkle root'])
             ),
-          {
-            retries: 5,
-            attemptTimeoutMs: 10_000,
-            totalTimeoutMs: 50_000,
-            delay: {
-              type: 'random',
-              minDelayMs: 2000,
-              maxDelayMs: 5000,
-            },
-          }
+          goAsyncOptions
         );
         if (
           !goFetchApi3MarketV2DapiPricingMerkleRootSignersHash.success ||
@@ -260,16 +211,7 @@ async function validateDeployments(network: string) {
         ) as unknown as AccessControlRegistry;
         const goFetchApi3MarketV2DapiNameSetterRoleStatus = await go(
           async () => accessControlRegistry.hasRole(dapiNameSetterRole, api3MarketV2Address),
-          {
-            retries: 5,
-            attemptTimeoutMs: 10_000,
-            totalTimeoutMs: 50_000,
-            delay: {
-              type: 'random',
-              minDelayMs: 2000,
-              maxDelayMs: 5000,
-            },
-          }
+          goAsyncOptions
         );
         if (!goFetchApi3MarketV2DapiNameSetterRoleStatus.success) {
           throw new Error(`${network} Api3MarketV2 dAPI name setter role status could not be fetched`);
@@ -298,16 +240,7 @@ async function validateDeployments(network: string) {
                 ])
               )
             ),
-          {
-            retries: 5,
-            attemptTimeoutMs: 10_000,
-            totalTimeoutMs: 50_000,
-            delay: {
-              type: 'random',
-              minDelayMs: 2000,
-              maxDelayMs: 5000,
-            },
-          }
+          goAsyncOptions
         );
         if (!goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.success) {
           throw new Error(`${network} Api3ServerV1OevExtension auctioneer role status could not be fetched`);
@@ -354,16 +287,7 @@ async function validateDeployments(network: string) {
                   ])
               )
             ),
-          {
-            retries: 5,
-            attemptTimeoutMs: 10_000,
-            totalTimeoutMs: 50_000,
-            delay: {
-              type: 'random',
-              minDelayMs: 2000,
-              maxDelayMs: 5000,
-            },
-          }
+          goAsyncOptions
         );
         if (!goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.success) {
           throw new Error(`${network} Api3ServerV1OevExtension auctioneer role status could not be fetched`);
