@@ -18,6 +18,8 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 
+import { goAsyncOptions } from './constants';
+
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
@@ -53,16 +55,7 @@ async function verifyDeployments(network: string) {
     );
 
     if (deployment.address === expectedDeterministicDeploymentAddress) {
-      const goFetchContractCode = await go(async () => provider.getCode(deployment.address), {
-        retries: 5,
-        attemptTimeoutMs: 10_000,
-        totalTimeoutMs: 50_000,
-        delay: {
-          type: 'random',
-          minDelayMs: 2000,
-          maxDelayMs: 5000,
-        },
-      });
+      const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
         throw new Error(`${network} ${contractName} (deterministic) contract code could not be fetched`);
       }
@@ -70,16 +63,10 @@ async function verifyDeployments(network: string) {
         throw new Error(`${network} ${contractName} (deterministic) contract code does not exist`);
       }
     } else {
-      const goFetchCreationTx = await go(async () => provider.getTransaction(deployment.transactionHash), {
-        retries: 5,
-        attemptTimeoutMs: 10_000,
-        totalTimeoutMs: 50_000,
-        delay: {
-          type: 'random',
-          minDelayMs: 2000,
-          maxDelayMs: 5000,
-        },
-      });
+      const goFetchCreationTx = await go(
+        async () => provider.getTransaction(deployment.transactionHash),
+        goAsyncOptions
+      );
       if (!goFetchCreationTx.success || !goFetchCreationTx.data) {
         throw new Error(`${network} ${contractName} creation tx could not be fetched`);
       }
