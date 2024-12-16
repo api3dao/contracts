@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 11.2.0
+
+### Minor Changes
+
+- 773e5b5: Add dAPI and Market support to hashkey-sepolia-testnet chain
+
 ## 11.1.0
 
 ### Minor Changes
