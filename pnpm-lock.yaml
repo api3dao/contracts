@@ -13,8 +13,8 @@ importers:
         version: 6.13.4
     devDependencies:
       '@api3/chains':
-        specifier: ^11.1.1
-        version: 11.1.1(typescript@5.7.2)
+        specifier: ^11.2.2
+        version: 11.2.2(typescript@5.7.2)
       '@api3/eslint-plugin-commons':
         specifier: ^1.0.1
         version: 1.0.1(eslint@8.57.1)(typescript@5.7.2)
@@ -124,8 +124,8 @@ packages:
   '@adraffy/ens-normalize@1.11.0':
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
 
-  '@api3/chains@11.1.1':
-    resolution: {integrity: sha512-87oz9jfEGVfqmQErCNa6kpbsJHkw+W4unIbYAJhq+YjGfc0THdlZPUfCNe6h5W3EppYrJW3+GGzc5N2RKaF3dw==}
+  '@api3/chains@11.2.2':
+    resolution: {integrity: sha512-gSh0msvKLGt8XqFUcEZNVVDiod+tnf4kGleRvQurE0Qw5APJX5zACQ4Rgatfu2pjtEs1ysZJFg+FQ5lLAPSSUA==}
 
   '@api3/eslint-plugin-commons@1.0.1':
     resolution: {integrity: sha512-KY46lDBa5QgqfYdD7D8kv0ZS8rtXgH2q1+7eeCvfDQD2jtWz9pzBoYXZ1Eu49P4e6NjeNn9PkYZElcdxXroVCg==}
@@ -3609,7 +3609,7 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.0': {}
 
-  '@api3/chains@11.1.1(typescript@5.7.2)':
+  '@api3/chains@11.2.2(typescript@5.7.2)':
     dependencies:
       viem: 2.21.32(typescript@5.7.2)(zod@3.23.8)
       zod: 3.23.8

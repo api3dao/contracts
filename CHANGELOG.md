@@ -1,5 +1,17 @@
 # @api3/contracts
 
+## 12.0.0
+
+### Major Changes
+
+- da83b91: Replace GnosisSafeWithoutProxy deployment with deterministically deployed contract for rari-arbitrum-sepolia-testnet
+
+## 11.2.0
+
+### Minor Changes
+
+- 773e5b5: Add dAPI and Market support to hashkey-sepolia-testnet chain
+
 ## 11.1.0
 
 ### Minor Changes
