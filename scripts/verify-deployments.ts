@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
+import type { Deployment } from 'hardhat-deploy/dist/types';
 
 import {
   chainsSupportedByManagerMultisig,
@@ -23,6 +24,96 @@ import { goAsyncOptions } from './constants';
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
+
+function validateDeploymentArguments(network: string, deployment: Deployment, contractName: string) {
+  let expectedDeploymentArgs: string[];
+  switch (contractName) {
+    case 'Api3ServerV1': {
+      const { address: accessControlRegistryAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'AccessControlRegistry.json'), 'utf8')
+      );
+      const api3ServerV1AdminRoleDescription = 'Api3ServerV1 admin';
+      const { address: ownableCallForwarderAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'OwnableCallForwarder.json'), 'utf8')
+      );
+      expectedDeploymentArgs = [
+        accessControlRegistryAddress,
+        api3ServerV1AdminRoleDescription,
+        ownableCallForwarderAddress,
+      ];
+      break;
+    }
+    case 'Api3ServerV1OevExtension': {
+      const { address: accessControlRegistryAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'AccessControlRegistry.json'), 'utf8')
+      );
+      const api3ServerV1OevExtensionAdminRoleDescription = 'Api3ServerV1OevExtension admin';
+      const { address: ownableCallForwarderAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'OwnableCallForwarder.json'), 'utf8')
+      );
+      const { address: api3ServerV1Address } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'Api3ServerV1.json'), 'utf8')
+      );
+      expectedDeploymentArgs = [
+        accessControlRegistryAddress,
+        api3ServerV1OevExtensionAdminRoleDescription,
+        ownableCallForwarderAddress,
+        api3ServerV1Address,
+      ];
+      break;
+    }
+    case 'Api3ReaderProxyV1Factory': {
+      const { address: api3ServerV1OevExtensionAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'Api3ServerV1OevExtension.json'), 'utf8')
+      );
+      // We do not check the initial owner as it is mutable and is validated separately
+      expectedDeploymentArgs = [deployment.args![0], api3ServerV1OevExtensionAddress];
+      break;
+    }
+    case 'Api3MarketV2': {
+      const { address: ownableCallForwarderAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'OwnableCallForwarder.json'), 'utf8')
+      );
+      const { address: api3ReaderProxyV1FactoryAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'Api3ReaderProxyV1Factory.json'), 'utf8')
+      );
+      const maximumSubscriptionQueueLength = 10;
+      expectedDeploymentArgs = [
+        ownableCallForwarderAddress,
+        api3ReaderProxyV1FactoryAddress,
+        maximumSubscriptionQueueLength,
+      ];
+      break;
+    }
+    case 'OevAuctionHouse': {
+      const { address: accessControlRegistryAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'AccessControlRegistry.json'), 'utf8')
+      );
+      const oevAuctionHouseAdminRoleDescription = 'OevAuctionHouse admin';
+      const { address: ownableCallForwarderAddress } = JSON.parse(
+        fs.readFileSync(join('deployments', network, 'OwnableCallForwarder.json'), 'utf8')
+      );
+      expectedDeploymentArgs = [
+        accessControlRegistryAddress,
+        oevAuctionHouseAdminRoleDescription,
+        ownableCallForwarderAddress,
+      ];
+      break;
+    }
+    default: {
+      // The variables set by the deployment arguments of the other contracts are all
+      // immutable, so they are validated separately and we have nothing to do here
+      return;
+    }
+  }
+  deployment.args!.map((deploymentArg: string, ind: number) => {
+    if (deploymentArg !== expectedDeploymentArgs[ind]) {
+      throw new Error(
+        `${contractName} deployment arg #${ind} is expected to be ${expectedDeploymentArgs[ind]} but is ${deploymentArg}`
+      );
+    }
+  });
+}
 
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
@@ -41,6 +132,9 @@ async function verifyDeployments(network: string) {
     const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
     const artifact = await deployments.getArtifact(contractName);
     const constructor = artifact.abi.find((method) => method.type === 'constructor');
+
+    validateDeploymentArguments(network, deployment, contractName);
+
     const expectedEncodedConstructorArguments = constructor
       ? ethers.AbiCoder.defaultAbiCoder().encode(
           constructor.inputs.map((input: any) => input.type),
