@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 13.0.0
+
+### Major Changes
+
+- 39055a0: Replace old GnosisSafeWithoutProxy deployments with deterministic contract deployments on testnets
+
 ## 12.0.0
 
 ### Major Changes
