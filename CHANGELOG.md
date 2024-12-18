@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 13.1.0
+
+### Minor Changes
+
+- a261641: Add dAPI and Market support to hashkey chain
+
 ## 13.0.0
 
 ### Major Changes
