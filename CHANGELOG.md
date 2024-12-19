@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 13.2.0
+
+### Minor Changes
+
+- c2679fd: Add dAPI and Market support to ink chain
+
 ## 13.1.0
 
 ### Minor Changes
