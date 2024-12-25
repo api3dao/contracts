@@ -19,10 +19,18 @@ import type {
   Api3MarketV2,
   Api3ReaderProxyV1Factory,
   GnosisSafeWithoutProxy,
+  OevAuctionHouse,
   OwnableCallForwarder,
 } from '../src/index';
+import { computeApi3ReaderProxyV1Address } from '../src/index';
 
 import { goAsyncOptions } from './constants';
+
+const chainSymbolToTicker: Record<string, string> = {
+  xDAI: 'DAI',
+};
+const dappId = 1;
+const api3ReaderProxyV1Metadata = '0x';
 
 async function validateDeployments(network: string) {
   if (chainsSupportedByManagerMultisig.includes(network)) {
@@ -300,6 +308,93 @@ async function validateDeployments(network: string) {
           throw new Error(
             `${network} (${[...auctioneerMetadata['auction-resolvers'], ...auctioneerMetadata['auction-cops']]}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ethers.ZeroHash ? false : true))})`
           );
+        }
+
+        // Validate that collateral rate proxy is set
+        const { address: oevAuctionHouseAddress, abi: oevAuctionHouseAbi } = JSON.parse(
+          fs.readFileSync(join('deployments', network, `OevAuctionHouse.json`), 'utf8')
+        );
+        const oevAuctionHouse = new ethers.Contract(
+          oevAuctionHouseAddress,
+          oevAuctionHouseAbi,
+          provider
+        ) as unknown as OevAuctionHouse;
+
+        const goFetchCollateralRateProxyAddress = await go(
+          async () => oevAuctionHouse.collateralRateProxy(),
+          goAsyncOptions
+        );
+        if (!goFetchCollateralRateProxyAddress.success) {
+          throw new Error('OevAuctionHouse collateral rate proxy address could not be fetched');
+        }
+        const oevAuctionChainId = CHAINS.find((chain: any) => chain.alias === network)!.id;
+        const ethUsdRateReaderProxyV1Address = computeApi3ReaderProxyV1Address(
+          oevAuctionChainId,
+          'ETH/USD',
+          dappId,
+          api3ReaderProxyV1Metadata
+        );
+        if (goFetchCollateralRateProxyAddress.data !== ethUsdRateReaderProxyV1Address) {
+          throw new Error(
+            `OevAuctionHouse collateral rate proxy address is ${goFetchCollateralRateProxyAddress.data} while it should have been ${ethUsdRateReaderProxyV1Address}`
+          );
+        }
+
+        // Validate that native currency rate proxies are set
+        const goFetchNativeCurrencyRateProxyAddresses = await go(
+          async () =>
+            oevAuctionHouse.multicall.staticCall(
+              chainsSupportedByMarket
+                .reduce((acc, chainAlias) => {
+                  const chain = CHAINS.find((chain: any) => chain.alias === chainAlias)!;
+                  if (!chain.testnet) {
+                    acc.push(chainAlias);
+                  }
+                  return acc;
+                }, [] as string[])
+                .reduce((acc, chainAlias) => {
+                  const chain = CHAINS.find((chain: any) => chain.alias === chainAlias)!;
+                  acc.push(
+                    oevAuctionHouse.interface.encodeFunctionData('chainIdToNativeCurrencyRateProxy', [chain.id])
+                  );
+                  return acc;
+                }, [] as string[])
+            ),
+          goAsyncOptions
+        );
+        if (!goFetchNativeCurrencyRateProxyAddresses.success) {
+          throw new Error('OevAuctionHouse native currency rate proxy addresses could not be fetched');
+        }
+        const nativeCurrencyRateProxyAddresses = goFetchNativeCurrencyRateProxyAddresses.data.map((returndata) =>
+          ethers.AbiCoder.defaultAbiCoder().decode(['address'], returndata)
+        );
+        const errorMessages = chainsSupportedByMarket
+          .reduce((acc, chainAlias) => {
+            const chain = CHAINS.find((chain: any) => chain.alias === chainAlias)!;
+            if (!chain.testnet) {
+              acc.push(chainAlias);
+            }
+            return acc;
+          }, [] as string[])
+          .reduce((acc, chainAlias, ind) => {
+            const chain = CHAINS.find((chain: any) => chain.alias === chainAlias)!;
+            const dapiName = `${chainSymbolToTicker[chain.symbol] ?? chain.symbol}/USD`;
+            const api3ReaderProxyV1Address = computeApi3ReaderProxyV1Address(
+              oevAuctionChainId,
+              dapiName,
+              dappId,
+              api3ReaderProxyV1Metadata
+            );
+            if (nativeCurrencyRateProxyAddresses[ind]!.toString() !== api3ReaderProxyV1Address) {
+              acc.push(
+                `${chainAlias} OevAuctionHouse native currency rate proxy address is ${nativeCurrencyRateProxyAddresses[ind]} while it should have been ${api3ReaderProxyV1Address}`
+              );
+            }
+            return acc;
+          }, [] as string[]);
+        if (errorMessages.length > 0) {
+          // eslint-disable-next-line unicorn/error-message
+          throw new Error(errorMessages.join('\n'));
         }
       }
     }
