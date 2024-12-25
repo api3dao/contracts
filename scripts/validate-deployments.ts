@@ -316,7 +316,7 @@ async function main() {
       try {
         await validateDeployments(network);
       } catch (error) {
-        if (CHAINS.find((chain) => chain.alias === network)?.testnet) {
+        if (CHAINS.find((chain: any) => chain.alias === network)?.testnet) {
           erroredTestnets.push(network);
         } else {
           erroredMainnets.push(network);
