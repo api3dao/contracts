@@ -54,7 +54,7 @@ async function validateDeployments(network: string) {
       throw new Error(`${network} GnosisSafeWithoutProxy owners could not be fetched`);
     }
     const { owners: managerMultisigOwners, threshold: managerMultisigThreshold } =
-      managerMultisigMetadata[CHAINS.find((chain: any) => chain.alias === network)?.testnet ? 'testnet' : 'mainnet'];
+      managerMultisigMetadata[CHAINS.find((chain) => chain.alias === network)?.testnet ? 'testnet' : 'mainnet'];
     if (
       !(
         managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
@@ -328,7 +328,7 @@ async function validateDeployments(network: string) {
         if (!goFetchCollateralRateProxyAddress.success) {
           throw new Error('OevAuctionHouse collateral rate proxy address could not be fetched');
         }
-        const oevAuctionChainId = CHAINS.find((chain: any) => chain.alias === network)!.id;
+        const oevAuctionChainId = CHAINS.find((chain) => chain.alias === network)!.id;
         const ethUsdRateReaderProxyV1Address = computeApi3ReaderProxyV1Address(
           oevAuctionChainId,
           'ETH/USD',
@@ -343,7 +343,7 @@ async function validateDeployments(network: string) {
 
         // Validate that native currency rate proxies are set
         const chainsWithNativeRateProxies = chainsSupportedByMarket.reduce((acc, chainAlias) => {
-          const chain = CHAINS.find((chain: any) => chain.alias === chainAlias)!;
+          const chain = CHAINS.find((chain) => chain.alias === chainAlias)!;
           if (!chain.testnet) {
             acc.push(chain);
           }
@@ -449,7 +449,7 @@ async function main() {
       try {
         await validateDeployments(network);
       } catch (error) {
-        if (CHAINS.find((chain: any) => chain.alias === network)?.testnet) {
+        if (CHAINS.find((chain) => chain.alias === network)?.testnet) {
           erroredTestnets.push(network);
         } else {
           erroredMainnets.push(network);
