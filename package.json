@@ -33,6 +33,7 @@
     "deploy:deterministic": "DETERMINISTIC=true hardhat deploy --network $NETWORK",
     "deploy:undeterministic": "hardhat deploy --network $NETWORK",
     "generate:dapps": "ts-node scripts/generate-dapps.ts",
+    "generate:deployment-addresses": "ts-node scripts/generate-deployment-addresses.ts",
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
     "lint:solhint": "solhint ./contracts/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
