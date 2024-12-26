@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Validate deployment config
-        run: pnpm validate-deployment-config
+      - name: Check local metadata
+        run: pnpm check
 
       - name: Validate deployments
         run: pnpm validate-deployments
