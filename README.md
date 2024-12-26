@@ -64,10 +64,10 @@ Verify that the vendor contracts are identical to the ones from their respective
 pnpm verify-vendor-contracts
 ```
 
-Validate the deployment config
+Check the local files containing metadata
 
 ```sh
-pnpm validate-deployment-config
+pnpm check
 ```
 
 Verify the deployments and validate their current state
