@@ -9,9 +9,9 @@ import {
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
-} from '../data/chain-support.json';
+} from '../../data/chain-support.json';
 
-module.exports = () => {
+function getDeploymentAddresses() {
   const references: Record<string, Record<string, AddressLike>> = {
     GnosisSafeWithoutProxy: {},
     OwnableCallForwarder: {},
@@ -45,6 +45,7 @@ module.exports = () => {
       references[contractName] = { ...references[contractName], [chainId]: deployment.address };
     }
   }
-  fs.writeFileSync(join('deployments', 'addresses.json'), `${JSON.stringify(references, null, 2)}\n`);
-};
-module.exports.tags = ['document'];
+  return `${JSON.stringify(references, null, 2)}\n`;
+}
+
+export { getDeploymentAddresses };
