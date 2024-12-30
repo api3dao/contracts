@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 13.3.0
+
+### Minor Changes
+
+- 5d12734: MockApi3ReaderProxyV1 (MockApi3ReaderProxy that also implements AggregatorV2V3Interface) is added
+
+### Patch Changes
+
+- 9e4b776: MockApi3ReaderProxy reverts when it is read before `mock()` is called
+
 ## 13.2.0
 
 ### Minor Changes
