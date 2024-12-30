@@ -1405,7 +1405,7 @@ describe('OevAuctionHouse', function () {
                   context('Collateral amount cannot be calculated', function () {
                     it('reverts', async function () {
                       const { roles, oevAuctionHouse, collateralRateProxy } = await helpers.loadFixture(deployAndSetUp);
-                      await collateralRateProxy.mock(COLLATERAL_RATE, 0);
+                      await collateralRateProxy.mock(COLLATERAL_RATE, 1);
                       const chainId = '137';
                       const proxyWithOevAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                       const bidTopic = ethers.solidityPackedKeccak256(
