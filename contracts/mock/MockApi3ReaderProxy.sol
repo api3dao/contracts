@@ -17,7 +17,7 @@ contract MockApi3ReaderProxy is IApi3ReaderProxy {
     /// @return value Data feed value
     /// @return timestamp Data feed timestamp
     function read()
-        external
+        public
         view
         override
         returns (int224 value, uint32 timestamp)
