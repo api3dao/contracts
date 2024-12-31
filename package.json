@@ -45,6 +45,7 @@
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
     "postpack": "./postpack.sh",
+    "survey-roles": "hardhat run scripts/survey-roles.ts",
     "test": "hardhat test --parallel",
     "test:coverage": "hardhat coverage",
     "test:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
