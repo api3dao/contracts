@@ -14,6 +14,10 @@ import {
   updateBeaconSet,
 } from '../test-utils';
 
+const MAXIMUM_BEACON_COUNT_IN_SET = 21;
+const MAXIMUM_UPDATE_PARAMETERS_LENGTH = 1024;
+const MAXIMUM_SIGNED_API_URL_LENGTH = 256;
+
 async function registerBeaconSet(airseekerRegistry: AirseekerRegistry, feedName: string, airnodes: HDNodeWallet[]) {
   const beacons = airnodes
     .map((airnode) => {
@@ -34,10 +38,6 @@ async function registerBeaconSet(airseekerRegistry: AirseekerRegistry, feedName:
 }
 
 describe('AirseekerRegistry', function () {
-  const MAXIMUM_BEACON_COUNT_IN_SET = 21;
-  const MAXIMUM_UPDATE_PARAMETERS_LENGTH = 1024;
-  const MAXIMUM_SIGNED_API_URL_LENGTH = 256;
-
   async function deploy() {
     const roleNames = ['deployer', 'api3ServerV1Manager', 'owner', 'randomPerson'];
     const accounts = await ethers.getSigners();

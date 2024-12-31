@@ -16,6 +16,7 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "resolveJsonModule": true,
+    "allowJs": true,
 
     // Disabled because they are covered by Eslint rules
     "noUnusedLocals": false,

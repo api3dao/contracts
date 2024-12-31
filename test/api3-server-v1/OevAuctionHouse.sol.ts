@@ -8,6 +8,33 @@ import { ethers } from 'hardhat';
 
 import type { MockApi3ReaderProxy } from '../../src/index';
 
+const PROXY_SETTER_ROLE_DESCRIPTION = 'Proxy setter';
+const WITHDRAWER_ROLE_DESCRIPTION = 'Withdrawer';
+const AUCTIONEER_ROLE_DESCRIPTION = 'Auctioneer';
+const WITHDRAWAL_WAITING_PERIOD = 15; // 15 seconds
+const MAXIMUM_BID_LIFETIME = 24 * 60 * 60; // 1 day
+const MINIMUM_BID_LIFETIME = 15; // 15 seconds
+const FULFILLMENT_REPORTING_PERIOD = 24 * 60 * 60; // 1 day
+// The encoded bid details from `encodeBidDetails()` below is 305 bytes
+// A transaction hash is 32 bytes
+const MAXIMUM_BIDDER_DATA_LENGTH = 1024;
+// `Api3ServerV1.updateOevProxyDataFeedWithSignedData()` calldata for
+// a Beacon set of 21 Beacons is 6336 bytes
+const MAXIMUM_AUCTIONEER_DATA_LENGTH = 8192;
+
+const HUNDRED_PERCENT_IN_BASIS_POINTS = 100 * 100;
+const MAXIMUM_RATE_AGE = 24 * 60 * 60; // 1 day
+
+// Below are example values
+const COLLATERAL_AMOUNT_IN_BASIS_POINTS = 7.5 * 100; // 7.5%
+const PROTOCOL_FEE_IN_BASIS_POINTS = 5 * 100; // 5%
+const CHAIN_ID_TO_PRICE: Record<string, bigint> = {
+  1: ethers.parseEther('1820'), // ETH/USD is 1,820
+  97: ethers.parseEther('230'), // BNB/USD is 230
+  137: ethers.parseEther('0.65'), // MATIC/USD is 0.65
+};
+const COLLATERAL_RATE = CHAIN_ID_TO_PRICE['1']!; // Using ETH as collateral
+
 describe('OevAuctionHouse', function () {
   enum BidConditionType {
     LTE = 0,
@@ -22,33 +49,6 @@ describe('OevAuctionHouse', function () {
     FulfillmentConfirmed = 4,
     FulfillmentContradicted = 5,
   }
-
-  const PROXY_SETTER_ROLE_DESCRIPTION = 'Proxy setter';
-  const WITHDRAWER_ROLE_DESCRIPTION = 'Withdrawer';
-  const AUCTIONEER_ROLE_DESCRIPTION = 'Auctioneer';
-  const WITHDRAWAL_WAITING_PERIOD = 15; // 15 seconds
-  const MAXIMUM_BID_LIFETIME = 24 * 60 * 60; // 1 day
-  const MINIMUM_BID_LIFETIME = 15; // 15 seconds
-  const FULFILLMENT_REPORTING_PERIOD = 24 * 60 * 60; // 1 day
-  // The encoded bid details from `encodeBidDetails()` below is 305 bytes
-  // A transaction hash is 32 bytes
-  const MAXIMUM_BIDDER_DATA_LENGTH = 1024;
-  // `Api3ServerV1.updateOevProxyDataFeedWithSignedData()` calldata for
-  // a Beacon set of 21 Beacons is 6336 bytes
-  const MAXIMUM_AUCTIONEER_DATA_LENGTH = 8192;
-
-  const HUNDRED_PERCENT_IN_BASIS_POINTS = 100 * 100;
-  const MAXIMUM_RATE_AGE = 24 * 60 * 60; // 1 day
-
-  // Below are example values
-  const COLLATERAL_AMOUNT_IN_BASIS_POINTS = 7.5 * 100; // 7.5%
-  const PROTOCOL_FEE_IN_BASIS_POINTS = 5 * 100; // 5%
-  const CHAIN_ID_TO_PRICE: Record<string, bigint> = {
-    1: ethers.parseEther('1820'), // ETH/USD is 1,820
-    97: ethers.parseEther('230'), // BNB/USD is 230
-    137: ethers.parseEther('0.65'), // MATIC/USD is 0.65
-  };
-  const COLLATERAL_RATE = CHAIN_ID_TO_PRICE['1']!; // Using ETH as collateral
 
   function deriveRootRole(managerAddress: AddressLike) {
     return ethers.solidityPackedKeccak256(['address'], [managerAddress]);

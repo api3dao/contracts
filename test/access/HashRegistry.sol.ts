@@ -4,6 +4,11 @@ import { expect } from 'chai';
 import type { BytesLike, HDNodeWallet } from 'ethers';
 import { ethers } from 'hardhat';
 
+const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
+  ['string'],
+  ['HashRegistry signature delegation']
+);
+
 export async function signHash(
   signers: HDNodeWallet[],
   hashType: BytesLike,
@@ -21,11 +26,6 @@ export async function signHash(
 }
 
 describe('HashRegistry', function () {
-  const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
-    ['string'],
-    ['HashRegistry signature delegation']
-  );
-
   async function signDelegation(
     signers: HDNodeWallet[],
     delegates: HDNodeWallet[],
