@@ -1,3 +1,7 @@
+// This script will not work with all providers but there are workarounds.
+// See https://github.com/api3dao/contracts/pull/310
+// TODO: Only display select role trees (which was not necessary at the time
+// this script was implemented)
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
@@ -9,17 +13,12 @@ import { chainsSupportedByManagerMultisig, chainsSupportedByDapis } from '../dat
 
 import { goAsyncOptions } from './constants';
 
-// This may need to be tuned for different RPCs
-const MAXIMUM_GETLOGS_BLOCK_RANGE = 50_000;
+const MAXIMUM_GETLOGS_BLOCK_RANGE = 1_000;
 
 async function surveyRoles(network: string) {
   if (!chainsSupportedByDapis.includes(network)) {
     return;
   }
-  // The provider must serve all logs for this script to work. The default
-  // chain RPC URLs don't necessarily support that. In such cases, you can
-  // override the default RPC URL through .env. See
-  // https://github.com/api3dao/chains/tree/main?tab=readme-ov-file#hardhatconfignetworks
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
