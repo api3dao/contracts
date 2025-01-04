@@ -13,8 +13,8 @@ importers:
         version: 6.13.4
     devDependencies:
       '@api3/chains':
-        specifier: ^11.4.0
-        version: 11.4.0(typescript@5.7.2)
+        specifier: ^11.4.1
+        version: 11.4.1(typescript@5.7.2)
       '@api3/eslint-plugin-commons':
         specifier: ^3.0.0
         version: 3.0.0(@babel/core@7.26.0)(eslint@8.57.1)(prettier@3.4.2)(typescript@5.7.2)
@@ -128,8 +128,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@api3/chains@11.4.0':
-    resolution: {integrity: sha512-J4qnCn8RrWIVyEZDPwU9jm5c2SiMvw7eXcSqZcMVv6EbJa1moIQepJWfA+t7+jwLoAOReKDKrTCNMiBAXlihBQ==}
+  '@api3/chains@11.4.1':
+    resolution: {integrity: sha512-TfSux3hH3Vknn4Xh7zQyGoUejm9MN0DvWiN8gL/u37iz2mukhZZXqYLhwZLeTYzXHp6VTfEvC4OaPOdqqv72kA==}
 
   '@api3/eslint-plugin-commons@3.0.0':
     resolution: {integrity: sha512-XUEM2HDA9LCHt6Fd7xydlxUjM2Foquilcb07IDzxMgAYq08yWXP3tuIjduZyHYTX0L7zFoOYfD1z8NQniRN61g==}
@@ -4150,7 +4150,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@api3/chains@11.4.0(typescript@5.7.2)':
+  '@api3/chains@11.4.1(typescript@5.7.2)':
     dependencies:
       viem: 2.21.32(typescript@5.7.2)(zod@3.24.1)
       zod: 3.24.1
