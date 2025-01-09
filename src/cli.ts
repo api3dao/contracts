@@ -47,6 +47,8 @@ yargs(hideBin(process.argv))
       if (!chain) {
         throw new Error(`Chain with ID ${args['chain-id']} is not known`);
       }
+      // eslint-disable-next-line no-console
+      console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain.name}\ndAPI name: ${args['dapi-name']}`);
       const provider = new ethers.JsonRpcProvider(
         chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
       );
