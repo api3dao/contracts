@@ -94,7 +94,7 @@
     "zod": "^3.24.1"
   },
   "dependencies": {
-    "@api3/chains": "^11.4.1",
+    "@api3/chains": "^11.4.2",
     "ethers": "^6.13.2",
     "yargs": "^17.7.2"
   },
