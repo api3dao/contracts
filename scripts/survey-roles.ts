@@ -13,7 +13,7 @@ import { chainsSupportedByManagerMultisig, chainsSupportedByDapis } from '../dat
 
 import { goAsyncOptions } from './constants';
 
-const MAXIMUM_GETLOGS_BLOCK_RANGE = 1_000;
+const MAXIMUM_GETLOGS_BLOCK_RANGE = 50_000;
 
 async function surveyRoles(network: string) {
   if (!chainsSupportedByDapis.includes(network)) {
