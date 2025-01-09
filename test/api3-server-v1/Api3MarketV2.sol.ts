@@ -9,23 +9,20 @@ import { type Api3MarketV2 } from '../../src/index';
 import { signHash } from '../access/HashRegistry.sol';
 import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
 
-describe('Api3MarketV2', function () {
-  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
-  const DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
-    ['string'],
-    ['dAPI management Merkle root']
-  );
-  const DAPI_PRICING_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(['string'], ['dAPI pricing Merkle root']);
-  const SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
-    ['string'],
-    ['Signed API URL Merkle root']
-  );
-  const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
-    ['string'],
-    ['Api3MarketV2 signature delegation']
-  );
-  const MAXIMUM_DAPI_UPDATE_AGE = 24 * 60 * 60;
+const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
+const DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
+  ['string'],
+  ['dAPI management Merkle root']
+);
+const DAPI_PRICING_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(['string'], ['dAPI pricing Merkle root']);
+const SIGNED_API_URL_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(['string'], ['Signed API URL Merkle root']);
+const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
+  ['string'],
+  ['Api3MarketV2 signature delegation']
+);
+const MAXIMUM_DAPI_UPDATE_AGE = 24 * 60 * 60;
 
+describe('Api3MarketV2', function () {
   async function computeRequiredPaymentAmount(
     api3MarketV2: Api3MarketV2,
     dapiName: BytesLike,

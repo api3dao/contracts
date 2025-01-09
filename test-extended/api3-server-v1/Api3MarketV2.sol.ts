@@ -7,9 +7,9 @@ import { ethers } from 'hardhat';
 
 import { encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils';
 
-describe('Api3MarketV2', function () {
-  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
+const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
 
+describe('Api3MarketV2', function () {
   async function deploy() {
     const roleNames = ['deployer', 'api3ServerV1Manager', 'owner', 'randomPerson'];
     const accounts = await ethers.getSigners();

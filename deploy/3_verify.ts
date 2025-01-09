@@ -8,10 +8,10 @@ import {
 } from '../data/chain-support.json';
 import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../src/index';
 
-module.exports = async () => {
-  const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
-  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
+const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
+module.exports = async () => {
   if (chainsSupportedByManagerMultisig.includes(network.name)) {
     const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
     await run('verify:verify', {

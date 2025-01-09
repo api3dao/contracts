@@ -10,10 +10,11 @@ import {
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
 import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
 
+const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+
 module.exports = async () => {
   const { deploy, log } = deployments;
   const [deployer] = await ethers.getSigners();
-  const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
   if (chainsSupportedByManagerMultisig.includes(network.name)) {
     const gnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy').catch(async () => {
