@@ -28,11 +28,15 @@
     "vendor",
     "dist"
   ],
+  "bin": {
+    "api3-contracts": "./dist/bin/cli.js"
+  },
   "scripts": {
     "build": "pnpm check && hardhat compile && pnpm generate && tsc -p tsconfig.build.json",
     "check": "pnpm check:deployment-addresses && pnpm check:deployment-config",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
     "check:deployment-config": "hardhat run scripts/check-deployment-config.ts",
+    "cli": "ts-node bin/cli.ts",
     "deploy:deterministic": "pnpm check:deployment-config && DETERMINISTIC=true hardhat deploy --network $NETWORK && pnpm generate:deployment-addresses",
     "deploy:undeterministic": "pnpm check:deployment-config && hardhat deploy --network $NETWORK && pnpm generate:deployment-addresses",
     "generate": "pnpm generate:dapps && pnpm generate:deployment-addresses",
@@ -56,7 +60,6 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^11.4.1",
     "@api3/eslint-plugin-commons": "^3.0.0",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.27.11",
@@ -71,6 +74,7 @@
     "@types/chai": "^4.3.20",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.17.11",
+    "@types/yargs": "^17.0.33",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "chai": "^4.5.0",
@@ -90,7 +94,9 @@
     "zod": "^3.24.1"
   },
   "dependencies": {
-    "ethers": "^6.13.2"
+    "@api3/chains": "^11.4.1",
+    "ethers": "^6.13.2",
+    "yargs": "^17.7.2"
   },
   "packageManager": "pnpm@9.15.2"
 }
