@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 14.0.0
+
+### Major Changes
+
+- d53c16f: Remove astar-sepolia-testnet support
+
 ## 13.3.0
 
 ### Minor Changes

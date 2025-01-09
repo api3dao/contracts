@@ -8,7 +8,7 @@
     "oev"
   ],
   "license": "MIT",
-  "version": "13.3.0",
+  "version": "14.0.0",
   "engines": {
     "node": ">=20.17.9"
   },
@@ -56,7 +56,7 @@
     "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
   },
   "devDependencies": {
-    "@api3/chains": "^11.4.0",
+    "@api3/chains": "^11.4.2",
     "@api3/eslint-plugin-commons": "^3.0.0",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.27.11",
