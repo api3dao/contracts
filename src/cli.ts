@@ -67,12 +67,27 @@ yargs(hideBin(process.argv))
         // eslint-disable-next-line no-console
         console.log('⚠️ Attempted to read the feed and failed');
       }
+      const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
+        args['dapp-alias'],
+        args['chain-id'],
+        args['dapi-name']
+      );
+      try {
+        const code = await provider.getCode(proxyAddress);
+        if (code === '0x') {
+          // eslint-disable-next-line no-console
+          console.log('⚠️ Proxy appears to not have been deployed');
+        }
+      } catch {
+        // eslint-disable-next-line no-console
+        console.log('⚠️ Attempted to check if the proxy has been deployed and failed');
+      }
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
       // eslint-disable-next-line no-console
       console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
       // eslint-disable-next-line no-console
       console.log(
-        `• Your proxy address is ${chain.explorer.browserUrl}address/${computeDappSpecificApi3ReaderProxyV1Address(args['dapp-alias'], args['chain-id'], args['dapi-name'])}\nPlease confirm that there is a contract deployed at this address before using it.`
+        `• Your proxy address is ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
       );
     }
   )
