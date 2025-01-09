@@ -2,5 +2,5 @@
 '@api3/contracts': major
 ---
 
-- Replace old GnosisSafeWithoutProxy deployments with deterministic contract deployments on mainnets
+- Replace GnosisSafeWithoutProxy deployments with deterministic ones on mainnets that they were deployed on non-deterministically
 - Remove deployments for unsupported networks
