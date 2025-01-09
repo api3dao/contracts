@@ -63,11 +63,11 @@ yargs(hideBin(process.argv))
         );
         if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
           // eslint-disable-next-line no-console
-          console.log('⚠️ Feed timestamp appears to be stale');
+          console.warn('⚠️ Feed timestamp appears to be stale');
         }
       } catch {
         // eslint-disable-next-line no-console
-        console.log('⚠️ Attempted to read the feed and failed');
+        console.warn('⚠️ Attempted to read the feed and failed');
       }
       const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
         args['dapp-alias'],
@@ -78,11 +78,11 @@ yargs(hideBin(process.argv))
         const code = await provider.getCode(proxyAddress);
         if (code === '0x') {
           // eslint-disable-next-line no-console
-          console.log('⚠️ Proxy appears to not have been deployed');
+          console.warn('⚠️ Proxy appears to not have been deployed');
         }
       } catch {
         // eslint-disable-next-line no-console
-        console.log('⚠️ Attempted to check if the proxy has been deployed and failed');
+        console.warn('⚠️ Attempted to check if the proxy has been deployed and failed');
       }
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
       // eslint-disable-next-line no-console
