@@ -1,11 +1,14 @@
-import type * as http from 'node:http';
-import * as https from 'node:https';
-
 import { CHAINS } from '@api3/chains';
+import * as ethers from 'ethers';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { computeDappSpecificApi3ReaderProxyV1Address } from './proxy';
+import {
+  type Api3ServerV1,
+  Api3ServerV1__factory,
+  computeDappSpecificApi3ReaderProxyV1Address,
+  deploymentAddresses,
+} from './index';
 
 const COMMON_COMMAND_ARGUMENTS = {
   dappAlias: {
@@ -27,18 +30,6 @@ const COMMON_COMMAND_ARGUMENTS = {
 
 const { dappAlias, chainId, dapiName } = COMMON_COMMAND_ARGUMENTS;
 
-async function requestToUrlReturns404(urlString: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    const request = https.get(urlString, (response: http.IncomingMessage) => {
-      response.resume();
-      resolve(response.statusCode === 404);
-    });
-    request.on('error', (error: Error) => {
-      reject(error);
-    });
-  });
-}
-
 // From https://github.com/api3dao/data-feeds/blob/main/packages/api3-market/src/utils/format.ts
 const slugify = (text: string) => text.toLowerCase().replaceAll(/[^\da-z-]+/g, '-');
 
@@ -56,13 +47,29 @@ yargs(hideBin(process.argv))
       if (!chain) {
         throw new Error(`Chain with ID ${args['chain-id']} is not known`);
       }
-      const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
-      if (await requestToUrlReturns404(marketUrl)) {
-        throw new Error(`${marketUrl} does not point to an active feed`);
-      } else {
+      const provider = new ethers.JsonRpcProvider(
+        chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
+      );
+      const api3ServerV1 = new ethers.Contract(
+        deploymentAddresses['Api3ServerV1'][chain.id as keyof (typeof deploymentAddresses)['Api3ServerV1']],
+        Api3ServerV1__factory.abi,
+        provider
+      ) as unknown as Api3ServerV1;
+      try {
+        const [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
+          ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
+        );
+        if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
+          // eslint-disable-next-line no-console
+          console.log('⚠️ Feed timestamp appears to be stale');
+        }
+      } catch {
         // eslint-disable-next-line no-console
-        console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
+        console.log('⚠️ Attempted to read the feed and failed');
       }
+      const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
+      // eslint-disable-next-line no-console
+      console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
       // eslint-disable-next-line no-console
       console.log(
         `• Your proxy address is ${chain.explorer.browserUrl}address/${computeDappSpecificApi3ReaderProxyV1Address(args['dapp-alias'], args['chain-id'], args['dapi-name'])}\nPlease confirm that there is a contract deployed at this address before using it.`
