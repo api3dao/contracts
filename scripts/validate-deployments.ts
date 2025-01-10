@@ -25,7 +25,7 @@ import type {
 } from '../src/index';
 import { computeApi3ReaderProxyV1Address } from '../src/index';
 
-import { goAsyncOptions } from './constants';
+import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants';
 
 const chainSymbolToTicker: Record<string, string> = {
   xDAI: 'DAI',
@@ -399,6 +399,10 @@ async function validateDeployments(network: string) {
 
       const proxyReadErrorMessages = await Promise.all(
         chainsWithNativeRateProxies.map(async (chain, ind) => {
+          if (skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation.includes(chain.alias)) {
+            return null;
+          }
+
           const nativeCurrencyRateReaderProxy = new ethers.Contract(
             nativeCurrencyRateProxyAddresses[ind]!.toString(),
             api3ReaderProxyAbi,
