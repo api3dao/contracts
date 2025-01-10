@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*", "typechain-types/**/*"]
+  "include": ["bin/**/*", "src/**/*", "typechain-types/**/*"]
 }
