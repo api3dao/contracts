@@ -10,3 +10,10 @@ export const goAsyncOptions: GoAsyncOptions = {
     maxDelayMs: 5000,
   },
 };
+
+export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation = [
+  'conflux',
+  'hashkey',
+  'lukso',
+  'sonic',
+];
