@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 15.0.0
+
+### Major Changes
+
+- 0b1ecc7: - Replace GnosisSafeWithoutProxy deployments with deterministic ones on mainnets that they were deployed on non-deterministically
+  - Remove deployments for unsupported networks
+
 ## 14.0.0
 
 ### Major Changes
