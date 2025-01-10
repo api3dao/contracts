@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 15.1.0
+
+### Minor Changes
+
+- 1acf989: Added the `print-api3readerproxyv1-address` CLI command
+
 ## 15.0.0
 
 ### Major Changes
