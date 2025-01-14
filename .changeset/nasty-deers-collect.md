@@ -7,12 +7,12 @@ Add the following dApps:
 - aave
 - abracadabra
 - aeroscraper
-- aurum
+- aurum-finance
 - avalon
 - benqi
 - beraborrow
 - burrbear
-- compound
+- compound-finance
 - curvance
 - dahlia
 - dolomite
@@ -21,7 +21,7 @@ Add the following dApps:
 - fisclend
 - fluid
 - macaron
-- machfi
+- mach-finance
 - moonwell
 - morpho
 - nitro
