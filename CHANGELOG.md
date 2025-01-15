@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 16.2.0
+
+### Minor Changes
+
+- fd56b48: Add the following dApps:
+
+  - aurelius
+  - granary
+  - ionic
+  - juice
+  - minterest
+  - pac
+  - takotako
+
 ## 16.1.0
 
 ### Minor Changes
