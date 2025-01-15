@@ -1,0 +1,50 @@
+---
+'@api3/contracts': minor
+---
+
+Add the following dApps:
+
+- aave
+- abracadabra
+- aeroscraper
+- aurum-finance
+- avalon
+- benqi
+- beraborrow
+- burrbear
+- compound-finance
+- curvance
+- dahlia
+- dolomite
+- eggs
+- enclabs
+- fisclend
+- fluid
+- macaron
+- mach-finance
+- moonwell
+- morpho
+- nitro
+- omega
+- origami
+- paddle
+- positions
+- roots
+- sake
+- scallop
+- silo
+- spark
+- stacking-salmon
+- stout
+- sumer
+- takara
+- taofi
+- untitled-bank
+- ursa
+- venus
+- vestation
+- vicuna
+- yield-hive
+- yieldfi
+- zeno
+- zeru
