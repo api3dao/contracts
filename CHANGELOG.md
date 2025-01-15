@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 16.1.0
+
+### Minor Changes
+
+- a0cc0ef: Add dAPI and Market support to soneium chain
+
 ## 16.0.0
 
 ### Major Changes
