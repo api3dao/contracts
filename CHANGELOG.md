@@ -1,5 +1,94 @@
 # @api3/contracts
 
+## 16.0.0
+
+### Major Changes
+
+- c30baba: Purge the following dApps (note that this merely means that you won't be able to derive dApp-specific Api3ReaderProxyV1 addresses using `@api3/contracts` for these dApps, they will be able to continue using data feed services as usual):
+
+  - airpuff
+  - aurelius
+  - davos-protocol
+  - granary-finance
+  - gravita-protocol
+  - grimoire-finance
+  - ionic-protocol
+  - ironclad-finance
+  - juice-finance
+  - kinetix-derivatives
+  - lore-finance
+  - mantisswap
+  - mean-finance
+  - mendi-minterest
+  - minterest
+  - pac-finance
+  - quickperps
+  - satoshi-protocol
+  - segment-finance
+  - seismic
+  - shoebill-finance
+  - splice-finance
+  - sturdy
+  - takotako
+  - wefi
+
+- a20ac37: Update the aliases of the following dApps:
+
+  - hana-finance (to hana)
+  - init-capital (to init)
+  - orbit-protocol (to orbit)
+  - yei-finance (to yei)
+
+### Minor Changes
+
+- a20ac37: Extend the dApp data schema to include name and homepage URL (optional)
+- aef7d46: Add the following dApps:
+
+  - aave
+  - abracadabra
+  - aeroscraper
+  - aurum-finance
+  - avalon
+  - benqi
+  - beraborrow
+  - burrbear
+  - compound-finance
+  - curvance
+  - dahlia
+  - dolomite
+  - eggs
+  - enclabs
+  - fisclend
+  - fluid
+  - macaron
+  - mach-finance
+  - moonwell
+  - morpho
+  - nitro
+  - omega
+  - origami
+  - paddle
+  - positions
+  - roots
+  - sake
+  - scallop
+  - silo
+  - spark
+  - stacking-salmon
+  - stout
+  - sumer
+  - takara
+  - taofi
+  - untitled-bank
+  - ursa
+  - venus
+  - vestation
+  - vicuna
+  - yield-hive
+  - yieldfi
+  - zeno
+  - zeru
+
 ## 15.1.0
 
 ### Minor Changes
