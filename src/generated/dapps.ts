@@ -58,7 +58,7 @@ export const DAPPS: Dapp[] = [
   { alias: 'ursa', name: 'Ursa Finance', homepageUrl: 'https://www.ursa.finance/' },
   { alias: 'venus', name: 'Venus Protocol', homepageUrl: 'https://venus.io/' },
   { alias: 'vestation', name: 'VeStation', homepageUrl: 'https://vestation.io/' },
-  { alias: 'vicuna', name: 'Vicuna Finance', homepageUrl: 'https://x.com/VicunaFinance/' },
+  { alias: 'vicuna-finance', name: 'Vicuna Finance', homepageUrl: 'https://x.com/VicunaFinance/' },
   { alias: 'yei', name: 'Yei Finance', homepageUrl: 'https://www.yei.finance/' },
   { alias: 'yield-hive', name: 'Yield Hive' },
   { alias: 'yieldfi', name: 'YieldFi', homepageUrl: 'https://yield.fi/' },
