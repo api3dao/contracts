@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 16.3.0
+
+### Minor Changes
+
+- 82ab69a: Add the dApp `dtrinity`
+
+### Patch Changes
+
+- 3c97e51: Update the alias of the dApp `vicuna` to `vicuna-finance` because that alias is already used to deploy proxies.
+
 ## 16.2.0
 
 ### Minor Changes
