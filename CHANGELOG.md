@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 16.4.0
+
+### Minor Changes
+
+- bb6ad34: Add the dApp `correlate`
+
 ## 16.3.0
 
 ### Minor Changes
