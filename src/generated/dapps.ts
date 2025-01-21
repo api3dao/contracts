@@ -18,6 +18,7 @@ export const DAPPS: Dapp[] = [
   { alias: 'beraborrow', name: 'Beraborrow', homepageUrl: 'https://www.beraborrow.com/' },
   { alias: 'burrbear', name: 'BurrBear', homepageUrl: 'https://www.burrbear.io/' },
   { alias: 'compound-finance', name: 'Compound', homepageUrl: 'https://compound.finance/' },
+  { alias: 'correlate', name: 'Correlate', homepageUrl: 'https://x.com/CorrelateFi' },
   { alias: 'curvance', name: 'Curvance', homepageUrl: 'https://www.curvance.com/' },
   { alias: 'dahlia', name: 'Dahlia', homepageUrl: 'https://dahlia.xyz/' },
   { alias: 'dolomite', name: 'Dolomite', homepageUrl: 'https://dolomite.io/' },
