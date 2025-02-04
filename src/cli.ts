@@ -62,7 +62,7 @@ yargs(hideBin(process.argv))
           ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
         );
         if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
-          const message = '⚠️ Feed timestamp appears to be stale';
+          const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
           // eslint-disable-next-line no-console
           console.warn(message);
         }
@@ -79,7 +79,7 @@ yargs(hideBin(process.argv))
       try {
         const code = await provider.getCode(proxyAddress);
         if (code === '0x') {
-          const message = '⚠️ Proxy appears to not have been deployed';
+          const message = `⚠️ Proxy at ${proxyAddress} appears to not have been deployed`;
           // eslint-disable-next-line no-console
           console.warn(message);
         }
