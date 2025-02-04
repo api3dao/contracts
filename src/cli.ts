@@ -72,7 +72,8 @@ yargs(hideBin(process.argv))
       } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
         if (strict) {
-          console.error(`${message}\n${error}`);
+          console.error(message);
+          console.error((error as Error).message);
           process.exit(1);
         }
         console.warn(message);
@@ -96,7 +97,8 @@ yargs(hideBin(process.argv))
       } catch (error) {
         const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
         if (strict) {
-          console.error(`${message}\n${error}`);
+          console.error(message);
+          console.error((error as Error).message);
           process.exit(1);
         }
         console.warn(message);
