@@ -26,9 +26,14 @@ const COMMON_COMMAND_ARGUMENTS = {
     demandOption: true,
     describe: 'dAPI (data feed) name as it appears on https://market.api3.org/',
   },
+  strict: {
+    type: 'boolean',
+    default: true,
+    describe: 'Requires validation steps to pass to print the proxy address',
+  },
 } as const;
 
-const { dappAlias, chainId, dapiName } = COMMON_COMMAND_ARGUMENTS;
+const { dappAlias, chainId, dapiName, strict } = COMMON_COMMAND_ARGUMENTS;
 
 // From https://github.com/api3dao/data-feeds/blob/main/packages/api3-market/src/utils/format.ts
 const slugify = (text: string) => text.toLowerCase().replaceAll(/[^\da-z-]+/g, '-');
@@ -41,6 +46,7 @@ yargs(hideBin(process.argv))
       'dapp-alias': dappAlias,
       'chain-id': chainId,
       'dapi-name': dapiName,
+      strict,
     },
     async (args) => {
       const chain = CHAINS.find((chain) => chain.id === args['chain-id']);
@@ -57,17 +63,24 @@ yargs(hideBin(process.argv))
         Api3ServerV1__factory.abi,
         provider
       ) as unknown as Api3ServerV1;
+      let timestamp;
       try {
-        const [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
+        [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
           ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
         );
-        if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
-          const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
-          // eslint-disable-next-line no-console
-          console.warn(message);
-        }
-      } catch {
+      } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
+        if (strict) {
+          throw new Error(`${message}\n${error}`);
+        }
+        // eslint-disable-next-line no-console
+        console.warn(message);
+      }
+      if (timestamp && timestamp + BigInt(24 * 60 * 60) < Date.now() / 1000) {
+        const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
+        if (strict) {
+          throw new Error(message);
+        }
         // eslint-disable-next-line no-console
         console.warn(message);
       }
@@ -76,15 +89,22 @@ yargs(hideBin(process.argv))
         args['chain-id'],
         args['dapi-name']
       );
+      let code;
       try {
-        const code = await provider.getCode(proxyAddress);
-        if (code === '0x') {
-          const message = `⚠️ Proxy at ${proxyAddress} appears to not have been deployed`;
-          // eslint-disable-next-line no-console
-          console.warn(message);
-        }
-      } catch {
+        code = await provider.getCode(proxyAddress);
+      } catch (error) {
         const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
+        if (strict) {
+          throw new Error(`${message}\n${error}`);
+        }
+        // eslint-disable-next-line no-console
+        console.warn(message);
+      }
+      if (code && code === '0x') {
+        const message = `⚠️ Proxy at ${proxyAddress} appears to not have been deployed`;
+        if (strict) {
+          throw new Error(message);
+        }
         // eslint-disable-next-line no-console
         console.warn(message);
       }
