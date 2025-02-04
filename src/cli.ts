@@ -71,7 +71,7 @@ yargs(hideBin(process.argv))
         );
       } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
-        if (strict) {
+        if (args['strict']) {
           console.error(message);
           console.error((error as Error).message);
           process.exit(1);
@@ -80,7 +80,7 @@ yargs(hideBin(process.argv))
       }
       if (timestamp && timestamp + BigInt(24 * 60 * 60) < Date.now() / 1000) {
         const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
-        if (strict) {
+        if (args['strict']) {
           console.error(message);
           process.exit(1);
         }
@@ -96,7 +96,7 @@ yargs(hideBin(process.argv))
         code = await provider.getCode(proxyAddress);
       } catch (error) {
         const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
-        if (strict) {
+        if (args['strict']) {
           console.error(message);
           console.error((error as Error).message);
           process.exit(1);
@@ -105,7 +105,7 @@ yargs(hideBin(process.argv))
       }
       if (code && code === '0x') {
         const message = '⚠️ Proxy does not appear to have been deployed';
-        if (strict) {
+        if (args['strict']) {
           console.error(message);
           process.exit(1);
         }
