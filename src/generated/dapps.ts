@@ -24,6 +24,7 @@ export const DAPPS: Dapp[] = [
   { alias: 'dolomite', name: 'Dolomite', homepageUrl: 'https://dolomite.io/' },
   { alias: 'dtrinity', name: 'dTrinity', homepageUrl: 'https://dtrinity.org/' },
   { alias: 'eggs', name: 'Eggs Finance', homepageUrl: 'https://x.com/EggsOnSonic' },
+  { alias: 'elara', name: 'Elara', homepageUrl: 'https://app.elara.finance/' },
   { alias: 'enclabs', name: 'Enclabs', homepageUrl: 'https://x.com/EnclabsFi' },
   { alias: 'fisclend', name: 'Fisclend Finance' },
   { alias: 'fluid', name: 'Fluid', homepageUrl: 'https://fluid.instadapp.io/' },

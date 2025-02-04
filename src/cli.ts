@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { CHAINS } from '@api3/chains';
 import * as ethers from 'ethers';
 import yargs from 'yargs';
@@ -26,9 +27,14 @@ const COMMON_COMMAND_ARGUMENTS = {
     demandOption: true,
     describe: 'dAPI (data feed) name as it appears on https://market.api3.org/',
   },
+  strict: {
+    type: 'boolean',
+    default: true,
+    describe: 'Requires validation steps to pass to print the proxy address',
+  },
 } as const;
 
-const { dappAlias, chainId, dapiName } = COMMON_COMMAND_ARGUMENTS;
+const { dappAlias, chainId, dapiName, strict } = COMMON_COMMAND_ARGUMENTS;
 
 // From https://github.com/api3dao/data-feeds/blob/main/packages/api3-market/src/utils/format.ts
 const slugify = (text: string) => text.toLowerCase().replaceAll(/[^\da-z-]+/g, '-');
@@ -41,13 +47,14 @@ yargs(hideBin(process.argv))
       'dapp-alias': dappAlias,
       'chain-id': chainId,
       'dapi-name': dapiName,
+      strict,
     },
     async (args) => {
       const chain = CHAINS.find((chain) => chain.id === args['chain-id']);
       if (!chain) {
-        throw new Error(`Chain with ID ${args['chain-id']} is not known`);
+        console.error(`Chain with ID ${args['chain-id']} is not known`);
+        process.exit(1);
       }
-      // eslint-disable-next-line no-console
       console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain.name}\ndAPI name: ${args['dapi-name']}`);
       const provider = new ethers.JsonRpcProvider(
         chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
@@ -57,39 +64,57 @@ yargs(hideBin(process.argv))
         Api3ServerV1__factory.abi,
         provider
       ) as unknown as Api3ServerV1;
+      let timestamp;
       try {
-        const [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
+        [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
           ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
         );
-        if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
-          // eslint-disable-next-line no-console
-          console.warn('⚠️ Feed timestamp appears to be stale');
+      } catch (error) {
+        const message = '⚠️ Attempted to read the feed and failed';
+        if (args['strict']) {
+          console.error(message);
+          console.error((error as Error).message);
+          process.exit(1);
         }
-      } catch {
-        // eslint-disable-next-line no-console
-        console.warn('⚠️ Attempted to read the feed and failed');
+        console.warn(message);
+      }
+      if (timestamp && timestamp + BigInt(24 * 60 * 60) < Date.now() / 1000) {
+        const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
+        if (args['strict']) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
       }
       const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
         args['dapp-alias'],
         args['chain-id'],
         args['dapi-name']
       );
+      let code;
       try {
-        const code = await provider.getCode(proxyAddress);
-        if (code === '0x') {
-          // eslint-disable-next-line no-console
-          console.warn('⚠️ Proxy appears to not have been deployed');
+        code = await provider.getCode(proxyAddress);
+      } catch (error) {
+        const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
+        if (args['strict']) {
+          console.error(message);
+          console.error((error as Error).message);
+          process.exit(1);
         }
-      } catch {
-        // eslint-disable-next-line no-console
-        console.warn('⚠️ Attempted to check if the proxy has been deployed and failed');
+        console.warn(message);
+      }
+      if (code && code === '0x') {
+        const message = '⚠️ Proxy does not appear to have been deployed';
+        if (args['strict']) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
       }
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
-      // eslint-disable-next-line no-console
       console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
-      // eslint-disable-next-line no-console
       console.log(
-        `• Your proxy address is ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
+        `• Your proxy is at ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
       );
     }
   )
