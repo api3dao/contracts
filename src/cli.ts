@@ -62,12 +62,14 @@ yargs(hideBin(process.argv))
           ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
         );
         if (timestamp! + BigInt(24 * 60 * 60) < Date.now() / 1000) {
+          const message = '⚠️ Feed timestamp appears to be stale';
           // eslint-disable-next-line no-console
-          console.warn('⚠️ Feed timestamp appears to be stale');
+          console.warn(message);
         }
       } catch {
+        const message = '⚠️ Attempted to read the feed and failed';
         // eslint-disable-next-line no-console
-        console.warn('⚠️ Attempted to read the feed and failed');
+        console.warn(message);
       }
       const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
         args['dapp-alias'],
@@ -77,12 +79,14 @@ yargs(hideBin(process.argv))
       try {
         const code = await provider.getCode(proxyAddress);
         if (code === '0x') {
+          const message = '⚠️ Proxy appears to not have been deployed';
           // eslint-disable-next-line no-console
-          console.warn('⚠️ Proxy appears to not have been deployed');
+          console.warn(message);
         }
       } catch {
+        const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
         // eslint-disable-next-line no-console
-        console.warn('⚠️ Attempted to check if the proxy has been deployed and failed');
+        console.warn(message);
       }
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
       // eslint-disable-next-line no-console
