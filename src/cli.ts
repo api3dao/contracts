@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { CHAINS } from '@api3/chains';
 import * as ethers from 'ethers';
 import yargs from 'yargs';
@@ -51,9 +52,9 @@ yargs(hideBin(process.argv))
     async (args) => {
       const chain = CHAINS.find((chain) => chain.id === args['chain-id']);
       if (!chain) {
-        throw new Error(`Chain with ID ${args['chain-id']} is not known`);
+        console.error(`Chain with ID ${args['chain-id']} is not known`);
+        process.exit(1);
       }
-      // eslint-disable-next-line no-console
       console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain.name}\ndAPI name: ${args['dapi-name']}`);
       const provider = new ethers.JsonRpcProvider(
         chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
@@ -71,17 +72,17 @@ yargs(hideBin(process.argv))
       } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
         if (strict) {
-          throw new Error(`${message}\n${error}`);
+          console.error(`${message}\n${error}`);
+          process.exit(1);
         }
-        // eslint-disable-next-line no-console
         console.warn(message);
       }
       if (timestamp && timestamp + BigInt(24 * 60 * 60) < Date.now() / 1000) {
         const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
         if (strict) {
-          throw new Error(message);
+          console.error(message);
+          process.exit(1);
         }
-        // eslint-disable-next-line no-console
         console.warn(message);
       }
       const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
@@ -95,23 +96,21 @@ yargs(hideBin(process.argv))
       } catch (error) {
         const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
         if (strict) {
-          throw new Error(`${message}\n${error}`);
+          console.error(`${message}\n${error}`);
+          process.exit(1);
         }
-        // eslint-disable-next-line no-console
         console.warn(message);
       }
       if (code && code === '0x') {
         const message = `⚠️ Proxy at ${proxyAddress} appears to not have been deployed`;
         if (strict) {
-          throw new Error(message);
+          console.error(message);
+          process.exit(1);
         }
-        // eslint-disable-next-line no-console
         console.warn(message);
       }
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
-      // eslint-disable-next-line no-console
       console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
-      // eslint-disable-next-line no-console
       console.log(
         `• Your proxy address is ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
       );
