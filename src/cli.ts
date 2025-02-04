@@ -104,7 +104,7 @@ yargs(hideBin(process.argv))
         console.warn(message);
       }
       if (code && code === '0x') {
-        const message = `⚠️ Proxy at ${proxyAddress} appears to not have been deployed`;
+        const message = '⚠️ Proxy does not appear to have been deployed';
         if (strict) {
           console.error(message);
           process.exit(1);
