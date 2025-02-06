@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@api3/chains':
-        specifier: ^11.5.1
-        version: 11.5.1(typescript@5.7.2)
+        specifier: ^11.6.0
+        version: 11.6.0(typescript@5.7.2)
       ethers:
         specifier: ^6.13.2
         version: 6.13.4
@@ -134,8 +134,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@api3/chains@11.5.1':
-    resolution: {integrity: sha512-2V2+LvnhwSfpgo52JY0PFuk3ujgq1FdnhajIKXcAjIasbnSCfrapMersGnV3FdPlZfT7jxHczRb47lx5gwgLLQ==}
+  '@api3/chains@11.6.0':
+    resolution: {integrity: sha512-DZt3W1gaw66EGGCatcJgHecEwSZ1CdYa9riiUfByesvrMLXAbUII41HgWq3P4NvgpyUfgpUvgN0WAq/HFzG7eA==}
 
   '@api3/eslint-plugin-commons@3.0.0':
     resolution: {integrity: sha512-XUEM2HDA9LCHt6Fd7xydlxUjM2Foquilcb07IDzxMgAYq08yWXP3tuIjduZyHYTX0L7zFoOYfD1z8NQniRN61g==}
@@ -4175,7 +4175,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@api3/chains@11.5.1(typescript@5.7.2)':
+  '@api3/chains@11.6.0(typescript@5.7.2)':
     dependencies:
       viem: 2.21.32(typescript@5.7.2)(zod@3.24.1)
       zod: 3.24.1
