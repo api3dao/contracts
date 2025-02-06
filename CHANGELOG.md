@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 16.6.0
+
+### Minor Changes
+
+- b9cf4cd: Add dAPI and Market support to berachain chain
+
 ## 16.5.0
 
 ### Minor Changes
