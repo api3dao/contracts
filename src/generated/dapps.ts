@@ -38,7 +38,6 @@ export const DAPPS: Dapp[] = [
   { alias: 'mach-finance', name: 'MachFi', homepageUrl: 'https://www.machfi.xyz/' },
   { alias: 'minterest', name: 'Minterest', homepageUrl: 'https://minterest.com/' },
   { alias: 'moonwell', name: 'Moonwell', homepageUrl: 'https://moonwell.fi/' },
-  { alias: 'morpho', name: 'Morpho', homepageUrl: 'https://morpho.org/' },
   { alias: 'nitro', name: 'Nitro', homepageUrl: 'https://nitrofinance.xyz/' },
   { alias: 'omega', name: 'Omega', homepageUrl: 'https://www.omega.xyz/' },
   { alias: 'orbit', name: 'Orbit', homepageUrl: 'https://orbitlending.io/' },
