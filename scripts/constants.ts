@@ -11,4 +11,9 @@ export const goAsyncOptions: GoAsyncOptions = {
   },
 };
 
-export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation = ['conflux', 'hashkey', 'lukso'];
+export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation = [
+  'conflux',
+  'fantom',
+  'hashkey',
+  'lukso',
+];
