@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 16.7.0
+
+### Minor Changes
+
+- f6efa23: Add dAPI and Market support to unichain chain
+
+### Patch Changes
+
+- 4410bec: Remove the dApp `morpho` (to be added on a per-pool basis)
+
 ## 16.6.0
 
 ### Minor Changes
