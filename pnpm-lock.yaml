@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@api3/chains':
-        specifier: ^11.5.0
-        version: 11.5.0(typescript@5.7.2)
+        specifier: ^11.7.0
+        version: 11.7.0(typescript@5.7.2)
       ethers:
         specifier: ^6.13.2
         version: 6.13.4
@@ -134,8 +134,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@api3/chains@11.5.0':
-    resolution: {integrity: sha512-Qc8EICOkwxj4BDBOtbRGnj7huAg9Td/EmqXr1/crPOUI9e/als8LKGFpVS3YPZzOePfXWsp7SVazc1J4ZBxFlg==}
+  '@api3/chains@11.7.0':
+    resolution: {integrity: sha512-Jf3RgYdOSvKGiqN2I0oJWf54Sse5SisQZQQKO1y/rOb6azmjPWGg1sXnbcnsY4IQl5A/11t2dBk3fRklp72Kgg==}
 
   '@api3/eslint-plugin-commons@3.0.0':
     resolution: {integrity: sha512-XUEM2HDA9LCHt6Fd7xydlxUjM2Foquilcb07IDzxMgAYq08yWXP3tuIjduZyHYTX0L7zFoOYfD1z8NQniRN61g==}
@@ -2838,6 +2838,7 @@ packages:
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
@@ -4174,7 +4175,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@api3/chains@11.5.0(typescript@5.7.2)':
+  '@api3/chains@11.7.0(typescript@5.7.2)':
     dependencies:
       viem: 2.21.32(typescript@5.7.2)(zod@3.24.1)
       zod: 3.24.1

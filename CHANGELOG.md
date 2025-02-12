@@ -1,5 +1,32 @@
 # @api3/contracts
 
+## 16.7.0
+
+### Minor Changes
+
+- f6efa23: Add dAPI and Market support to unichain chain
+
+### Patch Changes
+
+- 4410bec: Remove the dApp `morpho` (to be added on a per-pool basis)
+
+## 16.6.0
+
+### Minor Changes
+
+- b9cf4cd: Add dAPI and Market support to berachain chain
+
+## 16.5.0
+
+### Minor Changes
+
+- 28d749d: Add the dApp `elara`
+
+### Patch Changes
+
+- 942237e: Have the print-api3readerproxyv1-address CLI command print better looking errors
+- 942237e: Have the print-api3readerproxyv1-address CLI command require strict validation by default
+
 ## 16.4.0
 
 ### Minor Changes
