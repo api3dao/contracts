@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 16.8.0
+
+### Minor Changes
+
+- 6d2b0e9: Add dAPI and Market support to ronin and ronin-testnet chains
+
 ## 16.7.0
 
 ### Minor Changes
