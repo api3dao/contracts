@@ -2,4 +2,12 @@
 '@api3/contracts': major
 ---
 
-Remove astar, fantom, fantom-testnet, lukso, lukso-testnet, hashkey, hashkey-sepolia-testnet support
+Remove support from the following chains:
+
+- astar
+- fantom
+- fantom-testnet
+- hashkey
+- hashkey-sepolia-testnet
+- lukso
+- lukso-testnet
