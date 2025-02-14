@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 17.0.0
+
+### Major Changes
+
+- 411cdb1: Remove support from the following chains:
+
+  - astar
+  - fantom
+  - fantom-testnet
+  - hashkey
+  - hashkey-sepolia-testnet
+  - lukso
+  - lukso-testnet
+
 ## 16.8.0
 
 ### Minor Changes
