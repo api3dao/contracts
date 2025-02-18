@@ -15,7 +15,7 @@ const COMMON_COMMAND_ARGUMENTS = {
   dappAlias: {
     type: 'string',
     demandOption: true,
-    describe: 'dApp alias as specified on https://docs.api3.org/dapps/oev-rewards/dapp-alias.html',
+    describe: 'dApp alias as specified in https://github.com/api3dao/contracts/tree/main/data/dapps',
   },
   chainId: {
     type: 'string',
