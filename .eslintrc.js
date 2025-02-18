@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['plugin:@api3/eslint-plugin-commons/universal'],
+  extends: ['plugin:@api3/eslint-plugin-commons/universal', 'plugin:@api3/eslint-plugin-commons/jest'],
   parserOptions: {
     project: ['./tsconfig.json'],
   },
@@ -9,8 +9,11 @@ module.exports = {
 
     'functional/no-try-statements': 'off',
 
+    'jest/no-conditional-in-test': 'off',
+
     'lodash/prefer-constant': 'off',
     'lodash/prefer-lodash-typecheck': 'off',
+    'lodash/prefer-noop': 'off',
 
     'unicorn/filename-case': 'off',
     'unicorn/no-anonymous-default-export': 'off',
