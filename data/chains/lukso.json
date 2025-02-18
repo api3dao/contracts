@@ -1,0 +1,27 @@
+{
+  "alias": "lukso",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.execution.mainnet.lukso.network/api/"
+    },
+    "browserUrl": "https://explorer.execution.mainnet.lukso.network/"
+  },
+  "id": "42",
+  "name": "Lukso",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.mainnet.lukso.network"
+    },
+    {
+      "alias": "sigmacore",
+      "rpcUrl": "https://rpc.lukso.sigmacore.io/"
+    }
+  ],
+  "symbol": "LYX",
+  "testnet": false
+}

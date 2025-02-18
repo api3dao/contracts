@@ -1,0 +1,18 @@
+{
+  "alias": "bsquared-testnet",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://bsquared-testnet.l2scan.co/"
+  },
+  "id": "1123",
+  "name": "BSquared Network testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://b2-testnet.alt.technology"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "BTC",
+  "testnet": true
+}

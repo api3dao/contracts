@@ -1,0 +1,24 @@
+{
+  "alias": "moonbeam-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "moonbaseAlpha",
+        "required": true
+      },
+      "url": "https://api-moonbase.moonscan.io/api"
+    },
+    "browserUrl": "https://moonbase.moonscan.io/"
+  },
+  "id": "1287",
+  "name": "Moonbeam testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.api.moonbase.moonbeam.network"
+    }
+  ],
+  "symbol": "GLMR",
+  "testnet": true
+}

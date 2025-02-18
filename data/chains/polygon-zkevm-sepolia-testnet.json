@@ -1,0 +1,23 @@
+{
+  "alias": "polygon-zkevm-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-cardona-zkevm.polygonscan.com/api"
+    },
+    "browserUrl": "https://cardona-zkevm.polygonscan.com/"
+  },
+  "id": "2442",
+  "name": "Polygon zkEVM testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.cardona.zkevm-rpc.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

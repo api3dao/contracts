@@ -1,0 +1,39 @@
+{
+  "alias": "ink",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.inkonchain.com/api"
+    },
+    "browserUrl": "https://explorer.inkonchain.com/"
+  },
+  "id": "57073",
+  "name": "Ink",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc-gel.inkonchain.com"
+    },
+    {
+      "alias": "public",
+      "rpcUrl": "https://rpc-qnd.inkonchain.com"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
+    },
+    {
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

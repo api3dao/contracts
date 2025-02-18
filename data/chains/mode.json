@@ -1,0 +1,31 @@
+{
+  "alias": "mode",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.mode.network/api/"
+    },
+    "browserUrl": "https://explorer.mode.network/"
+  },
+  "id": "34443",
+  "name": "Mode",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet.mode.network"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

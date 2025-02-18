@@ -1,0 +1,23 @@
+{
+  "alias": "kava-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://api.verify.mintscan.io/evm/api/0x8ad"
+    },
+    "browserUrl": "https://testnet.kavascan.com/"
+  },
+  "id": "2221",
+  "name": "Kava testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://evm.testnet.kava.io/"
+    }
+  ],
+  "symbol": "KAVA",
+  "testnet": true
+}

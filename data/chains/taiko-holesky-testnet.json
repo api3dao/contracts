@@ -1,0 +1,27 @@
+{
+  "alias": "taiko-holesky-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-hekla.taikoscan.io/api"
+    },
+    "browserUrl": "https://hekla.taikoscan.io/"
+  },
+  "id": "167009",
+  "name": "Taiko testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.hekla.taiko.xyz"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://taiko-hekla-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

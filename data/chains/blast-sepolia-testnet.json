@@ -1,0 +1,23 @@
+{
+  "alias": "blast-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia.blastscan.io/api"
+    },
+    "browserUrl": "https://sepolia.blastscan.io/"
+  },
+  "id": "168587773",
+  "name": "Blast testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia.blast.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

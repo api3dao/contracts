@@ -1,0 +1,27 @@
+{
+  "alias": "astar",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://astar-zkevm.explorer.startale.com/api"
+    },
+    "browserUrl": "https://astar-zkevm.explorer.startale.com/"
+  },
+  "id": "3776",
+  "name": "Astar zkEVM",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.startale.com/astar-zkevm"
+    },
+    {
+      "alias": "dwellir",
+      "homepageUrl": "https://dwellir.com/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

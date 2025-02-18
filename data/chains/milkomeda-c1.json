@@ -1,0 +1,24 @@
+{
+  "alias": "milkomeda-c1",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer-mainnet-cardano-evm.c1.milkomeda.com/api"
+    },
+    "browserUrl": "https://explorer-mainnet-cardano-evm.c1.milkomeda.com/"
+  },
+  "id": "2001",
+  "name": "Milkomeda C1",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc-mainnet-cardano-evm.c1.milkomeda.com"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "ADA",
+  "testnet": false
+}

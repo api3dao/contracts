@@ -1,0 +1,24 @@
+{
+  "alias": "fantom-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "ftmTestnet",
+        "required": true
+      },
+      "url": "https://api-testnet.ftmscan.com/api"
+    },
+    "browserUrl": "https://testnet.ftmscan.com/"
+  },
+  "id": "4002",
+  "name": "Fantom testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://fantom-testnet-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "FTM",
+  "testnet": true
+}

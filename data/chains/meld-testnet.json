@@ -1,0 +1,18 @@
+{
+  "alias": "meld-testnet",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://testnet.meldscan.io/"
+  },
+  "id": "222000222",
+  "name": "Meld testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://testnet-rpc.meld.com/"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "MELD",
+  "testnet": true
+}

@@ -1,0 +1,23 @@
+{
+  "alias": "inevm",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.inevm.com/api"
+    },
+    "browserUrl": "https://explorer.inevm.com/"
+  },
+  "id": "2525",
+  "name": "inEVM",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet.rpc.inevm.com/http"
+    }
+  ],
+  "symbol": "INJ",
+  "testnet": false
+}

@@ -1,0 +1,40 @@
+{
+  "alias": "arbitrum",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "arbitrumOne",
+        "required": true
+      },
+      "url": "https://api.arbiscan.io/api"
+    },
+    "browserUrl": "https://arbiscan.io/"
+  },
+  "id": "42161",
+  "name": "Arbitrum One",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://arb1.arbitrum.io/rpc"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

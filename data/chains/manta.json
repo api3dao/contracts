@@ -1,0 +1,35 @@
+{
+  "alias": "manta",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://pacific-explorer.manta.network/api/"
+    },
+    "browserUrl": "https://pacific-explorer.manta.network/"
+  },
+  "id": "169",
+  "name": "Manta",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://pacific-rpc.manta.network/http"
+    },
+    {
+      "alias": "public",
+      "rpcUrl": "https://r1.pacific.manta.systems/http"
+    },
+    {
+      "alias": "nirvanalabs",
+      "rpcUrl": "https://manta.nirvanalabs.xyz/mantapublic"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

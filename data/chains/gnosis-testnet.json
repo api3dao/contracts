@@ -1,0 +1,28 @@
+{
+  "alias": "gnosis-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "chiado",
+        "required": false
+      },
+      "url": "https://gnosis-chiado.blockscout.com/api"
+    },
+    "browserUrl": "https://gnosis-chiado.blockscout.com/"
+  },
+  "id": "10200",
+  "name": "Gnosis Chain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.chiadochain.net"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://gnosis-chiado-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "xDAI",
+  "testnet": true
+}

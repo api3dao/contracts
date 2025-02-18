@@ -1,0 +1,28 @@
+{
+  "alias": "bsc-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "bscTestnet",
+        "required": true
+      },
+      "url": "https://api-testnet.bscscan.com/api"
+    },
+    "browserUrl": "https://testnet.bscscan.com/"
+  },
+  "id": "97",
+  "name": "BNB Smart Chain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://data-seed-prebsc-1-s3.binance.org:8545/"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://bsc-testnet-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "BNB",
+  "testnet": true
+}

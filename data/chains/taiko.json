@@ -1,0 +1,39 @@
+{
+  "alias": "taiko",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api.taikoscan.io/api"
+    },
+    "browserUrl": "https://taikoscan.io/"
+  },
+  "id": "167000",
+  "name": "Taiko",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.mainnet.taiko.xyz"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://taiko-rpc.publicnode.com"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

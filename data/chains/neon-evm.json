@@ -1,0 +1,28 @@
+{
+  "alias": "neon-evm",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://api.neonscan.org/hardhat/verify"
+    },
+    "browserUrl": "https://neonscan.org/"
+  },
+  "id": "245022934",
+  "name": "Neon EVM",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://neon-proxy-mainnet.solana.p2p.org"
+    },
+    {
+      "alias": "everstake",
+      "rpcUrl": "https://neon-mainnet.everstake.one"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "NEON",
+  "testnet": false
+}

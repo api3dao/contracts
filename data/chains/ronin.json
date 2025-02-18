@@ -1,0 +1,25 @@
+{
+  "alias": "ronin",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://app.roninchain.com/"
+  },
+  "id": "2020",
+  "name": "Ronin",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.roninchain.com/rpc/"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    }
+  ],
+  "symbol": "RON",
+  "testnet": false
+}

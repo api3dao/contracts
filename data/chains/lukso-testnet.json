@@ -1,0 +1,23 @@
+{
+  "alias": "lukso-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.execution.testnet.lukso.network/api/"
+    },
+    "browserUrl": "https://explorer.execution.testnet.lukso.network/"
+  },
+  "id": "4201",
+  "name": "Lukso testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.testnet.lukso.network"
+    }
+  ],
+  "symbol": "LYX",
+  "testnet": true
+}

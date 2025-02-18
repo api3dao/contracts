@@ -1,0 +1,18 @@
+{
+  "alias": "rsk",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://explorer.rsk.co/"
+  },
+  "id": "30",
+  "name": "Rootstock",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://public-node.rsk.co"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "RBTC",
+  "testnet": false
+}

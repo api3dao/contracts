@@ -1,0 +1,35 @@
+{
+  "alias": "bitlayer",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://api.btrscan.com/scan/api"
+    },
+    "browserUrl": "https://www.btrscan.com/"
+  },
+  "id": "200901",
+  "name": "Bitlayer",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.bitlayer.org"
+    },
+    {
+      "alias": "public",
+      "rpcUrl": "https://rpc.bitlayer-rpc.com"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "rockx",
+      "homepageUrl": "https://rockx.com/"
+    }
+  ],
+  "symbol": "BTC",
+  "testnet": false
+}

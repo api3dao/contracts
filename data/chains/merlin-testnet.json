@@ -1,0 +1,23 @@
+{
+  "alias": "merlin-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://testnet-scan.merlinchain.io/api"
+    },
+    "browserUrl": "https://testnet-scan.merlinchain.io/"
+  },
+  "id": "686868",
+  "name": "Merlin testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://testnet-rpc.merlinchain.io"
+    }
+  ],
+  "symbol": "BTC",
+  "testnet": true
+}

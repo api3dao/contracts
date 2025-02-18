@@ -1,0 +1,40 @@
+{
+  "alias": "avalanche",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "avalanche",
+        "required": true
+      },
+      "url": "https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api"
+    },
+    "browserUrl": "https://snowtrace.io/"
+  },
+  "id": "43114",
+  "name": "Avalanche",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.avax.network/ext/bc/C/rpc"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "AVAX",
+  "testnet": false
+}

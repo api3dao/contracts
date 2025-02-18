@@ -1,0 +1,27 @@
+{
+  "alias": "base-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia.basescan.org/api"
+    },
+    "browserUrl": "https://sepolia.basescan.org/"
+  },
+  "id": "84532",
+  "name": "Base testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia.base.org"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://base-sepolia-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

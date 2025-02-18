@@ -1,0 +1,24 @@
+{
+  "alias": "ethereum-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "sepolia",
+        "required": true
+      },
+      "url": "https://api-sepolia.etherscan.io/api"
+    },
+    "browserUrl": "https://sepolia.etherscan.io/"
+  },
+  "id": "11155111",
+  "name": "Ethereum Sepolia testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://ethereum-sepolia-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

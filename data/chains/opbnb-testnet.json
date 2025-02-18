@@ -1,0 +1,27 @@
+{
+  "alias": "opbnb-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-opbnb-testnet.bscscan.com/api"
+    },
+    "browserUrl": "https://opbnb-testnet.bscscan.com/"
+  },
+  "id": "5611",
+  "name": "opBNB testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://opbnb-testnet-rpc.bnbchain.org/"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://opbnb-testnet-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "BNB",
+  "testnet": true
+}

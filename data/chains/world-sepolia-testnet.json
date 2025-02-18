@@ -1,0 +1,23 @@
+{
+  "alias": "world-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://worldchain-sepolia.explorer.alchemy.com/api"
+    },
+    "browserUrl": "https://worldchain-sepolia.explorer.alchemy.com/"
+  },
+  "id": "4801",
+  "name": "World Chain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://worldchain-sepolia.g.alchemy.com/public"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

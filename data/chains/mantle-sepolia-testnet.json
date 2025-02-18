@@ -1,0 +1,23 @@
+{
+  "alias": "mantle-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia.mantlescan.xyz/api"
+    },
+    "browserUrl": "https://sepolia.mantlescan.xyz/"
+  },
+  "id": "5003",
+  "name": "Mantle testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.sepolia.mantle.xyz"
+    }
+  ],
+  "symbol": "MNT",
+  "testnet": true
+}

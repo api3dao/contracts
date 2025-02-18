@@ -1,0 +1,39 @@
+{
+  "alias": "scroll",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api.scrollscan.com/api"
+    },
+    "browserUrl": "https://scrollscan.com/"
+  },
+  "id": "534352",
+  "name": "Scroll",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.scroll.io"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://scroll-rpc.publicnode.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

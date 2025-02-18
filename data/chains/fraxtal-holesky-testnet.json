@@ -1,0 +1,23 @@
+{
+  "alias": "fraxtal-holesky-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-holesky.fraxscan.com/api/"
+    },
+    "browserUrl": "https://holesky.fraxscan.com/"
+  },
+  "id": "2522",
+  "name": "Fraxtal testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.testnet.frax.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

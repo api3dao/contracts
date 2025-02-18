@@ -1,0 +1,39 @@
+{
+  "alias": "polygon-zkevm",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-zkevm.polygonscan.com/api"
+    },
+    "browserUrl": "https://zkevm.polygonscan.com/"
+  },
+  "id": "1101",
+  "name": "Polygon zkEVM",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://zkevm-rpc.com"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

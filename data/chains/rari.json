@@ -1,0 +1,23 @@
+{
+  "alias": "rari",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://mainnet.explorer.rarichain.org/api"
+    },
+    "browserUrl": "https://mainnet.explorer.rarichain.org/"
+  },
+  "id": "1380012617",
+  "name": "RARI Chain",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet.rpc.rarichain.org/http/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

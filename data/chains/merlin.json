@@ -1,0 +1,27 @@
+{
+  "alias": "merlin",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://scan.merlinchain.io/api"
+    },
+    "browserUrl": "https://scan.merlinchain.io/"
+  },
+  "id": "4200",
+  "name": "Merlin",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.merlinchain.io"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    }
+  ],
+  "symbol": "BTC",
+  "testnet": false
+}

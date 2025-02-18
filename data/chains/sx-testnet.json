@@ -1,0 +1,24 @@
+{
+  "alias": "sx-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.toronto.sx.technology/api"
+    },
+    "browserUrl": "https://explorer.toronto.sx.technology/"
+  },
+  "id": "647",
+  "name": "SX Network testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.toronto.sx.technology"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "SX",
+  "testnet": true
+}

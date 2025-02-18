@@ -1,0 +1,24 @@
+{
+  "alias": "arbitrum-nova",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-nova.arbiscan.io/api"
+    },
+    "browserUrl": "https://nova.arbiscan.io/"
+  },
+  "id": "42170",
+  "name": "Arbitrum Nova",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://nova.arbitrum.io/rpc"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "ETH",
+  "testnet": false
+}

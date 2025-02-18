@@ -1,0 +1,22 @@
+{
+  "alias": "meter",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://scan.meter.io/"
+  },
+  "id": "82",
+  "name": "Meter",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.meter.io/"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "MTR",
+  "testnet": false
+}

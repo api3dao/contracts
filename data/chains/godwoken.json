@@ -1,0 +1,18 @@
+{
+  "alias": "godwoken",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://v1.gwscan.com/"
+  },
+  "id": "71402",
+  "name": "Godwoken",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://v1.mainnet.godwoken.io/rpc"
+    }
+  ],
+  "skipProviderCheck": true,
+  "symbol": "pCKB",
+  "testnet": false
+}
