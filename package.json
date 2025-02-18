@@ -98,6 +98,7 @@
   "dependencies": {
     "@api3/chains": "^11.8.0",
     "ethers": "^6.13.2",
+    "viem": "^2.23.2",
     "yargs": "^17.7.2"
   },
   "packageManager": "pnpm@9.15.2"

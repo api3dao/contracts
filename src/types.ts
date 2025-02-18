@@ -78,6 +78,32 @@ export const chainSchema = z.object({
 });
 
 export type Chain = z.infer<typeof chainSchema>;
+export type ChainExplorer = z.infer<typeof chainExplorerSchema>;
+export type ChainExplorerAPI = z.infer<typeof chainExplorerAPISchema>;
+export type ChainExplorerAPIKey = z.infer<typeof chainExplorerAPIKeySchema>;
+export type ChainHardhatConfigOverrides = z.infer<typeof hardhatConfigOverrides>;
+export type ChainProviders = z.infer<typeof chainProvidersSchema>;
+export type ChainProvider = z.infer<typeof chainProviderSchema>;
+
+export interface HardhatNetworksConfig {
+  [key: string]: {
+    accounts: { mnemonic: string };
+    chainId: number;
+    url: string;
+  };
+}
+
+// https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify#adding-support-for-other-networks
+export interface HardhatEtherscanCustomChain {
+  network: string;
+  chainId: number;
+  urls: { apiURL: string; browserURL: string };
+}
+
+export interface HardhatEtherscanConfig {
+  apiKey: { [alias: string]: string };
+  customChains: HardhatEtherscanCustomChain[];
+}
 
 export const dappSchema = z.object({
   alias: z.string().regex(/^[\da-z-]+$/),

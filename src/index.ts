@@ -6,4 +6,6 @@ export { deploymentAddresses };
 export * from './proxy';
 export { DAPPS } from './generated/dapps';
 export { CHAINS } from './generated/chains';
+export * as hardhatConfig from './hardhat-config';
+export * as viemConfig from './viem-config';
 export * from './types';
