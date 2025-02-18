@@ -53,7 +53,7 @@
     "postpack": "./postpack.sh",
     "survey-roles": "hardhat run scripts/survey-roles.ts",
     "test": "pnpm test:hardhat && pnpm test:jest",
-    "test:harhat": "hardhat test --parallel",
+    "test:hardhat": "hardhat test --parallel",
     "test:hardhat:coverage": "hardhat coverage",
     "test:hardhat:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:hardhat:gas": "REPORT_GAS=TRUE hardhat test",
