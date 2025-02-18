@@ -33,7 +33,8 @@
   },
   "scripts": {
     "build": "pnpm check && hardhat compile && pnpm generate && tsc -p tsconfig.build.json",
-    "check": "pnpm check:deployment-addresses && pnpm check:deployment-config",
+    "check": "pnpm check:chains && pnpm check:deployment-addresses && pnpm check:deployment-config",
+    "check:chains": "ts-node scripts/check-chains.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
     "check:deployment-config": "hardhat run scripts/check-deployment-config.ts",
     "cli": "ts-node bin/cli.ts",

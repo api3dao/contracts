@@ -6,3 +6,4 @@ export { deploymentAddresses };
 export * from './proxy';
 export { DAPPS } from './generated/dapps';
 export { CHAINS } from './generated/chains';
+export * from './types';

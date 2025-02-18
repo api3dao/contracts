@@ -10,6 +10,7 @@ module.exports = {
     'functional/no-try-statements': 'off',
 
     'lodash/prefer-constant': 'off',
+    'lodash/prefer-lodash-typecheck': 'off',
 
     'unicorn/filename-case': 'off',
     'unicorn/no-anonymous-default-export': 'off',
