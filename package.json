@@ -32,7 +32,8 @@
     "api3-contracts": "./dist/bin/cli.js"
   },
   "scripts": {
-    "build": "pnpm check && hardhat compile && pnpm generate && tsc -p tsconfig.build.json",
+    "build": "pnpm build:hardhat && pnpm check  && pnpm generate && tsc -p tsconfig.build.json",
+    "build:hardhat": "hardhat --config hardhat.build.config.ts compile",
     "check": "pnpm check:chains && pnpm check:deployment-addresses && pnpm check:deployment-config",
     "check:chains": "ts-node scripts/check-chains.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
