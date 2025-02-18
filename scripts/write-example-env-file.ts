@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-import { hardhatConfig } from '@api3/chains';
+import { hardhatConfig } from '../src/index';
 
 fs.writeFileSync(
   'example.env',
