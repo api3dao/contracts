@@ -244,22 +244,4 @@ describe(networks.name, () => {
       });
     });
   });
-
-  // eslint-disable-next-line jest/no-commented-out-tests
-  /*
-  See https://github.com/api3dao/contracts/issues/394
-
-  describe('hardhatConfigOverrides', () => {
-    it('zksync', () => {
-      expect(networks()['zksync']).toStrictEqual({
-        accounts: { mnemonic: '' },
-        chainId: 324,
-        ethNetwork: 'ethereum',
-        url: 'https://mainnet.era.zksync.io',
-        verifyURL: 'https://zksync2-mainnet-explorer.zksync.io/contract_verification',
-        zksync: true,
-      });
-    });
-  });
-  */
 });
