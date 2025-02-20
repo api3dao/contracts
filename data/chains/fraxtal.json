@@ -1,0 +1,31 @@
+{
+  "alias": "fraxtal",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api.fraxscan.com/api/"
+    },
+    "browserUrl": "https://fraxscan.com/"
+  },
+  "id": "252",
+  "name": "Fraxtal",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.frax.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

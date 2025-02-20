@@ -5,11 +5,11 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
 import { chainsSupportedByManagerMultisig, chainsSupportedByDapis } from '../data/chain-support.json';
+import { CHAINS } from '../src/index';
 
 import { goAsyncOptions } from './constants';
 

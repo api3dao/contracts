@@ -1,0 +1,17 @@
+{
+  "alias": "sei-testnet",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://testnet.seistream.app/"
+  },
+  "id": "1328",
+  "name": "Sei testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://evm-rpc-testnet.sei-apis.com"
+    }
+  ],
+  "symbol": "SEI",
+  "testnet": true
+}

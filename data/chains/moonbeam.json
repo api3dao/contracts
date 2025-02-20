@@ -1,0 +1,40 @@
+{
+  "alias": "moonbeam",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "moonbeam",
+        "required": true
+      },
+      "url": "https://api-moonbeam.moonscan.io/api"
+    },
+    "browserUrl": "https://moonscan.io/"
+  },
+  "id": "1284",
+  "name": "Moonbeam",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.api.moonbeam.network"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://moonbeam-rpc.publicnode.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org/"
+    }
+  ],
+  "symbol": "GLMR",
+  "testnet": false
+}

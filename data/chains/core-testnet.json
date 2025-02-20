@@ -1,0 +1,23 @@
+{
+  "alias": "core-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api.test.btcs.network/api"
+    },
+    "browserUrl": "https://scan.test.btcs.network/"
+  },
+  "id": "1115",
+  "name": "Core testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.test.btcs.network/"
+    }
+  ],
+  "symbol": "CORE",
+  "testnet": true
+}

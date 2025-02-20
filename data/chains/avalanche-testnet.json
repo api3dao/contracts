@@ -1,0 +1,28 @@
+{
+  "alias": "avalanche-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "avalancheFujiTestnet",
+        "required": true
+      },
+      "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
+    },
+    "browserUrl": "https://testnet.snowtrace.io/"
+  },
+  "id": "43113",
+  "name": "Avalanche testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.avax-test.network/ext/bc/C/rpc"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://avalanche-fuji-c-chain-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "AVAX",
+  "testnet": true
+}

@@ -1,0 +1,35 @@
+{
+  "alias": "core",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://openapi.coredao.org/api"
+    },
+    "browserUrl": "https://scan.coredao.org/"
+  },
+  "id": "1116",
+  "name": "Core",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.coredao.org/"
+    },
+    {
+      "alias": "icecreamswap",
+      "rpcUrl": "https://rpc-core.icecreamswap.com/"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "infstones",
+      "homepageUrl": "https://infstones.com"
+    }
+  ],
+  "symbol": "CORE",
+  "testnet": false
+}

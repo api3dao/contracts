@@ -1,0 +1,23 @@
+{
+  "alias": "manta-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://pacific-explorer.sepolia-testnet.manta.network/api/"
+    },
+    "browserUrl": "https://pacific-explorer.sepolia-testnet.manta.network/"
+  },
+  "id": "3441006",
+  "name": "Manta testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://pacific-rpc.sepolia-testnet.manta.network/http"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

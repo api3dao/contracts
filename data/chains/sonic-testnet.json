@@ -1,0 +1,23 @@
+{
+  "alias": "sonic-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-testnet.sonicscan.org/api"
+    },
+    "browserUrl": "https://testnet.sonicscan.org/"
+  },
+  "id": "57054",
+  "name": "Sonic testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.blaze.soniclabs.com"
+    }
+  ],
+  "symbol": "S",
+  "testnet": true
+}

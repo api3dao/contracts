@@ -1,0 +1,35 @@
+{
+  "alias": "metis",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://andromeda-explorer.metis.io/api"
+    },
+    "browserUrl": "https://andromeda-explorer.metis.io/"
+  },
+  "id": "1088",
+  "name": "Metis",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://andromeda.metis.io/?owner=1088"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    }
+  ],
+  "symbol": "METIS",
+  "testnet": false
+}

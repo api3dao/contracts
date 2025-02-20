@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { CHAINS } from '@api3/chains';
 import * as ethers from 'ethers';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
@@ -7,6 +6,7 @@ import { hideBin } from 'yargs/helpers';
 import {
   type Api3ServerV1,
   Api3ServerV1__factory,
+  CHAINS,
   computeDappSpecificApi3ReaderProxyV1Address,
   deploymentAddresses,
 } from './index';
@@ -15,7 +15,7 @@ const COMMON_COMMAND_ARGUMENTS = {
   dappAlias: {
     type: 'string',
     demandOption: true,
-    describe: 'dApp alias as specified on https://docs.api3.org/dapps/oev-rewards/dapp-alias.html',
+    describe: 'dApp alias as specified in https://github.com/api3dao/contracts/tree/main/data/dapps',
   },
   chainId: {
     type: 'string',

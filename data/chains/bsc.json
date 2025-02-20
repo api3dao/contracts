@@ -1,0 +1,40 @@
+{
+  "alias": "bsc",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "bsc",
+        "required": true
+      },
+      "url": "https://api.bscscan.com/api"
+    },
+    "browserUrl": "https://bscscan.com/"
+  },
+  "id": "56",
+  "name": "BNB Smart Chain",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://bsc-dataseed1.binance.org/"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "BNB",
+  "testnet": false
+}

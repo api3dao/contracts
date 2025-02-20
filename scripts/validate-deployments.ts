@@ -1,7 +1,6 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
@@ -23,7 +22,7 @@ import type {
   OevAuctionHouse,
   OwnableCallForwarder,
 } from '../src/index';
-import { computeApi3ReaderProxyV1Address } from '../src/index';
+import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index';
 
 import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants';
 

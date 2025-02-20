@@ -7,7 +7,6 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { CHAINS } from '@api3/chains';
 import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
@@ -18,6 +17,7 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
+import { CHAINS } from '../src/index';
 
 import { goAsyncOptions } from './constants';
 

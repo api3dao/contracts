@@ -1,0 +1,35 @@
+{
+  "alias": "bob",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.gobob.xyz/api"
+    },
+    "browserUrl": "https://explorer.gobob.xyz/"
+  },
+  "id": "60808",
+  "name": "BOB",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.gobob.xyz/"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

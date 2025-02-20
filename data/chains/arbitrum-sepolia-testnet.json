@@ -1,0 +1,28 @@
+{
+  "alias": "arbitrum-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "arbitrumSepolia",
+        "required": true
+      },
+      "url": "https://api-sepolia.arbiscan.io/api"
+    },
+    "browserUrl": "https://sepolia.arbiscan.io/"
+  },
+  "id": "421614",
+  "name": "Arbitrum testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia-rollup.arbitrum.io/rpc"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://arbitrum-sepolia-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

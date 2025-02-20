@@ -1,0 +1,27 @@
+{
+  "alias": "scroll-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia.scrollscan.com/api"
+    },
+    "browserUrl": "https://sepolia.scrollscan.com/"
+  },
+  "id": "534351",
+  "name": "Scroll testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia-rpc.scroll.io"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://scroll-sepolia-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}
