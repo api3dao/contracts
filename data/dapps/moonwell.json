@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "moonwell": ["base", "moonbeam", "optimism"]
+    "moonwell": ["moonbeam"]
   },
   "name": "Moonwell",
   "homepageUrl": "https://moonwell.fi/"
