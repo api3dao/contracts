@@ -1,5 +1,7 @@
 {
-  "alias": "orbit",
+  "aliases": {
+    "orbit": ["blast"]
+  },
   "name": "Orbit",
   "homepageUrl": "https://orbitlending.io/"
 }

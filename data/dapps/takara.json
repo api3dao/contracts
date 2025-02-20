@@ -1,5 +1,7 @@
 {
-  "alias": "takara",
+  "aliases": {
+    "takara": ["sei"]
+  },
   "name": "Takara Lend",
   "homepageUrl": "https://x.com/takaralend"
 }

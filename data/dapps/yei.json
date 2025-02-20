@@ -1,5 +1,7 @@
 {
-  "alias": "yei",
+  "aliases": {
+    "yei": ["sei"]
+  },
   "name": "Yei Finance",
   "homepageUrl": "https://www.yei.finance/"
 }

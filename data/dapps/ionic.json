@@ -1,5 +1,7 @@
 {
-  "alias": "ionic",
+  "aliases": {
+    "ionic": ["base", "bob", "fraxtal", "mode", "optimism"]
+  },
   "name": "Ionic",
   "homepageUrl": "https://www.ionic.money/"
 }
