@@ -3,6 +3,8 @@ import path from 'node:path';
 
 import { format } from 'prettier';
 
+import { dappSchema } from '../src/types';
+
 const PRETTIER_CONFIG = path.join(__dirname, '..', '.prettierrc');
 const INPUT_DIR = path.join(__dirname, '..', 'data', 'dapps');
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
