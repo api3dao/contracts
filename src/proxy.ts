@@ -1,6 +1,10 @@
 import * as ethers from 'ethers';
 
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory, deploymentAddresses, DAPPS, CHAINS } from './index';
+import deploymentAddresses from '../deployments/addresses.json';
+import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../typechain-types';
+
+import { CHAINS } from './generated/chains';
+import { DAPPS } from './generated/dapps';
 
 function computeApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
