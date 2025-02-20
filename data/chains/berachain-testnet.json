@@ -1,0 +1,23 @@
+{
+  "alias": "berachain-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://api.routescan.io/v2/network/testnet/evm/80084/etherscan/api"
+    },
+    "browserUrl": "https://bartio.beratrail.io/"
+  },
+  "id": "80084",
+  "name": "Berachain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://bartio.rpc.berachain.com"
+    }
+  ],
+  "symbol": "BERA",
+  "testnet": true
+}

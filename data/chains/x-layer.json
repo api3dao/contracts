@@ -1,0 +1,35 @@
+{
+  "alias": "x-layer",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
+    },
+    "browserUrl": "https://www.okx.com/explorer/xlayer/"
+  },
+  "id": "196",
+  "name": "X Layer",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.xlayer.tech/"
+    },
+    {
+      "alias": "okx",
+      "rpcUrl": "https://xlayerrpc.okx.com/"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    }
+  ],
+  "symbol": "OKB",
+  "testnet": false
+}

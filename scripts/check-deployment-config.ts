@@ -1,11 +1,10 @@
-import { CHAINS } from '@api3/chains';
-
 import {
   chainsSupportedByManagerMultisig,
   chainsSupportedByDapis,
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
+import { CHAINS } from '../src/index';
 
 function main() {
   const chainAliases = new Set(CHAINS.map((chain) => chain.alias));

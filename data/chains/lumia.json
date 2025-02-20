@@ -1,0 +1,27 @@
+{
+  "alias": "lumia",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer.lumia.org/api/"
+    },
+    "browserUrl": "https://explorer.lumia.org/"
+  },
+  "id": "994873017",
+  "name": "Lumia",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet-rpc.lumia.org"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "LUMIA",
+  "testnet": false
+}

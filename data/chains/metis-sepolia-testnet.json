@@ -1,0 +1,23 @@
+{
+  "alias": "metis-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://sepolia-explorer-api.metisdevops.link/api"
+    },
+    "browserUrl": "https://sepolia-explorer.metisdevops.link/"
+  },
+  "id": "59902",
+  "name": "Metis testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia.metisdevops.link"
+    }
+  ],
+  "symbol": "METIS",
+  "testnet": true
+}

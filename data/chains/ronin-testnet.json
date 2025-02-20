@@ -1,0 +1,17 @@
+{
+  "alias": "ronin-testnet",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://saigon-app.roninchain.com/"
+  },
+  "id": "2021",
+  "name": "Ronin testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://saigon-testnet.roninchain.com/rpc"
+    }
+  ],
+  "symbol": "RON",
+  "testnet": true
+}

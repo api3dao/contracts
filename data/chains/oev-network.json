@@ -1,0 +1,27 @@
+{
+  "alias": "oev-network",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://oev.explorer.api3.org/api/"
+    },
+    "browserUrl": "https://oev.explorer.api3.org/"
+  },
+  "id": "4913",
+  "name": "OEV Network",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://oev.rpc.api3.org/http"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

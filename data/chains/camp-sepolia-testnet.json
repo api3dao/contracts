@@ -1,0 +1,23 @@
+{
+  "alias": "camp-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://camp-network-testnet.blockscout.com/api"
+    },
+    "browserUrl": "https://camp-network-testnet.blockscout.com/"
+  },
+  "id": "325000",
+  "name": "Camp Network testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc-campnetwork.xyz/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

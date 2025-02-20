@@ -1,0 +1,40 @@
+{
+  "alias": "gnosis",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "xdai",
+        "required": true
+      },
+      "url": "https://api.gnosisscan.io/api"
+    },
+    "browserUrl": "https://gnosisscan.io/"
+  },
+  "id": "100",
+  "name": "Gnosis Chain",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.gnosischain.com"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://gnosis-rpc.publicnode.com/"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "xDAI",
+  "testnet": false
+}

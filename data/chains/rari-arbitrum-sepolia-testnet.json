@@ -1,0 +1,23 @@
+{
+  "alias": "rari-arbitrum-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://testnet.explorer.rarichain.org/api"
+    },
+    "browserUrl": "https://testnet.explorer.rarichain.org/"
+  },
+  "id": "1918988905",
+  "name": "RARI Chain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://testnet.rpc.rarichain.org/http/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

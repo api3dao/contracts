@@ -1,0 +1,27 @@
+{
+  "alias": "conflux-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://evmapi-testnet.confluxscan.io/api/"
+    },
+    "browserUrl": "https://evmtestnet.confluxscan.io/"
+  },
+  "id": "71",
+  "name": "Conflux eSpace testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://evmtestnet.confluxrpc.com/"
+    },
+    {
+      "alias": "public",
+      "rpcUrl": "https://evmtest.confluxrpc.com/"
+    }
+  ],
+  "symbol": "CFX",
+  "testnet": true
+}

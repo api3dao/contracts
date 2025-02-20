@@ -1,0 +1,27 @@
+{
+  "alias": "optimism-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia-optimism.etherscan.io/api"
+    },
+    "browserUrl": "https://sepolia-optimism.etherscan.io/"
+  },
+  "id": "11155420",
+  "name": "Optimism testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia.optimism.io"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://optimism-sepolia-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

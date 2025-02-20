@@ -1,0 +1,29 @@
+{
+  "alias": "sei",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://seitrace.com/"
+  },
+  "id": "1329",
+  "name": "Sei",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://evm-rpc.sei-apis.com/"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://sei-evm-rpc.publicnode.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "SEI",
+  "testnet": false
+}

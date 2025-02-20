@@ -6,7 +6,7 @@
 ![downloads per week](https://img.shields.io/npm/dw/%40api3%2Fcontracts)
 [![continuous-build](https://img.shields.io/github/actions/workflow/status/api3dao/contracts/continuous-build.yml?label=continuous-build)](https://github.com/api3dao/contracts/actions/workflows/continuous-build.yml)
 [![validate-verify](https://img.shields.io/github/actions/workflow/status/api3dao/contracts/validate-verify.yml?label=validate-verify)](https://github.com/api3dao/contracts/actions/workflows/validate-verify.yml)
-[![license](https://img.shields.io/npm/l/%40api3%2Fchains)](https://www.npmjs.com/package/@api3/chains)
+[![license](https://img.shields.io/npm/l/%40api3%2Fchains)](https://www.npmjs.com/package/@api3/contracts)
 
 </div>
 

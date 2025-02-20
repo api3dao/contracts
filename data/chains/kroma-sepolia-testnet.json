@@ -1,0 +1,23 @@
+{
+  "alias": "kroma-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-sepolia.kromascan.com/api"
+    },
+    "browserUrl": "https://sepolia.kromascan.com/"
+  },
+  "id": "2358",
+  "name": "Kroma testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.sepolia.kroma.network/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

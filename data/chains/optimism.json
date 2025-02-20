@@ -1,0 +1,40 @@
+{
+  "alias": "optimism",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "optimisticEthereum",
+        "required": true
+      },
+      "url": "https://api-optimistic.etherscan.io/api"
+    },
+    "browserUrl": "https://optimistic.etherscan.io/"
+  },
+  "id": "10",
+  "name": "Optimism",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet.optimism.io"
+    },
+    {
+      "alias": "ankr",
+      "homepageUrl": "https://ankr.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

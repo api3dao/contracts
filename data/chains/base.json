@@ -1,0 +1,39 @@
+{
+  "alias": "base",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api.basescan.org/api"
+    },
+    "browserUrl": "https://basescan.org/"
+  },
+  "id": "8453",
+  "name": "Base",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://mainnet.base.org"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false
+}

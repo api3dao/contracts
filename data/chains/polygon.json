@@ -1,0 +1,36 @@
+{
+  "alias": "polygon",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "hardhatEtherscanAlias": "polygon",
+        "required": true
+      },
+      "url": "https://api.polygonscan.com/api"
+    },
+    "browserUrl": "https://polygonscan.com/"
+  },
+  "id": "137",
+  "name": "Polygon",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://polygon-bor-rpc.publicnode.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "POL",
+  "testnet": false
+}

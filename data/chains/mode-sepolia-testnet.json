@@ -1,0 +1,23 @@
+{
+  "alias": "mode-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://sepolia.explorer.mode.network/api/"
+    },
+    "browserUrl": "https://sepolia.explorer.mode.network/"
+  },
+  "id": "919",
+  "name": "Mode testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://sepolia.mode.network"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

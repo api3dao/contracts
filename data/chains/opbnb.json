@@ -1,0 +1,35 @@
+{
+  "alias": "opbnb",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-opbnb.bscscan.com/api"
+    },
+    "browserUrl": "https://opbnb.bscscan.com/"
+  },
+  "id": "204",
+  "name": "opBNB",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://opbnb-mainnet-rpc.bnbchain.org"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://opbnb-rpc.publicnode.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org/"
+    }
+  ],
+  "symbol": "BNB",
+  "testnet": false
+}

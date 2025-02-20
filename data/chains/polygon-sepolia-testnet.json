@@ -1,0 +1,27 @@
+{
+  "alias": "polygon-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": true
+      },
+      "url": "https://api-amoy.polygonscan.com/api"
+    },
+    "browserUrl": "https://amoy.polygonscan.com/"
+  },
+  "id": "80002",
+  "name": "Polygon testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc-amoy.polygon.technology"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://polygon-amoy-bor-rpc.publicnode.com"
+    }
+  ],
+  "symbol": "POL",
+  "testnet": true
+}

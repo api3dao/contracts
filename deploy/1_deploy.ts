@@ -1,4 +1,3 @@
-import { CHAINS } from '@api3/chains';
 import { deployments, ethers, network } from 'hardhat';
 
 import {
@@ -8,6 +7,7 @@ import {
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
+import { CHAINS } from '../src/index';
 import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;

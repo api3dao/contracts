@@ -1,0 +1,27 @@
+{
+  "alias": "bitlayer-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://api-testnet.btrscan.com/scan/api"
+    },
+    "browserUrl": "https://testnet.btrscan.com/"
+  },
+  "id": "200810",
+  "name": "Bitlayer testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://testnet-rpc.bitlayer.org"
+    },
+    {
+      "alias": "public",
+      "rpcUrl": "https://testnet-rpc.bitlayer-rpc.com"
+    }
+  ],
+  "symbol": "BTC",
+  "testnet": true
+}

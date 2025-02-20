@@ -1,0 +1,23 @@
+{
+  "alias": "bob-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://bob-sepolia.explorer.gobob.xyz/api"
+    },
+    "browserUrl": "https://bob-sepolia.explorer.gobob.xyz/"
+  },
+  "id": "808813",
+  "name": "BOB testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://bob-sepolia.rpc.gobob.xyz/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}

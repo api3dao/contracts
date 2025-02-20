@@ -1,0 +1,23 @@
+{
+  "alias": "apechain-arbitrum-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://curtis.explorer.caldera.xyz/api"
+    },
+    "browserUrl": "https://curtis.explorer.caldera.xyz/"
+  },
+  "id": "33111",
+  "name": "ApeChain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://curtis.rpc.caldera.xyz/http"
+    }
+  ],
+  "symbol": "APE",
+  "testnet": true
+}
