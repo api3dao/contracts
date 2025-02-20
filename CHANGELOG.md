@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 17.1.0
+
+### Minor Changes
+
+- b8a1575: Migrates @api3/chains into this package
+
 ## 17.0.0
 
 ### Major Changes
