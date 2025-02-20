@@ -20,6 +20,10 @@ const HEADER_CONTENT = `// =====================================================
 import { type Dapp } from '../types';
 `;
 
+function toImprovisedKebabCase(value: string) {
+  return value.split(' ').join('-').toLowerCase();
+}
+
 async function main(): Promise<void> {
   const fileNames = fs.readdirSync(INPUT_DIR);
   const jsonFiles = fileNames.filter((fileName) => fileName.endsWith('.json'));
@@ -29,6 +33,11 @@ async function main(): Promise<void> {
     const filePath = path.join(INPUT_DIR, jsonFile);
     const fileContentRaw = fs.readFileSync(filePath, 'utf8');
     const fileContent = JSON.parse(fileContentRaw);
+    if (toImprovisedKebabCase(fileContent.name) !== jsonFile.replace('.json', '')) {
+      throw new Error(
+        `File name does not match dApp name: ${toImprovisedKebabCase(fileContent.name)} vs ${jsonFile.replace('.json', '')}`
+      );
+    }
     if (!dappSchema.safeParse(fileContent).success) {
       throw new Error(`Invalid dApps file content: ${filePath}\n${dappSchema.safeParse(fileContent).error}`);
     }
