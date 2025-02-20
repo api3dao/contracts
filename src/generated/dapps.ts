@@ -8,30 +8,21 @@
 import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
+  { aliases: { 'aurum-finance': ['sonic'] }, name: 'Aurum', homepageUrl: 'https://aurumfi.io/' },
   { aliases: { dtrinity: ['fraxtal'] }, name: 'dTrinity', homepageUrl: 'https://dtrinity.org/' },
   { aliases: { elara: ['zircuit'] }, name: 'Elara', homepageUrl: 'https://app.elara.finance/' },
   { aliases: { enclabs: ['sonic'] }, name: 'Enclabs', homepageUrl: 'https://x.com/EnclabsFi' },
   { aliases: { hana: ['taiko'] }, name: 'Hana Finance', homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: ['blast', 'mantle'] }, name: 'INIT Capital', homepageUrl: 'https://init.capital/' },
-  {
-    aliases: { ionic: ['base', 'bob', 'fraxtal', 'mode', 'optimism'] },
-    name: 'Ionic',
-    homepageUrl: 'https://www.ionic.money/',
-  },
-  { aliases: { juice: ['blast'] }, name: 'Juice Finance', homepageUrl: 'https://www.juice.finance/' },
+  { aliases: { ionic: ['mode'] }, name: 'Ionic', homepageUrl: 'https://www.ionic.money/' },
   { aliases: { lendle: ['mantle'] }, name: 'Lendle', homepageUrl: 'https://www.lendle.xyz/' },
   { aliases: { 'mach-finance': ['sonic'] }, name: 'MachFi', homepageUrl: 'https://www.machfi.xyz/' },
-  { aliases: { moonwell: ['base', 'moonbeam', 'optimism'] }, name: 'Moonwell', homepageUrl: 'https://moonwell.fi/' },
+  { aliases: { moonwell: ['moonbeam'] }, name: 'Moonwell', homepageUrl: 'https://moonwell.fi/' },
   { aliases: { omega: ['mantle'] }, name: 'Omega', homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: ['blast'] }, name: 'Orbit', homepageUrl: 'https://orbitlending.io/' },
-  {
-    aliases: { silo: ['arbitrum', 'base', 'ethereum', 'optimism', 'sonic'] },
-    name: 'Silo',
-    homepageUrl: 'https://www.silo.finance/',
-  },
   { aliases: { stout: ['sonic'] }, name: 'Stout', homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: ['sei'] }, name: 'Takara Lend', homepageUrl: 'https://x.com/takaralend' },
-  { aliases: { takotako: ['taiko'] }, name: 'TAKOTAKO', homepageUrl: 'https://takotako.xyz/' },
   { aliases: { 'vicuna-finance': ['sonic'] }, name: 'Vicuna Finance', homepageUrl: 'https://x.com/VicunaFinance/' },
   { aliases: { yei: ['sei'] }, name: 'Yei Finance', homepageUrl: 'https://www.yei.finance/' },
+  { aliases: { zerolend: ['zircuit'] }, name: 'ZeroLend', homepageUrl: 'https://zerolend.xyz/' },
 ];
