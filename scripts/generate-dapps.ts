@@ -27,6 +27,9 @@ async function main(): Promise<void> {
     const filePath = path.join(INPUT_DIR, jsonFile);
     const fileContentRaw = fs.readFileSync(filePath, 'utf8');
     const fileContent = JSON.parse(fileContentRaw);
+    if (!dappSchema.safeParse(fileContent).success) {
+      throw new Error(`Invalid dApps file content: ${filePath}\n${dappSchema.safeParse(fileContent).error}`);
+    }
     combinedDapps.push(fileContent);
   }
 
