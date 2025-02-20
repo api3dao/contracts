@@ -1,5 +1,7 @@
 {
-  "alias": "init",
+  "aliases": {
+    "init": ["blast", "mantle"]
+  },
   "name": "INIT Capital",
   "homepageUrl": "https://init.capital/"
 }

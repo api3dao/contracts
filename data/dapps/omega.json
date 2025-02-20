@@ -1,5 +1,7 @@
 {
-  "alias": "omega",
+  "aliases": {
+    "omega": ["mantle"]
+  },
   "name": "Omega",
   "homepageUrl": "https://www.omega.xyz/"
 }

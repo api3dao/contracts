@@ -1,5 +1,7 @@
 {
-  "alias": "mach-finance",
+  "aliases": {
+    "mach-finance": ["sonic"]
+  },
   "name": "MachFi",
   "homepageUrl": "https://www.machfi.xyz/"
 }

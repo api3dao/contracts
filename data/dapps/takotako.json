@@ -1,5 +1,7 @@
 {
-  "alias": "takotako",
+  "aliases": {
+    "takotako": ["taiko"]
+  },
   "name": "TAKOTAKO",
   "homepageUrl": "https://takotako.xyz/"
 }

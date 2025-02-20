@@ -1,5 +1,7 @@
 {
-  "alias": "enclabs",
+  "aliases": {
+    "enclabs": ["sonic"]
+  },
   "name": "Enclabs",
   "homepageUrl": "https://x.com/EnclabsFi"
 }
