@@ -1,6 +1,6 @@
 import * as ethers from 'ethers';
 
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory, deploymentAddresses, DAPPS } from './index';
+import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory, deploymentAddresses, DAPPS, CHAINS } from './index';
 
 function computeApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
@@ -54,9 +54,18 @@ function computeCommunalApi3ReaderProxyV1Address(chainId: ethers.BigNumberish, d
 }
 
 function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
-  if (!DAPPS.some((dapp) => dapp.alias === dappAlias)) {
+  const dApp = DAPPS.find((dapp) => Object.hasOwn(dapp.aliases, dappAlias));
+  if (!dApp) {
     throw new Error(`dApp with alias ${dappAlias} not registered to the package`);
   }
+  const chainAlias = CHAINS.find((chain) => chain.id === chainId)?.alias;
+  if (!chainAlias) {
+    throw new Error(`Chain with ID ${chainId} not registered to the package`);
+  }
+  if (!dApp.aliases[dappAlias]!.includes(chainAlias)) {
+    throw new Error(`dApp with alias ${dappAlias} not registered to chain with ID ${chainId}`);
+  }
+
   return BigInt(
     ethers.solidityPackedKeccak256(
       ['bytes32', 'uint256'],
