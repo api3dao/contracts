@@ -44,6 +44,11 @@ async function main(): Promise<void> {
     combinedDapps.push(fileContent);
   }
 
+  const aliases = combinedDapps.flatMap((dapp: any) => Object.keys(dapp.aliases));
+  if (aliases.length !== new Set(aliases).size) {
+    throw new Error(`Duplicate dApp aliases found. See:\n${JSON.stringify(aliases.sort(), null, 2)}`);
+  }
+
   const rawContent = `${HEADER_CONTENT}\nexport const DAPPS: Dapp[] = ${JSON.stringify(combinedDapps)};\n\n`;
 
   const prettierConfig = JSON.parse(fs.readFileSync(PRETTIER_CONFIG, 'utf8'));
@@ -58,10 +63,10 @@ async function main(): Promise<void> {
   console.log(`Combined dApps been saved as ${OUTPUT_FILE}`);
 }
 
-/* eslint-disable */
 main()
   .then(() => process.exit(0))
   .catch((error) => {
+    // eslint-disable-next-line no-console
     console.log(error);
     process.exit(1);
   });
