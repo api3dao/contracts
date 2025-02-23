@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "omega": ["mantle"]
+    "omega": { "chains": ["mantle"], "tag": "" }
   },
   "name": "Omega",
   "homepageUrl": "https://www.omega.xyz/"

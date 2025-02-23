@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "stout": ["sonic"]
+    "stout": { "chains": ["sonic"], "tag": "" }
   },
   "name": "Stout",
   "homepageUrl": "https://stout.fi/"

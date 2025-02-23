@@ -66,7 +66,7 @@ function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
   if (!chainAlias) {
     throw new Error(`Chain with ID ${chainId} not registered to the package`);
   }
-  if (!dApp.aliases[dappAlias]!.includes(chainAlias)) {
+  if (!dApp.aliases[dappAlias]!.chains.includes(chainAlias)) {
     throw new Error(`dApp with alias ${dappAlias} not registered to chain with ID ${chainId}`);
   }
 

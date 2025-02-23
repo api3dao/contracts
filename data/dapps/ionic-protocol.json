@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "ionic": ["mode"]
+    "ionic": { "chains": ["mode"], "tag": "" }
   },
   "name": "Ionic Protocol",
   "homepageUrl": "https://www.ionic.money/"

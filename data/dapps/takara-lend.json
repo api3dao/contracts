@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "takara": ["sei"]
+    "takara": { "chains": ["sei"], "tag": "" }
   },
   "name": "Takara Lend",
   "homepageUrl": "https://x.com/takaralend"
