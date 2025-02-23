@@ -120,12 +120,15 @@ export type ChainAlias = z.infer<typeof chainAlias>;
 export const dappSchema = z.strictObject({
   aliases: z.record(
     aliasSchema,
-    z
-      .array(chainAlias)
-      .refine(
-        (value) => JSON.stringify(value.toSorted()) === JSON.stringify(value),
-        'Chain aliases must be sorted alphabetically'
-      )
+    z.strictObject({
+      chains: z
+        .array(chainAlias)
+        .refine(
+          (value) => JSON.stringify(value.toSorted()) === JSON.stringify(value),
+          'Chain aliases must be sorted alphabetically'
+        ),
+      tag: z.string(),
+    })
   ),
   name: z.string(),
   homepageUrl: z.string().url().optional(),
