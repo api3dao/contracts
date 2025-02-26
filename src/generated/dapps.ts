@@ -20,6 +20,11 @@ export const DAPPS: Dapp[] = [
   { aliases: { moonwell: { chains: ['moonbeam'] } }, name: 'Moonwell', homepageUrl: 'https://moonwell.fi/' },
   { aliases: { omega: { chains: ['mantle'] } }, name: 'Omega', homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'] } }, name: 'Orbit Protocol', homepageUrl: 'https://orbitlending.io/' },
+  {
+    aliases: { 'silo-v1-rdnt': { chains: ['arbitrum'], tag: 'RDNT market' } },
+    name: 'Silo V1',
+    homepageUrl: 'https://app.silo.finance/',
+  },
   { aliases: { stout: { chains: ['sonic'] } }, name: 'Stout', homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: { chains: ['sei'] } }, name: 'Takara Lend', homepageUrl: 'https://x.com/takaralend' },
   {

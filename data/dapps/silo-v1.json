@@ -1,0 +1,7 @@
+{
+  "aliases": {
+    "silo-v1-rdnt": { "chains": ["arbitrum"], "tag": "RDNT market" }
+  },
+  "name": "Silo V1",
+  "homepageUrl": "https://app.silo.finance/"
+}
