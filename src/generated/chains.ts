@@ -911,6 +911,16 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'monad-testnet',
+    decimals: 18,
+    explorer: { browserUrl: 'https://testnet.monadexplorer.com/' },
+    id: '10143',
+    name: 'Monad testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.monad.xyz/' }],
+    symbol: 'MON',
+    testnet: true,
+  },
+  {
     alias: 'moonbeam-testnet',
     decimals: 18,
     explorer: {
