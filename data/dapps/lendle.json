@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "lendle": { "chains": ["mantle"], "tag": "" }
+    "lendle": { "chains": ["mantle"] }
   },
   "name": "Lendle",
   "homepageUrl": "https://www.lendle.xyz/"

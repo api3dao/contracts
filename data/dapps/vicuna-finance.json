@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "vicuna-finance": { "chains": ["sonic"], "tag": "" }
+    "vicuna-finance": { "chains": ["sonic"] }
   },
   "name": "Vicuna Finance",
   "homepageUrl": "https://x.com/VicunaFinance/"
