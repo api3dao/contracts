@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
 
-import { type Chain, chainSchema } from './types';
+import { type Chain, chainAlias, chainSchema, dappSchema } from './types';
 
 describe('chainSchema', () => {
   const validChain: Chain = {
@@ -57,5 +57,112 @@ describe('chainSchema', () => {
     };
 
     expect(() => chainSchema.parse(invalidChain)).toThrow(z.ZodError);
+  });
+});
+
+describe('chainAlias', () => {
+  it('should accept valid chain aliases', () => {
+    expect(() => chainAlias.parse('ethereum')).not.toThrow();
+    expect(() => chainAlias.parse('bsc')).not.toThrow();
+    expect(() => chainAlias.parse('mantle')).not.toThrow();
+  });
+
+  it('should reject chain aliases not in the CHAINS array', () => {
+    expect(() => chainAlias.parse('Mantle')).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          message: 'Invalid chain alias: Mantle',
+          path: [],
+        },
+      ])
+    );
+    expect(() => chainAlias.parse('ethereum-mainnet')).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          message: 'Invalid chain alias: ethereum-mainnet',
+          path: [],
+        },
+      ])
+    );
+  });
+});
+
+describe('dappSchema', () => {
+  it('accepts a single alias when multiAliased is false', () => {
+    const dappWithSingleAlias = {
+      aliases: {
+        'alias-1': {
+          chains: ['ethereum'],
+          title: 'Single DApp',
+        },
+      },
+      multiAliased: false,
+      homepageUrl: 'https://example.com',
+    };
+
+    expect(() => dappSchema.parse(dappWithSingleAlias)).not.toThrow();
+  });
+
+  it('honors the multiAliased option', () => {
+    const dappWithSingleAlias = {
+      aliases: {
+        'alias-1': {
+          chains: ['ethereum'],
+          title: 'dApp ETH market',
+        },
+        'alias-2': {
+          chains: ['ethereum'],
+          title: 'dApp USDT market',
+        },
+      },
+      homepageUrl: 'https://example.com',
+    };
+
+    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: false })).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          message: "Multiple aliases are allowed only when 'multiAliased' is enabled",
+          path: ['aliases'],
+        },
+      ])
+    );
+    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: true })).not.toThrow();
+  });
+
+  it('accepts valid chain IDs and throws on invalid ones', () => {
+    const validChainsDapp = {
+      aliases: {
+        'valid-chains': {
+          chains: ['ethereum', 'bsc', 'polygon'],
+          title: 'Valid Chains DApp',
+        },
+      },
+      multiAliased: true,
+      homepageUrl: 'https://example.com',
+    };
+    expect(() => dappSchema.parse(validChainsDapp)).not.toThrow();
+
+    const invalidChainsDapp = {
+      aliases: {
+        'invalid-chains': {
+          chains: ['ethereum', 'invalid-chain', 'polygon'],
+          title: 'Invalid Chains DApp',
+        },
+      },
+      multiAliased: true,
+      homepageUrl: 'https://example.com',
+    };
+    expect(() => dappSchema.parse(invalidChainsDapp)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          message: 'Invalid chain alias: invalid-chain',
+          path: ['aliases', 'invalid-chains', 'chains', 1],
+        },
+      ])
+    );
   });
 });

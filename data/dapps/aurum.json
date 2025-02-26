@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "aurum-finance": { "chains": ["sonic"], "title": "Aurum" }
+  },
+  "homepageUrl": "https://aurumfi.io/"
+}

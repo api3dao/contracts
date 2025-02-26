@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "mach-finance": { "chains": ["sonic"], "title": "MachFi" }
+  },
+  "homepageUrl": "https://www.machfi.xyz/"
+}
