@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "hana": { "chains": ["taiko"], "tag": "" }
+    "hana": { "chains": ["taiko"] }
   },
   "name": "Hana Finance",
   "homepageUrl": "https://www.hana.finance/"

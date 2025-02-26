@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "zerolend": { "chains": ["zircuit"], "tag": "" }
+    "zerolend": { "chains": ["zircuit"] }
   },
   "name": "ZeroLend",
   "homepageUrl": "https://zerolend.xyz/"

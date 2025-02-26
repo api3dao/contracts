@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "init": { "chains": ["blast", "mantle"], "tag": "" }
+    "init": { "chains": ["blast", "mantle"] }
   },
   "name": "INIT Capital",
   "homepageUrl": "https://init.capital/"
