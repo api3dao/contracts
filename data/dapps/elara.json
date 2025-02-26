@@ -1,7 +1,6 @@
 {
   "aliases": {
-    "elara": { "chains": ["zircuit"] }
+    "elara": { "chains": ["zircuit"], "title": "Elara" }
   },
-  "name": "Elara",
   "homepageUrl": "https://app.elara.finance/"
 }

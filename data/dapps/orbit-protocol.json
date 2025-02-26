@@ -1,7 +1,6 @@
 {
   "aliases": {
-    "orbit": { "chains": ["blast"] }
+    "orbit": { "chains": ["blast"], "title": "Orbit Protocol" }
   },
-  "name": "Orbit Protocol",
   "homepageUrl": "https://orbitlending.io/"
 }

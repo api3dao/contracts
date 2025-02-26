@@ -117,31 +117,26 @@ export const chainAlias = z.string().refine(
 
 export type ChainAlias = z.infer<typeof chainAlias>;
 
-export const dappSchema = z.strictObject({
-  aliases: z
-    .record(
+export const dappSchema = z
+  .strictObject({
+    aliases: z.record(
       aliasSchema,
       z.strictObject({
         chains: z.array(chainAlias),
-        tag: z.string().optional(),
+        title: z.string(),
       })
-    )
-    .superRefine((value, ctx) => {
-      // Make sure "tag" is used when there are multiple dApp aliases. It's expected that multiple aliases are only
-      // present in dApps which have multiple markets.
-      const aliasesData = Object.values(value);
-      if (aliasesData.length <= 1) return;
-
-      // We allow the tag being empty for special cases when it's not required.
-      if (aliasesData.some((aliasData) => aliasData.tag === undefined)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Property "tag" is required for dApps with multiple aliases`,
-        });
-      }
-    }),
-  name: z.string(),
-  homepageUrl: z.string().url().optional(),
-});
+    ),
+    multiAliased: z.boolean().optional(),
+    homepageUrl: z.string().url().optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.multiAliased === false && Object.keys(value.aliases).length > 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Multiple aliases are allowed only when 'multiAliased' is enabled`,
+        path: ['aliases'],
+      });
+    }
+  });
 
 export type Dapp = z.infer<typeof dappSchema>;

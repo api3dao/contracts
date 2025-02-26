@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { goSync } from '@api3/promise-utils';
 import { format } from 'prettier';
 
 import { dappSchema } from '../src/types';
@@ -20,9 +21,6 @@ const HEADER_CONTENT = `// =====================================================
 import { type Dapp } from '../types';
 `;
 
-// From https://github.com/api3dao/data-feeds/blob/main/packages/api3-market/src/utils/format.ts
-const slugify = (text: string) => text.toLowerCase().replaceAll(/[^\da-z-]+/g, '-');
-
 async function main(): Promise<void> {
   const fileNames = fs.readdirSync(INPUT_DIR);
   const jsonFiles = fileNames.filter((fileName) => fileName.endsWith('.json'));
@@ -30,16 +28,11 @@ async function main(): Promise<void> {
 
   for (const jsonFile of jsonFiles) {
     const filePath = path.join(INPUT_DIR, jsonFile);
-    const fileContentRaw = fs.readFileSync(filePath, 'utf8');
-    const fileContent = JSON.parse(fileContentRaw);
-    if (slugify(fileContent.name) !== jsonFile.replace('.json', '')) {
-      throw new Error(
-        `File name does not match dApp name: ${slugify(fileContent.name)} vs ${jsonFile.replace('.json', '')}`
-      );
+    const goFileContent = goSync(() => dappSchema.parse(JSON.parse(fs.readFileSync(filePath, 'utf8'))));
+    if (!goFileContent.success) {
+      throw new Error(`Invalid dApps file content: ${filePath}\n${goFileContent.error}`);
     }
-    if (!dappSchema.safeParse(fileContent).success) {
-      throw new Error(`Invalid dApps file content: ${filePath}\n${dappSchema.safeParse(fileContent).error}`);
-    }
+    const fileContent = goFileContent.data;
     combinedDapps.push(fileContent);
   }
 

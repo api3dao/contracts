@@ -90,63 +90,46 @@ describe('chainAlias', () => {
 });
 
 describe('dappSchema', () => {
-  it('accepts a value with a single alias without a tag', () => {
-    const validSingleAliasDapp = {
-      aliases: {
-        'single-dapp': {
-          chains: ['ethereum', 'bsc'],
-        },
-      },
-      name: 'Single Alias DApp',
-      homepageUrl: 'https://example.com',
-    };
-
-    expect(() => dappSchema.parse(validSingleAliasDapp)).not.toThrow();
-  });
-
-  it('accepts a value with multiple aliases with tags', () => {
-    const validMultipleAliasesDapp = {
+  it('accepts a single alias when multiAliased is false', () => {
+    const dappWithSingleAlias = {
       aliases: {
         'alias-1': {
           chains: ['ethereum'],
-          tag: 'Ethereum Market',
-        },
-        'alias-2': {
-          chains: ['bsc'],
-          tag: 'BSC Market',
+          title: 'Single DApp',
         },
       },
-      name: 'Multiple Aliases DApp',
+      multiAliased: false,
       homepageUrl: 'https://example.com',
     };
 
-    expect(() => dappSchema.parse(validMultipleAliasesDapp)).not.toThrow();
+    expect(() => dappSchema.parse(dappWithSingleAlias)).not.toThrow();
   });
 
-  it('throws on value with multiple aliases without tags', () => {
-    const invalidMultipleAliasesDapp = {
+  it('honors the multiAliased option', () => {
+    const dappWithSingleAlias = {
       aliases: {
-        'multi-dapp-1': {
+        'alias-1': {
           chains: ['ethereum'],
+          title: 'dApp ETH market',
         },
-        'multi-dapp-2': {
-          chains: ['bsc'],
-          tag: 'BSC Market',
+        'alias-2': {
+          chains: ['ethereum'],
+          title: 'dApp USDT market',
         },
       },
-      name: 'Invalid Multiple Aliases DApp',
       homepageUrl: 'https://example.com',
     };
 
-    expect(() => dappSchema.parse(invalidMultipleAliasesDapp)).toThrow(
+    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: false })).toThrow(
       new ZodError([
         {
           code: 'custom',
-          message: 'Property "tag" is required for dApps with multiple aliases',
+          message: "Multiple aliases are allowed only when 'multiAliased' is enabled",
           path: ['aliases'],
         },
       ])
     );
+    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: true })).not.toThrow();
   });
 
   it('accepts valid chain IDs and throws on invalid ones', () => {
@@ -154,9 +137,10 @@ describe('dappSchema', () => {
       aliases: {
         'valid-chains': {
           chains: ['ethereum', 'bsc', 'polygon'],
+          title: 'Valid Chains DApp',
         },
       },
-      name: 'Valid Chains DApp',
+      multiAliased: true,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(validChainsDapp)).not.toThrow();
@@ -165,9 +149,10 @@ describe('dappSchema', () => {
       aliases: {
         'invalid-chains': {
           chains: ['ethereum', 'invalid-chain', 'polygon'],
+          title: 'Invalid Chains DApp',
         },
       },
-      name: 'Invalid Chains DApp',
+      multiAliased: true,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(invalidChainsDapp)).toThrow(
