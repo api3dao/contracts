@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 17.2.0
+
+### Minor Changes
+
+- d6414f1: Add dAPI and Market support to monad-testnet
+
+### Patch Changes
+
+- 5639919: Move zod from devDependencies to dependencies
+
 ## 17.1.0
 
 ### Minor Changes
