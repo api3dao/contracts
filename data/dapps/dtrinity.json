@@ -1,7 +1,6 @@
 {
   "aliases": {
-    "dtrinity": { "chains": ["fraxtal"] }
+    "dtrinity": { "chains": ["fraxtal"], "title": "dTRINITY" }
   },
-  "name": "dTRINITY",
   "homepageUrl": "https://dtrinity.org/"
 }

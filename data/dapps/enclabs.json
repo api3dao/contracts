@@ -1,7 +1,6 @@
 {
   "aliases": {
-    "enclabs": { "chains": ["sonic"] }
+    "enclabs": { "chains": ["sonic"], "title": "Enclabs" }
   },
-  "name": "Enclabs",
   "homepageUrl": "https://x.com/EnclabsFi"
 }
