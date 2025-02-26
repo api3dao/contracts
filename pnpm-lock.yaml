@@ -13,10 +13,13 @@ importers:
         version: 6.13.4
       viem:
         specifier: ^2.23.2
-        version: 2.23.2(typescript@5.7.2)(zod@3.24.1)
+        version: 2.23.2(typescript@5.7.2)(zod@3.24.2)
       yargs:
         specifier: ^17.7.2
         version: 17.7.2
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@api3/eslint-plugin-commons':
         specifier: ^3.0.0
@@ -38,7 +41,7 @@ importers:
         version: 1.0.12(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^4.0.0
-        version: 4.0.0(vvtm4gykyroe5xc5hbxg5owwpm)
+        version: 4.0.0(5kshdnn6wjayw6f622vvbygqpa)
       '@nomicfoundation/hardhat-verify':
         specifier: ^2.0.12
         version: 2.0.12(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))
@@ -92,7 +95,7 @@ importers:
         version: 0.14.0
       hardhat-gas-reporter:
         specifier: ^2.2.2
-        version: 2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.1)
+        version: 2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.2)
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.17.11)(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))
@@ -120,9 +123,6 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
-      zod:
-        specifier: ^3.24.1
-        version: 3.24.1
 
 packages:
 
@@ -4818,8 +4818,8 @@ packages:
     peerDependencies:
       ethers: ~5.7.0
 
-  zod@3.24.1:
-    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+  zod@3.24.2:
+    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
 snapshots:
 
@@ -5864,7 +5864,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2)
 
-  '@nomicfoundation/hardhat-toolbox@4.0.0(vvtm4gykyroe5xc5hbxg5owwpm)':
+  '@nomicfoundation/hardhat-toolbox@4.0.0(5kshdnn6wjayw6f622vvbygqpa)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.0.8(@nomicfoundation/hardhat-ethers@3.0.8(ethers@6.13.4)(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2)))(chai@4.5.0)(ethers@6.13.4)(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))
       '@nomicfoundation/hardhat-ethers': 3.0.8(ethers@6.13.4)(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))
@@ -5878,7 +5878,7 @@ snapshots:
       chai: 4.5.0
       ethers: 6.13.4
       hardhat: 2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2)
-      hardhat-gas-reporter: 2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.1)
+      hardhat-gas-reporter: 2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.2)
       solidity-coverage: 0.8.14(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))
       ts-node: 10.9.2(@types/node@20.17.11)(typescript@5.7.2)
       typechain: 8.3.2(typescript@5.7.2)
@@ -6411,15 +6411,15 @@ snapshots:
 
   abbrev@1.0.9: {}
 
-  abitype@1.0.0(typescript@5.7.2)(zod@3.24.1):
+  abitype@1.0.0(typescript@5.7.2)(zod@3.24.2):
     optionalDependencies:
       typescript: 5.7.2
-      zod: 3.24.1
+      zod: 3.24.2
 
-  abitype@1.0.8(typescript@5.7.2)(zod@3.24.1):
+  abitype@1.0.8(typescript@5.7.2)(zod@3.24.2):
     optionalDependencies:
       typescript: 5.7.2
-      zod: 3.24.1
+      zod: 3.24.2
 
   acorn-jsx@5.3.2(acorn@8.12.1):
     dependencies:
@@ -8402,7 +8402,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  hardhat-gas-reporter@2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.1):
+  hardhat-gas-reporter@2.2.2(hardhat@2.22.17(ts-node@10.9.2(@types/node@20.17.11)(typescript@5.7.2))(typescript@5.7.2))(typescript@5.7.2)(zod@3.24.2):
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/bytes': 5.7.0
@@ -8419,7 +8419,7 @@ snapshots:
       lodash: 4.17.21
       markdown-table: 2.0.0
       sha1: 1.1.1
-      viem: 2.7.14(typescript@5.7.2)(zod@3.24.1)
+      viem: 2.7.14(typescript@5.7.2)(zod@3.24.2)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -9653,14 +9653,14 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  ox@0.6.7(typescript@5.7.2)(zod@3.24.1):
+  ox@0.6.7(typescript@5.7.2)(zod@3.24.2):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.7.2)(zod@3.24.1)
+      abitype: 1.0.8(typescript@5.7.2)(zod@3.24.2)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.7.2
@@ -10734,15 +10734,15 @@ snapshots:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
 
-  viem@2.23.2(typescript@5.7.2)(zod@3.24.1):
+  viem@2.23.2(typescript@5.7.2)(zod@3.24.2):
     dependencies:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.7.2)(zod@3.24.1)
+      abitype: 1.0.8(typescript@5.7.2)(zod@3.24.2)
       isows: 1.0.6(ws@8.18.0)
-      ox: 0.6.7(typescript@5.7.2)(zod@3.24.1)
+      ox: 0.6.7(typescript@5.7.2)(zod@3.24.2)
       ws: 8.18.0
     optionalDependencies:
       typescript: 5.7.2
@@ -10751,14 +10751,14 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.7.14(typescript@5.7.2)(zod@3.24.1):
+  viem@2.7.14(typescript@5.7.2)(zod@3.24.2):
     dependencies:
       '@adraffy/ens-normalize': 1.10.0
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
       '@scure/bip32': 1.3.2
       '@scure/bip39': 1.2.1
-      abitype: 1.0.0(typescript@5.7.2)(zod@3.24.1)
+      abitype: 1.0.0(typescript@5.7.2)(zod@3.24.2)
       isows: 1.0.3(ws@8.13.0)
       ws: 8.13.0
     optionalDependencies:
@@ -10956,4 +10956,4 @@ snapshots:
     dependencies:
       ethers: 5.7.2
 
-  zod@3.24.1: {}
+  zod@3.24.2: {}
