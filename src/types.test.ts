@@ -111,10 +111,12 @@ describe('dappSchema', () => {
         'alias-1': {
           chains: ['ethereum'],
           title: 'dApp ETH market',
+          description: 'ETH market description',
         },
         'alias-2': {
           chains: ['ethereum'],
           title: 'dApp USDT market',
+          description: 'USDT market description',
         },
       },
       homepageUrl: 'https://example.com',
@@ -132,6 +134,28 @@ describe('dappSchema', () => {
     expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: true })).not.toThrow();
   });
 
+  it('enforces alias description when multiAliased is set to true', () => {
+    const dapp = {
+      aliases: {
+        alias: {
+          chains: ['ethereum'],
+          title: 'Some dApp',
+        },
+      },
+      multiAliased: true,
+      homepageUrl: 'https://example.com',
+    };
+    expect(() => dappSchema.parse(dapp)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          message: 'Description is required for multiple aliased dApps',
+          path: ['aliases', 'alias'],
+        },
+      ])
+    );
+  });
+
   it('accepts valid chain IDs and throws on invalid ones', () => {
     const validChainsDapp = {
       aliases: {
@@ -140,7 +164,7 @@ describe('dappSchema', () => {
           title: 'Valid Chains DApp',
         },
       },
-      multiAliased: true,
+      multiAliased: false,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(validChainsDapp)).not.toThrow();
@@ -152,7 +176,7 @@ describe('dappSchema', () => {
           title: 'Invalid Chains DApp',
         },
       },
-      multiAliased: true,
+      multiAliased: false,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(invalidChainsDapp)).toThrow(

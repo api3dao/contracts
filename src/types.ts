@@ -124,12 +124,25 @@ export const dappSchema = z
       z.strictObject({
         chains: z.array(chainAlias),
         title: z.string(),
+        description: z.string().optional(),
       })
     ),
     multiAliased: z.boolean().optional(),
     homepageUrl: z.string().url().optional(),
   })
   .superRefine((value, ctx) => {
+    if (value.multiAliased === true) {
+      Object.entries(value.aliases).forEach(([alias, aliasData]) => {
+        if (aliasData.description === undefined) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `Description is required for multiple aliased dApps`,
+            path: ['aliases', alias],
+          });
+        }
+      });
+    }
+
     if (value.multiAliased === false && Object.keys(value.aliases).length > 1) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

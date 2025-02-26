@@ -21,7 +21,14 @@ export const DAPPS: Dapp[] = [
   { aliases: { omega: { chains: ['mantle'], title: 'Omega' } }, homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
   {
-    aliases: { 'silo-finance-v1-rdnt': { chains: ['arbitrum'], title: 'Silo Finance RDNT market' } },
+    aliases: {
+      'silo-finance-v1-rdnt': {
+        chains: ['arbitrum'],
+        title: 'Silo Finance RDNT market',
+        description:
+          'The dAPI proxies specific for Silo Finance RDNT market on Arbitrum. Proxies for other Silo Finance markets should use different configuration.',
+      },
+    },
     multiAliased: true,
     homepageUrl: 'https://app.silo.finance/',
   },
