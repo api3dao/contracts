@@ -3,7 +3,7 @@
     "silo-finance-v1-rdnt": {
       "chains": ["arbitrum"],
       "title": "Silo Finance RDNT market",
-      "description": "The dAPI proxies specific for Silo Finance RDNT market on Arbitrum. Proxies for other Silo Finance markets should use different configuration."
+      "description": "Only to be used for the RDNT market."
     }
   },
   "homepageUrl": "https://app.silo.finance/"
