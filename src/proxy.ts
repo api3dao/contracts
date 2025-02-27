@@ -3,9 +3,6 @@ import * as ethers from 'ethers';
 import deploymentAddresses from '../deployments/addresses.json';
 import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../typechain-types';
 
-import { CHAINS } from './generated/chains';
-import { DAPPS } from './generated/dapps';
-
 function computeApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
   dapiName: string,
@@ -58,18 +55,6 @@ function computeCommunalApi3ReaderProxyV1Address(chainId: ethers.BigNumberish, d
 }
 
 function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
-  const dApp = DAPPS.find((dapp) => Object.hasOwn(dapp.aliases, dappAlias));
-  if (!dApp) {
-    throw new Error(`dApp with alias ${dappAlias} not registered to the package`);
-  }
-  const chainAlias = CHAINS.find((chain) => chain.id === chainId)?.alias;
-  if (!chainAlias) {
-    throw new Error(`Chain with ID ${chainId} not registered to the package`);
-  }
-  if (!dApp.aliases[dappAlias]!.chains.includes(chainAlias)) {
-    throw new Error(`dApp with alias ${dappAlias} not registered to chain with ID ${chainId}`);
-  }
-
   return BigInt(
     ethers.solidityPackedKeccak256(
       ['bytes32', 'uint256'],
