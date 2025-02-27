@@ -90,72 +90,6 @@ describe('chainAlias', () => {
 });
 
 describe('dappSchema', () => {
-  it('accepts a single alias when multiAliased is false', () => {
-    const dappWithSingleAlias = {
-      aliases: {
-        'alias-1': {
-          chains: ['ethereum'],
-          title: 'Single DApp',
-        },
-      },
-      multiAliased: false,
-      homepageUrl: 'https://example.com',
-    };
-
-    expect(() => dappSchema.parse(dappWithSingleAlias)).not.toThrow();
-  });
-
-  it('honors the multiAliased option', () => {
-    const dappWithSingleAlias = {
-      aliases: {
-        'alias-1': {
-          chains: ['ethereum'],
-          title: 'dApp ETH market',
-          description: 'ETH market description',
-        },
-        'alias-2': {
-          chains: ['ethereum'],
-          title: 'dApp USDT market',
-          description: 'USDT market description',
-        },
-      },
-      homepageUrl: 'https://example.com',
-    };
-
-    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: false })).toThrow(
-      new ZodError([
-        {
-          code: 'custom',
-          message: "Multiple aliases are allowed only when 'multiAliased' is enabled",
-          path: ['aliases'],
-        },
-      ])
-    );
-    expect(() => dappSchema.parse({ ...dappWithSingleAlias, multiAliased: true })).not.toThrow();
-  });
-
-  it('enforces alias description when multiAliased is set to true', () => {
-    const dapp = {
-      aliases: {
-        alias: {
-          chains: ['ethereum'],
-          title: 'Some dApp',
-        },
-      },
-      multiAliased: true,
-      homepageUrl: 'https://example.com',
-    };
-    expect(() => dappSchema.parse(dapp)).toThrow(
-      new ZodError([
-        {
-          code: 'custom',
-          message: 'Description is required for multiple aliased dApps',
-          path: ['aliases', 'alias'],
-        },
-      ])
-    );
-  });
-
   it('accepts valid chain IDs and throws on invalid ones', () => {
     const validChainsDapp = {
       aliases: {
@@ -164,7 +98,6 @@ describe('dappSchema', () => {
           title: 'Valid Chains DApp',
         },
       },
-      multiAliased: false,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(validChainsDapp)).not.toThrow();
@@ -176,7 +109,6 @@ describe('dappSchema', () => {
           title: 'Invalid Chains DApp',
         },
       },
-      multiAliased: false,
       homepageUrl: 'https://example.com',
     };
     expect(() => dappSchema.parse(invalidChainsDapp)).toThrow(

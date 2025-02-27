@@ -6,6 +6,5 @@
       "description": "The dAPI proxies specific for Silo Finance RDNT market on Arbitrum. Proxies for other Silo Finance markets should use different configuration."
     }
   },
-  "multiAliased": true,
   "homepageUrl": "https://app.silo.finance/"
 }
