@@ -14,15 +14,17 @@ export const DAPPS: Dapp[] = [
       'compound-finance-usde': {
         chains: ['mantle'],
         title: 'Compound Finance USDe market',
-        description:
-          'The dAPI proxies specific for Compound Finance USDe market on Mantle. Proxies for other Compound Finance markets should use different configuration.',
+        description: 'Only to be used for the USDe market.',
       },
     },
     homepageUrl: 'https://compound.finance/',
   },
   { aliases: { dtrinity: { chains: ['fraxtal'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
   { aliases: { elara: { chains: ['zircuit'], title: 'Elara' } }, homepageUrl: 'https://app.elara.finance/' },
-  { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://x.com/EnclabsFi' },
+  {
+    aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } },
+    homepageUrl: 'https://www.enclabs.finance/#/?chainId=146',
+  },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
   { aliases: { ionic: { chains: ['mode'], title: 'Ionic Protocol' } }, homepageUrl: 'https://www.ionic.money/' },
@@ -36,8 +38,7 @@ export const DAPPS: Dapp[] = [
       'silo-finance-v1-rdnt': {
         chains: ['arbitrum'],
         title: 'Silo Finance RDNT market',
-        description:
-          'The dAPI proxies specific for Silo Finance RDNT market on Arbitrum. Proxies for other Silo Finance markets should use different configuration.',
+        description: 'Only to be used for the RDNT market.',
       },
     },
     homepageUrl: 'https://app.silo.finance/',
