@@ -1,0 +1,11 @@
+{
+  "aliases": {
+    "compound-finance-usde": {
+      "chains": ["mantle"],
+      "title": "Compound Finance USDe market",
+      "description": "The dAPI proxies specific for Compound Finance USDe market on Mantle. Proxies for other Compound Finance markets should use different configuration."
+    }
+  },
+  "multiAliased": true,
+  "homepageUrl": "https://compound.finance/"
+}

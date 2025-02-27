@@ -9,6 +9,18 @@ import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
   { aliases: { 'aurum-finance': { chains: ['sonic'], title: 'Aurum' } }, homepageUrl: 'https://aurumfi.io/' },
+  {
+    aliases: {
+      'compound-finance-usde': {
+        chains: ['mantle'],
+        title: 'Compound Finance USDe market',
+        description:
+          'The dAPI proxies specific for Compound Finance USDe market on Mantle. Proxies for other Compound Finance markets should use different configuration.',
+      },
+    },
+    multiAliased: true,
+    homepageUrl: 'https://compound.finance/',
+  },
   { aliases: { dtrinity: { chains: ['fraxtal'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
   { aliases: { elara: { chains: ['zircuit'], title: 'Elara' } }, homepageUrl: 'https://app.elara.finance/' },
   { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://x.com/EnclabsFi' },
