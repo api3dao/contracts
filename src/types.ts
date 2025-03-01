@@ -110,7 +110,7 @@ export const aliasSchema = z.string().regex(/^[\da-z-]+$/);
 
 export type Alias = z.infer<typeof aliasSchema>;
 
-export const chainAlias = z.string().refine(
+export const chainAlias = aliasSchema.refine(
   (value) => CHAINS.some((chain) => chain.alias === value),
   (value) => ({ message: `Invalid chain alias: ${value}` })
 );
