@@ -54,7 +54,7 @@ function computeCommunalApi3ReaderProxyV1Address(chainId: ethers.BigNumberish, d
   return computeApi3ReaderProxyV1Address(chainId, dapiName, 1, '0x');
 }
 
-function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
+function unsafeComputeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
   return BigInt(
     ethers.solidityPackedKeccak256(
       ['bytes32', 'uint256'],
@@ -68,12 +68,12 @@ function computeDappSpecificApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
   dapiName: string
 ) {
-  return computeApi3ReaderProxyV1Address(chainId, dapiName, computeDappId(dappAlias, chainId), '0x');
+  return computeApi3ReaderProxyV1Address(chainId, dapiName, unsafeComputeDappId(dappAlias, chainId), '0x');
 }
 
 export {
   computeApi3ReaderProxyV1Address,
   computeCommunalApi3ReaderProxyV1Address,
-  computeDappId,
+  unsafeComputeDappId,
   computeDappSpecificApi3ReaderProxyV1Address,
 };
