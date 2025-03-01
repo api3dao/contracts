@@ -1,5 +1,10 @@
 {
-  "alias": "compound-finance",
-  "name": "Compound",
+  "aliases": {
+    "compound-finance-usde": {
+      "chains": ["mantle"],
+      "title": "Compound Finance USDe market",
+      "description": "Only to be used for the USDe market."
+    }
+  },
   "homepageUrl": "https://compound.finance/"
 }

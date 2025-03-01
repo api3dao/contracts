@@ -1,6 +1,7 @@
 import * as ethers from 'ethers';
 
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory, deploymentAddresses, DAPPS } from './index';
+import deploymentAddresses from '../deployments/addresses.json';
+import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../typechain-types';
 
 function computeApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
@@ -53,10 +54,7 @@ function computeCommunalApi3ReaderProxyV1Address(chainId: ethers.BigNumberish, d
   return computeApi3ReaderProxyV1Address(chainId, dapiName, 1, '0x');
 }
 
-function computeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
-  if (!DAPPS.some((dapp) => dapp.alias === dappAlias)) {
-    throw new Error(`dApp with alias ${dappAlias} not registered to the package`);
-  }
+function unsafeComputeDappId(dappAlias: string, chainId: ethers.BigNumberish) {
   return BigInt(
     ethers.solidityPackedKeccak256(
       ['bytes32', 'uint256'],
@@ -70,12 +68,12 @@ function computeDappSpecificApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
   dapiName: string
 ) {
-  return computeApi3ReaderProxyV1Address(chainId, dapiName, computeDappId(dappAlias, chainId), '0x');
+  return computeApi3ReaderProxyV1Address(chainId, dapiName, unsafeComputeDappId(dappAlias, chainId), '0x');
 }
 
 export {
   computeApi3ReaderProxyV1Address,
   computeCommunalApi3ReaderProxyV1Address,
-  computeDappId,
+  unsafeComputeDappId,
   computeDappSpecificApi3ReaderProxyV1Address,
 };

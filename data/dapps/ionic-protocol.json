@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "ionic": { "chains": ["mode"], "title": "Ionic Protocol" }
+  },
+  "homepageUrl": "https://www.ionic.money/"
+}

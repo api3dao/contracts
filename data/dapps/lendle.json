@@ -1,5 +1,6 @@
 {
-  "alias": "lendle",
-  "name": "Lendle",
+  "aliases": {
+    "lendle": { "chains": ["mantle"], "title": "Lendle" }
+  },
   "homepageUrl": "https://www.lendle.xyz/"
 }
