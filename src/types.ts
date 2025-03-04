@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { CHAINS } from './generated/chains';
 import { hasUniqueEntries } from './utils/arrays';
 
 export const chainExplorerAPIKeySchema = z.object({
@@ -105,9 +106,26 @@ export interface HardhatEtherscanConfig {
   customChains: HardhatEtherscanCustomChain[];
 }
 
-export const dappSchema = z.object({
-  alias: z.string().regex(/^[\da-z-]+$/),
-  name: z.string(),
+export const aliasSchema = z.string().regex(/^[\da-z-]+$/);
+
+export type Alias = z.infer<typeof aliasSchema>;
+
+export const chainAlias = aliasSchema.refine(
+  (value) => CHAINS.some((chain) => chain.alias === value),
+  (value) => ({ message: `Invalid chain alias: ${value}` })
+);
+
+export type ChainAlias = z.infer<typeof chainAlias>;
+
+export const dappSchema = z.strictObject({
+  aliases: z.record(
+    aliasSchema,
+    z.strictObject({
+      chains: z.array(chainAlias),
+      title: z.string(),
+      description: z.string().optional(),
+    })
+  ),
   homepageUrl: z.string().url().optional(),
 });
 

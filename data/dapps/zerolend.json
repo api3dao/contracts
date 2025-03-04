@@ -1,5 +1,6 @@
 {
-  "alias": "zerolend",
-  "name": "ZeroLend",
+  "aliases": {
+    "zerolend": { "chains": ["zircuit"], "title": "ZeroLend" }
+  },
   "homepageUrl": "https://zerolend.xyz/"
 }

@@ -8,6 +8,7 @@ import {
   Api3ServerV1__factory,
   CHAINS,
   computeDappSpecificApi3ReaderProxyV1Address,
+  DAPPS,
   deploymentAddresses,
 } from './index';
 
@@ -56,6 +57,19 @@ yargs(hideBin(process.argv))
         process.exit(1);
       }
       console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain.name}\ndAPI name: ${args['dapi-name']}`);
+      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
+      if (!dappInfo) {
+        const message = `⚠️ Could not find any record for alias "${args['dapp-alias']}"`;
+        if (args['strict']) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
+      }
+      if (dappInfo) {
+        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args['dapp-alias'])!;
+        if (aliasInfo.description) console.log(`\nℹ️ ${aliasInfo.description}\n`);
+      }
       const provider = new ethers.JsonRpcProvider(
         chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
       );
