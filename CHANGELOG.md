@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 18.0.0
+
+### Major Changes
+
+- ca76e88: Refactor dApps schema structure and remove unused dApps
+- b01760f: Rename computeDappId to unsafeComputeDappId and remove dApp alias verification
+
 ## 17.2.0
 
 ### Minor Changes
