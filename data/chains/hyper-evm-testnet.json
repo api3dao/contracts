@@ -1,5 +1,5 @@
 {
-  "alias": "hyperliquid-evm-testnet",
+  "alias": "hyper-evm-testnet",
   "decimals": 18,
   "explorer": {
     "browserUrl": "https://testnet.purrsec.com/"

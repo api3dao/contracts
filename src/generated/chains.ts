@@ -520,7 +520,7 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'hyperliquid-evm-testnet',
+    alias: 'hyper-evm-testnet',
     decimals: 18,
     explorer: { browserUrl: 'https://testnet.purrsec.com/' },
     id: '998',
@@ -530,7 +530,7 @@ export const CHAINS: Chain[] = [
     testnet: true,
   },
   {
-    alias: 'hyperliquid-evm',
+    alias: 'hyper-evm',
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://hyperliquid.cloud.blockscout.com/api' },

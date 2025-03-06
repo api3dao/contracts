@@ -1,5 +1,5 @@
 {
-  "alias": "hyperliquid-evm",
+  "alias": "hyper-evm",
   "decimals": 18,
   "explorer": {
     "api": {
