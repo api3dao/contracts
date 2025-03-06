@@ -1,0 +1,23 @@
+{
+  "alias": "hyperliquid-evm",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://hyperliquid.cloud.blockscout.com/api"
+    },
+    "browserUrl": "https://hyperliquid.cloud.blockscout.com/"
+  },
+  "id": "999",
+  "name": "HyperEVM",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.hyperliquid.xyz/evm"
+    }
+  ],
+  "symbol": "HYPE",
+  "testnet": false
+}
