@@ -1,11 +1,11 @@
 {
-  "alias": "hyper-evm-testnet",
+  "alias": "hyperliquid-testnet",
   "decimals": 18,
   "explorer": {
     "browserUrl": "https://testnet.purrsec.com/"
   },
   "id": "998",
-  "name": "HyperEVM testnet",
+  "name": "Hyperliquid testnet",
   "providers": [
     {
       "alias": "default",

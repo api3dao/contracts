@@ -2,4 +2,4 @@
 '@api3/contracts': minor
 ---
 
-Add dAPI and Market support for hyperliquid-evm and hyperliquid-evm-testnet
+Add dAPI and Market support for hyperliquid and hyperliquid-testnet
