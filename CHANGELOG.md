@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 18.1.0
+
+### Minor Changes
+
+- 122bb0f: Add dAPI and Market support for hyperliquid and hyperliquid-testnet
+
 ## 18.0.0
 
 ### Major Changes
