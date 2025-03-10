@@ -520,6 +520,32 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'hyperliquid-testnet',
+    decimals: 18,
+    explorer: { browserUrl: 'https://testnet.purrsec.com/' },
+    id: '998',
+    name: 'Hyperliquid testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.hyperliquid-testnet.xyz/evm' }],
+    symbol: 'HYPE',
+    testnet: true,
+  },
+  {
+    alias: 'hyperliquid',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://hyperliquid.cloud.blockscout.com/api' },
+      browserUrl: 'https://hyperliquid.cloud.blockscout.com/',
+    },
+    id: '999',
+    name: 'Hyperliquid',
+    providers: [
+      { alias: 'default', rpcUrl: 'https://rpc.hyperliquid.xyz/evm' },
+      { alias: 'backup', rpcUrl: 'https://rpc.hypurrscan.io' },
+    ],
+    symbol: 'HYPE',
+    testnet: false,
+  },
+  {
     alias: 'immutable-sepolia-testnet',
     decimals: 18,
     explorer: {
