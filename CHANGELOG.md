@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 18.2.0
+
+### Minor Changes
+
+- fc23880: Adds following chain:
+
+  - rechain-testnet
+
+- daf17d7: Add dAPI and Market support to rechain-testnet
+
 ## 18.1.0
 
 ### Minor Changes
