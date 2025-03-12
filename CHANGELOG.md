@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 19.0.0
+
+### Major Changes
+
+- 8d6cd44: Removed dAPI and Market support from deprecated Berachain testnet and added replaced Berachain testnet (with the same alias)
+
 ## 18.2.0
 
 ### Minor Changes
