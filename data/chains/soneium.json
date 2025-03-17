@@ -18,6 +18,10 @@
       "rpcUrl": "https://rpc.soneium.org/"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://soneium-rpc.publicnode.com"
+    },
+    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
     },

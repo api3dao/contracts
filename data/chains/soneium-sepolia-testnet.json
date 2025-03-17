@@ -16,6 +16,10 @@
     {
       "alias": "default",
       "rpcUrl": "https://rpc.minato.soneium.org/"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://soneium-sepolia-rpc.publicnode.com"
     }
   ],
   "symbol": "ETH",

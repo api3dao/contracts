@@ -18,6 +18,10 @@
       "rpcUrl": "https://andromeda.metis.io/?owner=1088"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://metis-rpc.publicnode.com:443"
+    },
+    {
       "alias": "ankr",
       "homepageUrl": "https://ankr.com"
     },

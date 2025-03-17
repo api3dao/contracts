@@ -18,6 +18,10 @@
       "rpcUrl": "https://rpc.frax.com"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://fraxtal-rpc.publicnode.com:443"
+    },
+    {
       "alias": "drpc",
       "homepageUrl": "https://drpc.org"
     },
