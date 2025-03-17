@@ -18,8 +18,16 @@
       "rpcUrl": "https://rpc.berachain.com/"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://berachain-rpc.publicnode.com"
+    },
+    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
     },
     {
       "alias": "quicknode",

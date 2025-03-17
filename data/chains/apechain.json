@@ -22,6 +22,10 @@
       "rpcUrl": "https://apechain.calderachain.xyz/http"
     },
     {
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    },
+    {
       "alias": "blastapi",
       "homepageUrl": "https://blastapi.io"
     },

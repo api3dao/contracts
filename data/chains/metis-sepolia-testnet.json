@@ -16,6 +16,10 @@
     {
       "alias": "default",
       "rpcUrl": "https://sepolia.metisdevops.link"
+    },
+    {
+      "alias": "publicnode",
+      "rpcUrl": "https://metis-sepolia-rpc.publicnode.com:443"
     }
   ],
   "symbol": "METIS",

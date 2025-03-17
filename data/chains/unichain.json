@@ -18,8 +18,16 @@
       "rpcUrl": "https://mainnet.unichain.org/"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://unichain-rpc.publicnode.com"
+    },
+    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
     },
     {
       "alias": "quicknode",

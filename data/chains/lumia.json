@@ -18,8 +18,16 @@
       "rpcUrl": "https://mainnet-rpc.lumia.org"
     },
     {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "nirvanalabs",
+      "homepageUrl": "https://nirvanalabs.com"
     }
   ],
   "symbol": "LUMIA",

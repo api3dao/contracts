@@ -24,6 +24,10 @@
     {
       "alias": "drpc",
       "homepageUrl": "https://drpc.org/"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
