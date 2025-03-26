@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "apebank": { "chains": ["apechain"], "title": "ApeBank" }
+  },
+  "homepageUrl": "https://ape-bank.netlify.app/"
+}
