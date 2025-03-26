@@ -8,6 +8,7 @@
 import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
+  { aliases: { apebank: { chains: ['apechain'], title: 'ApeBank' } }, homepageUrl: 'https://ape-bank.netlify.app/' },
   { aliases: { 'aurum-finance': { chains: ['sonic'], title: 'Aurum' } }, homepageUrl: 'https://aurumfi.io/' },
   {
     aliases: {
@@ -24,7 +25,10 @@ export const DAPPS: Dapp[] = [
   { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://www.enclabs.finance/' },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
-  { aliases: { ionic: { chains: ['mode'], title: 'Ionic Protocol' } }, homepageUrl: 'https://www.ionic.money/' },
+  {
+    aliases: { ionic: { chains: ['mode', 'metal'], title: 'Ionic Protocol' } },
+    homepageUrl: 'https://www.ionic.money/',
+  },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
   { aliases: { 'mach-finance': { chains: ['sonic'], title: 'MachFi' } }, homepageUrl: 'https://www.machfi.xyz/' },
   { aliases: { moonwell: { chains: ['moonbeam'], title: 'Moonwell' } }, homepageUrl: 'https://moonwell.fi/' },
