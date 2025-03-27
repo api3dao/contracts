@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 19.1.0
+
+### Minor Changes
+
+- cb8c835: Add ApeBank and update Ionic Protocol dApp data
+
 ## 19.0.1
 
 ### Patch Changes
