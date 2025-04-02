@@ -11,7 +11,7 @@ import { CHAINS } from '../src/index';
 import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
-const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
+const INITIAL_OWNABLECALLFORWARDER_OWNER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
 
 module.exports = async () => {
   const { deploy, log } = deployments;
@@ -36,7 +36,7 @@ module.exports = async () => {
         log(`Deploying OwnableCallForwarder`);
         return deploy('OwnableCallForwarder', {
           from: deployer!.address,
-          args: [EXPECTED_DEPLOYER_ADDRESS],
+          args: [INITIAL_OWNABLECALLFORWARDER_OWNER_ADDRESS],
           log: true,
           deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
         });
