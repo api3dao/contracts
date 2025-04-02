@@ -3,7 +3,7 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "matchPackageNames": ["node", "pnpm"],
+      "matchPackageNames": ["node", "actions/node-versions", "pnpm"],
       "enabled": false
     },
     {
