@@ -91,8 +91,8 @@ importers:
         specifier: ^2.22.19
         version: 2.22.19(ts-node@10.9.2(@types/node@20.17.30)(typescript@5.8.2))(typescript@5.8.2)
       hardhat-deploy:
-        specifier: ^0.14.1
-        version: 0.14.1
+        specifier: ^1.0.1
+        version: 1.0.1
       hardhat-gas-reporter:
         specifier: ^2.2.2
         version: 2.2.2(hardhat@2.22.19(ts-node@10.9.2(@types/node@20.17.30)(typescript@5.8.2))(typescript@5.8.2))(typescript@5.8.2)(zod@3.24.2)
@@ -2697,8 +2697,8 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
 
-  hardhat-deploy@0.14.1:
-    resolution: {integrity: sha512-hfho8XtlWqCi/xV2y+z3gBzkCcEP8o5smx6IS1X1ar8gL1ocRulD0kVl5rfZtNLdPjvXa77EtvhBgGAeDQsoOA==}
+  hardhat-deploy@1.0.1:
+    resolution: {integrity: sha512-cpjq9/7H9I5/iJ41b3tPLlG+D5siJ7NlG5GjocH5claUz7xrpCU5gUvx8stMf1fIyUhdM2g/TGOtCCmF64Nq3w==}
 
   hardhat-gas-reporter@2.2.2:
     resolution: {integrity: sha512-xlg3d00wrgUvP2S5tw3Zf6nO7OyS5crK3P6/ZP69i24pz4grM+6oFHGW/eJPSGqiDWBYX+gKp9XoqP4rwRXrdQ==}
@@ -8460,7 +8460,7 @@ snapshots:
     optionalDependencies:
       uglify-js: 3.17.4
 
-  hardhat-deploy@0.14.1:
+  hardhat-deploy@1.0.1:
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/abstract-signer': 5.7.0
