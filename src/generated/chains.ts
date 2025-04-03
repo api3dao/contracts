@@ -332,19 +332,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'camp-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://camp-network-testnet.blockscout.com/api' },
-      browserUrl: 'https://camp-network-testnet.blockscout.com/',
-    },
-    id: '325000',
-    name: 'Camp Network testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://rpc-campnetwork.xyz/' }],
-    symbol: 'ETH',
-    testnet: true,
-  },
-  {
     alias: 'conflux-testnet',
     decimals: 18,
     explorer: {
@@ -522,45 +509,6 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'xDAI',
     testnet: false,
-  },
-  {
-    alias: 'hyperliquid-testnet',
-    decimals: 18,
-    explorer: { browserUrl: 'https://testnet.purrsec.com/' },
-    id: '998',
-    name: 'Hyperliquid testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://rpc.hyperliquid-testnet.xyz/evm' }],
-    symbol: 'HYPE',
-    testnet: true,
-  },
-  {
-    alias: 'hyperliquid',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://hyperliquid.cloud.blockscout.com/api' },
-      browserUrl: 'https://hyperliquid.cloud.blockscout.com/',
-    },
-    id: '999',
-    name: 'Hyperliquid',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.hyperliquid.xyz/evm' },
-      { alias: 'backup', rpcUrl: 'https://rpc.hypurrscan.io' },
-    ],
-    symbol: 'HYPE',
-    testnet: false,
-  },
-  {
-    alias: 'immutable-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.testnet.immutable.com/api' },
-      browserUrl: 'https://explorer.testnet.immutable.com/',
-    },
-    id: '13473',
-    name: 'Immutable zkEVM testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://rpc.testnet.immutable.com' }],
-    symbol: 'IMX',
-    testnet: true,
   },
   {
     alias: 'inevm-testnet',
