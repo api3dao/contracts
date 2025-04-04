@@ -153,7 +153,7 @@ async function validateDeployments(network: string) {
         );
       }
 
-      // Validate that Api3MarketV2 dAPI management and dAPI pricing MT hash signers are set
+      // Validate that Api3MarketV2 dAPI management, dAPI pricing and Signed API URL MT hash signers are set
       const goFetchApi3MarketV2DapiManagementMerkleRootSignersHash = await go(
         async () =>
           api3MarketV2.hashTypeToSignersHash(
