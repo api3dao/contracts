@@ -11,7 +11,11 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import { dapiManagementMerkleRootSigners, dapiPricingMerkleRootSigners } from '../data/dapi-management-metadata.json';
+import {
+  dapiManagementMerkleRootSigners,
+  dapiPricingMerkleRootSigners,
+  signedApiUrlMerkleRootSigners,
+} from '../data/dapi-management-metadata.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
 import type {
   AccessControlRegistry,
@@ -149,7 +153,7 @@ async function validateDeployments(network: string) {
         );
       }
 
-      // Validate that Api3MarketV2 dAPI management and dAPI pricing MT hash signers are set
+      // Validate that Api3MarketV2 dAPI management, dAPI pricing and Signed API URL MT hash signers are set
       const goFetchApi3MarketV2DapiManagementMerkleRootSignersHash = await go(
         async () =>
           api3MarketV2.hashTypeToSignersHash(
@@ -191,6 +195,28 @@ async function validateDeployments(network: string) {
         ethers.solidityPackedKeccak256(['address[]'], [dapiPricingMerkleRootSigners])
       ) {
         throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are set incorrectly`);
+      }
+      const goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash = await go(
+        async () =>
+          api3MarketV2.hashTypeToSignersHash(
+            ethers.solidityPackedKeccak256(['string'], ['Signed API URL Merkle root'])
+          ),
+        goAsyncOptions
+      );
+      if (
+        !goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.success ||
+        !goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data
+      ) {
+        throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers hash could not be fetched`);
+      }
+      if (goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data === ethers.ZeroHash) {
+        throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers are not set`);
+      }
+      if (
+        goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data !==
+        ethers.solidityPackedKeccak256(['address[]'], [signedApiUrlMerkleRootSigners])
+      ) {
+        throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers are set incorrectly`);
       }
 
       // Validate that Api3MarketV2 is a dAPI name setter
