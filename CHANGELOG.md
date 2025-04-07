@@ -1,5 +1,20 @@
 # @api3/contracts
 
+## 20.0.0
+
+### Major Changes
+
+- b295ca8: Remove support from the following chains:
+
+  - camp-sepolia-testnet
+  - hyperliquid-testnet
+  - hyperliquid
+  - immutable-sepolia-testnet
+
+### Minor Changes
+
+- 1d5b61b: Export dAPI management metadata
+
 ## 19.1.0
 
 ### Minor Changes
