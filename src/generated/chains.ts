@@ -785,11 +785,11 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'mega-testnet',
+    alias: 'megaeth-testnet',
     decimals: 18,
     explorer: { browserUrl: 'https://www.megaexplorer.xyz/' },
     id: '6342',
-    name: 'MEGA testnet',
+    name: 'MegaETH testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://carrot.megaeth.com/rpc' }],
     symbol: 'ETH',
     testnet: true,
