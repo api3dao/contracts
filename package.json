@@ -89,7 +89,7 @@
     "eslint": "^8.57.1",
     "glob": "^11.0.1",
     "hardhat": "^2.22.19",
-    "hardhat-deploy": "^0.14.1",
+    "hardhat-deploy": "0.14.0",
     "hardhat-gas-reporter": "^2.2.2",
     "jest": "^29.7.0",
     "prettier": "^3.5.3",
