@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 20.1.0
+
+### Minor Changes
+
+- 3b95181: Add dAPI and Market support to megaeth-testnet
+
 ## 20.0.0
 
 ### Major Changes
