@@ -1,7 +1,6 @@
 {
-    "aliases": {
-      "segment-finance": { "chains": ["bob"], "title": "Segment Finance" }
-    },
-    "homepageUrl": "https://www.segment.finance/"
+  "aliases": {
+    "segment-finance": { "chains": ["bob"], "title": "Segment Finance" }
+  },
+  "homepageUrl": "https://www.segment.finance/"
 }
-  
