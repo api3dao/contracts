@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 20.2.0
+
+### Minor Changes
+
+- 091caa2: Add the dApps nerite and segment-finance
+- 091caa2: Add the chain sonic to the dApp dtrinity
+
 ## 20.1.0
 
 ### Minor Changes
