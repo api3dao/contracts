@@ -39,6 +39,16 @@ export const DAPPS: Dapp[] = [
     aliases: { 'segment-finance': { chains: ['bob'], title: 'Segment Finance' } },
     homepageUrl: 'https://www.segment.finance/',
   },
+  {
+    aliases: {
+      'silo-finance-v1-rdnt': {
+        chains: ['arbitrum'],
+        title: 'Silo Finance RDNT market',
+        description: 'Only to be used for the RDNT market.',
+      },
+    },
+    homepageUrl: 'https://app.silo.finance/',
+  },
   { aliases: { stout: { chains: ['sonic'], title: 'Stout' } }, homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
   {
