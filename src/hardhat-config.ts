@@ -40,7 +40,7 @@ export function etherscan(): HardhatEtherscanConfig {
       const apiKey = chain.explorer.api.key;
 
       const apiKeyEnvName = etherscanApiKeyName(chain);
-      const apiKeyValue = apiKey.required ? process.env[apiKeyEnvName] ?? 'NOT_FOUND' : 'DUMMY_VALUE';
+      const apiKeyValue = apiKey.required ? (process.env[apiKeyEnvName] ?? 'NOT_FOUND') : 'DUMMY_VALUE';
 
       if (apiKey.hardhatEtherscanAlias) {
         etherscan.apiKey[apiKey.hardhatEtherscanAlias] = apiKeyValue;
