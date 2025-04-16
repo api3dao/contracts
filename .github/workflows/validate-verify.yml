@@ -31,11 +31,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+        id: build
 
       - name: Validate deployments
         run: pnpm validate-deployments
-        if: always()
+        if: steps.build.outcome == 'success'
 
       - name: Verify deployments
         run: pnpm verify-deployments
-        if: always()
+        if: steps.build.outcome == 'success'
