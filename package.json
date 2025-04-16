@@ -32,10 +32,11 @@
     "api3-contracts": "./dist/bin/cli.js"
   },
   "scripts": {
-    "build": "pnpm build:hardhat && pnpm generate && pnpm check && tsc -p tsconfig.build.json",
+    "build": "pnpm check && pnpm build:hardhat && pnpm generate && tsc -p tsconfig.build.json",
     "build:hardhat": "hardhat --config hardhat.build.config.ts compile",
-    "check": "pnpm check:chains && pnpm check:deployment-addresses && pnpm check:deployment-config && pnpm check:chain-support-order",
+    "check": "pnpm check:chains && pnpm check:dapps && pnpm check:deployment-addresses && pnpm check:deployment-config && pnpm check:chain-support-order",
     "check:chains": "ts-node scripts/check-chains.ts",
+    "check:dapps": "ts-node scripts/check-dapps.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
     "check:deployment-config": "ts-node scripts/check-deployment-config.ts",
     "check:chain-support-order": "ts-node scripts/check-chain-support-order.ts",

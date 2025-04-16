@@ -20,7 +20,7 @@ export const DAPPS: Dapp[] = [
     },
     homepageUrl: 'https://compound.finance/',
   },
-  { aliases: { dtrinity: { chains: ['fraxtal'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
+  { aliases: { dtrinity: { chains: ['fraxtal', 'sonic'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
   { aliases: { elara: { chains: ['zircuit'], title: 'Elara' } }, homepageUrl: 'https://app.elara.finance/' },
   { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://www.enclabs.finance/' },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
@@ -32,8 +32,13 @@ export const DAPPS: Dapp[] = [
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
   { aliases: { 'mach-finance': { chains: ['sonic'], title: 'MachFi' } }, homepageUrl: 'https://www.machfi.xyz/' },
   { aliases: { moonwell: { chains: ['moonbeam'], title: 'Moonwell' } }, homepageUrl: 'https://moonwell.fi/' },
+  { aliases: { nerite: { chains: ['arbitrum'], title: 'Nerite' } }, homepageUrl: 'https://www.nerite.org/' },
   { aliases: { omega: { chains: ['mantle'], title: 'Omega' } }, homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
+  {
+    aliases: { 'segment-finance': { chains: ['bob'], title: 'Segment Finance' } },
+    homepageUrl: 'https://www.segment.finance/',
+  },
   {
     aliases: {
       'silo-finance-v1-rdnt': {

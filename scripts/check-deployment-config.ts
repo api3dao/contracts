@@ -4,7 +4,7 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../data/chain-support.json';
-import { CHAINS } from '../src/index';
+import { CHAINS } from '../src/generated/chains';
 
 function main() {
   const chainAliases = new Set(CHAINS.map((chain) => chain.alias));
