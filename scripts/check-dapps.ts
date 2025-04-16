@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { DAPPS, dappSchema, type Dapp } from '../src';
+import { DAPPS } from '../src/generated/dapps';
+import { dappSchema, type Dapp } from '../src/types';
 import { deepEqual } from '../src/utils/deep-equal';
 import { toLowerKebabCase } from '../src/utils/strings';
 

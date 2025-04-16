@@ -2,7 +2,6 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import type { AddressLike } from 'ethers';
-import { config } from 'hardhat';
 
 import {
   chainsSupportedByManagerMultisig,
@@ -10,6 +9,7 @@ import {
   chainsSupportedByMarket,
   chainsSupportedByOevAuctions,
 } from '../../data/chain-support.json';
+import { CHAINS } from '../../src/generated/chains';
 
 function getDeploymentAddresses() {
   const references: Record<string, Record<string, AddressLike>> = {
@@ -31,7 +31,7 @@ function getDeploymentAddresses() {
   ]);
 
   for (const network of networks) {
-    const chainId = config.networks[network]!.chainId!;
+    const chainId = CHAINS.find((chain) => chain.alias === network)?.id;
     const contractNames = [
       ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
       ...(chainsSupportedByDapis.includes(network)
@@ -42,7 +42,7 @@ function getDeploymentAddresses() {
     ];
     for (const contractName of contractNames) {
       const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
-      references[contractName] = { ...references[contractName], [chainId]: deployment.address };
+      references[contractName] = { ...references[contractName], [chainId!]: deployment.address };
     }
   }
   return `${JSON.stringify(references, null, 2)}\n`;
