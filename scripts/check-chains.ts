@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { CHAINS } from '../src/generated/chains';
-import { chainSchema } from '../src/types';
+import { type Chain, chainSchema } from '../src/types';
 import { deepEqual } from '../src/utils/deep-equal';
 
 const INPUT_DIR = path.join('data', 'chains');
@@ -10,34 +10,47 @@ const INPUT_DIR = path.join('data', 'chains');
 const fileNames = fs.readdirSync(INPUT_DIR);
 const jsonFiles = fileNames.filter((fileName) => fileName.endsWith('.json'));
 
-const jsonChains: any[] = jsonFiles.map((filePath: string) => {
-  const fullPath = path.join(INPUT_DIR, filePath);
-  const fileContentRaw = fs.readFileSync(fullPath, 'utf8');
-  return JSON.parse(fileContentRaw);
-});
-
 const logs: string[] = [];
 
-// Validation: Ensure that each JSON file is represented in the CHAINS array
-if (CHAINS.length !== jsonChains.length) {
-  logs.push(
-    'Generated chains differs in length to the number of JSON files',
-    `Generated CHAINS length = ${CHAINS.length}. Expected ${jsonChains.length} chains\n`
-  );
-}
+const jsonChains: Chain[] = jsonFiles.map((filePath: string) => {
+  const fullPath = path.join(INPUT_DIR, filePath);
+  const fileContentRaw = fs.readFileSync(fullPath, 'utf8');
+  const chain = JSON.parse(fileContentRaw);
 
-// Validation: Ensure that each JSON file is named using the chain's alias
-jsonFiles.forEach((filePath: string, index: number) => {
-  const chain = jsonChains[index]!;
-  if (filePath.replace('.json', '') !== chain.alias) {
+  // Validation: Ensure that each JSON file is named using the chain's alias
+  const fileAlias = filePath.replace('.json', '');
+  if (fileAlias !== chain.alias) {
     logs.push(
       "JSON file name must match the chain's alias",
       `Current value: ${filePath}. Expected: ${chain.alias}.json\n`
     );
   }
+
+  return chain;
 });
 
-jsonChains.forEach((chain: any, index: number) => {
+// Lookup by alias
+const chainsMap = new Map(CHAINS.map((chain) => [chain.alias, chain]));
+const jsonChainsMap = new Map(jsonChains.map((chain) => [chain.alias, chain]));
+
+// Validation: Ensure that each JSON file is represented in the CHAINS array
+if (CHAINS.length !== jsonChains.length) {
+  const chainAliases = new Set(chainsMap.keys());
+  const jsonAliases = new Set(jsonChainsMap.keys());
+
+  const missingInChains = [...jsonAliases].filter((alias) => !chainAliases.has(alias));
+  const missingInJson = [...chainAliases].filter((alias) => !jsonAliases.has(alias));
+
+  logs.push(
+    'Generated chains differs in length to the number of JSON files',
+    `Generated CHAINS length = ${CHAINS.length}. Expected ${jsonChains.length} chains`,
+    missingInChains.length > 0 ? `Missing in CHAINS: ${missingInChains.join(', ')}` : '',
+    missingInJson.length > 0 ? `Missing in JSON files: ${missingInJson.join(', ')}` : '',
+    '\n'
+  );
+}
+
+jsonChains.forEach((chain: Chain) => {
   const res = chainSchema.safeParse(chain);
   // Validation: Ensure each JSON file content conforms to the required schema
   if (!res.success) {
@@ -48,8 +61,8 @@ jsonChains.forEach((chain: any, index: number) => {
   }
 
   // Validation: Ensure that the latest JSON content is represented in each Chain object
-  const existingChain = CHAINS[index];
-  if (!deepEqual(chain, existingChain)) {
+  const existingChain = chainsMap.get(chain.alias);
+  if (existingChain && !deepEqual(chain, existingChain)) {
     logs.push(`Chain '${chain.name}' differs to the currently generated Chain object in CHAINS\n`);
   }
 });
