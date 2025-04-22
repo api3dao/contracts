@@ -36,20 +36,22 @@ const dappsMap = new Map(DAPPS.map((dapp) => [Object.keys(dapp.aliases)[0], dapp
 const jsonDappsMap = new Map(jsonDapps.map((dapp) => [Object.keys(dapp.aliases)[0], dapp]));
 
 // Validation: Ensure that each JSON file is represented in the DAPPS array
+const dappNames = new Set(dappsMap.keys());
+const jsonNames = new Set(jsonDappsMap.keys());
 if (DAPPS.length !== jsonDapps.length) {
-  const dappNames = new Set(dappsMap.keys());
-  const jsonNames = new Set(jsonDappsMap.keys());
-
-  const missingInDapps = [...jsonNames].filter((name) => !dappNames.has(name));
-  const missingInJson = [...dappNames].filter((name) => !jsonNames.has(name));
-
   logs.push(
     'Generated dapps differs in length to the number of JSON files',
-    `Generated DAPPS length = ${DAPPS.length}. Expected ${jsonDapps.length} dApps`,
-    missingInDapps.length > 0 ? `Missing in DAPPS: ${missingInDapps.join(', ')}` : '',
-    missingInJson.length > 0 ? `Missing in JSON files: ${missingInJson.join(', ')}` : '',
-    '\n'
+    `Generated DAPPS length = ${DAPPS.length}. Expected ${jsonDapps.length} dApps\n`
   );
+}
+
+const missingInDapps = [...jsonNames].filter((name) => !dappNames.has(name));
+if (missingInDapps.length > 0) {
+  logs.push(`Missing in DAPPS: ${missingInDapps.join(', ')}\n`);
+}
+const missingInJson = [...dappNames].filter((name) => !jsonNames.has(name));
+if (missingInJson.length > 0) {
+  logs.push(`Missing in JSON files: ${missingInJson.join(', ')}\n`);
 }
 
 jsonDapps.forEach((dapp: Dapp) => {

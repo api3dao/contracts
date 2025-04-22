@@ -34,20 +34,22 @@ const chainsMap = new Map(CHAINS.map((chain) => [chain.alias, chain]));
 const jsonChainsMap = new Map(jsonChains.map((chain) => [chain.alias, chain]));
 
 // Validation: Ensure that each JSON file is represented in the CHAINS array
+const chainAliases = new Set(chainsMap.keys());
+const jsonAliases = new Set(jsonChainsMap.keys());
 if (CHAINS.length !== jsonChains.length) {
-  const chainAliases = new Set(chainsMap.keys());
-  const jsonAliases = new Set(jsonChainsMap.keys());
-
-  const missingInChains = [...jsonAliases].filter((alias) => !chainAliases.has(alias));
-  const missingInJson = [...chainAliases].filter((alias) => !jsonAliases.has(alias));
-
   logs.push(
     'Generated chains differs in length to the number of JSON files',
-    `Generated CHAINS length = ${CHAINS.length}. Expected ${jsonChains.length} chains`,
-    missingInChains.length > 0 ? `Missing in CHAINS: ${missingInChains.join(', ')}` : '',
-    missingInJson.length > 0 ? `Missing in JSON files: ${missingInJson.join(', ')}` : '',
-    '\n'
+    `Generated CHAINS length = ${CHAINS.length}. Expected ${jsonChains.length} chains\n`
   );
+}
+
+const missingInChains = [...jsonAliases].filter((alias) => !chainAliases.has(alias));
+if (missingInChains.length > 0) {
+  logs.push(`Missing in CHAINS: ${missingInChains.join(', ')}\n`);
+}
+const missingInJson = [...chainAliases].filter((alias) => !jsonAliases.has(alias));
+if (missingInJson.length > 0) {
+  logs.push(`Missing in JSON files: ${missingInJson.join(', ')}\n`);
 }
 
 jsonChains.forEach((chain: Chain) => {
