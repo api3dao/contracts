@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "malda": { "chains": ["linea"], "title": "Malda" }
+  },
+  "homepageUrl": "https://malda.xyz/"
+}
