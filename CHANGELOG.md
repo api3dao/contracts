@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 20.3.0
+
+### Minor Changes
+
+- 7a9fdef: Add Malda on Linea to dApp details
+
 ## 20.2.0
 
 ### Minor Changes
