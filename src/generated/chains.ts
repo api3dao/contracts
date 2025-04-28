@@ -469,7 +469,7 @@ export const CHAINS: Chain[] = [
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
     ],
-    symbol: 'ETH',
+    symbol: 'FXS',
     testnet: false,
   },
   {
