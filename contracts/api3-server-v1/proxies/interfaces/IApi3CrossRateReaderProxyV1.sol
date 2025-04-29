@@ -14,8 +14,6 @@ interface IApi3CrossRateReaderProxyV1 is IApi3ReaderProxy {
 
     error ProxyReturnedZero(address proxy);
 
-    error ValueOutOfRange(int256 value);
-
     function initialize(address initialOwner) external;
 
     function proxy1() external returns (address);
