@@ -10,8 +10,7 @@ import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevEx
 // See Api3CrossRateReaderProxyV1Factory tests for the upgrade flow
 describe('Api3CrossRateReaderProxyV1', function () {
   enum CalculationType {
-    Divide1By2,
-    Divide2By1,
+    Divide,
     Multiply,
   }
 
@@ -97,7 +96,7 @@ describe('Api3CrossRateReaderProxyV1', function () {
     const api3CrossRateReaderProxyV1EthSol = await api3CrossRateReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
       api3CrossRateReaderProxyV1SolUsd.getAddress(),
-      CalculationType.Divide1By2,
+      CalculationType.Divide,
       ethers.encodeBytes32String('ETH/SOL')
     );
 
@@ -156,8 +155,8 @@ describe('Api3CrossRateReaderProxyV1', function () {
     );
 
     return {
-      api3CrossRateReaderProxyV1SolUsd,
       api3CrossRateReaderProxyV1EthSol,
+      api3CrossRateReaderProxyV1SolUsd,
       api3ReaderProxyV1EthUsd,
       api3ReaderProxyV1SolEth,
       api3ServerV1,
@@ -196,7 +195,7 @@ describe('Api3CrossRateReaderProxyV1', function () {
       expect(await api3CrossRateReaderProxyV1EthSol.proxy2()).to.equal(
         await api3CrossRateReaderProxyV1SolUsd.getAddress()
       );
-      expect(await api3CrossRateReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide1By2);
+      expect(await api3CrossRateReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
       expect(await api3CrossRateReaderProxyV1EthSol.crossRateDapiName()).to.equal(
         ethers.encodeBytes32String('ETH/SOL')
       );
@@ -254,15 +253,10 @@ describe('Api3CrossRateReaderProxyV1', function () {
         expect(dataFeed.timestamp).to.equal(baseBeaconTimestampEthUsd); // Returns the oldest timestamp
       });
     });
-    context('proxy calculation type is Divide1By2 and underlying returns zero', function () {
+    context('proxy calculation type is Divide and underlying returns zero', function () {
       it('reverts', async function () {
-        const {
-          api3CrossRateReaderProxyV1SolUsd,
-          api3CrossRateReaderProxyV1EthSol,
-          api3ServerV1,
-          roles,
-          templateIdEthUsd,
-        } = await helpers.loadFixture(deploy);
+        const { api3CrossRateReaderProxyV1EthSol, api3ServerV1, roles, templateIdEthUsd } =
+          await helpers.loadFixture(deploy);
 
         const baseBeaconTimestampEthUsd = await helpers.time.latest();
         const dataEthUsd = ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [0n]);
@@ -281,8 +275,8 @@ describe('Api3CrossRateReaderProxyV1', function () {
         );
 
         await expect(api3CrossRateReaderProxyV1EthSol.read())
-          .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1EthSol, 'ProxyReturnedZero')
-          .withArgs(await api3CrossRateReaderProxyV1SolUsd.getAddress());
+          .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1EthSol, 'ZeroDenominator')
+          .withArgs();
       });
     });
   });

@@ -5,14 +5,13 @@ import "../../../interfaces/IApi3ReaderProxy.sol";
 
 interface IApi3CrossRateReaderProxyV1 is IApi3ReaderProxy {
     enum CalculationType {
-        Divide1By2,
-        Divide2By1,
+        Divide,
         Multiply
     }
 
     error FunctionIsNotSupported();
 
-    error ProxyReturnedZero(address proxy);
+    error ZeroDenominator();
 
     function initialize(address initialOwner) external;
 

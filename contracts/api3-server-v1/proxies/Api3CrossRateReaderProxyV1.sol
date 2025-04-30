@@ -85,12 +85,9 @@ contract Api3CrossRateReaderProxyV1 is
         int256 val2 = int256(value2);
         int256 crossRate;
 
-        if (calculationType == CalculationType.Divide1By2) {
-            if (val2 == 0) revert ProxyReturnedZero(proxy2);
+        if (calculationType == CalculationType.Divide) {
+            if (val2 == 0) revert ZeroDenominator();
             crossRate = (val1 * 1e18) / val2;
-        } else if (calculationType == CalculationType.Divide2By1) {
-            if (val1 == 0) revert ProxyReturnedZero(proxy1);
-            crossRate = (val2 * 1e18) / val1;
         } else if (calculationType == CalculationType.Multiply) {
             crossRate = (val1 * val2) / 1e18;
         }
