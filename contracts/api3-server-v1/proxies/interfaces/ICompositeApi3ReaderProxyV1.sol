@@ -13,8 +13,6 @@ interface ICompositeApi3ReaderProxyV1 is IApi3ReaderProxy {
 
     error ZeroDenominator();
 
-    function initialize(address initialOwner) external;
-
     function proxy1() external returns (address);
 
     function proxy2() external returns (address);

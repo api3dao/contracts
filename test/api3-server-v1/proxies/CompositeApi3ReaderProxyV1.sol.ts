@@ -181,25 +181,14 @@ describe('CompositeApi3ReaderProxyV1', function () {
         api3ReaderProxyV1EthUsd,
         api3ReaderProxyV1SolEth,
       } = await helpers.loadFixture(deploy);
-      expect(await compositeApi3ReaderProxyV1SolUsd.owner()).to.equal(ethers.ZeroAddress);
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
       expect(await compositeApi3ReaderProxyV1SolUsd.calculationType()).to.equal(CalculationType.Multiply);
-      expect(await compositeApi3ReaderProxyV1EthSol.owner()).to.equal(ethers.ZeroAddress);
       expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
         await compositeApi3ReaderProxyV1SolUsd.getAddress()
       );
       expect(await compositeApi3ReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
-    });
-  });
-
-  describe('initialize', function () {
-    it('reverts', async function () {
-      const { roles, compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      await expect(compositeApi3ReaderProxyV1SolUsd.initialize(roles.owner!.address))
-        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'InvalidInitialization')
-        .withArgs();
     });
   });
 

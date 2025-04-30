@@ -1,28 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
-import "../../vendor/@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
-/// @title UUPS-upgradeable ICompositeApi3ReaderProxyV1 and
-/// AggregatorV2V3Interface implementation that is designed to be deployed by
-/// CompositeApi3ReaderProxyV1Factory
-/// @notice The owner of this contract is allowed to upgrade it. In the case that
-/// it is deployed by CompositeApi3ReaderProxyV1Factory, the owner will be the
-/// owner of CompositeApi3ReaderProxyV1Factory at the time of deployment.
-/// @dev For a gas-cheap `read()` implementation, this upgradeable contract uses
-/// immutable variables (rather than initializable ones). To enable this, a
-/// CompositeApi3ReaderProxyV1 needs to be deployed for each unique combination
-/// of variables. The end user does not need to concern themselves with this, as
-/// CompositeApi3ReaderProxyV1Factory abstracts this detail away.
+/// @title An immutable proxy contract that is used to read a composite data feed
+/// calculated from two IApi3ReaderProxy data feeds
+/// @notice For deterministic deployment, use the CompositeApi3ReaderProxyV1Factory
+/// contract. The constructor arguments are validated by the factory, rather
+/// than internally. If you intend to deploy this contract without using the
+/// factory, you are recommended to implement an equivalent validation.
+/// @dev This contract implements the AggregatorV2V3Interface to be compatible with
+/// Chainlink aggregators. This allows the contract to be used as a drop-in
+/// replacement for Chainlink aggregators in existing dApps.
 /// Refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more
 /// information about the Chainlink interface implementation.
 contract CompositeApi3ReaderProxyV1 is
-    UUPSUpgradeable,
-    OwnableUpgradeable,
     AggregatorV2V3Interface,
     ICompositeApi3ReaderProxyV1
 {
@@ -47,13 +41,6 @@ contract CompositeApi3ReaderProxyV1 is
         proxy1 = proxy1_;
         proxy2 = proxy2_;
         calculationType = calculationType_;
-        _disableInitializers();
-    }
-
-    /// @notice Initializes the contract with the initial owner
-    /// @param initialOwner Initial owner
-    function initialize(address initialOwner) external override initializer {
-        __Ownable_init(initialOwner);
     }
 
     /// @notice Returns the current value and timestamp of the rate composition
@@ -173,10 +160,4 @@ contract CompositeApi3ReaderProxyV1 is
         (answer, startedAt) = read();
         updatedAt = startedAt;
     }
-
-    /// @param newImplementation New implementation contract address
-    /// @dev Only the owner can upgrade this contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal virtual override onlyOwner {}
 }
