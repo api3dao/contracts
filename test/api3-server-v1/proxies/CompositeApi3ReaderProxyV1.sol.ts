@@ -211,11 +211,10 @@ describe('CompositeApi3ReaderProxyV1', function () {
           api3ServerV1OevExtensionOevBidPayer,
           compositeApi3ReaderProxyV1SolUsd,
           dappId,
-          baseBeaconValueEthUsd,
-          baseBeaconTimestampEthUsd,
-          templateIdSolEth,
-          baseBeaconValueSolEth,
           baseBeaconTimestampSolEth,
+          baseBeaconValueEthUsd,
+          baseBeaconValueSolEth,
+          templateIdSolEth,
         } = await helpers.loadFixture(deploy);
         const oevBeaconValueSolEth = (baseBeaconValueSolEth * 101n) / 100n; // 1% increase
         const oevBeaconTimestampSolEth = baseBeaconTimestampSolEth + 1;
@@ -242,7 +241,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
         await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
         const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
         expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
-        expect(dataFeed.timestamp).to.equal(baseBeaconTimestampEthUsd); // Returns the oldest timestamp
+        expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
       });
     });
     context('proxy calculation type is Divide and underlying returns zero', function () {

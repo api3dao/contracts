@@ -70,8 +70,8 @@ contract CompositeApi3ReaderProxyV1 is
         override
         returns (int224 value, uint32 timestamp)
     {
-        (int224 value1, uint32 timestamp1) = IApi3ReaderProxy(proxy1).read();
-        (int224 value2, uint32 timestamp2) = IApi3ReaderProxy(proxy2).read();
+        (int224 value1, ) = IApi3ReaderProxy(proxy1).read();
+        (int224 value2, ) = IApi3ReaderProxy(proxy2).read();
 
         int256 val1 = int256(value1);
         int256 val2 = int256(value2);
@@ -85,7 +85,7 @@ contract CompositeApi3ReaderProxyV1 is
         }
 
         value = int224(compositeValue);
-        timestamp = timestamp1 < timestamp2 ? timestamp1 : timestamp2;
+        timestamp = uint32(block.timestamp);
     }
 
     /// @dev AggregatorV2V3Interface users are already responsible with
