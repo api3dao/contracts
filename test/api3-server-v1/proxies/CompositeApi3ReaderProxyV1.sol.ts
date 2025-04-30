@@ -7,8 +7,8 @@ import * as testUtils from '../../test-utils';
 import { encodeData } from '../Api3ServerV1.sol';
 import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevExtension.sol';
 
-// See Api3CrossRateReaderProxyV1Factory tests for the upgrade flow
-describe('Api3CrossRateReaderProxyV1', function () {
+// See CompositeApi3ReaderProxyV1Factory tests for the upgrade flow
+describe('CompositeApi3ReaderProxyV1', function () {
   enum CalculationType {
     Divide,
     Multiply,
@@ -81,21 +81,21 @@ describe('Api3CrossRateReaderProxyV1', function () {
       dappId
     );
 
-    const api3CrossRateReaderProxyV1Factory = await ethers.getContractFactory(
-      'Api3CrossRateReaderProxyV1',
+    const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
+      'CompositeApi3ReaderProxyV1',
       roles.deployer
     );
 
-    const api3CrossRateReaderProxyV1SolUsd = await api3CrossRateReaderProxyV1Factory.deploy(
+    const compositeApi3ReaderProxyV1SolUsd = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
       api3ReaderProxyV1SolEth.getAddress(),
       CalculationType.Multiply,
       ethers.encodeBytes32String('SOL/USD')
     );
 
-    const api3CrossRateReaderProxyV1EthSol = await api3CrossRateReaderProxyV1Factory.deploy(
+    const compositeApi3ReaderProxyV1EthSol = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      api3CrossRateReaderProxyV1SolUsd.getAddress(),
+      compositeApi3ReaderProxyV1SolUsd.getAddress(),
       CalculationType.Divide,
       ethers.encodeBytes32String('ETH/SOL')
     );
@@ -155,8 +155,6 @@ describe('Api3CrossRateReaderProxyV1', function () {
     );
 
     return {
-      api3CrossRateReaderProxyV1EthSol,
-      api3CrossRateReaderProxyV1SolUsd,
       api3ReaderProxyV1EthUsd,
       api3ReaderProxyV1SolEth,
       api3ServerV1,
@@ -166,6 +164,8 @@ describe('Api3CrossRateReaderProxyV1', function () {
       baseBeaconTimestampSolEth,
       baseBeaconValueEthUsd,
       baseBeaconValueSolEth,
+      compositeApi3ReaderProxyV1EthSol,
+      compositeApi3ReaderProxyV1SolUsd,
       dapiNameEthUsd,
       dapiNameSolEth,
       dappId,
@@ -178,25 +178,25 @@ describe('Api3CrossRateReaderProxyV1', function () {
   describe('constructor', function () {
     it('constructs', async function () {
       const {
-        api3CrossRateReaderProxyV1SolUsd,
-        api3CrossRateReaderProxyV1EthSol,
+        compositeApi3ReaderProxyV1SolUsd,
+        compositeApi3ReaderProxyV1EthSol,
         api3ReaderProxyV1EthUsd,
         api3ReaderProxyV1SolEth,
       } = await helpers.loadFixture(deploy);
-      expect(await api3CrossRateReaderProxyV1SolUsd.owner()).to.equal(ethers.ZeroAddress);
-      expect(await api3CrossRateReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
-      expect(await api3CrossRateReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
-      expect(await api3CrossRateReaderProxyV1SolUsd.calculationType()).to.equal(CalculationType.Multiply);
-      expect(await api3CrossRateReaderProxyV1SolUsd.crossRateDapiName()).to.equal(
+      expect(await compositeApi3ReaderProxyV1SolUsd.owner()).to.equal(ethers.ZeroAddress);
+      expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
+      expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
+      expect(await compositeApi3ReaderProxyV1SolUsd.calculationType()).to.equal(CalculationType.Multiply);
+      expect(await compositeApi3ReaderProxyV1SolUsd.crossRateDapiName()).to.equal(
         ethers.encodeBytes32String('SOL/USD')
       );
-      expect(await api3CrossRateReaderProxyV1EthSol.owner()).to.equal(ethers.ZeroAddress);
-      expect(await api3CrossRateReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
-      expect(await api3CrossRateReaderProxyV1EthSol.proxy2()).to.equal(
-        await api3CrossRateReaderProxyV1SolUsd.getAddress()
+      expect(await compositeApi3ReaderProxyV1EthSol.owner()).to.equal(ethers.ZeroAddress);
+      expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
+      expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
+        await compositeApi3ReaderProxyV1SolUsd.getAddress()
       );
-      expect(await api3CrossRateReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
-      expect(await api3CrossRateReaderProxyV1EthSol.crossRateDapiName()).to.equal(
+      expect(await compositeApi3ReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
+      expect(await compositeApi3ReaderProxyV1EthSol.crossRateDapiName()).to.equal(
         ethers.encodeBytes32String('ETH/SOL')
       );
     });
@@ -204,20 +204,20 @@ describe('Api3CrossRateReaderProxyV1', function () {
 
   describe('initialize', function () {
     it('reverts', async function () {
-      const { roles, api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      await expect(api3CrossRateReaderProxyV1SolUsd.initialize(roles.owner!.address))
-        .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1SolUsd, 'InvalidInitialization')
+      const { roles, compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      await expect(compositeApi3ReaderProxyV1SolUsd.initialize(roles.owner!.address))
+        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'InvalidInitialization')
         .withArgs();
     });
   });
 
   describe('read', function () {
     context('proxy calculation type is Multiply or underlying do not return zero', function () {
-      it('reads cross rate feed', async function () {
+      it('reads composite rate feed', async function () {
         const {
           roles,
           api3ServerV1OevExtensionOevBidPayer,
-          api3CrossRateReaderProxyV1SolUsd,
+          compositeApi3ReaderProxyV1SolUsd,
           dappId,
           baseBeaconValueEthUsd,
           baseBeaconTimestampEthUsd,
@@ -248,14 +248,14 @@ describe('Api3CrossRateReaderProxyV1', function () {
         );
         await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
         await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
-        const dataFeed = await api3CrossRateReaderProxyV1SolUsd.read();
+        const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
         expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
         expect(dataFeed.timestamp).to.equal(baseBeaconTimestampEthUsd); // Returns the oldest timestamp
       });
     });
     context('proxy calculation type is Divide and underlying returns zero', function () {
       it('reverts', async function () {
-        const { api3CrossRateReaderProxyV1EthSol, api3ServerV1, roles, templateIdEthUsd } =
+        const { compositeApi3ReaderProxyV1EthSol, api3ServerV1, roles, templateIdEthUsd } =
           await helpers.loadFixture(deploy);
 
         const baseBeaconTimestampEthUsd = await helpers.time.latest();
@@ -274,8 +274,8 @@ describe('Api3CrossRateReaderProxyV1', function () {
           signatureEthUsd
         );
 
-        await expect(api3CrossRateReaderProxyV1EthSol.read())
-          .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1EthSol, 'ZeroDenominator')
+        await expect(compositeApi3ReaderProxyV1EthSol.read())
+          .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1EthSol, 'ZeroDenominator')
           .withArgs();
       });
     });
@@ -283,86 +283,86 @@ describe('Api3CrossRateReaderProxyV1', function () {
 
   describe('latestAnswer', function () {
     it('returns proxy value', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [value] = await api3CrossRateReaderProxyV1SolUsd.read();
-      expect(await api3CrossRateReaderProxyV1SolUsd.latestAnswer()).to.be.equal(value);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [value] = await compositeApi3ReaderProxyV1SolUsd.read();
+      expect(await compositeApi3ReaderProxyV1SolUsd.latestAnswer()).to.be.equal(value);
     });
   });
 
   describe('latestTimestamp', function () {
     it('returns proxy value', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [, timestamp] = await api3CrossRateReaderProxyV1SolUsd.read();
-      expect(await api3CrossRateReaderProxyV1SolUsd.latestTimestamp()).to.be.equal(timestamp);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [, timestamp] = await compositeApi3ReaderProxyV1SolUsd.read();
+      expect(await compositeApi3ReaderProxyV1SolUsd.latestTimestamp()).to.be.equal(timestamp);
     });
   });
 
   describe('latestRound', function () {
     it('reverts', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      await expect(api3CrossRateReaderProxyV1SolUsd.latestRound())
-        .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      await expect(compositeApi3ReaderProxyV1SolUsd.latestRound())
+        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('getAnswer', function () {
     it('reverts', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(api3CrossRateReaderProxyV1SolUsd.getAnswer(blockNumber))
-        .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(compositeApi3ReaderProxyV1SolUsd.getAnswer(blockNumber))
+        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('getTimestamp', function () {
     it('reverts', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(api3CrossRateReaderProxyV1SolUsd.getTimestamp(blockNumber))
-        .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(compositeApi3ReaderProxyV1SolUsd.getTimestamp(blockNumber))
+        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('decimals', function () {
     it('returns 18', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await api3CrossRateReaderProxyV1SolUsd.decimals()).to.equal(18);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await compositeApi3ReaderProxyV1SolUsd.decimals()).to.equal(18);
     });
   });
 
   describe('description', function () {
     it('returns empty string', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await api3CrossRateReaderProxyV1SolUsd.description()).to.equal('');
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await compositeApi3ReaderProxyV1SolUsd.description()).to.equal('');
     });
   });
 
   describe('version', function () {
     it('returns 4913', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await api3CrossRateReaderProxyV1SolUsd.version()).to.equal(4914);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await compositeApi3ReaderProxyV1SolUsd.version()).to.equal(4914);
     });
   });
 
   describe('getRoundData', function () {
     it('reverts', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(api3CrossRateReaderProxyV1SolUsd.getRoundData(blockNumber))
-        .to.be.revertedWithCustomError(api3CrossRateReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(compositeApi3ReaderProxyV1SolUsd.getRoundData(blockNumber))
+        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('latestRoundData', function () {
     it('returns approximated round data', async function () {
-      const { api3CrossRateReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [value, timestamp] = await api3CrossRateReaderProxyV1SolUsd.read();
+      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [value, timestamp] = await compositeApi3ReaderProxyV1SolUsd.read();
       const [roundId, answer, startedAt, updatedAt, answeredInRound] =
-        await api3CrossRateReaderProxyV1SolUsd.latestRoundData();
+        await compositeApi3ReaderProxyV1SolUsd.latestRoundData();
       expect(roundId).to.equal(0);
       expect(answer).to.equal(value);
       expect(startedAt).to.equal(timestamp);

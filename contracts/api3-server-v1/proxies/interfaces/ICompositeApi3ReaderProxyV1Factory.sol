@@ -1,30 +1,30 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./IApi3CrossRateReaderProxyV1.sol";
+import "./ICompositeApi3ReaderProxyV1.sol";
 
-interface IApi3CrossRateReaderProxyV1Factory {
-    event DeployedApi3CrossRateReaderProxyV1(
+interface ICompositeApi3ReaderProxyV1Factory {
+    event DeployedCompositeApi3ReaderProxyV1(
         address indexed proxy,
         address proxy1,
         address proxy2,
-        IApi3CrossRateReaderProxyV1.CalculationType calculationType,
+        ICompositeApi3ReaderProxyV1.CalculationType calculationType,
         bytes32 crossRateDapiName,
         bytes metadata
     );
 
-    function deployApi3CrossRateReaderProxyV1(
+    function deployCompositeApi3ReaderProxyV1(
         address proxy1,
         address proxy2,
-        IApi3CrossRateReaderProxyV1.CalculationType calculationType,
+        ICompositeApi3ReaderProxyV1.CalculationType calculationType,
         bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external returns (address proxy);
 
-    function computeApi3CrossRateReaderProxyV1Address(
+    function computeCompositeApi3ReaderProxyV1Address(
         address proxy1,
         address proxy2,
-        IApi3CrossRateReaderProxyV1.CalculationType calculationType,
+        ICompositeApi3ReaderProxyV1.CalculationType calculationType,
         bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external view returns (address proxy);

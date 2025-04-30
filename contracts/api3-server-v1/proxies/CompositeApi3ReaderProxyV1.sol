@@ -4,27 +4,27 @@ pragma solidity ^0.8.27;
 import "../../vendor/@openzeppelin/contracts@5.0.2/proxy/utils/UUPSUpgradeable.sol";
 import "../../vendor/@openzeppelin/contracts-upgradeable@5.0.2/access/OwnableUpgradeable.sol";
 import "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
-import "./interfaces/IApi3CrossRateReaderProxyV1.sol";
+import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
-/// @title UUPS-upgradeable IApi3CrossRateReaderProxyV1 and
+/// @title UUPS-upgradeable ICompositeApi3ReaderProxyV1 and
 /// AggregatorV2V3Interface implementation that is designed to be deployed by
-/// Api3CrossRateReaderProxyV1Factory
-/// @notice The owner of this contract is allowed to upgrade it. In the case
-/// that it is deployed by Api3CrossRateReaderProxyV1Factory, the owner will be
-/// the owner of Api3CrossRateReaderProxyV1Factory at the time of deployment.
-/// @dev For a gas-cheap `read()` implementation, this upgradeable contract
-/// uses immutable variables (rather than initializable ones). To enable this,
-/// an Api3CrossRateReaderProxyV1 needs to be deployed for each unique
-/// combination of variables. The end user does not need to concern themselves
-/// with this, as Api3CrossRateReaderProxyV1Factory abstracts this detail away.
+/// CompositeApi3ReaderProxyV1Factory
+/// @notice The owner of this contract is allowed to upgrade it. In the case that
+/// it is deployed by CompositeApi3ReaderProxyV1Factory, the owner will be the
+/// owner of CompositeApi3ReaderProxyV1Factory at the time of deployment.
+/// @dev For a gas-cheap `read()` implementation, this upgradeable contract uses
+/// immutable variables (rather than initializable ones). To enable this, a
+/// CompositeApi3ReaderProxyV1 needs to be deployed for each unique combination
+/// of variables. The end user does not need to concern themselves with this, as
+/// CompositeApi3ReaderProxyV1Factory abstracts this detail away.
 /// Refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more
 /// information about the Chainlink interface implementation.
-contract Api3CrossRateReaderProxyV1 is
+contract CompositeApi3ReaderProxyV1 is
     UUPSUpgradeable,
     OwnableUpgradeable,
     AggregatorV2V3Interface,
-    IApi3CrossRateReaderProxyV1
+    ICompositeApi3ReaderProxyV1
 {
     /// @notice First IApi3ReaderProxy contract address
     address public immutable override proxy1;
@@ -32,7 +32,7 @@ contract Api3CrossRateReaderProxyV1 is
     /// @notice Second IApi3ReaderProxy contract address
     address public immutable override proxy2;
 
-    /// @notice Calculation type to be used for the cross rate
+    /// @notice Calculation type to be used for the rate composition
     CalculationType public immutable override calculationType;
 
     /// @notice Derived dAPI name of the cross rate as a bytes32 string
@@ -41,10 +41,10 @@ contract Api3CrossRateReaderProxyV1 is
     /// purposes and is not used in any calculations
     bytes32 public immutable override crossRateDapiName;
 
-    /// @dev Parameters are validated by Api3CrossRateReaderProxyV1Factory
+    /// @dev Parameters are validated by CompositeApi3ReaderProxyV1Factory
     /// @param proxy1_ First IApi3ReaderProxy contract address
     /// @param proxy2_ Second IApi3ReaderProxy contract address
-    /// @param calculationType_ Calculation type to be used for the cross rate
+    /// @param calculationType_ Calculation type to be used for the rate composition
     /// @param crossRateDapiName_ dAPI name of the cross rate as a bytes32 string
     constructor(
         address proxy1_,
@@ -65,12 +65,13 @@ contract Api3CrossRateReaderProxyV1 is
         __Ownable_init(initialOwner);
     }
 
-    /// @notice Returns the current value and timestamp of the cross rate between
-    /// two API3 data feeds associated with the two IApi3ReaderProxy contracts
+    /// @notice Returns the current value and timestamp of the rate composition
+    /// between two API3 data feeds associated with the two IApi3ReaderProxy
+    /// contracts
     /// @dev The value is calculated based on the calculation type and the
     /// timestamp is the earliest of the two timestamps to ensure that the data
     /// is not stale
-    /// @return value Cross rate between the two data feed values
+    /// @return value Value of the rate composition
     /// @return timestamp Timestamp of the oldest data feed update
     function read()
         public
@@ -83,16 +84,16 @@ contract Api3CrossRateReaderProxyV1 is
 
         int256 val1 = int256(value1);
         int256 val2 = int256(value2);
-        int256 crossRate;
+        int256 compositeValue;
 
         if (calculationType == CalculationType.Divide) {
             if (val2 == 0) revert ZeroDenominator();
-            crossRate = (val1 * 1e18) / val2;
+            compositeValue = (val1 * 1e18) / val2;
         } else if (calculationType == CalculationType.Multiply) {
-            crossRate = (val1 * val2) / 1e18;
+            compositeValue = (val1 * val2) / 1e18;
         }
 
-        value = int224(crossRate);
+        value = int224(compositeValue);
         timestamp = timestamp1 < timestamp2 ? timestamp1 : timestamp2;
     }
 
@@ -145,7 +146,7 @@ contract Api3CrossRateReaderProxyV1 is
     }
 
     /// @dev A unique version is chosen to easily check if an unverified
-    /// contract that acts as a Chainlink feed is an Api3CrossRateReaderProxyV1
+    /// contract that acts as a Chainlink feed is an CompositeApi3ReaderProxyV1
     function version() external pure override returns (uint256) {
         return 4914;
     }

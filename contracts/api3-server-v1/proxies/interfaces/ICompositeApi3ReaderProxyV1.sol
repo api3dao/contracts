@@ -3,7 +3,7 @@ pragma solidity ^0.8.4;
 
 import "../../../interfaces/IApi3ReaderProxy.sol";
 
-interface IApi3CrossRateReaderProxyV1 is IApi3ReaderProxy {
+interface ICompositeApi3ReaderProxyV1 is IApi3ReaderProxy {
     enum CalculationType {
         Divide,
         Multiply
