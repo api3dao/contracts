@@ -20,6 +20,4 @@ interface ICompositeApi3ReaderProxyV1 is IApi3ReaderProxy {
     function proxy2() external returns (address);
 
     function calculationType() external returns (CalculationType);
-
-    function crossRateDapiName() external returns (bytes32);
 }

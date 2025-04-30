@@ -89,15 +89,13 @@ describe('CompositeApi3ReaderProxyV1', function () {
     const compositeApi3ReaderProxyV1SolUsd = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
       api3ReaderProxyV1SolEth.getAddress(),
-      CalculationType.Multiply,
-      ethers.encodeBytes32String('SOL/USD')
+      CalculationType.Multiply
     );
 
     const compositeApi3ReaderProxyV1EthSol = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
       compositeApi3ReaderProxyV1SolUsd.getAddress(),
-      CalculationType.Divide,
-      ethers.encodeBytes32String('ETH/SOL')
+      CalculationType.Divide
     );
 
     const endpointIdEthUsd = testUtils.generateRandomBytes32();
@@ -187,18 +185,12 @@ describe('CompositeApi3ReaderProxyV1', function () {
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
       expect(await compositeApi3ReaderProxyV1SolUsd.calculationType()).to.equal(CalculationType.Multiply);
-      expect(await compositeApi3ReaderProxyV1SolUsd.crossRateDapiName()).to.equal(
-        ethers.encodeBytes32String('SOL/USD')
-      );
       expect(await compositeApi3ReaderProxyV1EthSol.owner()).to.equal(ethers.ZeroAddress);
       expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
         await compositeApi3ReaderProxyV1SolUsd.getAddress()
       );
       expect(await compositeApi3ReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
-      expect(await compositeApi3ReaderProxyV1EthSol.crossRateDapiName()).to.equal(
-        ethers.encodeBytes32String('ETH/SOL')
-      );
     });
   });
 

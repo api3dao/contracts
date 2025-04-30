@@ -29,14 +29,12 @@ contract CompositeApi3ReaderProxyV1Factory is
     /// @param proxy1 First IApi3ReaderProxy contract
     /// @param proxy2 Second IApi3ReaderProxy contract
     /// @param calculationType Type of calculation to perform on proxies
-    /// @param crossRateDapiName The derived dAPI name of the cross rate
     /// @param metadata Metadata for deterministic deployment
     /// @return proxy Proxy address
     function deployCompositeApi3ReaderProxyV1(
         address proxy1,
         address proxy2,
         ICompositeApi3ReaderProxyV1.CalculationType calculationType,
-        bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external override returns (address proxy) {
         require(proxy1 != address(0), "proxy1 address zero");
@@ -50,8 +48,7 @@ contract CompositeApi3ReaderProxyV1Factory is
             new CompositeApi3ReaderProxyV1{salt: keccak256(metadata)}(
                 proxy1,
                 proxy2,
-                calculationType,
-                crossRateDapiName
+                calculationType
             )
         );
         proxy = address(
@@ -63,7 +60,6 @@ contract CompositeApi3ReaderProxyV1Factory is
             proxy1,
             proxy2,
             calculationType,
-            crossRateDapiName,
             metadata
         );
     }
@@ -72,14 +68,12 @@ contract CompositeApi3ReaderProxyV1Factory is
     /// @param proxy1 First IApi3ReaderProxy contract
     /// @param proxy2 Second IApi3ReaderProxy contract
     /// @param calculationType Type of calculation to perform on proxies
-    /// @param crossRateDapiName The derived dAPI name of the cross rate
     /// @param metadata Metadata for deterministic deployment
     /// @return proxy Proxy address
     function computeCompositeApi3ReaderProxyV1Address(
         address proxy1,
         address proxy2,
         ICompositeApi3ReaderProxyV1.CalculationType calculationType,
-        bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external view returns (address proxy) {
         require(proxy1 != address(0), "proxy1 address zero");
@@ -90,12 +84,7 @@ contract CompositeApi3ReaderProxyV1Factory is
             keccak256(
                 abi.encodePacked(
                     type(CompositeApi3ReaderProxyV1).creationCode,
-                    abi.encode(
-                        proxy1,
-                        proxy2,
-                        uint256(calculationType),
-                        crossRateDapiName
-                    )
+                    abi.encode(proxy1, proxy2, uint256(calculationType))
                 )
             )
         );

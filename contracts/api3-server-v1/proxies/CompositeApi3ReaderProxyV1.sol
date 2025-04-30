@@ -35,27 +35,18 @@ contract CompositeApi3ReaderProxyV1 is
     /// @notice Calculation type to be used for the rate composition
     CalculationType public immutable override calculationType;
 
-    /// @notice Derived dAPI name of the cross rate as a bytes32 string
-    /// @dev For example if the two proxies are "USD/USDT" and "USDT/EUR", the
-    /// derived dAPI name should be "USD/EUR". This is just for informational
-    /// purposes and is not used in any calculations
-    bytes32 public immutable override crossRateDapiName;
-
     /// @dev Parameters are validated by CompositeApi3ReaderProxyV1Factory
     /// @param proxy1_ First IApi3ReaderProxy contract address
     /// @param proxy2_ Second IApi3ReaderProxy contract address
     /// @param calculationType_ Calculation type to be used for the rate composition
-    /// @param crossRateDapiName_ dAPI name of the cross rate as a bytes32 string
     constructor(
         address proxy1_,
         address proxy2_,
-        CalculationType calculationType_,
-        bytes32 crossRateDapiName_
+        CalculationType calculationType_
     ) {
         proxy1 = proxy1_;
         proxy2 = proxy2_;
         calculationType = calculationType_;
-        crossRateDapiName = crossRateDapiName_;
         _disableInitializers();
     }
 
@@ -139,8 +130,8 @@ contract CompositeApi3ReaderProxyV1 is
         return 18;
     }
 
-    /// @dev The cross-rate dAPI name act as the description, and this is left
-    /// empty to save gas on contract deployment
+    /// @dev The underlying proxy dAPI names act as the description, and this is
+    /// left empty to save gas on contract deployment
     function description() external pure override returns (string memory) {
         return "";
     }

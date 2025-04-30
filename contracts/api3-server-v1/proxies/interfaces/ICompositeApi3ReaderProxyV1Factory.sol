@@ -9,7 +9,6 @@ interface ICompositeApi3ReaderProxyV1Factory {
         address proxy1,
         address proxy2,
         ICompositeApi3ReaderProxyV1.CalculationType calculationType,
-        bytes32 crossRateDapiName,
         bytes metadata
     );
 
@@ -17,7 +16,6 @@ interface ICompositeApi3ReaderProxyV1Factory {
         address proxy1,
         address proxy2,
         ICompositeApi3ReaderProxyV1.CalculationType calculationType,
-        bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external returns (address proxy);
 
@@ -25,7 +23,6 @@ interface ICompositeApi3ReaderProxyV1Factory {
         address proxy1,
         address proxy2,
         ICompositeApi3ReaderProxyV1.CalculationType calculationType,
-        bytes32 crossRateDapiName,
         bytes calldata metadata
     ) external view returns (address proxy);
 }
