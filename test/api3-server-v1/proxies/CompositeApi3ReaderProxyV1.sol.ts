@@ -9,11 +9,6 @@ import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevEx
 
 // See CompositeApi3ReaderProxyV1Factory tests for the upgrade flow
 describe('CompositeApi3ReaderProxyV1', function () {
-  enum CalculationType {
-    Divide,
-    Multiply,
-  }
-
   async function deploy() {
     const roleNames = ['deployer', 'manager', 'airnode', 'auctioneer', 'searcher'];
     const accounts = await ethers.getSigners();
@@ -88,14 +83,12 @@ describe('CompositeApi3ReaderProxyV1', function () {
 
     const compositeApi3ReaderProxyV1SolUsd = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      api3ReaderProxyV1SolEth.getAddress(),
-      CalculationType.Multiply
+      api3ReaderProxyV1SolEth.getAddress()
     );
 
     const compositeApi3ReaderProxyV1EthSol = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      compositeApi3ReaderProxyV1SolUsd.getAddress(),
-      CalculationType.Divide
+      compositeApi3ReaderProxyV1SolUsd.getAddress()
     );
 
     const endpointIdEthUsd = testUtils.generateRandomBytes32();
@@ -183,81 +176,51 @@ describe('CompositeApi3ReaderProxyV1', function () {
       } = await helpers.loadFixture(deploy);
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
-      expect(await compositeApi3ReaderProxyV1SolUsd.calculationType()).to.equal(CalculationType.Multiply);
       expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
       expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
         await compositeApi3ReaderProxyV1SolUsd.getAddress()
       );
-      expect(await compositeApi3ReaderProxyV1EthSol.calculationType()).to.equal(CalculationType.Divide);
     });
   });
 
   describe('read', function () {
-    context('proxy calculation type is Multiply or underlying do not return zero', function () {
-      it('reads composite rate feed', async function () {
-        const {
-          roles,
-          api3ServerV1OevExtensionOevBidPayer,
-          compositeApi3ReaderProxyV1SolUsd,
-          dappId,
-          baseBeaconTimestampSolEth,
-          baseBeaconValueEthUsd,
-          baseBeaconValueSolEth,
-          templateIdSolEth,
-        } = await helpers.loadFixture(deploy);
-        const oevBeaconValueSolEth = (baseBeaconValueSolEth * 101n) / 100n; // 1% increase
-        const oevBeaconTimestampSolEth = baseBeaconTimestampSolEth + 1;
-        const signedDataTimestampCutoff = oevBeaconTimestampSolEth + 10;
-        await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 1);
-        await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, 1);
-        const signature = await signDataWithAlternateTemplateId(
-          roles.airnode as any,
+    it('reads composite rate feed', async function () {
+      const {
+        roles,
+        api3ServerV1OevExtensionOevBidPayer,
+        compositeApi3ReaderProxyV1SolUsd,
+        dappId,
+        baseBeaconTimestampSolEth,
+        baseBeaconValueEthUsd,
+        baseBeaconValueSolEth,
+        templateIdSolEth,
+      } = await helpers.loadFixture(deploy);
+      const oevBeaconValueSolEth = (baseBeaconValueSolEth * 101n) / 100n; // 1% increase
+      const oevBeaconTimestampSolEth = baseBeaconTimestampSolEth + 1;
+      const signedDataTimestampCutoff = oevBeaconTimestampSolEth + 10;
+      await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 1);
+      await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, 1);
+      const signature = await signDataWithAlternateTemplateId(
+        roles.airnode as any,
+        templateIdSolEth,
+        oevBeaconTimestampSolEth,
+        encodeData(oevBeaconValueSolEth)
+      );
+      const signedData = ethers.AbiCoder.defaultAbiCoder().encode(
+        ['address', 'bytes32', 'uint256', 'bytes', 'bytes'],
+        [
+          roles.airnode!.address,
           templateIdSolEth,
           oevBeaconTimestampSolEth,
-          encodeData(oevBeaconValueSolEth)
-        );
-        const signedData = ethers.AbiCoder.defaultAbiCoder().encode(
-          ['address', 'bytes32', 'uint256', 'bytes', 'bytes'],
-          [
-            roles.airnode!.address,
-            templateIdSolEth,
-            oevBeaconTimestampSolEth,
-            encodeData(oevBeaconValueSolEth),
-            signature,
-          ]
-        );
-        await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
-        await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
-        const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
-        expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
-        expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
-      });
-    });
-    context('proxy calculation type is Divide and underlying returns zero', function () {
-      it('reverts', async function () {
-        const { compositeApi3ReaderProxyV1EthSol, api3ServerV1, roles, templateIdEthUsd } =
-          await helpers.loadFixture(deploy);
-
-        const baseBeaconTimestampEthUsd = await helpers.time.latest();
-        const dataEthUsd = ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [0n]);
-        const signatureEthUsd = await testUtils.signData(
-          roles.airnode! as any,
-          templateIdEthUsd,
-          baseBeaconTimestampEthUsd,
-          dataEthUsd
-        );
-        await api3ServerV1.updateBeaconWithSignedData(
-          roles.airnode!.address,
-          templateIdEthUsd,
-          baseBeaconTimestampEthUsd,
-          dataEthUsd,
-          signatureEthUsd
-        );
-
-        await expect(compositeApi3ReaderProxyV1EthSol.read())
-          .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1EthSol, 'ZeroDenominator')
-          .withArgs();
-      });
+          encodeData(oevBeaconValueSolEth),
+          signature,
+        ]
+      );
+      await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
+      await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
+      const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
+      expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
+      expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
     });
   });
 

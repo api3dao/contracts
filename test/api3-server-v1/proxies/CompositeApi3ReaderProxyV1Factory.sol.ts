@@ -7,11 +7,6 @@ import { CompositeApi3ReaderProxyV1__factory } from '../../../src/index';
 import * as testUtils from '../../test-utils';
 
 describe('CompositeApi3ReaderProxyV1Factory', function () {
-  enum CalculationType {
-    Divide,
-    Multiply,
-  }
-
   async function deploy() {
     const roleNames = ['deployer', 'manager', 'airnode', 'auctioneer', 'searcher'];
     const accounts = await ethers.getSigners();
@@ -153,47 +148,28 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             } = await helpers.loadFixture(deploy);
             const proxy1 = await api3ReaderProxyV1EthUsd.getAddress();
             const proxy2 = await api3ReaderProxyV1SolEth.getAddress();
-            const calculationType = CalculationType.Multiply;
 
             // Precompute the proxy address
             const proxyAddress = await compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
               proxy1,
               proxy2,
-              CalculationType.Multiply,
               metadata
             );
 
             // Can only deploy once
-            await expect(
-              compositeApi3ReaderProxyV1Factory.deployCompositeApi3ReaderProxyV1(
-                proxy1,
-                proxy2,
-                calculationType,
-                metadata
-              )
-            )
+            await expect(compositeApi3ReaderProxyV1Factory.deployCompositeApi3ReaderProxyV1(proxy1, proxy2, metadata))
               .to.emit(compositeApi3ReaderProxyV1Factory, 'DeployedCompositeApi3ReaderProxyV1')
-              .withArgs(proxyAddress, proxy1, proxy2, calculationType, metadata);
+              .withArgs(proxyAddress, proxy1, proxy2, metadata);
             // Subsequent deployments will revert with no string
-            await expect(
-              compositeApi3ReaderProxyV1Factory.deployCompositeApi3ReaderProxyV1(
-                proxy1,
-                proxy2,
-                calculationType,
-                metadata
-              )
-            ).to.be.reverted;
+            await expect(compositeApi3ReaderProxyV1Factory.deployCompositeApi3ReaderProxyV1(proxy1, proxy2, metadata))
+              .to.be.reverted;
 
             // Confirm that the bytecode is the same
             const CompositeApi3ReaderProxyV1 = await ethers.getContractFactory(
               'CompositeApi3ReaderProxyV1',
               roles.deployer
             );
-            const eoaDeployedCompositeApi3ReaderProxyV1 = await CompositeApi3ReaderProxyV1.deploy(
-              proxy1,
-              proxy2,
-              calculationType
-            );
+            const eoaDeployedCompositeApi3ReaderProxyV1 = await CompositeApi3ReaderProxyV1.deploy(proxy1, proxy2);
             expect(await ethers.provider.getCode(proxyAddress)).to.equal(
               await ethers.provider.getCode(await eoaDeployedCompositeApi3ReaderProxyV1.getAddress())
             );
@@ -205,7 +181,6 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             );
             expect(await compositeApi3ReaderProxyV1.proxy1()).to.equal(proxy1);
             expect(await compositeApi3ReaderProxyV1.proxy2()).to.equal(proxy2);
-            expect(await compositeApi3ReaderProxyV1.calculationType()).to.equal(calculationType);
             const compositeValue = await compositeApi3ReaderProxyV1.read();
             expect(compositeValue.value).to.equal((baseBeaconValueEthUsd * baseBeaconValueSolEth) / 10n ** 18n);
             expect(compositeValue.timestamp).to.equal(await helpers.time.latest());
@@ -218,12 +193,7 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             const proxy1 = await api3ReaderProxyV1EthUsd.getAddress();
             const proxy2 = proxy1;
             await expect(
-              compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
-                proxy1,
-                proxy2,
-                CalculationType.Multiply,
-                metadata
-              )
+              compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(proxy1, proxy2, metadata)
             ).to.be.revertedWith('proxies same address');
           });
         });
@@ -236,7 +206,6 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
               await api3ReaderProxyV1EthUsd.getAddress(),
               ethers.ZeroAddress,
-              CalculationType.Multiply,
               metadata
             )
           ).to.be.revertedWith('proxy2 address zero');
@@ -251,7 +220,6 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
           compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
             ethers.ZeroAddress,
             await api3ReaderProxyV1SolEth.getAddress(),
-            CalculationType.Multiply,
             metadata
           )
         ).to.be.revertedWith('proxy1 address zero');
@@ -276,20 +244,12 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
                 ['bytes', 'bytes'],
                 [
                   CompositeApi3ReaderProxyV1__factory.bytecode,
-                  ethers.AbiCoder.defaultAbiCoder().encode(
-                    ['address', 'address', 'uint256'],
-                    [proxy1, proxy2, CalculationType.Multiply]
-                  ),
+                  ethers.AbiCoder.defaultAbiCoder().encode(['address', 'address'], [proxy1, proxy2]),
                 ]
               )
             );
             expect(
-              await compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
-                proxy1,
-                proxy2,
-                CalculationType.Multiply,
-                metadata
-              )
+              await compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(proxy1, proxy2, metadata)
             ).to.equal(proxyAddress);
           });
         });
@@ -300,12 +260,7 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             const proxy1 = await api3ReaderProxyV1EthUsd.getAddress();
             const proxy2 = proxy1;
             await expect(
-              compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
-                proxy1,
-                proxy2,
-                CalculationType.Multiply,
-                metadata
-              )
+              compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(proxy1, proxy2, metadata)
             ).to.be.revertedWith('proxies same address');
           });
         });
@@ -318,7 +273,6 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
             compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
               await api3ReaderProxyV1EthUsd.getAddress(),
               ethers.ZeroAddress,
-              CalculationType.Multiply,
               metadata
             )
           ).to.be.revertedWith('proxy2 address zero');
@@ -333,7 +287,6 @@ describe('CompositeApi3ReaderProxyV1Factory', function () {
           compositeApi3ReaderProxyV1Factory.computeCompositeApi3ReaderProxyV1Address(
             ethers.ZeroAddress,
             await api3ReaderProxyV1SolEth.getAddress(),
-            CalculationType.Multiply,
             metadata
           )
         ).to.be.revertedWith('proxy1 address zero');

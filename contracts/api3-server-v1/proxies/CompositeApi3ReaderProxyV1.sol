@@ -6,7 +6,7 @@ import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
 /// @title An immutable proxy contract that is used to read a composite data feed
-/// calculated from two IApi3ReaderProxy data feeds
+/// by multiplying two IApi3ReaderProxy data feeds
 /// @notice For deterministic deployment, use the CompositeApi3ReaderProxyV1Factory
 /// contract. The constructor arguments are validated by the factory, rather
 /// than internally. If you intend to deploy this contract without using the
@@ -26,31 +26,22 @@ contract CompositeApi3ReaderProxyV1 is
     /// @notice Second IApi3ReaderProxy contract address
     address public immutable override proxy2;
 
-    /// @notice Calculation type to be used for the rate composition
-    CalculationType public immutable override calculationType;
-
     /// @dev Parameters are validated by CompositeApi3ReaderProxyV1Factory
     /// @param proxy1_ First IApi3ReaderProxy contract address
     /// @param proxy2_ Second IApi3ReaderProxy contract address
-    /// @param calculationType_ Calculation type to be used for the rate composition
-    constructor(
-        address proxy1_,
-        address proxy2_,
-        CalculationType calculationType_
-    ) {
+    constructor(address proxy1_, address proxy2_) {
         proxy1 = proxy1_;
         proxy2 = proxy2_;
-        calculationType = calculationType_;
     }
 
     /// @notice Returns the current value and timestamp of the rate composition
     /// between two API3 data feeds associated with the two IApi3ReaderProxy
     /// contracts
-    /// @dev The value is calculated based on the calculation type and the
-    /// timestamp is the earliest of the two timestamps to ensure that the data
-    /// is not stale
+    /// @dev The value is calculated by multiplying the values returned by each
+    /// proxy and this may overflow if the multiplication results in a value
+    /// unsuitable for an int256. The timestamp is the current block timestamp
     /// @return value Value of the rate composition
-    /// @return timestamp Timestamp of the oldest data feed update
+    /// @return timestamp Timestamp of the rate composition
     function read()
         public
         view
@@ -60,18 +51,7 @@ contract CompositeApi3ReaderProxyV1 is
         (int224 value1, ) = IApi3ReaderProxy(proxy1).read();
         (int224 value2, ) = IApi3ReaderProxy(proxy2).read();
 
-        int256 val1 = int256(value1);
-        int256 val2 = int256(value2);
-        int256 compositeValue;
-
-        if (calculationType == CalculationType.Divide) {
-            if (val2 == 0) revert ZeroDenominator();
-            compositeValue = (val1 * 1e18) / val2;
-        } else if (calculationType == CalculationType.Multiply) {
-            compositeValue = (val1 * val2) / 1e18;
-        }
-
-        value = int224(compositeValue);
+        value = int224((int256(value1) * int256(value2)) / 1e18);
         timestamp = uint32(block.timestamp);
     }
 

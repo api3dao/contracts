@@ -4,11 +4,6 @@ pragma solidity ^0.8.4;
 import "../../../interfaces/IApi3ReaderProxy.sol";
 
 interface ICompositeApi3ReaderProxyV1 is IApi3ReaderProxy {
-    enum CalculationType {
-        Divide,
-        Multiply
-    }
-
     error FunctionIsNotSupported();
 
     error ZeroDenominator();
@@ -16,6 +11,4 @@ interface ICompositeApi3ReaderProxyV1 is IApi3ReaderProxy {
     function proxy1() external returns (address);
 
     function proxy2() external returns (address);
-
-    function calculationType() external returns (CalculationType);
 }
