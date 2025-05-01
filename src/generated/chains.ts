@@ -332,39 +332,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'conflux-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://evmapi-testnet.confluxscan.io/api/' },
-      browserUrl: 'https://evmtestnet.confluxscan.io/',
-    },
-    id: '71',
-    name: 'Conflux eSpace testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://evmtestnet.confluxrpc.com/' },
-      { alias: 'public', rpcUrl: 'https://evmtest.confluxrpc.com/' },
-    ],
-    symbol: 'CFX',
-    testnet: true,
-  },
-  {
-    alias: 'conflux',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://evmapi.confluxscan.io/api/' },
-      browserUrl: 'https://evm.confluxscan.io/',
-    },
-    id: '1030',
-    name: 'Conflux eSpace',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://evm.confluxrpc.com/' },
-      { alias: 'public', rpcUrl: 'https://evmmain-global.confluxrpc.com/' },
-      { alias: 'backup', rpcUrl: 'https://evm.confluxrpc.org/' },
-    ],
-    symbol: 'CFX',
-    testnet: false,
-  },
-  {
     alias: 'core-testnet',
     decimals: 18,
     explorer: {
@@ -469,7 +436,7 @@ export const CHAINS: Chain[] = [
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
     ],
-    symbol: 'ETH',
+    symbol: 'FXS',
     testnet: false,
   },
   {

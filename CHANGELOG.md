@@ -1,5 +1,14 @@
 # @api3/contracts
 
+## 21.0.0
+
+### Major Changes
+
+- cc71f82: Remove support for following chains:
+
+  - conflux
+  - conflux-testnet
+
 ## 20.3.0
 
 ### Minor Changes
