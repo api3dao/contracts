@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 21.0.1
+
+### Patch Changes
+
+- fca6acb: Update Fraxtal symbol name from ETH to FXS
+
 ## 21.0.0
 
 ### Major Changes
