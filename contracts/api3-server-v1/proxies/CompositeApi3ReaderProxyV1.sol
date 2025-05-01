@@ -1,35 +1,32 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
 /// @title An immutable proxy contract that is used to read a composite data feed
 /// by multiplying two IApi3ReaderProxy data feeds
-/// @notice For deterministic deployment, use the CompositeApi3ReaderProxyV1Factory
-/// contract. The constructor arguments are validated by the factory, rather
-/// than internally. If you intend to deploy this contract without using the
-/// factory, you are recommended to implement an equivalent validation.
 /// @dev This contract implements the AggregatorV2V3Interface to be compatible with
 /// Chainlink aggregators. This allows the contract to be used as a drop-in
 /// replacement for Chainlink aggregators in existing dApps.
 /// Refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more
 /// information about the Chainlink interface implementation.
-contract CompositeApi3ReaderProxyV1 is
-    AggregatorV2V3Interface,
-    ICompositeApi3ReaderProxyV1
-{
+contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
     /// @notice First IApi3ReaderProxy contract address
     address public immutable override proxy1;
 
     /// @notice Second IApi3ReaderProxy contract address
     address public immutable override proxy2;
 
-    /// @dev Parameters are validated by CompositeApi3ReaderProxyV1Factory
     /// @param proxy1_ First IApi3ReaderProxy contract address
     /// @param proxy2_ Second IApi3ReaderProxy contract address
     constructor(address proxy1_, address proxy2_) {
+        if (proxy1_ == address(0) || proxy2_ == address(0)) {
+            revert ZeroProxyAddress();
+        }
+        if (proxy1_ == proxy2_) {
+            revert SameProxyAddress();
+        }
         proxy1 = proxy1_;
         proxy2 = proxy2_;
     }
@@ -104,7 +101,7 @@ contract CompositeApi3ReaderProxyV1 is
     }
 
     /// @dev A unique version is chosen to easily check if an unverified
-    /// contract that acts as a Chainlink feed is an CompositeApi3ReaderProxyV1
+    /// contract that acts as a Chainlink feed is a CompositeApi3ReaderProxyV1
     function version() external pure override returns (uint256) {
         return 4914;
     }
