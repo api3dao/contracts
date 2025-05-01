@@ -173,25 +173,54 @@ describe('CompositeApi3ReaderProxyV1', function () {
     context('proxy1 is not zero address', function () {
       context('proxy2 is not zero address', function () {
         context('proxy1 is not the same as proxy2', function () {
-          it('constructs', async function () {
-            const {
-              compositeApi3ReaderProxyV1SolUsd,
-              compositeApi3ReaderProxyV1EthSol,
-              api3ReaderProxyV1EthUsd,
-              api3ReaderProxyV1SolEth,
-            } = await helpers.loadFixture(deploy);
-            expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(
-              await api3ReaderProxyV1EthUsd.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(
-              await api3ReaderProxyV1SolEth.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(
-              await api3ReaderProxyV1EthUsd.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
-              await compositeApi3ReaderProxyV1SolUsd.getAddress()
-            );
+          context('decimals is not zero or over 18', function () {
+            it('constructs', async function () {
+              const {
+                compositeApi3ReaderProxyV1SolUsd,
+                compositeApi3ReaderProxyV1EthSol,
+                api3ReaderProxyV1EthUsd,
+                api3ReaderProxyV1SolEth,
+              } = await helpers.loadFixture(deploy);
+              expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(
+                await api3ReaderProxyV1EthUsd.getAddress()
+              );
+              expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(
+                await api3ReaderProxyV1SolEth.getAddress()
+              );
+              expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(
+                await api3ReaderProxyV1EthUsd.getAddress()
+              );
+              expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
+                await compositeApi3ReaderProxyV1SolUsd.getAddress()
+              );
+            });
+          });
+          context('decimals is zero or over 18', function () {
+            it('reverts', async function () {
+              const { api3ReaderProxyV1EthUsd, api3ReaderProxyV1SolEth, roles } = await helpers.loadFixture(deploy);
+              const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
+                'CompositeApi3ReaderProxyV1',
+                roles.deployer
+              );
+              await expect(
+                compositeApi3ReaderProxyV1Factory.deploy(
+                  await api3ReaderProxyV1EthUsd.getAddress(),
+                  await api3ReaderProxyV1SolEth.getAddress(),
+                  0n
+                )
+              )
+                .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'InvalidDecimals')
+                .withArgs();
+              await expect(
+                compositeApi3ReaderProxyV1Factory.deploy(
+                  await api3ReaderProxyV1EthUsd.getAddress(),
+                  await api3ReaderProxyV1SolEth.getAddress(),
+                  19n
+                )
+              )
+                .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'InvalidDecimals')
+                .withArgs();
+            });
           });
         });
         context('proxy1 is the same as proxy2', function () {
