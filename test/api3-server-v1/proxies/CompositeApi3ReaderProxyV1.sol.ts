@@ -80,14 +80,17 @@ describe('CompositeApi3ReaderProxyV1', function () {
       roles.deployer
     );
 
+    const decimals = 8n;
     const compositeApi3ReaderProxyV1SolUsd = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      api3ReaderProxyV1SolEth.getAddress()
+      api3ReaderProxyV1SolEth.getAddress(),
+      decimals
     );
 
     const compositeApi3ReaderProxyV1EthSol = await compositeApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      compositeApi3ReaderProxyV1SolUsd.getAddress()
+      compositeApi3ReaderProxyV1SolUsd.getAddress(),
+      decimals
     );
 
     const endpointIdEthUsd = testUtils.generateRandomBytes32();
@@ -100,7 +103,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
     );
     await api3ServerV1.connect(roles.manager).setDapiName(dapiNameEthUsd, beaconIdEthUsd);
 
-    const baseBeaconValueEthUsd = ethers.parseUnits('1824.97', 18);
+    const baseBeaconValueEthUsd = ethers.parseEther('1824.97');
     const baseBeaconTimestampEthUsd = await helpers.time.latest();
     const dataEthUsd = ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [baseBeaconValueEthUsd]);
     const signatureEthUsd = await testUtils.signData(
@@ -127,7 +130,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
     );
     await api3ServerV1.connect(roles.manager).setDapiName(dapiNameSolEth, beaconIdSolEth);
 
-    const baseBeaconValueSolEth = ethers.parseUnits('0.08202', 18);
+    const baseBeaconValueSolEth = ethers.parseEther('0.08202');
     const baseBeaconTimestampSolEth = await helpers.time.latest();
     const dataSolEth = ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [baseBeaconValueSolEth]);
     const signatureSolEth = await testUtils.signData(
@@ -159,6 +162,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
       dapiNameEthUsd,
       dapiNameSolEth,
       dappId,
+      decimals,
       roles,
       templateIdEthUsd,
       templateIdSolEth,
@@ -192,7 +196,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
         });
         context('proxy1 is the same as proxy2', function () {
           it('reverts', async function () {
-            const { api3ReaderProxyV1EthUsd, roles } = await helpers.loadFixture(deploy);
+            const { api3ReaderProxyV1EthUsd, decimals, roles } = await helpers.loadFixture(deploy);
             const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
               'CompositeApi3ReaderProxyV1',
               roles.deployer
@@ -200,7 +204,8 @@ describe('CompositeApi3ReaderProxyV1', function () {
             await expect(
               compositeApi3ReaderProxyV1Factory.deploy(
                 await api3ReaderProxyV1EthUsd.getAddress(),
-                await api3ReaderProxyV1EthUsd.getAddress()
+                await api3ReaderProxyV1EthUsd.getAddress(),
+                decimals
               )
             )
               .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'SameProxyAddress')
@@ -210,13 +215,17 @@ describe('CompositeApi3ReaderProxyV1', function () {
       });
       context('proxy2 is zero address', function () {
         it('reverts', async function () {
-          const { api3ReaderProxyV1EthUsd, roles } = await helpers.loadFixture(deploy);
+          const { api3ReaderProxyV1EthUsd, decimals, roles } = await helpers.loadFixture(deploy);
           const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
             'CompositeApi3ReaderProxyV1',
             roles.deployer
           );
           await expect(
-            compositeApi3ReaderProxyV1Factory.deploy(await api3ReaderProxyV1EthUsd.getAddress(), ethers.ZeroAddress)
+            compositeApi3ReaderProxyV1Factory.deploy(
+              await api3ReaderProxyV1EthUsd.getAddress(),
+              ethers.ZeroAddress,
+              decimals
+            )
           )
             .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
             .withArgs();
@@ -225,13 +234,17 @@ describe('CompositeApi3ReaderProxyV1', function () {
     });
     context('proxy1 is zero address', function () {
       it('reverts', async function () {
-        const { api3ReaderProxyV1SolEth, roles } = await helpers.loadFixture(deploy);
+        const { api3ReaderProxyV1SolEth, decimals, roles } = await helpers.loadFixture(deploy);
         const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
           'CompositeApi3ReaderProxyV1',
           roles.deployer
         );
         await expect(
-          compositeApi3ReaderProxyV1Factory.deploy(ethers.ZeroAddress, await api3ReaderProxyV1SolEth.getAddress())
+          compositeApi3ReaderProxyV1Factory.deploy(
+            ethers.ZeroAddress,
+            await api3ReaderProxyV1SolEth.getAddress(),
+            decimals
+          )
         )
           .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
           .withArgs();
@@ -246,6 +259,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
         api3ServerV1OevExtensionOevBidPayer,
         compositeApi3ReaderProxyV1SolUsd,
         dappId,
+        decimals,
         baseBeaconTimestampSolEth,
         baseBeaconValueEthUsd,
         baseBeaconValueSolEth,
@@ -275,7 +289,11 @@ describe('CompositeApi3ReaderProxyV1', function () {
       await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
       await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
       const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
-      expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
+      expect(dataFeed.value).to.equal(
+        (((baseBeaconValueEthUsd * 10n ** decimals) / 10n ** 18n) *
+          ((oevBeaconValueSolEth * 10n ** decimals) / 10n ** 18n)) /
+          10n ** decimals
+      );
       expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
     });
   });
@@ -327,8 +345,8 @@ describe('CompositeApi3ReaderProxyV1', function () {
 
   describe('decimals', function () {
     it('returns 18', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await compositeApi3ReaderProxyV1SolUsd.decimals()).to.equal(18);
+      const { compositeApi3ReaderProxyV1SolUsd, decimals } = await helpers.loadFixture(deploy);
+      expect(await compositeApi3ReaderProxyV1SolUsd.decimals()).to.equal(decimals);
     });
   });
 

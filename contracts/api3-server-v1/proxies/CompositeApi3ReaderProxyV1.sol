@@ -4,6 +4,8 @@ pragma solidity ^0.8.27;
 import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
+import "hardhat/console.sol";
+
 /// @title An immutable proxy contract that is used to read a composite data feed
 /// by multiplying two IApi3ReaderProxy data feeds
 /// @dev This contract implements the AggregatorV2V3Interface to be compatible with
@@ -18,17 +20,30 @@ contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
     /// @notice Second IApi3ReaderProxy contract address
     address public immutable override proxy2;
 
+    /// @notice Decimals of the rate composition
+    uint8 public immutable override decimals;
+
+    uint256 private immutable baseUnit;
+
+    /// @dev Proxy addresses must be different and decimals must be a value
+    /// between 1 and 18 inclusive
     /// @param proxy1_ First IApi3ReaderProxy contract address
     /// @param proxy2_ Second IApi3ReaderProxy contract address
-    constructor(address proxy1_, address proxy2_) {
+    /// @param decimals_ Decimals of the rate composition
+    constructor(address proxy1_, address proxy2_, uint8 decimals_) {
         if (proxy1_ == address(0) || proxy2_ == address(0)) {
             revert ZeroProxyAddress();
         }
         if (proxy1_ == proxy2_) {
             revert SameProxyAddress();
         }
+        if (decimals_ == 0 || decimals_ > 18) {
+            revert InvalidDecimals();
+        }
         proxy1 = proxy1_;
         proxy2 = proxy2_;
+        decimals = decimals_;
+        baseUnit = 10 ** decimals_;
     }
 
     /// @notice Returns the current value and timestamp of the rate composition
@@ -48,7 +63,11 @@ contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
         (int224 value1, ) = IApi3ReaderProxy(proxy1).read();
         (int224 value2, ) = IApi3ReaderProxy(proxy2).read();
 
-        value = int224((int256(value1) * int256(value2)) / 1e18);
+        // IApi3ReaderProxy always return values in 18 decimals
+        int256 value1InBase = (int256(value1) * int256(baseUnit)) / 1e18;
+        int256 value2InBase = (int256(value2) * int256(baseUnit)) / 1e18;
+
+        value = int224((value1InBase * value2InBase) / int256(baseUnit));
         timestamp = uint32(block.timestamp);
     }
 
@@ -87,11 +106,6 @@ contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
     /// @dev Functions that use the round ID as an argument are not supported
     function getTimestamp(uint256) external pure override returns (uint256) {
         revert FunctionIsNotSupported();
-    }
-
-    /// @dev API3 feeds always use 18 decimals
-    function decimals() external pure override returns (uint8) {
-        return 18;
     }
 
     /// @dev The underlying proxy dAPI names act as the description, and this is
