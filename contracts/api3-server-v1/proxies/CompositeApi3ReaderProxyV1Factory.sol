@@ -67,7 +67,7 @@ contract CompositeApi3ReaderProxyV1Factory is
     {
         require(proxy1 != address(0), "proxy1 address zero");
         require(proxy2 != address(0), "proxy2 address zero");
-        require(proxy1 != proxy2, "proxy1 and proxy2 same address");
+        require(proxy1 != proxy2, "proxies same address");
         compositeApi3ReaderProxyV1Address = Create2.computeAddress(
             keccak256(metadata),
             keccak256(

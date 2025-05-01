@@ -15,7 +15,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
   }
 
   async function deploy() {
-    const roleNames = ['deployer', 'manager', 'owner', 'airnode', 'auctioneer', 'searcher'];
+    const roleNames = ['deployer', 'manager', 'airnode', 'auctioneer', 'searcher'];
     const accounts = await ethers.getSigners();
     const roles: Record<string, HardhatEthersSigner> = roleNames.reduce((acc, roleName, index) => {
       return { ...acc, [roleName]: accounts[index] };
