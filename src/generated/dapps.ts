@@ -50,6 +50,7 @@ export const DAPPS: Dapp[] = [
     },
     homepageUrl: 'https://app.silo.finance/',
   },
+  { aliases: { stability: { chains: ['sonic'], title: 'Stability' } }, homepageUrl: 'https://stability.farm/' },
   { aliases: { stout: { chains: ['sonic'], title: 'Stout' } }, homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
   {
