@@ -12,8 +12,6 @@ interface ICompositeApi3ReaderProxyV1 is
 
     error SameProxyAddress();
 
-    error InvalidDecimals();
-
     error FunctionIsNotSupported();
 
     error ZeroDenominator();
