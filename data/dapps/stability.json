@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "stability": { "chains": ["sonic"], "title": "Stability" }
+  },
+  "homepageUrl": "https://stability.farm/"
+}
