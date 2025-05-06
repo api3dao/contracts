@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
 
-import "./interfaces/ICompositeApi3ReaderProxyV1.sol";
+import "./interfaces/IProductApi3ReaderProxyV1.sol";
 import "../../interfaces/IApi3ReaderProxy.sol";
 
-/// @title An immutable proxy contract that is used to read a composite data feed
-/// by multiplying two IApi3ReaderProxy data feeds
-/// @dev This contract implements the AggregatorV2V3Interface to be compatible with
-/// Chainlink aggregators. This allows the contract to be used as a drop-in
+/// @title An immutable proxy contract that is used to read a composition of two
+/// IApi3ReaderProxy data feeds by multiplying their values
+/// @dev This contract implements the AggregatorV2V3Interface to be compatible
+/// with Chainlink aggregators. This allows the contract to be used as a drop-in
 /// replacement for Chainlink aggregators in existing dApps.
 /// Refer to https://github.com/api3dao/migrate-from-chainlink-to-api3 for more
 /// information about the Chainlink interface implementation.
-contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
+contract ProductApi3ReaderProxyV1 is IProductApi3ReaderProxyV1 {
     /// @notice First IApi3ReaderProxy contract address
     address public immutable override proxy1;
 
@@ -32,13 +32,11 @@ contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
     }
 
     /// @notice Returns the current value and timestamp of the rate composition
-    /// between two API3 data feeds associated with the two IApi3ReaderProxy
-    /// contracts
-    /// @dev The value is calculated by multiplying the values returned by each
-    /// proxy and this may overflow if the multiplication results in a value
-    /// unsuitable for an int256. The timestamp is the current block timestamp
-    /// @return value Value of the rate composition
-    /// @return timestamp Timestamp of the rate composition
+    /// between two IApi3ReaderProxy proxies by multiplying their values
+    /// @dev There is a risk of multiplication overflowing if result is not
+    /// suitable for int256 type. The timestamp is the current block timestamp
+    /// @return value Value of the product of the two proxies
+    /// @return timestamp Timestamp of the current block
     function read()
         public
         view
@@ -101,7 +99,7 @@ contract CompositeApi3ReaderProxyV1 is ICompositeApi3ReaderProxyV1 {
     }
 
     /// @dev A unique version is chosen to easily check if an unverified
-    /// contract that acts as a Chainlink feed is a CompositeApi3ReaderProxyV1
+    /// contract that acts as a Chainlink feed is a ProductApi3ReaderProxyV1
     function version() external pure override returns (uint256) {
         return 4914;
     }

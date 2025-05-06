@@ -7,7 +7,7 @@ import * as testUtils from '../../test-utils';
 import { encodeData } from '../Api3ServerV1.sol';
 import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevExtension.sol';
 
-describe('CompositeApi3ReaderProxyV1', function () {
+describe('ProductApi3ReaderProxyV1', function () {
   async function deploy() {
     const roleNames = ['deployer', 'manager', 'airnode', 'auctioneer', 'searcher'];
     const accounts = await ethers.getSigners();
@@ -75,19 +75,16 @@ describe('CompositeApi3ReaderProxyV1', function () {
       dappId
     );
 
-    const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
-      'CompositeApi3ReaderProxyV1',
-      roles.deployer
-    );
+    const productApi3ReaderProxyV1Factory = await ethers.getContractFactory('ProductApi3ReaderProxyV1', roles.deployer);
 
-    const compositeApi3ReaderProxyV1SolUsd = await compositeApi3ReaderProxyV1Factory.deploy(
+    const productApi3ReaderProxyV1SolUsd = await productApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
       api3ReaderProxyV1SolEth.getAddress()
     );
 
-    const compositeApi3ReaderProxyV1EthSol = await compositeApi3ReaderProxyV1Factory.deploy(
+    const productApi3ReaderProxyV1EthSol = await productApi3ReaderProxyV1Factory.deploy(
       api3ReaderProxyV1EthUsd.getAddress(),
-      compositeApi3ReaderProxyV1SolUsd.getAddress()
+      productApi3ReaderProxyV1SolUsd.getAddress()
     );
 
     const endpointIdEthUsd = testUtils.generateRandomBytes32();
@@ -154,11 +151,11 @@ describe('CompositeApi3ReaderProxyV1', function () {
       baseBeaconTimestampSolEth,
       baseBeaconValueEthUsd,
       baseBeaconValueSolEth,
-      compositeApi3ReaderProxyV1EthSol,
-      compositeApi3ReaderProxyV1SolUsd,
       dapiNameEthUsd,
       dapiNameSolEth,
       dappId,
+      productApi3ReaderProxyV1EthSol,
+      productApi3ReaderProxyV1SolUsd,
       roles,
       templateIdEthUsd,
       templateIdSolEth,
@@ -171,39 +168,33 @@ describe('CompositeApi3ReaderProxyV1', function () {
         context('proxy1 is not the same as proxy2', function () {
           it('constructs', async function () {
             const {
-              compositeApi3ReaderProxyV1SolUsd,
-              compositeApi3ReaderProxyV1EthSol,
+              productApi3ReaderProxyV1SolUsd,
+              productApi3ReaderProxyV1EthSol,
               api3ReaderProxyV1EthUsd,
               api3ReaderProxyV1SolEth,
             } = await helpers.loadFixture(deploy);
-            expect(await compositeApi3ReaderProxyV1SolUsd.proxy1()).to.equal(
-              await api3ReaderProxyV1EthUsd.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1SolUsd.proxy2()).to.equal(
-              await api3ReaderProxyV1SolEth.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1EthSol.proxy1()).to.equal(
-              await api3ReaderProxyV1EthUsd.getAddress()
-            );
-            expect(await compositeApi3ReaderProxyV1EthSol.proxy2()).to.equal(
-              await compositeApi3ReaderProxyV1SolUsd.getAddress()
+            expect(await productApi3ReaderProxyV1SolUsd.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
+            expect(await productApi3ReaderProxyV1SolUsd.proxy2()).to.equal(await api3ReaderProxyV1SolEth.getAddress());
+            expect(await productApi3ReaderProxyV1EthSol.proxy1()).to.equal(await api3ReaderProxyV1EthUsd.getAddress());
+            expect(await productApi3ReaderProxyV1EthSol.proxy2()).to.equal(
+              await productApi3ReaderProxyV1SolUsd.getAddress()
             );
           });
         });
         context('proxy1 is the same as proxy2', function () {
           it('reverts', async function () {
             const { api3ReaderProxyV1EthUsd, roles } = await helpers.loadFixture(deploy);
-            const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
-              'CompositeApi3ReaderProxyV1',
+            const productApi3ReaderProxyV1Factory = await ethers.getContractFactory(
+              'ProductApi3ReaderProxyV1',
               roles.deployer
             );
             await expect(
-              compositeApi3ReaderProxyV1Factory.deploy(
+              productApi3ReaderProxyV1Factory.deploy(
                 await api3ReaderProxyV1EthUsd.getAddress(),
                 await api3ReaderProxyV1EthUsd.getAddress()
               )
             )
-              .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'SameProxyAddress')
+              .to.be.revertedWithCustomError(productApi3ReaderProxyV1Factory, 'SameProxyAddress')
               .withArgs();
           });
         });
@@ -211,14 +202,14 @@ describe('CompositeApi3ReaderProxyV1', function () {
       context('proxy2 is zero address', function () {
         it('reverts', async function () {
           const { api3ReaderProxyV1EthUsd, roles } = await helpers.loadFixture(deploy);
-          const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
-            'CompositeApi3ReaderProxyV1',
+          const productApi3ReaderProxyV1Factory = await ethers.getContractFactory(
+            'ProductApi3ReaderProxyV1',
             roles.deployer
           );
           await expect(
-            compositeApi3ReaderProxyV1Factory.deploy(await api3ReaderProxyV1EthUsd.getAddress(), ethers.ZeroAddress)
+            productApi3ReaderProxyV1Factory.deploy(await api3ReaderProxyV1EthUsd.getAddress(), ethers.ZeroAddress)
           )
-            .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
+            .to.be.revertedWithCustomError(productApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
             .withArgs();
         });
       });
@@ -226,25 +217,25 @@ describe('CompositeApi3ReaderProxyV1', function () {
     context('proxy1 is zero address', function () {
       it('reverts', async function () {
         const { api3ReaderProxyV1SolEth, roles } = await helpers.loadFixture(deploy);
-        const compositeApi3ReaderProxyV1Factory = await ethers.getContractFactory(
-          'CompositeApi3ReaderProxyV1',
+        const productApi3ReaderProxyV1Factory = await ethers.getContractFactory(
+          'ProductApi3ReaderProxyV1',
           roles.deployer
         );
         await expect(
-          compositeApi3ReaderProxyV1Factory.deploy(ethers.ZeroAddress, await api3ReaderProxyV1SolEth.getAddress())
+          productApi3ReaderProxyV1Factory.deploy(ethers.ZeroAddress, await api3ReaderProxyV1SolEth.getAddress())
         )
-          .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
+          .to.be.revertedWithCustomError(productApi3ReaderProxyV1Factory, 'ZeroProxyAddress')
           .withArgs();
       });
     });
   });
 
   describe('read', function () {
-    it('reads composite rate feed', async function () {
+    it('reads the product of the proxy rates', async function () {
       const {
         roles,
         api3ServerV1OevExtensionOevBidPayer,
-        compositeApi3ReaderProxyV1SolUsd,
+        productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd,
         dappId,
         baseBeaconTimestampSolEth,
         baseBeaconValueEthUsd,
@@ -274,7 +265,7 @@ describe('CompositeApi3ReaderProxyV1', function () {
       );
       await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
       await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
-      const dataFeed = await compositeApi3ReaderProxyV1SolUsd.read();
+      const dataFeed = await productApi3ReaderProxyV1SolUsd.read();
       expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
       expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
     });
@@ -282,86 +273,86 @@ describe('CompositeApi3ReaderProxyV1', function () {
 
   describe('latestAnswer', function () {
     it('returns proxy value', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [value] = await compositeApi3ReaderProxyV1SolUsd.read();
-      expect(await compositeApi3ReaderProxyV1SolUsd.latestAnswer()).to.be.equal(value);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [value] = await productApi3ReaderProxyV1SolUsd.read();
+      expect(await productApi3ReaderProxyV1SolUsd.latestAnswer()).to.be.equal(value);
     });
   });
 
   describe('latestTimestamp', function () {
     it('returns proxy value', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [, timestamp] = await compositeApi3ReaderProxyV1SolUsd.read();
-      expect(await compositeApi3ReaderProxyV1SolUsd.latestTimestamp()).to.be.equal(timestamp);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [, timestamp] = await productApi3ReaderProxyV1SolUsd.read();
+      expect(await productApi3ReaderProxyV1SolUsd.latestTimestamp()).to.be.equal(timestamp);
     });
   });
 
   describe('latestRound', function () {
     it('reverts', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      await expect(compositeApi3ReaderProxyV1SolUsd.latestRound())
-        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      await expect(productApi3ReaderProxyV1SolUsd.latestRound())
+        .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('getAnswer', function () {
     it('reverts', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(compositeApi3ReaderProxyV1SolUsd.getAnswer(blockNumber))
-        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(productApi3ReaderProxyV1SolUsd.getAnswer(blockNumber))
+        .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('getTimestamp', function () {
     it('reverts', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(compositeApi3ReaderProxyV1SolUsd.getTimestamp(blockNumber))
-        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(productApi3ReaderProxyV1SolUsd.getTimestamp(blockNumber))
+        .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('decimals', function () {
     it('returns 18', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await compositeApi3ReaderProxyV1SolUsd.decimals()).to.equal(18);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await productApi3ReaderProxyV1SolUsd.decimals()).to.equal(18);
     });
   });
 
   describe('description', function () {
     it('returns empty string', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await compositeApi3ReaderProxyV1SolUsd.description()).to.equal('');
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await productApi3ReaderProxyV1SolUsd.description()).to.equal('');
     });
   });
 
   describe('version', function () {
     it('returns 4913', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      expect(await compositeApi3ReaderProxyV1SolUsd.version()).to.equal(4914);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      expect(await productApi3ReaderProxyV1SolUsd.version()).to.equal(4914);
     });
   });
 
   describe('getRoundData', function () {
     it('reverts', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
-      await expect(compositeApi3ReaderProxyV1SolUsd.getRoundData(blockNumber))
-        .to.be.revertedWithCustomError(compositeApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
+      await expect(productApi3ReaderProxyV1SolUsd.getRoundData(blockNumber))
+        .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
     });
   });
 
   describe('latestRoundData', function () {
     it('returns approximated round data', async function () {
-      const { compositeApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
-      const [value, timestamp] = await compositeApi3ReaderProxyV1SolUsd.read();
+      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const [value, timestamp] = await productApi3ReaderProxyV1SolUsd.read();
       const [roundId, answer, startedAt, updatedAt, answeredInRound] =
-        await compositeApi3ReaderProxyV1SolUsd.latestRoundData();
+        await productApi3ReaderProxyV1SolUsd.latestRoundData();
       expect(roundId).to.equal(0);
       expect(answer).to.equal(value);
       expect(startedAt).to.equal(timestamp);

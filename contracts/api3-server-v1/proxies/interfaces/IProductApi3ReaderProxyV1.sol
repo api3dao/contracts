@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import "../../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
 import "../../../interfaces/IApi3ReaderProxy.sol";
 
-interface ICompositeApi3ReaderProxyV1 is
+interface IProductApi3ReaderProxyV1 is
     AggregatorV2V3Interface,
     IApi3ReaderProxy
 {
@@ -16,7 +16,7 @@ interface ICompositeApi3ReaderProxyV1 is
 
     error ZeroDenominator();
 
-    function proxy1() external returns (address proxy1);
+    function proxy1() external view returns (address proxy1);
 
-    function proxy2() external returns (address proxy2);
+    function proxy2() external view returns (address proxy2);
 }
