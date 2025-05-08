@@ -15,7 +15,7 @@
     {
       "files": "*.sol",
       "options": {
-        "parser": "solidity-parse",
+        "parser": "antlr",
         "printWidth": 80,
         "tabWidth": 4,
         "useTabs": false,
