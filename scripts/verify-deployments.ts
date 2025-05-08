@@ -130,14 +130,12 @@ function validateDeploymentArguments(network: string, deployment: Deployment, co
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const contractNames = [
+    ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
     ...(chainsSupportedByDapis.includes(network)
       ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
       : []),
     ...(chainsSupportedByMarket.includes(network) ? ['Api3MarketV2'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
-    // GnosisSafeWithoutProxy is checked last because it fails on some chains due to provider issues
-    // https://github.com/api3dao/contracts/issues/223
-    ...(chainsSupportedByManagerMultisig.includes(network) ? ['OwnableCallForwarder', 'GnosisSafeWithoutProxy'] : []),
   ];
 
   for (const contractName of contractNames) {
