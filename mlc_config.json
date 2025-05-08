@@ -1,0 +1,5 @@
+{
+  "retryOn429": true,
+  "retryCount": 1,
+  "fallbackRetryDelay": "5s"
+}
