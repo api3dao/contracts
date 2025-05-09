@@ -11,7 +11,6 @@ import { CHAINS } from '../src/index';
 import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
-const INITIAL_OWNABLECALLFORWARDER_OWNER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
 
 module.exports = async () => {
   const { deploy, log } = deployments;
@@ -36,7 +35,7 @@ module.exports = async () => {
         log(`Deploying OwnableCallForwarder`);
         return deploy('OwnableCallForwarder', {
           from: deployer!.address,
-          args: [INITIAL_OWNABLECALLFORWARDER_OWNER_ADDRESS],
+          args: [gnosisSafeWithoutProxy.address],
           log: true,
           deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
         });
@@ -46,12 +45,6 @@ module.exports = async () => {
       ownableCallForwarderAbi,
       deployer
     ) as unknown as OwnableCallForwarder;
-
-    if ((await ownableCallForwarder.owner()) === deployer!.address) {
-      const transaction = await ownableCallForwarder.transferOwnership(gnosisSafeWithoutProxy.address);
-      await transaction.wait();
-      log(`Transferred OwnableCallForwarder ownership to ${gnosisSafeWithoutProxy.address}`);
-    }
 
     if (chainsSupportedByDapis.includes(network.name)) {
       const accessControlRegistry = await deployments.get('AccessControlRegistry').catch(async () => {
