@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 21.1.0
+
+### Minor Changes
+
+- 1283b3d: Add Stability on Sonic to dApp details
+
 ## 21.0.1
 
 ### Patch Changes

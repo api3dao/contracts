@@ -19,7 +19,7 @@ import {
 } from '../data/chain-support.json';
 import { CHAINS } from '../src/index';
 
-import { goAsyncOptions } from './constants';
+import { goAsyncOptions, skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification } from './constants';
 
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
@@ -28,6 +28,18 @@ const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
 function validateDeploymentArguments(network: string, deployment: Deployment, contractName: string) {
   let expectedDeploymentArgs: string[];
   switch (contractName) {
+    case 'OwnableCallForwarder': {
+      if (skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification.includes(network)) {
+        expectedDeploymentArgs = deployment.args!;
+        break;
+      } else {
+        const { address: gnosisSafeWithoutProxyAddress } = JSON.parse(
+          fs.readFileSync(join('deployments', network, 'GnosisSafeWithoutProxy.json'), 'utf8')
+        );
+        expectedDeploymentArgs = [gnosisSafeWithoutProxyAddress];
+        break;
+      }
+    }
     case 'Api3ServerV1': {
       const { address: accessControlRegistryAddress } = JSON.parse(
         fs.readFileSync(join('deployments', network, 'AccessControlRegistry.json'), 'utf8')
@@ -118,14 +130,12 @@ function validateDeploymentArguments(network: string, deployment: Deployment, co
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const contractNames = [
+    ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
     ...(chainsSupportedByDapis.includes(network)
       ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
       : []),
     ...(chainsSupportedByMarket.includes(network) ? ['Api3MarketV2'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
-    // GnosisSafeWithoutProxy is checked last because it fails on some chains due to provider issues
-    // https://github.com/api3dao/contracts/issues/223
-    ...(chainsSupportedByManagerMultisig.includes(network) ? ['OwnableCallForwarder', 'GnosisSafeWithoutProxy'] : []),
   ];
 
   for (const contractName of contractNames) {
