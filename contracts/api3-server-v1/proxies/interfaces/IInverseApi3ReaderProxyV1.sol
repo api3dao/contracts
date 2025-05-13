@@ -1,16 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "../../../vendor/@chainlink/contracts@1.2.0/src/v0.8/shared/interfaces/AggregatorV2V3Interface.sol";
-import "../../../interfaces/IApi3ReaderProxy.sol";
+import "../adapters/interfaces/IApi3AggregatorAdapter.sol";
 
-interface IInverseApi3ReaderProxyV1 is
-    AggregatorV2V3Interface,
-    IApi3ReaderProxy
-{
+interface IInverseApi3ReaderProxyV1 is IApi3AggregatorAdapter {
     error ZeroProxyAddress();
-
-    error FunctionIsNotSupported();
 
     error DivisionByZero();
 

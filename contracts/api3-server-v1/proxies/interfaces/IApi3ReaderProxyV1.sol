@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "../../../interfaces/IApi3ReaderProxy.sol";
+import "../adapters/interfaces/IApi3AggregatorAdapter.sol";
 
-interface IApi3ReaderProxyV1 is IApi3ReaderProxy {
+interface IApi3ReaderProxyV1 is IApi3AggregatorAdapter {
     error DapiNameIsNotSet();
 
     error DataFeedIsNotInitialized();
-
-    error FunctionIsNotSupported();
 
     function initialize(address initialOwner) external;
 
