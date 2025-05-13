@@ -29,7 +29,8 @@ contract NormalizedApi3ReaderProxyV1 is
         if (feed_ == address(0)) {
             revert ZeroProxyAddress();
         }
-        uint8 feedDecimals_ = AggregatorV2V3Interface(feed).decimals();
+
+        uint8 feedDecimals_ = AggregatorV2V3Interface(feed_).decimals();
         if (feedDecimals_ == 0 || feedDecimals_ > 36) {
             revert UnsupportedFeedDecimals();
         }

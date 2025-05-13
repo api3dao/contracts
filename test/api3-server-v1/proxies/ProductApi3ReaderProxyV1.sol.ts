@@ -4,8 +4,6 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
 import * as testUtils from '../../test-utils';
-import { encodeData } from '../Api3ServerV1.sol';
-import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevExtension.sol';
 
 describe('ProductApi3ReaderProxyV1', function () {
   async function deploy() {
@@ -33,31 +31,6 @@ describe('ProductApi3ReaderProxyV1', function () {
       roles.manager!.address,
       api3ServerV1.getAddress()
     );
-
-    const api3ServerV1OevExtensionOevBidPayerFactory = await ethers.getContractFactory(
-      'MockApi3ServerV1OevExtensionOevBidPayer',
-      roles.deployer
-    );
-    const api3ServerV1OevExtensionOevBidPayer = await api3ServerV1OevExtensionOevBidPayerFactory.deploy(
-      roles.searcher!.address,
-      api3ServerV1OevExtension.getAddress()
-    );
-    await roles.searcher!.sendTransaction({
-      to: api3ServerV1OevExtensionOevBidPayer.getAddress(),
-      value: ethers.parseEther('10'),
-    });
-
-    const managerRootRole = testUtils.deriveRootRole(roles.manager!.address);
-    const adminRole = testUtils.deriveRole(managerRootRole, api3ServerV1OevExtensionAdminRoleDescription);
-    const auctioneerRoleDescription = 'Auctioneer';
-    await accessControlRegistry
-      .connect(roles.manager)
-      .initializeRoleAndGrantToSender(managerRootRole, api3ServerV1OevExtensionAdminRoleDescription);
-    const auctioneerRole = testUtils.deriveRole(adminRole, auctioneerRoleDescription);
-    await accessControlRegistry
-      .connect(roles.manager)
-      .initializeRoleAndGrantToSender(adminRole, auctioneerRoleDescription);
-    await accessControlRegistry.connect(roles.manager).grantRole(auctioneerRole, roles.auctioneer!.address);
 
     const api3ReaderProxyV1Factory = await ethers.getContractFactory('Api3ReaderProxyV1', roles.deployer);
 
@@ -145,20 +118,9 @@ describe('ProductApi3ReaderProxyV1', function () {
       api3ReaderProxyV1EthUsd,
       api3ReaderProxyV1SolEth,
       api3ServerV1,
-      api3ServerV1OevExtension,
-      api3ServerV1OevExtensionOevBidPayer,
-      baseBeaconTimestampEthUsd,
-      baseBeaconTimestampSolEth,
-      baseBeaconValueEthUsd,
-      baseBeaconValueSolEth,
-      dapiNameEthUsd,
-      dapiNameSolEth,
-      dappId,
       productApi3ReaderProxyV1EthSol,
       productApi3ReaderProxyV1SolUsd,
       roles,
-      templateIdEthUsd,
-      templateIdSolEth,
     };
   }
 
@@ -232,48 +194,19 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('read', function () {
     it('reads the product of the proxy rates', async function () {
-      const {
-        roles,
-        api3ServerV1OevExtensionOevBidPayer,
-        productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd,
-        dappId,
-        baseBeaconTimestampSolEth,
-        baseBeaconValueEthUsd,
-        baseBeaconValueSolEth,
-        templateIdSolEth,
-      } = await helpers.loadFixture(deploy);
-      const oevBeaconValueSolEth = (baseBeaconValueSolEth * 101n) / 100n; // 1% increase
-      const oevBeaconTimestampSolEth = baseBeaconTimestampSolEth + 1;
-      const signedDataTimestampCutoff = oevBeaconTimestampSolEth + 10;
-      await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 1);
-      await payOevBid(roles, api3ServerV1OevExtensionOevBidPayer, dappId, signedDataTimestampCutoff, 1);
-      const signature = await signDataWithAlternateTemplateId(
-        roles.airnode as any,
-        templateIdSolEth,
-        oevBeaconTimestampSolEth,
-        encodeData(oevBeaconValueSolEth)
-      );
-      const signedData = ethers.AbiCoder.defaultAbiCoder().encode(
-        ['address', 'bytes32', 'uint256', 'bytes', 'bytes'],
-        [
-          roles.airnode!.address,
-          templateIdSolEth,
-          oevBeaconTimestampSolEth,
-          encodeData(oevBeaconValueSolEth),
-          signature,
-        ]
-      );
-      await helpers.time.setNextBlockTimestamp(oevBeaconTimestampSolEth + 2);
-      await api3ServerV1OevExtensionOevBidPayer.connect(roles.searcher).updateDappOevDataFeed(dappId, [signedData]);
+      const { productApi3ReaderProxyV1SolUsd, api3ReaderProxyV1EthUsd, api3ReaderProxyV1SolEth } =
+        await helpers.loadFixture(deploy);
+      const [baseBeaconValueEthUsd] = await api3ReaderProxyV1EthUsd.read();
+      const [baseBeaconValueSolEth] = await api3ReaderProxyV1SolEth.read();
       const dataFeed = await productApi3ReaderProxyV1SolUsd.read();
-      expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * oevBeaconValueSolEth) / 10n ** 18n);
+      expect(dataFeed.value).to.equal((baseBeaconValueEthUsd * baseBeaconValueSolEth) / 10n ** 18n);
       expect(dataFeed.timestamp).to.equal(await helpers.time.latest());
     });
   });
 
   describe('latestAnswer', function () {
     it('returns proxy value', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const [value] = await productApi3ReaderProxyV1SolUsd.read();
       expect(await productApi3ReaderProxyV1SolUsd.latestAnswer()).to.be.equal(value);
     });
@@ -281,7 +214,7 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('latestTimestamp', function () {
     it('returns proxy value', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const [, timestamp] = await productApi3ReaderProxyV1SolUsd.read();
       expect(await productApi3ReaderProxyV1SolUsd.latestTimestamp()).to.be.equal(timestamp);
     });
@@ -289,7 +222,7 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('latestRound', function () {
     it('reverts', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       await expect(productApi3ReaderProxyV1SolUsd.latestRound())
         .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
         .withArgs();
@@ -298,7 +231,7 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('getAnswer', function () {
     it('reverts', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
       await expect(productApi3ReaderProxyV1SolUsd.getAnswer(blockNumber))
         .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
@@ -308,7 +241,7 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('getTimestamp', function () {
     it('reverts', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
       await expect(productApi3ReaderProxyV1SolUsd.getTimestamp(blockNumber))
         .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
@@ -318,28 +251,28 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('decimals', function () {
     it('returns 18', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       expect(await productApi3ReaderProxyV1SolUsd.decimals()).to.equal(18);
     });
   });
 
   describe('description', function () {
     it('returns empty string', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       expect(await productApi3ReaderProxyV1SolUsd.description()).to.equal('');
     });
   });
 
   describe('version', function () {
-    it('returns 4913', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+    it('returns 4914', async function () {
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       expect(await productApi3ReaderProxyV1SolUsd.version()).to.equal(4914);
     });
   });
 
   describe('getRoundData', function () {
     it('reverts', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const blockNumber = await ethers.provider.getBlockNumber();
       await expect(productApi3ReaderProxyV1SolUsd.getRoundData(blockNumber))
         .to.be.revertedWithCustomError(productApi3ReaderProxyV1SolUsd, 'FunctionIsNotSupported')
@@ -349,7 +282,7 @@ describe('ProductApi3ReaderProxyV1', function () {
 
   describe('latestRoundData', function () {
     it('returns approximated round data', async function () {
-      const { productApi3ReaderProxyV1SolUsd: productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
+      const { productApi3ReaderProxyV1SolUsd } = await helpers.loadFixture(deploy);
       const [value, timestamp] = await productApi3ReaderProxyV1SolUsd.read();
       const [roundId, answer, startedAt, updatedAt, answeredInRound] =
         await productApi3ReaderProxyV1SolUsd.latestRoundData();
