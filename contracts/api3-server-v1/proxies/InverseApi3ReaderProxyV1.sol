@@ -24,7 +24,9 @@ contract InverseApi3ReaderProxyV1 is IInverseApi3ReaderProxyV1 {
 
     /// @notice Returns the inverted value of the underlying IApi3ReaderProxy
     /// @dev This inverts the 18-decimal fixed-point value using 1e36 / value.
-    /// It is assumed that operation might overflow if `baseValue` is too small.
+    /// It is assumed that operation might overflow if `baseValue` is too small
+    /// and will revert on division by zero. No safety checks are performed to
+    /// optimize gas usage. Use with trusted feeds only.
     /// @return value Inverted value of the underlying proxy
     /// @return timestamp Timestamp from the underlying proxy
     function read()
@@ -36,11 +38,9 @@ contract InverseApi3ReaderProxyV1 is IInverseApi3ReaderProxyV1 {
         (int224 baseValue, uint32 baseTimestamp) = IApi3ReaderProxy(proxy)
             .read();
 
-        if (baseValue == 0) {
-            revert DivisionByZero();
+        unchecked {
+            value = int224((1e36) / int256(baseValue));
         }
-
-        value = int224((1e36) / int256(baseValue));
         timestamp = baseTimestamp;
     }
 
