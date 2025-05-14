@@ -17,7 +17,7 @@
       "alias": "default",
       "rpcUrl": "https://mainnet.zircuit.com"
     },
-     {
+    {
       "alias": "chainstack",
       "rpcUrl": "https://zircuit1-mainnet.p2pify.com/"
     },
