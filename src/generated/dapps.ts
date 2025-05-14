@@ -33,6 +33,21 @@ export const DAPPS: Dapp[] = [
   { aliases: { 'mach-finance': { chains: ['sonic'], title: 'MachFi' } }, homepageUrl: 'https://www.machfi.xyz/' },
   { aliases: { malda: { chains: ['linea'], title: 'Malda' } }, homepageUrl: 'https://malda.xyz/' },
   { aliases: { moonwell: { chains: ['moonbeam'], title: 'Moonwell' } }, homepageUrl: 'https://moonwell.fi/' },
+  {
+    aliases: {
+      'morpho-mvl-usdc-770-lltv': {
+        chains: ['ethereum'],
+        title: 'Morpho MVL/USDC 77% LLTV',
+        description: 'Only to be used for the MVL/USDC 77% LLTV market.',
+      },
+      'morpho-wsteth-usdc-860-lltv': {
+        chains: ['ethereum'],
+        title: 'Morpho wstETH/USDC 86% LLTV',
+        description: 'Only to be used for the wstETH/USDC 86% LLTV market.',
+      },
+    },
+    homepageUrl: 'https://morpho.org/vaults/',
+  },
   { aliases: { nerite: { chains: ['arbitrum'], title: 'Nerite' } }, homepageUrl: 'https://www.nerite.org/' },
   { aliases: { omega: { chains: ['mantle'], title: 'Omega' } }, homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
@@ -53,6 +68,7 @@ export const DAPPS: Dapp[] = [
   { aliases: { stability: { chains: ['sonic'], title: 'Stability' } }, homepageUrl: 'https://stability.farm/' },
   { aliases: { stout: { chains: ['sonic'], title: 'Stout' } }, homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
+  { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
   {
     aliases: { 'vicuna-finance': { chains: ['sonic'], title: 'Vicuna Finance' } },
     homepageUrl: 'https://vicunafinance.com/',
