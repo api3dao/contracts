@@ -1,5 +1,18 @@
 # @api3/contracts
 
+## 21.1.1
+
+### Patch Changes
+
+- 5170255: Updates RPC provider configurations:
+
+  - Remove ankr from bitlayer, core, kava, moonbeam, taiko, x-layer
+  - Update default provider for blast-sepolia-testnet, x-layer-sepolia-testnet, zircuit-sepolia-testnet, zircuit
+  - Add blastapi for opbnb, ronin, sei
+  - Replace drpc with publicnode for mantle
+  - Add tenderly for ronin
+  - Add omniatech for lightlink
+
 ## 21.1.0
 
 ### Minor Changes
