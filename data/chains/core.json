@@ -22,10 +22,6 @@
       "rpcUrl": "https://rpc-core.icecreamswap.com/"
     },
     {
-      "alias": "ankr",
-      "homepageUrl": "https://ankr.com"
-    },
-    {
       "alias": "infstones",
       "homepageUrl": "https://infstones.com"
     }

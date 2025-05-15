@@ -15,10 +15,14 @@
   "providers": [
     {
       "alias": "default",
+      "rpcUrl": "https://mainnet.zircuit.com"
+    },
+    {
+      "alias": "chainstack",
       "rpcUrl": "https://zircuit1-mainnet.p2pify.com/"
     },
     {
-      "alias": "public",
+      "alias": "liquify",
       "rpcUrl": "https://zircuit1-mainnet.liquify.com"
     },
     {

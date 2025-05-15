@@ -18,12 +18,12 @@
       "rpcUrl": "https://rpc.mantle.xyz"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "publicnode",
+      "rpcUrl": "https://mantle-rpc.publicnode.com"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
     },
     {
       "alias": "quicknode",

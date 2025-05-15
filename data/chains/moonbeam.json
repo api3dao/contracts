@@ -19,10 +19,6 @@
       "rpcUrl": "https://rpc.api.moonbeam.network"
     },
     {
-      "alias": "ankr",
-      "homepageUrl": "https://ankr.com"
-    },
-    {
       "alias": "publicnode",
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
     },
