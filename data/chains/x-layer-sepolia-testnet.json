@@ -15,6 +15,10 @@
   "providers": [
     {
       "alias": "default",
+      "rpcUrl": "https://rpc.ankr.com/xlayer_testnet/"
+    },
+    {
+      "alias": "public",
       "rpcUrl": "https://testrpc.xlayer.tech/"
     },
     {

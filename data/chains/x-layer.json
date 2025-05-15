@@ -22,10 +22,6 @@
       "rpcUrl": "https://xlayerrpc.okx.com/"
     },
     {
-      "alias": "ankr",
-      "homepageUrl": "https://ankr.com"
-    },
-    {
       "alias": "drpc",
       "homepageUrl": "https://drpc.org"
     }

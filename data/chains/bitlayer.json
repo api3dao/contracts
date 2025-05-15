@@ -22,10 +22,6 @@
       "rpcUrl": "https://rpc.bitlayer-rpc.com"
     },
     {
-      "alias": "ankr",
-      "homepageUrl": "https://ankr.com"
-    },
-    {
       "alias": "rockx",
       "homepageUrl": "https://rockx.com/"
     }

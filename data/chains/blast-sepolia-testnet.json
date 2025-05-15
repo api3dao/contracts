@@ -15,6 +15,10 @@
   "providers": [
     {
       "alias": "default",
+      "rpcUrl": "https://rpc.ankr.com/blast_testnet_sepolia"
+    },
+    {
+      "alias": "public",
       "rpcUrl": "https://sepolia.blast.io"
     }
   ],

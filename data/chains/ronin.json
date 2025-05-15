@@ -18,6 +18,14 @@
     {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "blastapi",
+      "homepageUrl": "https://blastapi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "RON",

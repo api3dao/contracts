@@ -16,6 +16,10 @@
     {
       "alias": "default",
       "rpcUrl": "https://replicator.phoenix.lightlink.io/rpc/v1"
+    },
+    {
+      "alias": "omniatech",
+      "rpcUrl": "https://endpoints.omniatech.io/v1/lightlink/phoenix/public"
     }
   ],
   "symbol": "ETH",
