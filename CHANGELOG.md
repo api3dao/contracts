@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 21.2.0
+
+### Minor Changes
+
+- 796f033: Add TakoTako dApp details
+- 97c61a3: Add Morpho and tunnl to dApp details
+
 ## 21.1.1
 
 ### Patch Changes
