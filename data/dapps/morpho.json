@@ -1,0 +1,15 @@
+{
+  "aliases": {
+    "morpho-mvl-usdc-770-lltv": {
+      "chains": ["ethereum"],
+      "title": "Morpho MVL/USDC 77% LLTV",
+      "description": "Only to be used for the MVL/USDC 77% LLTV market."
+    },
+    "morpho-wsteth-usdc-860-lltv": {
+      "chains": ["ethereum"],
+      "title": "Morpho wstETH/USDC 86% LLTV",
+      "description": "Only to be used for the wstETH/USDC 86% LLTV market."
+    }
+  },
+  "homepageUrl": "https://morpho.org/vaults/"
+}
