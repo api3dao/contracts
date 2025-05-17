@@ -74,8 +74,8 @@ contract ScaledApi3FeedProxyV1 is IScaledApi3FeedProxyV1 {
         return targetDecimals;
     }
 
-    /// @dev The underlying proxy dAPI names act as the description, and this is
-    /// left empty to save gas on contract deployment
+    /// @dev Underlying proxy dApp ID and dAPI name act as the description, and
+    /// this is left empty to save gas on contract deployment
     function description() external pure override returns (string memory) {
         return "";
     }
