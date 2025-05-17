@@ -41,7 +41,7 @@ contract ScaledApi3FeedProxyV1 is IScaledApi3FeedProxyV1 {
     }
 
     /// @dev A Chainlink feed contract returns the block timestamp at which the
-    /// feed was last updated. On the other hand, an API3 feed timestamp
+    /// feed was last updated. On the other hand, an Api3 feed timestamp
     /// denotes the point in time at which the first-party oracles signed the
     /// data used to do the last update. We find this to be a reasonable
     /// approximation, considering that usually the timestamp is only used to
@@ -55,7 +55,7 @@ contract ScaledApi3FeedProxyV1 is IScaledApi3FeedProxyV1 {
         (, timestamp) = _read();
     }
 
-    /// @dev API3 feeds are updated asynchronously and not in rounds
+    /// @dev Api3 feeds are updated asynchronously and not in rounds
     function latestRound() external pure override returns (uint256) {
         revert FunctionIsNotSupported();
     }

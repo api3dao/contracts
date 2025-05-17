@@ -3,9 +3,9 @@ pragma solidity ^0.8.27;
 
 import "./interfaces/IApi3AggregatorAdapter.sol";
 
-/// @title Base implementation of AggregatorV2V3Interface for API3 proxies
+/// @title Base implementation of AggregatorV2V3Interface for Api3 proxies
 /// @notice This abstract contract provides common implementation of
-/// AggregatorV2V3Interface to be inherited by specific API3 proxy contracts
+/// AggregatorV2V3Interface to be inherited by specific Api3 proxy contracts
 abstract contract BaseApi3AggregatorAdapter is IApi3AggregatorAdapter {
     /// @dev IApi3ReaderProxy read function must be implemented by derived
     /// contracts
@@ -23,7 +23,7 @@ abstract contract BaseApi3AggregatorAdapter is IApi3AggregatorAdapter {
     }
 
     /// @dev A Chainlink feed contract returns the block timestamp at which the
-    /// feed was last updated. On the other hand, an API3 feed timestamp
+    /// feed was last updated. On the other hand, an Api3 feed timestamp
     /// denotes the point in time at which the first-party oracles signed the
     /// data used to do the last update. We find this to be a reasonable
     /// approximation, considering that usually the timestamp is only used to
@@ -37,7 +37,7 @@ abstract contract BaseApi3AggregatorAdapter is IApi3AggregatorAdapter {
         (, timestamp) = read();
     }
 
-    /// @dev API3 feeds are updated asynchronously and not in rounds
+    /// @dev Api3 feeds are updated asynchronously and not in rounds
     function latestRound() external pure override returns (uint256) {
         revert FunctionIsNotSupported();
     }
@@ -52,7 +52,7 @@ abstract contract BaseApi3AggregatorAdapter is IApi3AggregatorAdapter {
         revert FunctionIsNotSupported();
     }
 
-    /// @dev API3 feeds always use 18 decimals by default
+    /// @dev Api3 feeds always use 18 decimals by default
     function decimals() external pure override returns (uint8) {
         return 18;
     }

@@ -68,7 +68,7 @@ contract Api3ReaderProxyV1 is
         __Ownable_init(initialOwner);
     }
 
-    /// @notice Returns the current value and timestamp of the API3 data feed
+    /// @notice Returns the current value and timestamp of the Api3 data feed
     /// associated with the proxy contract
     /// @dev Reads the base feed that is associated to the dAPI and the OEV
     /// feed that is associated to the dApp–dAPI pair, and returns the value
