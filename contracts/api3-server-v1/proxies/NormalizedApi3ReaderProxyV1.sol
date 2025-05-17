@@ -38,9 +38,10 @@ contract NormalizedApi3ReaderProxyV1 is
         feedDecimals = feedDecimals_;
     }
 
-    /// @notice Returns the normalized to 18 decimals value from the latest value
+    /// @notice Returns the price of the underlying Chainlink feed normalized to
+    /// 18 decimals
     /// of underlying Chainlink feed
-    /// @return value The normalized signed fixed-point value (18 decimals)
+    /// @return value The normalized signed fixed-point value with 18 decimals
     /// @return timestamp The updatedAt timestamp of the feed
     function read()
         public
