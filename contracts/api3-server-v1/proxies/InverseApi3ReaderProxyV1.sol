@@ -42,9 +42,7 @@ contract InverseApi3ReaderProxyV1 is
         (int224 baseValue, uint32 baseTimestamp) = IApi3ReaderProxy(proxy)
             .read();
 
-        unchecked {
-            value = int224((1e36) / int256(baseValue));
-        }
+        value = int224((1e36) / int256(baseValue));
         timestamp = baseTimestamp;
     }
 
