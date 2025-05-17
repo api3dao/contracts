@@ -37,8 +37,13 @@ contract ProductApi3ReaderProxyV1 is
 
     /// @notice Returns the current value and timestamp of the rate composition
     /// between two IApi3ReaderProxy proxies by multiplying their values
-    /// @dev There is a risk of multiplication overflowing if result is not
-    /// suitable for int256 type. The timestamp is the current block timestamp
+    /// @dev There is a risk of multiplication overflowing if the result exceeds
+    /// `int256` bounds. The returned timestamp is `block.timestamp`, marking
+    /// when this newly derived product value was computed on-chain.
+    /// Timestamps from underlying `IApi3ReaderProxy` feeds are not aggregated.
+    /// Their diverse nature (see `IApi3ReaderProxy` interface for details like
+    /// off-chain origins or varying update cadences) makes aggregation complex
+    /// and potentially misleading for this product's timestamp.
     /// @return value Value of the product of the two proxies
     /// @return timestamp Timestamp of the current block
     function read()
