@@ -16,8 +16,7 @@ contract ScaledApi3FeedProxyV1 is IScaledApi3FeedProxyV1 {
     /// @notice IApi3ReaderProxy contract address
     address public immutable override proxy;
 
-    /// @notice Decimals used to scale the IApi3ReaderProxy value
-    uint8 public immutable override targetDecimals;
+    uint8 private immutable targetDecimals;
 
     /// @param proxy_ IApi3ReaderProxy contract address
     /// @param targetDecimals_ Decimals used to scale the IApi3ReaderProxy value

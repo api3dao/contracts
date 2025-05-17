@@ -91,9 +91,8 @@ describe('ScaledApi3FeedProxyV1', function () {
     context('proxy is not zero address', function () {
       context('targetDecimals is not invalid', function () {
         it('constructs', async function () {
-          const { decimals, api3ReaderProxyV1, scaledApi3FeedProxyV1 } = await helpers.loadFixture(deploy);
+          const { api3ReaderProxyV1, scaledApi3FeedProxyV1 } = await helpers.loadFixture(deploy);
           expect(await scaledApi3FeedProxyV1.proxy()).to.equal(await api3ReaderProxyV1.getAddress());
-          expect(await scaledApi3FeedProxyV1.targetDecimals()).to.equal(decimals);
         });
       });
       context('targetDecimals is invalid', function () {

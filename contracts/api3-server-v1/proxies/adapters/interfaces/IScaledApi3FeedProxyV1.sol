@@ -11,6 +11,4 @@ interface IScaledApi3FeedProxyV1 is AggregatorV2V3Interface {
     error FunctionIsNotSupported();
 
     function proxy() external view returns (address proxy);
-
-    function targetDecimals() external view returns (uint8 targetDecimals);
 }
