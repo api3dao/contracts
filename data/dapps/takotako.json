@@ -1,6 +1,11 @@
 {
   "aliases": {
-    "takotako": { "chains": ["taiko"], "title": "TakoTako" }
+    "takotako": { "chains": ["taiko"], "title": "TakoTako" },
+    "takotako-weeth-eth": {
+      "chains": ["taiko"],
+      "title": "TakoTako weETH/ETH isolated market",
+      "description": "Only to be used for the weETH/ETH isolated market."
+    }
   },
   "homepageUrl": "https://www.takotako.xyz/"
 }
