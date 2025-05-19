@@ -68,7 +68,17 @@ export const DAPPS: Dapp[] = [
   { aliases: { stability: { chains: ['sonic'], title: 'Stability' } }, homepageUrl: 'https://stability.farm/' },
   { aliases: { stout: { chains: ['sonic'], title: 'Stout' } }, homepageUrl: 'https://stout.fi/' },
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
-  { aliases: { takotako: { chains: ['taiko'], title: 'TakoTako' } }, homepageUrl: 'https://www.takotako.xyz/' },
+  {
+    aliases: {
+      takotako: { chains: ['taiko'], title: 'TakoTako' },
+      'takotako-weeth-eth': {
+        chains: ['taiko'],
+        title: 'TakoTako weETH/ETH isolated market',
+        description: 'Only to be used for the weETH/ETH isolated market.',
+      },
+    },
+    homepageUrl: 'https://www.takotako.xyz/',
+  },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
   {
     aliases: { 'vicuna-finance': { chains: ['sonic'], title: 'Vicuna Finance' } },
