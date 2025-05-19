@@ -70,7 +70,7 @@ export const DAPPS: Dapp[] = [
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
   {
     aliases: {
-      takotako: { chains: ['taiko'], title: 'TakoTako' },
+      takotako: { chains: ['taiko'], title: 'TakoTako', description: 'Only to be used for the main markets.' },
       'takotako-weeth-eth': {
         chains: ['taiko'],
         title: 'TakoTako weETH/ETH isolated market',
