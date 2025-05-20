@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 21.3.0
+
+### Minor Changes
+
+- 68d855a: Add TakoTako weETH/ETH isolated market to dApp details
+
 ## 21.2.0
 
 ### Minor Changes
