@@ -4,11 +4,11 @@
   "explorer": {
     "api": {
       "key": {
-        "required": false
+        "required": true
       },
-      "url": "https://curtis.explorer.caldera.xyz/api"
+      "url": "https://api-curtis.apescan.io/api"
     },
-    "browserUrl": "https://curtis.explorer.caldera.xyz/"
+    "browserUrl": "https://curtis.apescan.io/"
   },
   "id": "33111",
   "name": "ApeChain testnet",

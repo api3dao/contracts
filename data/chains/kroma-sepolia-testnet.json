@@ -6,9 +6,9 @@
       "key": {
         "required": true
       },
-      "url": "https://api-sepolia.kromascan.com/api"
+      "url": "https://api.routescan.io/v2/network/testnet/evm/2358/etherscan"
     },
-    "browserUrl": "https://sepolia.kromascan.com/"
+    "browserUrl": "https://testnet.kroscan.io/"
   },
   "id": "2358",
   "name": "Kroma testnet",
