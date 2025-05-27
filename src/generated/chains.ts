@@ -1137,19 +1137,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'rechain-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet-explorer.rechain.dev/api' },
-      browserUrl: 'https://testnet-explorer.rechain.dev/',
-    },
-    id: '42402',
-    name: 'ReChain testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.rechain.dev/' }],
-    symbol: 'VET',
-    testnet: true,
-  },
-  {
     alias: 'ronin-testnet',
     decimals: 18,
     explorer: { browserUrl: 'https://saigon-app.roninchain.com/' },
