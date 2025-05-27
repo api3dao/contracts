@@ -15,7 +15,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://testnet.rpc.rarichain.org/http/"
+      "rpcUrl": "https://rari-testnet.calderachain.xyz/http"
     }
   ],
   "symbol": "ETH",
