@@ -84,7 +84,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'polygon-zkevm-sepolia-testnet',
   'rari',
   'rari-arbitrum-sepolia-testnet',
-  'rechain-testnet',
   'ronin',
   'ronin-testnet',
   'scroll',
