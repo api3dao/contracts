@@ -4,11 +4,11 @@
   "explorer": {
     "api": {
       "key": {
-        "required": false
+        "required": true
       },
-      "url": "https://api.routescan.io/v2/network/testnet/evm/80069/etherscan/api"
+      "url": "https://api-testnet.berascan.com/api"
     },
-    "browserUrl": "https://bepolia.beratrail.io/"
+    "browserUrl": "https://testnet.berascan.com/"
   },
   "id": "80069",
   "name": "Berachain testnet",
