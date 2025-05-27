@@ -18,10 +18,6 @@
       "rpcUrl": "https://testnet.zircuit.com"
     },
     {
-      "alias": "chainstack",
-      "rpcUrl": "https://zircuit1-testnet.p2pify.com/"
-    },
-    {
       "alias": "liquify",
       "rpcUrl": "https://zircuit1-testnet.liquify.com"
     }

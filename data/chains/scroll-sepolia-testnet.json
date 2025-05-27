@@ -16,10 +16,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://sepolia-rpc.scroll.io"
-    },
-    {
-      "alias": "publicnode",
-      "rpcUrl": "https://scroll-sepolia-rpc.publicnode.com"
     }
   ],
   "symbol": "ETH",

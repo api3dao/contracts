@@ -16,10 +16,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://rpc.hekla.taiko.xyz"
-    },
-    {
-      "alias": "publicnode",
-      "rpcUrl": "https://taiko-hekla-rpc.publicnode.com"
     }
   ],
   "symbol": "ETH",
