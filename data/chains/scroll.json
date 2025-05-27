@@ -18,10 +18,6 @@
       "rpcUrl": "https://rpc.scroll.io"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://scroll-rpc.publicnode.com"
-    },
-    {
       "alias": "drpc",
       "homepageUrl": "https://drpc.org"
     },
