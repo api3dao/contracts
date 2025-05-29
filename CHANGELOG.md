@@ -1,5 +1,28 @@
 # @api3/contracts
 
+## 22.0.0
+
+### Major Changes
+
+- fe10931: Remove support for following chains:
+
+  - rechain-testnet
+
+### Patch Changes
+
+- 317509e: Update block explorer for following chains:
+
+  - apechain-arbitrum-sepolia-testnet
+  - berachain-testnet
+  - kroma-sepolia-testnet
+  - metis
+  - world-sepolia-testnet
+
+- 7cfebed: Updates RPC provider configurations:
+
+  - Update default provider for atleta-testnet, ethereum-holesky-testnet, rari-arbitrum-sepolia-testnet, x-layer-sepolia-testnet
+  - Remove not realible alternative providers from blast-sepolia-testnet, scroll-sepolia-testnet, scroll, taiko-holesky-testnet, zircuit-sepolia-testnet
+
 ## 21.3.0
 
 ### Minor Changes
