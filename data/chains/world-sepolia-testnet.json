@@ -4,11 +4,11 @@
   "explorer": {
     "api": {
       "key": {
-        "required": false
+        "required": true
       },
-      "url": "https://worldchain-sepolia.explorer.alchemy.com/api"
+      "url": "https://api-sepolia.worldscan.org/api"
     },
-    "browserUrl": "https://worldchain-sepolia.explorer.alchemy.com/"
+    "browserUrl": "https://sepolia.worldscan.org/"
   },
   "id": "4801",
   "name": "World Chain testnet",

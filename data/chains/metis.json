@@ -6,9 +6,9 @@
       "key": {
         "required": false
       },
-      "url": "https://andromeda-explorer.metis.io/api"
+      "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
     },
-    "browserUrl": "https://andromeda-explorer.metis.io/"
+    "browserUrl": "https://explorer.metis.io/"
   },
   "id": "1088",
   "name": "Metis",
