@@ -2,7 +2,7 @@ import { type HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import type { BytesLike } from 'ethers';
 import { deployments, ethers, network } from 'hardhat';
 
-import { chainsSupportedByDapis } from '../data/chain-support.json';
+import { chainsSupportedByMarket } from '../data/chain-support.json';
 import { Api3ServerV1__factory } from '../src/index';
 
 const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
@@ -45,7 +45,7 @@ module.exports = async () => {
   // If the first signer returned by ethers is the expected deployer address, it will do both (1) and (2).
   // Otherwise, it will only do (1). In both cases, (1) is done using hardcoded signatures by the expected
   // deployer address.
-  if (!chainsSupportedByDapis.includes(network.name)) {
+  if (!chainsSupportedByMarket.includes(network.name)) {
     log(`Skipping Beacon set update for ${network.name}`);
     return;
   }
