@@ -2,4 +2,4 @@
 '@api3/contracts': major
 ---
 
-Removed dAPI and Market support from deprecated Core testnet and added replaced Core testnet (with the same alias)
+Removed dAPI and Market support for the deprecated Core testnet (chain ID 1115) and added support for the replacement Core testnet (chain ID 1114) under the same alias
