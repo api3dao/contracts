@@ -15,11 +15,11 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.mainnet.taiko.xyz"
+      "rpcUrl": "https://taiko-rpc.publicnode.com"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://taiko-rpc.publicnode.com"
+      "alias": "public",
+      "rpcUrl": "https://rpc.mainnet.taiko.xyz"
     },
     {
       "alias": "drpc",
