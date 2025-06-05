@@ -1309,8 +1309,8 @@ export const CHAINS: Chain[] = [
     id: '167000',
     name: 'Taiko',
     providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.mainnet.taiko.xyz' },
-      { alias: 'publicnode', rpcUrl: 'https://taiko-rpc.publicnode.com' },
+      { alias: 'default', rpcUrl: 'https://taiko-rpc.publicnode.com' },
+      { alias: 'public', rpcUrl: 'https://rpc.mainnet.taiko.xyz' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
     ],
