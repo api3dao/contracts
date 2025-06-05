@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 23.0.0
+
+### Major Changes
+
+- 8592e34: Removed dAPI and Market support for the deprecated Core testnet (chain ID 1115) and added support for the replacement Core testnet (chain ID 1114) under the same alias
+
+### Patch Changes
+
+- c6b1692: Update default provider for taiko
+
 ## 22.0.0
 
 ### Major Changes
