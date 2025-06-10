@@ -52,7 +52,7 @@ export const DAPPS: Dapp[] = [
   { aliases: { omega: { chains: ['mantle'], title: 'Omega' } }, homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
   {
-    aliases: { 'segment-finance': { chains: ['bob'], title: 'Segment Finance' } },
+    aliases: { 'segment-finance': { chains: ['bob', 'core'], title: 'Segment Finance' } },
     homepageUrl: 'https://www.segment.finance/',
   },
   {
