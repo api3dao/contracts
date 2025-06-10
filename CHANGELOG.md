@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 23.1.0
+
+### Minor Changes
+
+- c94f62b: Add Segment Finance on Core chain to dApp details
+
 ## 23.0.0
 
 ### Major Changes
