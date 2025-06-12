@@ -27,14 +27,12 @@ jobs:
       - name: Check changeset files
         id: check_files
         run: |
-          if find ./.changeset -maxdepth 1 -type f -name "*.md" ! -name "README.md" | grep -q .; then
-            echo "files_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "files_exists=false" >> $GITHUB_OUTPUT
-          fi
+            if ! find ./.changeset -maxdepth 1 -type f -name "*.md" ! -name "README.md" | grep -q .; then
+              echo "No changeset files found in ./.changeset directory"
+              exit 1
+            fi
 
       - name: Create release PR
-        if: ${{ steps.check_files.outputs.files_exists == 'true' }}
         run: gh pr create -B production -H main --title 'Initiate release' --body 'Merges main into production' --reviewer bbenligiray
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
