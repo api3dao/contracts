@@ -11,12 +11,7 @@ import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
 
-import {
-  chainsSupportedByManagerMultisig,
-  chainsSupportedByDapis,
-  chainsSupportedByMarket,
-  chainsSupportedByOevAuctions,
-} from '../data/chain-support.json';
+import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../data/chain-support.json';
 import { CHAINS } from '../src/index';
 
 import { goAsyncOptions, skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification } from './constants';
@@ -130,11 +125,17 @@ function validateDeploymentArguments(network: string, deployment: Deployment, co
 async function verifyDeployments(network: string) {
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const contractNames = [
-    ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
-    ...(chainsSupportedByDapis.includes(network)
-      ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
+    ...(chainsSupportedByMarket.includes(network)
+      ? [
+          'GnosisSafeWithoutProxy',
+          'OwnableCallForwarder',
+          'AccessControlRegistry',
+          'Api3ServerV1',
+          'Api3ServerV1OevExtension',
+          'Api3ReaderProxyV1Factory',
+          'Api3MarketV2',
+        ]
       : []),
-    ...(chainsSupportedByMarket.includes(network) ? ['Api3MarketV2'] : []),
     ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
   ];
 
@@ -204,7 +205,7 @@ async function verifyDeployments(network: string) {
 }
 
 async function main() {
-  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByManagerMultisig;
+  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByMarket;
 
   const erroredMainnets: string[] = [];
   const erroredTestnets: string[] = [];

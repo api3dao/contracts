@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
-import { chainsSupportedByManagerMultisig, chainsSupportedByDapis } from '../data/chain-support.json';
+import { chainsSupportedByMarket } from '../data/chain-support.json';
 import { CHAINS } from '../src/index';
 
 import { goAsyncOptions } from './constants';
@@ -16,7 +16,7 @@ import { goAsyncOptions } from './constants';
 const MAXIMUM_GETLOGS_BLOCK_RANGE = 50_000;
 
 async function surveyRoles(network: string) {
-  if (!chainsSupportedByDapis.includes(network)) {
+  if (!chainsSupportedByMarket.includes(network)) {
     return;
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
@@ -82,7 +82,7 @@ async function surveyRoles(network: string) {
 }
 
 async function main() {
-  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByManagerMultisig;
+  const networks = process.env.NETWORK ? [process.env.NETWORK] : chainsSupportedByMarket;
 
   const erroredMainnets: string[] = [];
   const erroredTestnets: string[] = [];
