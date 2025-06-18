@@ -792,6 +792,19 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'metal-sepolia-testnet',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://testnet.explorer.metall2.com/api' },
+      browserUrl: 'https://testnet.explorer.metall2.com/',
+    },
+    id: '1740',
+    name: 'Metal L2 testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://testnet.rpc.metall2.com/' }],
+    symbol: 'ETH',
+    testnet: true,
+  },
+  {
     alias: 'metal',
     decimals: 18,
     explorer: {
