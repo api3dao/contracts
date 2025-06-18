@@ -9,7 +9,6 @@ import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
   { aliases: { apebank: { chains: ['apechain'], title: 'ApeBank' } }, homepageUrl: 'https://ape-bank.netlify.app/' },
-  { aliases: { 'aurum-finance': { chains: ['sonic'], title: 'Aurum' } }, homepageUrl: 'https://aurumfi.io/' },
   {
     aliases: {
       'compound-finance-usde': {
@@ -21,14 +20,9 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://compound.finance/',
   },
   { aliases: { dtrinity: { chains: ['fraxtal', 'sonic'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
-  { aliases: { elara: { chains: ['zircuit'], title: 'Elara' } }, homepageUrl: 'https://app.elara.finance/' },
   { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://www.enclabs.finance/' },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
-  {
-    aliases: { ionic: { chains: ['mode', 'metal'], title: 'Ionic Protocol' } },
-    homepageUrl: 'https://www.ionic.money/',
-  },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
   { aliases: { 'mach-finance': { chains: ['sonic'], title: 'MachFi' } }, homepageUrl: 'https://www.machfi.xyz/' },
   { aliases: { malda: { chains: ['linea'], title: 'Malda' } }, homepageUrl: 'https://malda.xyz/' },
@@ -49,7 +43,6 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://morpho.org/vaults/',
   },
   { aliases: { nerite: { chains: ['arbitrum'], title: 'Nerite' } }, homepageUrl: 'https://www.nerite.org/' },
-  { aliases: { omega: { chains: ['mantle'], title: 'Omega' } }, homepageUrl: 'https://www.omega.xyz/' },
   { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
   {
     aliases: { 'segment-finance': { chains: ['bob', 'core'], title: 'Segment Finance' } },
@@ -80,10 +73,6 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://www.takotako.xyz/',
   },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
-  {
-    aliases: { 'vicuna-finance': { chains: ['sonic'], title: 'Vicuna Finance' } },
-    homepageUrl: 'https://vicunafinance.com/',
-  },
   { aliases: { yei: { chains: ['sei'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
   { aliases: { zerolend: { chains: ['zircuit'], title: 'ZeroLend' } }, homepageUrl: 'https://zerolend.xyz/' },
 ];

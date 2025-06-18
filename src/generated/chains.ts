@@ -191,7 +191,6 @@ export const CHAINS: Chain[] = [
     name: 'Berachain',
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.berachain.com/' },
-      { alias: 'publicnode', rpcUrl: 'https://berachain-rpc.publicnode.com' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
@@ -369,7 +368,7 @@ export const CHAINS: Chain[] = [
     },
     id: '17000',
     name: 'Ethereum Holesky testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://holesky.gateway.tenderly.co' }],
+    providers: [{ alias: 'default', rpcUrl: 'https://ethereum-holesky-rpc.publicnode.com' }],
     symbol: 'ETH',
     testnet: true,
   },
@@ -792,6 +791,19 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'metal-sepolia-testnet',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://testnet.explorer.metall2.com/api' },
+      browserUrl: 'https://testnet.explorer.metall2.com/',
+    },
+    id: '1740',
+    name: 'Metal L2 testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://testnet.rpc.metall2.com/' }],
+    symbol: 'ETH',
+    testnet: true,
+  },
+  {
     alias: 'metal',
     decimals: 18,
     explorer: {
@@ -932,7 +944,6 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.api.moonriver.moonbeam.network' },
       { alias: 'publicnode', rpcUrl: 'https://moonriver-rpc.publicnode.com' },
-      { alias: 'blastapi', homepageUrl: 'https://blastapi.io' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org/' },
     ],
     symbol: 'MOVR',
