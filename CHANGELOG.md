@@ -1,5 +1,23 @@
 # @api3/contracts
 
+## 24.0.0
+
+### Major Changes
+
+- 1f3906a: Remove unused dApp aliases
+
+### Minor Changes
+
+- 184643d: Add dAPI and Market support to metal-sepolia-testnet
+
+### Patch Changes
+
+- ce97433: Updates RPC provider configurations:
+
+  - Update default provider for ethereum-holesky-testnet
+  - Remove publicnode from berachain
+  - Remove blastapi from moonriver
+
 ## 23.1.0
 
 ### Minor Changes
