@@ -16,7 +16,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://holesky.gateway.tenderly.co"
+      "rpcUrl": "https://ethereum-holesky-rpc.publicnode.com"
     }
   ],
   "symbol": "ETH",

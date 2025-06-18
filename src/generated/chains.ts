@@ -191,7 +191,6 @@ export const CHAINS: Chain[] = [
     name: 'Berachain',
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.berachain.com/' },
-      { alias: 'publicnode', rpcUrl: 'https://berachain-rpc.publicnode.com' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
@@ -369,7 +368,7 @@ export const CHAINS: Chain[] = [
     },
     id: '17000',
     name: 'Ethereum Holesky testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://holesky.gateway.tenderly.co' }],
+    providers: [{ alias: 'default', rpcUrl: 'https://ethereum-holesky-rpc.publicnode.com' }],
     symbol: 'ETH',
     testnet: true,
   },
@@ -945,7 +944,6 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.api.moonriver.moonbeam.network' },
       { alias: 'publicnode', rpcUrl: 'https://moonriver-rpc.publicnode.com' },
-      { alias: 'blastapi', homepageUrl: 'https://blastapi.io' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org/' },
     ],
     symbol: 'MOVR',
