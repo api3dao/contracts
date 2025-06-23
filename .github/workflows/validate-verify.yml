@@ -39,4 +39,4 @@ jobs:
 
       - name: Verify deployments
         run: pnpm verify-deployments
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && !cancelled()
