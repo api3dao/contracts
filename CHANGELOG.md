@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 24.1.0
+
+### Minor Changes
+
+- e4e71c5: Add dAPI and Market support to katana
+
 ## 24.0.0
 
 ### Major Changes
