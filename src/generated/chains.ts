@@ -533,6 +533,22 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'katana',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://explorer.katanarpc.com/api' },
+      browserUrl: 'https://explorer.katanarpc.com/',
+    },
+    id: '747474',
+    name: 'Katana',
+    providers: [
+      { alias: 'default', rpcUrl: 'https://rpc.katana.network' },
+      { alias: 'conduit', homepageUrl: 'https://conduit.xyz' },
+    ],
+    symbol: 'ETH',
+    testnet: false,
+  },
+  {
     alias: 'kava-testnet',
     decimals: 18,
     explorer: {
