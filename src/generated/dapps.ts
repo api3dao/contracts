@@ -39,6 +39,16 @@ export const DAPPS: Dapp[] = [
         title: 'Morpho wstETH/USDC 86% LLTV',
         description: 'Only to be used for the wstETH/USDC 86% LLTV market.',
       },
+      'morpho-wbtc-usdc-860-lltv': {
+        chains: ['ethereum'],
+        title: 'Morpho WTBC/USDC 86% LLTV',
+        description: 'Only to be used for the WTBC/USDC 86% LLTV market.',
+      },
+      'morpho-cbbtc-usdc-860-lltv': {
+        chains: ['ethereum'],
+        title: 'Morpho cbBTC/USDC 86% LLTV',
+        description: 'Only to be used for the cbBTC/USDC 86% LLTV market.',
+      },
     },
     homepageUrl: 'https://morpho.org/vaults/',
   },
