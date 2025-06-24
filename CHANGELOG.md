@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 24.2.0
+
+### Minor Changes
+
+- 7161784: Add Morpho BTC dApp aliases
+
 ## 24.1.0
 
 ### Minor Changes
