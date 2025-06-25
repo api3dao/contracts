@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 24.2.1
+
+### Patch Changes
+
+- a4d6344: Fix typo from WTBC to WBTC
+
 ## 24.2.0
 
 ### Minor Changes
