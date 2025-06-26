@@ -79,19 +79,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'atleta-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://blockscout.testnet-v2.atleta.network/api' },
-      browserUrl: 'https://blockscout.testnet-v2.atleta.network/',
-    },
-    id: '2340',
-    name: 'Atleta testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.atleta.network' }],
-    symbol: 'ATLA',
-    testnet: true,
-  },
-  {
     alias: 'avalanche-testnet',
     decimals: 18,
     explorer: {
@@ -475,32 +462,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'inevm-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet.explorer.inevm.com/api' },
-      browserUrl: 'https://testnet.explorer.inevm.com/',
-    },
-    id: '2424',
-    name: 'inEVM testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://testnet.rpc.inevm.com/http' }],
-    symbol: 'INJ',
-    testnet: true,
-  },
-  {
-    alias: 'inevm',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.inevm.com/api' },
-      browserUrl: 'https://explorer.inevm.com/',
-    },
-    id: '2525',
-    name: 'inEVM',
-    providers: [{ alias: 'default', rpcUrl: 'https://mainnet.rpc.inevm.com/http' }],
-    symbol: 'INJ',
-    testnet: false,
-  },
-  {
     alias: 'ink-sepolia-testnet',
     decimals: 18,
     explorer: {
@@ -579,19 +540,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'kroma-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.routescan.io/v2/network/testnet/evm/2358/etherscan' },
-      browserUrl: 'https://testnet.kroscan.io/',
-    },
-    id: '2358',
-    name: 'Kroma testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://api.sepolia.kroma.network/' }],
-    symbol: 'ETH',
-    testnet: true,
-  },
-  {
     alias: 'kroma',
     decimals: 18,
     explorer: {
@@ -604,35 +552,6 @@ export const CHAINS: Chain[] = [
       { alias: 'default', rpcUrl: 'https://api.kroma.network/' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
       { alias: 'rockx', homepageUrl: 'https://rockx.com/' },
-    ],
-    symbol: 'ETH',
-    testnet: false,
-  },
-  {
-    alias: 'lightlink-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://pegasus.lightlink.io/api' },
-      browserUrl: 'https://pegasus.lightlink.io/',
-    },
-    id: '1891',
-    name: 'LightLink testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://replicator.pegasus.lightlink.io/rpc/v1' }],
-    symbol: 'ETH',
-    testnet: true,
-  },
-  {
-    alias: 'lightlink',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://phoenix.lightlink.io/api' },
-      browserUrl: 'https://phoenix.lightlink.io/',
-    },
-    id: '1890',
-    name: 'LightLink',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://replicator.phoenix.lightlink.io/rpc/v1' },
-      { alias: 'omniatech', rpcUrl: 'https://endpoints.omniatech.io/v1/lightlink/phoenix/public' },
     ],
     symbol: 'ETH',
     testnet: false,
@@ -1135,32 +1054,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'rari-arbitrum-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet.explorer.rarichain.org/api' },
-      browserUrl: 'https://testnet.explorer.rarichain.org/',
-    },
-    id: '1918988905',
-    name: 'RARI Chain testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://rari-testnet.calderachain.xyz/http' }],
-    symbol: 'ETH',
-    testnet: true,
-  },
-  {
-    alias: 'rari',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://mainnet.explorer.rarichain.org/api' },
-      browserUrl: 'https://mainnet.explorer.rarichain.org/',
-    },
-    id: '1380012617',
-    name: 'RARI Chain',
-    providers: [{ alias: 'default', rpcUrl: 'https://mainnet.rpc.rarichain.org/http/' }],
-    symbol: 'ETH',
-    testnet: false,
-  },
-  {
     alias: 'ronin-testnet',
     decimals: 18,
     explorer: { browserUrl: 'https://saigon-app.roninchain.com/' },
@@ -1449,22 +1342,6 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'OKB',
     testnet: false,
-  },
-  {
-    alias: 'zircuit-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://explorer.testnet.zircuit.com/api/contractVerifyHardhat' },
-      browserUrl: 'https://explorer.testnet.zircuit.com/',
-    },
-    id: '48899',
-    name: 'Zircuit testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://testnet.zircuit.com' },
-      { alias: 'liquify', rpcUrl: 'https://zircuit1-testnet.liquify.com' },
-    ],
-    symbol: 'ETH',
-    testnet: true,
   },
   {
     alias: 'zircuit',
