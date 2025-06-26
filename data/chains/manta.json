@@ -19,7 +19,7 @@
     },
     {
       "alias": "public",
-      "rpcUrl": "https://r1.pacific.manta.systems/http"
+      "rpcUrl": "https://manta-pacific-gascap.calderachain.xyz/http"
     },
     {
       "alias": "nirvanalabs",
