@@ -18,8 +18,8 @@
       "rpcUrl": "https://rpc-amoy.polygon.technology"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://polygon-amoy-bor-rpc.publicnode.com"
+      "alias": "tenderly-public",
+      "rpcUrl": "https://polygon-amoy.gateway.tenderly.co"
     }
   ],
   "symbol": "POL",
