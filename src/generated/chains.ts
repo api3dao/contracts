@@ -646,7 +646,7 @@ export const CHAINS: Chain[] = [
     name: 'Manta',
     providers: [
       { alias: 'default', rpcUrl: 'https://pacific-rpc.manta.network/http' },
-      { alias: 'public', rpcUrl: 'https://r1.pacific.manta.systems/http' },
+      { alias: 'public', rpcUrl: 'https://manta-pacific-gascap.calderachain.xyz/http' },
       { alias: 'nirvanalabs', rpcUrl: 'https://manta.nirvanalabs.xyz/mantapublic' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
     ],
@@ -997,7 +997,7 @@ export const CHAINS: Chain[] = [
     name: 'Polygon testnet',
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc-amoy.polygon.technology' },
-      { alias: 'publicnode', rpcUrl: 'https://polygon-amoy-bor-rpc.publicnode.com' },
+      { alias: 'tenderly-public', rpcUrl: 'https://polygon-amoy.gateway.tenderly.co' },
     ],
     symbol: 'POL',
     testnet: true,
