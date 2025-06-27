@@ -2,24 +2,14 @@
   "alias": "zircuit-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://explorer.testnet.zircuit.com/api/contractVerifyHardhat"
-    },
-    "browserUrl": "https://explorer.testnet.zircuit.com/"
+    "browserUrl": "https://explorer.garfield-testnet.zircuit.com/"
   },
-  "id": "48899",
+  "id": "48898",
   "name": "Zircuit testnet",
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://testnet.zircuit.com"
-    },
-    {
-      "alias": "liquify",
-      "rpcUrl": "https://zircuit1-testnet.liquify.com"
+      "rpcUrl": "https://garfield-testnet.zircuit.com"
     }
   ],
   "symbol": "ETH",
