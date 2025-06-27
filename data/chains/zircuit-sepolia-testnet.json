@@ -1,0 +1,17 @@
+{
+  "alias": "zircuit-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://explorer.garfield-testnet.zircuit.com/"
+  },
+  "id": "48898",
+  "name": "Zircuit",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://garfield-testnet.zircuit.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}
