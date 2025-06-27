@@ -6,16 +6,16 @@
       "key": {
         "required": true
       },
-      "url": "https://api.test.btcs.network/api"
+      "url": "https://api.test2.btcs.network/api"
     },
-    "browserUrl": "https://scan.test.btcs.network/"
+    "browserUrl": "https://scan.test2.btcs.network/"
   },
-  "id": "1115",
+  "id": "1114",
   "name": "Core testnet",
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.test.btcs.network/"
+      "rpcUrl": "https://rpc.test2.btcs.network/"
     }
   ],
   "symbol": "CORE",

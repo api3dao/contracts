@@ -1,0 +1,38 @@
+# https://github.com/changesets/action
+name: Initiate-Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  initiate-release:
+    name: Initiate-Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Check if main branch is used
+        run: |
+          BRANCH_NAME=$(echo $GITHUB_REF | awk -F'/' '{print $3}')
+          if [[ "$BRANCH_NAME" != "main" ]]; then
+            echo "Branch $BRANCH_NAME is not allowed to use this action"
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check changeset files
+        id: check_files
+        run: |
+            if ! find ./.changeset -maxdepth 1 -type f -name "*.md" ! -name "README.md" | grep -q .; then
+              echo "No changeset files found in ./.changeset directory"
+              exit 1
+            fi
+
+      - name: Create release PR
+        run: gh pr create -B production -H main --title 'Initiate release' --body 'Merges main into production' --reviewer bbenligiray
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

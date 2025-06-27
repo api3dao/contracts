@@ -1,5 +1,84 @@
 # @api3/contracts
 
+## 25.0.0
+
+### Major Changes
+
+- 6171e77: Remove support for following chains:
+
+  - atleta-testnet
+  - inevm-testnet
+  - inevm
+  - kroma-sepolia-testnet
+  - lightlink-sepolia-testnet
+  - lightlink
+  - rari-arbitrum-sepolia-testnet
+  - rari
+  - zircuit-sepolia-testnet (48899)
+
+### Minor Changes
+
+- f9e3e4b: Add dAPI and Market support to zircuit-sepolia-testnet (48898)
+
+### Patch Changes
+
+- cd423b4: Updates RPC provider configurations:
+
+  - Update public provider for manta
+  - Replace publicnode with tenderly-public for polygon-sepolia-testnet
+
+## 24.2.1
+
+### Patch Changes
+
+- a4d6344: Fix typo from WTBC to WBTC
+
+## 24.2.0
+
+### Minor Changes
+
+- 7161784: Add Morpho BTC dApp aliases
+
+## 24.1.0
+
+### Minor Changes
+
+- e4e71c5: Add dAPI and Market support to katana
+
+## 24.0.0
+
+### Major Changes
+
+- 1f3906a: Remove unused dApp aliases
+
+### Minor Changes
+
+- 184643d: Add dAPI and Market support to metal-sepolia-testnet
+
+### Patch Changes
+
+- ce97433: Updates RPC provider configurations:
+
+  - Update default provider for ethereum-holesky-testnet
+  - Remove publicnode from berachain
+  - Remove blastapi from moonriver
+
+## 23.1.0
+
+### Minor Changes
+
+- c94f62b: Add Segment Finance on Core chain to dApp details
+
+## 23.0.0
+
+### Major Changes
+
+- 8592e34: Removed dAPI and Market support for the deprecated Core testnet (chain ID 1115) and added support for the replacement Core testnet (chain ID 1114) under the same alias
+
+### Patch Changes
+
+- c6b1692: Update default provider for taiko
+
 ## 22.0.0
 
 ### Major Changes
