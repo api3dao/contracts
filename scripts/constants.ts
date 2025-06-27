@@ -94,5 +94,5 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'world-sepolia-testnet',
   'x-layer',
   'x-layer-sepolia-testnet',
-  'zircuit'
+  'zircuit',
 ];
