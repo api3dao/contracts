@@ -1344,6 +1344,16 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'zircuit-sepolia-testnet',
+    decimals: 18,
+    explorer: { browserUrl: 'https://explorer.garfield-testnet.zircuit.com/' },
+    id: '48898',
+    name: 'Zircuit testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://garfield-testnet.zircuit.com' }],
+    symbol: 'ETH',
+    testnet: true,
+  },
+  {
     alias: 'zircuit',
     decimals: 18,
     explorer: {

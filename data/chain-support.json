@@ -82,7 +82,8 @@
     "world-sepolia-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
-    "zircuit"
+    "zircuit",
+    "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByDapis": [
     "apechain",
@@ -167,7 +168,8 @@
     "world-sepolia-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
-    "zircuit"
+    "zircuit",
+    "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByMarket": [
     "apechain",
@@ -252,7 +254,8 @@
     "world-sepolia-testnet",
     "x-layer",
     "x-layer-sepolia-testnet",
-    "zircuit"
+    "zircuit",
+    "zircuit-sepolia-testnet"
   ],
   "chainsSupportedByOevAuctions": ["oev-network"]
 }
