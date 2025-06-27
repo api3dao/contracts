@@ -1348,7 +1348,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: { browserUrl: 'https://explorer.garfield-testnet.zircuit.com/' },
     id: '48898',
-    name: 'Zircuit',
+    name: 'Zircuit testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://garfield-testnet.zircuit.com' }],
     symbol: 'ETH',
     testnet: true,
