@@ -1,5 +1,32 @@
 # @api3/contracts
 
+## 25.0.0
+
+### Major Changes
+
+- 6171e77: Remove support for following chains:
+
+  - atleta-testnet
+  - inevm-testnet
+  - inevm
+  - kroma-sepolia-testnet
+  - lightlink-sepolia-testnet
+  - lightlink
+  - rari-arbitrum-sepolia-testnet
+  - rari
+  - zircuit-sepolia-testnet (48899)
+
+### Minor Changes
+
+- f9e3e4b: Add dAPI and Market support to zircuit-sepolia-testnet (48898)
+
+### Patch Changes
+
+- cd423b4: Updates RPC provider configurations:
+
+  - Update public provider for manta
+  - Replace publicnode with tenderly-public for polygon-sepolia-testnet
+
 ## 24.2.1
 
 ### Patch Changes
