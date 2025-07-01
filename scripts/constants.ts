@@ -45,7 +45,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'ink-sepolia-testnet',
   'kava',
   'kava-testnet',
-  'kroma',
   'linea',
   'linea-sepolia-testnet',
   'lumia',
