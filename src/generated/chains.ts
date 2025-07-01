@@ -540,23 +540,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'kroma',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api.routescan.io/v2/network/mainnet/evm/255/etherscan' },
-      browserUrl: 'https://kroscan.io/',
-    },
-    id: '255',
-    name: 'Kroma',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://api.kroma.network/' },
-      { alias: 'drpc', homepageUrl: 'https://drpc.org' },
-      { alias: 'rockx', homepageUrl: 'https://rockx.com/' },
-    ],
-    symbol: 'ETH',
-    testnet: false,
-  },
-  {
     alias: 'linea-sepolia-testnet',
     decimals: 18,
     explorer: {
