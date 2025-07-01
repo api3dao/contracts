@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 26.0.0
+
+### Major Changes
+
+- adf5421: Remove support for following chain:
+
+  - kroma
+
 ## 25.0.0
 
 ### Major Changes
