@@ -19,6 +19,26 @@
       "chains": ["ethereum"],
       "title": "Morpho cbBTC/USDC 86% LLTV",
       "description": "Only to be used for the cbBTC/USDC 86% LLTV market."
+    },
+    "morpho-vbeth-vbusdc-860-lltv": {
+      "chains": ["katana"],
+      "title": "Morpho vbETH/vbUSDC 86% LLTV",
+      "description": "Only to be used for the vbETH/vbUSDC 86% LLTV market."
+    },
+    "morpho-vbeth-vbusdt-860-lltv": {
+      "chains": ["katana"],
+      "title": "Morpho vbETH/vbUSDT 86% LLTV",
+      "description": "Only to be used for the vbETH/vbUSDT 86% LLTV market."
+    },
+    "morpho-vbwbtc-vbusdc-860-lltv": {
+      "chains": ["katana"],
+      "title": "Morpho vbWBTC/vbUSDC 86% LLTV",
+      "description": "Only to be used for the vbWBTC/vbUSDC 86% LLTV market."
+    },
+    "morpho-vbwbtc-vbusdt-860-lltv": {
+      "chains": ["katana"],
+      "title": "Morpho vbWBTC/vbUSDT 86% LLTV",
+      "description": "Only to be used for the vbWBTC/vbUSDT 86% LLTV market."
     }
   },
   "homepageUrl": "https://morpho.org/vaults/"
