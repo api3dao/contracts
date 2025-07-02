@@ -46,8 +46,7 @@ module.exports = async () => {
   // Otherwise, it will only do (1). In both cases, (1) is done using hardcoded signatures by the expected
   // deployer address.
   if (!chainsSupportedByMarket.includes(network.name)) {
-    log(`Skipping Beacon set update for ${network.name}`);
-    return;
+    throw new Error(`${network.name} is not supported`);
   }
 
   const Api3ServerV1 = await deployments.get('Api3ServerV1');
