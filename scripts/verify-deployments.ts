@@ -123,6 +123,9 @@ function validateDeploymentArguments(network: string, deployment: Deployment, co
 }
 
 async function verifyDeployments(network: string) {
+  if (!chainsSupportedByMarket.includes(network)) {
+    throw new Error(`${network} is not supported`);
+  }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const contractNames = [
     ...(chainsSupportedByMarket.includes(network)
