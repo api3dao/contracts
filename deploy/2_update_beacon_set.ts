@@ -5,7 +5,7 @@ import { deployments, ethers, network } from 'hardhat';
 import { chainsSupportedByMarket } from '../data/chain-support.json';
 import { Api3ServerV1__factory } from '../src/index';
 
-const EXPECTED_DEPLOYER_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
+const EXAMPLE_AIRNODE_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
 const BEACON_SET_BEACON_COUNT = 7;
 
 async function signData(
@@ -56,7 +56,7 @@ module.exports = async () => {
     (index) => `0x${(index + 1).toString(16).padStart(64, '0')}`
   ) as BytesLike[];
   const beaconIds = templateIds.map((templateId) =>
-    ethers.solidityPackedKeccak256(['address', 'bytes32'], [EXPECTED_DEPLOYER_ADDRESS, templateId])
+    ethers.solidityPackedKeccak256(['address', 'bytes32'], [EXAMPLE_AIRNODE_ADDRESS, templateId])
   );
   const beaconSetId = ethers.keccak256(ethers.AbiCoder.defaultAbiCoder().encode(['bytes32[]'], [beaconIds]));
   const dataFeedReadings = await api3ServerV1.multicall.staticCall([
@@ -93,7 +93,7 @@ module.exports = async () => {
     if (dataFeedReadings[ind] === initialValue) {
       updateMulticallData.push(
         api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', [
-          EXPECTED_DEPLOYER_ADDRESS,
+          EXAMPLE_AIRNODE_ADDRESS,
           templateId,
           ind + 1,
           `0x${(ind + 1).toString().padStart(64, '0')}`,
@@ -115,7 +115,7 @@ module.exports = async () => {
     log('Beacon set update already executed');
   }
 
-  if (EXPECTED_DEPLOYER_ADDRESS !== deployer!.address) {
+  if (EXAMPLE_AIRNODE_ADDRESS !== deployer!.address) {
     log('Skipping gas estimation for non-expected deployer');
     return;
   }
@@ -126,7 +126,7 @@ module.exports = async () => {
     const signature = await signData(deployer!, templateId, ind + 102, ind + 102);
     estimateGasMulticallData.push(
       api3ServerV1.interface.encodeFunctionData('updateBeaconWithSignedData', [
-        EXPECTED_DEPLOYER_ADDRESS,
+        EXAMPLE_AIRNODE_ADDRESS,
         templateId,
         ind + 102,
         `0x${(ind + 102).toString().padStart(64, '0')}`,
@@ -138,7 +138,7 @@ module.exports = async () => {
   estimateGasMulticallData.push(api3ServerV1.interface.encodeFunctionData('updateBeaconSetWithBeacons', [beaconIds]));
   const estimateGasCalldata = api3ServerV1.interface.encodeFunctionData('multicall', [estimateGasMulticallData]);
   // log(`Beacon set update estimate gas calldata:\n${estimateGasCalldata}`);
-  const voidSigner = new ethers.VoidSigner(EXPECTED_DEPLOYER_ADDRESS, ethers.provider);
+  const voidSigner = new ethers.VoidSigner(EXAMPLE_AIRNODE_ADDRESS, ethers.provider);
   const gasCost = await voidSigner?.estimateGas({ to: api3ServerV1.getAddress(), data: estimateGasCalldata });
   log(`Estimated Beacon set update gas cost: ${gasCost}`);
 };
