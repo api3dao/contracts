@@ -17,7 +17,7 @@ const MAXIMUM_GETLOGS_BLOCK_RANGE = 50_000;
 
 async function surveyRoles(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
-    return;
+    throw new Error(`${network} is not supported`);
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
