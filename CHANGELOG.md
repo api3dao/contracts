@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 26.1.0
+
+### Minor Changes
+
+- fd084dc: Add Morpho markets on Katana
+
 ## 26.0.0
 
 ### Major Changes
