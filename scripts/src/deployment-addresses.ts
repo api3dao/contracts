@@ -3,12 +3,7 @@ import { join } from 'node:path';
 
 import type { AddressLike } from 'ethers';
 
-import {
-  chainsSupportedByManagerMultisig,
-  chainsSupportedByDapis,
-  chainsSupportedByMarket,
-  chainsSupportedByOevAuctions,
-} from '../../data/chain-support.json';
+import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../../data/chain-support.json';
 import { CHAINS } from '../../src/generated/chains';
 
 function getDeploymentAddresses() {
@@ -23,21 +18,23 @@ function getDeploymentAddresses() {
     OevAuctionHouse: {},
   };
 
-  const networks = new Set([
-    ...chainsSupportedByManagerMultisig,
-    ...chainsSupportedByDapis,
-    ...chainsSupportedByMarket,
-    ...chainsSupportedByOevAuctions,
-  ]);
+  const networks = new Set([...chainsSupportedByMarket, ...chainsSupportedByOevAuctions]);
 
   for (const network of networks) {
     const chainId = CHAINS.find((chain) => chain.alias === network)?.id;
     const contractNames = [
-      ...(chainsSupportedByManagerMultisig.includes(network) ? ['GnosisSafeWithoutProxy', 'OwnableCallForwarder'] : []),
-      ...(chainsSupportedByDapis.includes(network)
-        ? ['AccessControlRegistry', 'Api3ServerV1', 'Api3ServerV1OevExtension', 'Api3ReaderProxyV1Factory']
+      ...(chainsSupportedByMarket.includes(network)
+        ? [
+            'GnosisSafeWithoutProxy',
+            'OwnableCallForwarder',
+            'AccessControlRegistry',
+            'Api3ServerV1',
+            'Api3ServerV1OevExtension',
+            'Api3ReaderProxyV1Factory',
+            'AirseekerRegistry',
+            'Api3MarketV2',
+          ]
         : []),
-      ...(chainsSupportedByMarket.includes(network) ? ['AirseekerRegistry', 'Api3MarketV2'] : []),
       ...(chainsSupportedByOevAuctions.includes(network) ? ['OevAuctionHouse'] : []),
     ];
     for (const contractName of contractNames) {
