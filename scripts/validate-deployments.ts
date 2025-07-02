@@ -34,7 +34,7 @@ const api3ReaderProxyV1Metadata = '0x';
 
 async function validateDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
-    return;
+    throw new Error(`${network} is not supported`);
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
 
