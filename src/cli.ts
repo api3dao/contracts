@@ -142,18 +142,9 @@ yargs(hideBin(process.argv))
       strict,
     },
     (args) => {
-      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
-      if (!dappInfo) {
-        const message = `⚠️  Could not find any record for alias "${args['dapp-alias']}"\n`;
-        if (args.strict) {
-          console.error(message);
-          process.exit(1);
-        }
-        console.warn(message);
-      }
       const chain = CHAINS.find((c) => c.id === args['chain-id']);
       if (!chain) {
-        const message = `⚠️  Chain with ID ${args['chain-id']} is not known\n`;
+        const message = `⚠️  Chain with ID ${args['chain-id']} is not known`;
         if (args.strict) {
           console.error(message);
           process.exit(1);
@@ -161,8 +152,27 @@ yargs(hideBin(process.argv))
         console.warn(message);
       }
 
-      console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain?.name ?? args['chain-id']}`);
+      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
+      if (!dappInfo) {
+        const message = `⚠️  Could not find any record for alias "${args['dapp-alias']}"`;
+        if (args.strict) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
+      } else if (chain) {
+        const aliasInfo = dappInfo.aliases[args['dapp-alias']];
+        if (!aliasInfo!.chains.includes(chain.alias)) {
+          const message = `⚠️  dApp alias "${args['dapp-alias']}" is not available on chain "${chain.name}"`;
+          if (args.strict) {
+            console.error(message);
+            process.exit(1);
+          }
+          console.warn(message);
+        }
+      }
 
+      console.log(`\ndApp alias: ${args['dapp-alias']}\nchain: ${chain?.name ?? args['chain-id']}`);
       if (dappInfo) {
         const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args['dapp-alias'])!;
         if (aliasInfo.description) console.log(`\nℹ️  ${aliasInfo.description}`);
