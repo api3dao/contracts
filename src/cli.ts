@@ -169,7 +169,7 @@ yargs(hideBin(process.argv))
       }
 
       const dappId = unsafeComputeDappId(args['dapp-alias'], args['chain-id']);
-      console.log(`\ndApp ID: ${dappId.toString()}`);
+      console.log(`\n• dApp ID: ${dappId.toString()}`);
     }
   )
   .help().argv;
