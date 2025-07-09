@@ -6,6 +6,7 @@ module.exports = {
   rules: {
     camelcase: 'off',
     'no-nested-ternary': 'off',
+    'sort-keys': 'off',
 
     'functional/no-try-statements': 'off',
 
