@@ -8,6 +8,7 @@ import {
   Api3ServerV1__factory,
   CHAINS,
   computeDappSpecificApi3ReaderProxyV1Address,
+  unsafeComputeDappId,
   DAPPS,
   deploymentAddresses,
 } from './index';
@@ -60,7 +61,7 @@ yargs(hideBin(process.argv))
       const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
       if (!dappInfo) {
         const message = `⚠️ Could not find any record for alias "${args['dapp-alias']}"`;
-        if (args['strict']) {
+        if (args.strict) {
           console.error(message);
           process.exit(1);
         }
@@ -85,7 +86,7 @@ yargs(hideBin(process.argv))
         );
       } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
-        if (args['strict']) {
+        if (args.strict) {
           console.error(message);
           console.error((error as Error).message);
           process.exit(1);
@@ -94,7 +95,7 @@ yargs(hideBin(process.argv))
       }
       if (timestamp && timestamp + BigInt(24 * 60 * 60) < Date.now() / 1000) {
         const message = `⚠️ Feed timestamp (${new Date(Number(timestamp) * 1000).toISOString()}) appears to be older than a day`;
-        if (args['strict']) {
+        if (args.strict) {
           console.error(message);
           process.exit(1);
         }
@@ -110,7 +111,7 @@ yargs(hideBin(process.argv))
         code = await provider.getCode(proxyAddress);
       } catch (error) {
         const message = '⚠️ Attempted to check if the proxy has been deployed and failed';
-        if (args['strict']) {
+        if (args.strict) {
           console.error(message);
           console.error((error as Error).message);
           process.exit(1);
@@ -119,7 +120,7 @@ yargs(hideBin(process.argv))
       }
       if (code && code === '0x') {
         const message = '⚠️ Proxy does not appear to have been deployed';
-        if (args['strict']) {
+        if (args.strict) {
           console.error(message);
           process.exit(1);
         }
@@ -130,6 +131,55 @@ yargs(hideBin(process.argv))
       console.log(
         `• Your proxy is at ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
       );
+    }
+  )
+  .command(
+    'compute-dapp-id',
+    'Computes the dApp ID for a given dApp alias and chain ID',
+    {
+      'dapp-alias': dappAlias,
+      'chain-id': chainId,
+      strict,
+    },
+    (args) => {
+      const chain = CHAINS.find((c) => c.id === args['chain-id']);
+      if (!chain) {
+        const message = `⚠️  Chain with ID ${args['chain-id']} is not known`;
+        if (args.strict) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
+      }
+
+      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
+      if (!dappInfo) {
+        const message = `⚠️  Could not find any record for alias "${args['dapp-alias']}"`;
+        if (args.strict) {
+          console.error(message);
+          process.exit(1);
+        }
+        console.warn(message);
+      } else if (chain) {
+        const aliasInfo = dappInfo.aliases[args['dapp-alias']];
+        if (!aliasInfo!.chains.includes(chain.alias)) {
+          const message = `⚠️  dApp alias "${args['dapp-alias']}" is not available on chain "${chain.name}"`;
+          if (args.strict) {
+            console.error(message);
+            process.exit(1);
+          }
+          console.warn(message);
+        }
+      }
+
+      console.log(`\ndApp alias: ${args['dapp-alias']}\nchain: ${chain?.name ?? args['chain-id']}`);
+      if (dappInfo) {
+        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args['dapp-alias'])!;
+        if (aliasInfo.description) console.log(`\nℹ️  ${aliasInfo.description}`);
+      }
+
+      const dappId = unsafeComputeDappId(args['dapp-alias'], args['chain-id']);
+      console.log(`\n• dApp ID: ${dappId.toString()}`);
     }
   )
   .help().argv;
