@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 26.2.0
+
+### Minor Changes
+
+- 230fed2: Added the `compute-dapp-id` CLI command
+- eca462d: Add first wave of Morpho markets to dApp details on Gnosis chain
+
 ## 26.1.0
 
 ### Minor Changes
