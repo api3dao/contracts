@@ -4,7 +4,7 @@ import path from 'node:path';
 import { goSync } from '@api3/promise-utils';
 import { format } from 'prettier';
 
-import { dappSchema } from '../src/types';
+import { type Dapp, dappSchema } from '../src/types';
 
 const PRETTIER_CONFIG = path.join(__dirname, '..', '.prettierrc');
 const INPUT_DIR = path.join(__dirname, '..', 'data', 'dapps');
@@ -21,6 +21,38 @@ const HEADER_CONTENT = `// =====================================================
 import { type Dapp } from '../types';
 `;
 
+function ensureMorphoDappConventions(fileContent: Dapp) {
+  const { aliases } = fileContent;
+
+  for (const [alias, dapp] of Object.entries(aliases)) {
+    // Verify basic alias and title format.
+    const aSplit = alias.split('-'); // e.g. morpho-mvl-usdc-770-lltv
+    const tSplit = dapp.title.split(/[ /]/); // e.g. Morpho MVL/USDC 77% LLTV
+    if (aSplit.length !== 5) throw new Error(`Morpho alias ${alias} has an invalid format.`);
+    if (tSplit.length !== 5) throw new Error(`Morpho title ${dapp.title} has an invalid format.`);
+    const [aMorphoStr, aCollateralToken, aBorrowToken, aLltv, aLltvStr] = aSplit;
+    const [tMorphoStr, tCollateralToken, tBorrowToken, tLltv, tLltvStr] = tSplit;
+
+    // Verify the title/alias convention.
+    if (
+      aMorphoStr !== 'morpho' ||
+      tMorphoStr !== 'Morpho' ||
+      aCollateralToken !== tCollateralToken!.toLowerCase() || // The token names are sometimes mixed case, e.g. wstETH
+      aBorrowToken !== tBorrowToken!.toLowerCase() || // The token names are sometimes mixed case, e.g. wstETH
+      `${Number(aLltv) / 10}%` !== tLltv ||
+      aLltvStr!.toUpperCase() !== tLltvStr
+    ) {
+      throw new Error(`Morpho title/alias discrepancy for alias: ${alias}`);
+    }
+
+    // Verify the title/description convention.
+    const expectedDescription = `Only to be used for the ${tCollateralToken}/${tBorrowToken} ${tLltv} LLTV market.`;
+    if (dapp.description !== expectedDescription) {
+      throw new Error(`Morpho title/description discrepancy for alias: ${alias}`);
+    }
+  }
+}
+
 async function main(): Promise<void> {
   const fileNames = fs.readdirSync(INPUT_DIR);
   const jsonFiles = fileNames.filter((fileName) => fileName.endsWith('.json'));
@@ -33,6 +65,18 @@ async function main(): Promise<void> {
       throw new Error(`Invalid dApps file content: ${filePath}\n${goFileContent.error}`);
     }
     const fileContent = goFileContent.data;
+
+    // Apply custom validation for non-schema enforced conventions.
+    switch (jsonFile) {
+      case 'morpho.json': {
+        ensureMorphoDappConventions(fileContent);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
     combinedDapps.push(fileContent);
   }
 
