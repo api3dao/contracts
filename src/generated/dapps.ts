@@ -69,6 +69,21 @@ export const DAPPS: Dapp[] = [
         title: 'Morpho vbWBTC/vbUSDT 86% LLTV',
         description: 'Only to be used for the vbWBTC/vbUSDT 86% LLTV market.',
       },
+      'morpho-gno-usdc-860-lltv': {
+        chains: ['gnosis'],
+        title: 'Morpho GNO/USDC 86% LLTV',
+        description: 'Only to be used for the GNO/USDC 86% LLTV market.',
+      },
+      'morpho-wsteth-usdc-gnosis-860-lltv': {
+        chains: ['gnosis'],
+        title: 'Morpho wstETH/USDC 86% LLTV',
+        description: 'Only to be used for the wstETH/USDC 86% LLTV market on Gnosis.',
+      },
+      'morpho-sdai-usdc-860-lltv': {
+        chains: ['gnosis'],
+        title: 'Morpho sDAI/USDC 86% LLTV',
+        description: 'Only to be used for the sDAI/USDC 86% LLTV market.',
+      },
     },
     homepageUrl: 'https://morpho.org/vaults/',
   },
