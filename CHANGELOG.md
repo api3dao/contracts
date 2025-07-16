@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 26.2.1
+
+### Patch Changes
+
+- 810f03c: Update dependency zod to ^3.25.76
+
 ## 26.2.0
 
 ### Minor Changes
