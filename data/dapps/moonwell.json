@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "moonwell": { "chains": ["moonbeam"], "title": "Moonwell" }
+    "moonwell": { "chains": ["base", "moonbeam", "optimism"], "title": "Moonwell" }
   },
   "homepageUrl": "https://moonwell.fi/"
 }
