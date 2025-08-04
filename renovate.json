@@ -7,7 +7,7 @@
       "enabled": false
     },
     {
-      "matchPackagePatterns": ["@types/node", "@nomicfoundation/.*", "chai", "eslint"],
+      "matchPackagePatterns": ["eslint"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
