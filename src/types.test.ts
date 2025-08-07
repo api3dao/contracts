@@ -71,14 +71,9 @@ describe('chainAlias', () => {
     expect(() => chainAlias.parse('Mantle')).toThrow(
       new ZodError([
         {
-          validation: 'regex',
-          code: 'invalid_string',
-          message: 'Invalid',
-          path: [],
-        },
-        {
-          code: 'custom',
-          message: 'Invalid chain alias: Mantle',
+          code: 'invalid_format',
+          format: 'regex',
+          message: 'Invalid chain alias format: Mantle',
           path: [],
         },
       ])
