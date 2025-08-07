@@ -1,6 +1,6 @@
 import { z, ZodError } from 'zod';
 
-import { type Chain, chainAlias, chainSchema, dappSchema } from './types';
+import { type Chain, chainAlias, chainSchema, chainProviderSchema, chainProvidersSchema, dappSchema } from './types';
 
 describe('chainSchema', () => {
   const validChain: Chain = {
@@ -118,6 +118,125 @@ describe('dappSchema', () => {
           code: 'custom',
           message: 'Invalid chain alias: invalid-chain',
           path: ['aliases', 'invalid-chains', 'chains', 1],
+        },
+      ])
+    );
+  });
+});
+
+describe('chainProviderSchema', () => {
+  it('should accept a valid provider with rpcUrl', () => {
+    const validProvider = {
+      alias: 'default',
+      rpcUrl: 'https://dummy-rpc.com',
+    };
+    expect(() => chainProviderSchema.parse(validProvider)).not.toThrow();
+  });
+
+  it('should accept a valid provider with homepageUrl', () => {
+    const validProvider = {
+      alias: 'paid-provider',
+      homepageUrl: 'https://dummy-homepage.com',
+    };
+    expect(() => chainProviderSchema.parse(validProvider)).not.toThrow();
+  });
+
+  it('should reject an invalid homepageUrl', () => {
+    const invalidProvider = {
+      alias: 'paid-provider',
+      homepageUrl: 'dummy-homepage.com',
+    };
+    expect(() => chainProviderSchema.parse(invalidProvider)).toThrow(
+      new ZodError([
+        {
+          code: 'invalid_format',
+          format: 'url',
+          path: ['homepageUrl'],
+          message: 'Invalid URL',
+        },
+      ])
+    );
+  });
+
+  it('should reject an invalid rpcUrl', () => {
+    const invalidProvider = {
+      alias: 'paid-provider',
+      rpcUrl: 'dummy-rpc.com',
+    };
+    expect(() => chainProviderSchema.parse(invalidProvider)).toThrow(
+      new ZodError([
+        {
+          code: 'invalid_format',
+          format: 'url',
+          path: ['rpcUrl'],
+          message: 'Invalid URL',
+        },
+      ])
+    );
+  });
+
+  it('should reject an invalid provider if default rpcUrl is missing', () => {
+    const invalidProvider = {
+      alias: 'default',
+    };
+    expect(() => chainProviderSchema.parse(invalidProvider)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          path: [],
+          message: 'rpcUrl or homepageUrl is required',
+        },
+      ])
+    );
+  });
+});
+
+describe('chainProvidersSchema', () => {
+  it('should accept valid providers', () => {
+    const validProviders = [
+      { alias: 'default', rpcUrl: 'https://dummy-rpc.com' },
+      { alias: 'public', rpcUrl: 'https://public-rpc.com' },
+    ];
+    expect(() => chainProvidersSchema.parse(validProviders)).not.toThrow();
+  });
+
+  it('should reject if no provider with alias "default" is present', () => {
+    const invalidProviders = [{ alias: 'public', rpcUrl: 'https://public-rpc.com' }];
+    expect(() => chainProvidersSchema.parse(invalidProviders)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          path: ['providers', 'alias'],
+          message: "a provider with alias 'default' is required",
+        },
+      ])
+    );
+  });
+
+  it('should reject if there are duplicate aliases', () => {
+    const invalidProviders = [
+      { alias: 'default', rpcUrl: 'https://dummy-rpc.com' },
+      { alias: 'default', rpcUrl: 'https://another-rpc.com' },
+    ];
+    expect(() => chainProvidersSchema.parse(invalidProviders)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          path: ['providers', 'alias'],
+          message: "cannot contain duplicate 'alias' values",
+        },
+      ])
+    );
+  });
+
+  it('should reject if "default" or "public" provider does not have rpcUrl', () => {
+    const invalidProviders = [{ alias: 'default', homepageUrl: 'https://dummy-homepage.com' }];
+    expect(() => chainProvidersSchema.parse(invalidProviders)).toThrow(
+      new ZodError([
+        {
+          code: 'custom',
+          path: ['providers', 'rpcUrl'],
+          message: "providers with alias 'default' or 'public' must also have an 'rpcUrl'",
         },
       ])
     );
