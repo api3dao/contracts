@@ -38,19 +38,27 @@ const CHAIN_ID_TO_PRICE: Record<string, bigint> = {
 const COLLATERAL_RATE = CHAIN_ID_TO_PRICE['1']!; // Using ETH as collateral
 
 describe('OevAuctionHouse', function () {
-  enum BidConditionType {
-    LTE = 0,
-    GTE = 1,
-  }
+  const bidConditionType = (conditionType: string) =>
+    conditionType === 'LTE'
+      ? 0
+      : conditionType === 'GTE'
+        ? 1
+        : (() => {
+            throw new Error('Invalid condition type');
+          })();
 
-  enum BidStatus {
-    None = 0,
-    Placed = 1,
-    Awarded = 2,
-    FulfillmentReported = 3,
-    FulfillmentConfirmed = 4,
-    FulfillmentContradicted = 5,
-  }
+  const bidStatus = (status: string) =>
+    ({
+      None: 0,
+      Placed: 1,
+      Awarded: 2,
+      FulfillmentReported: 3,
+      FulfillmentConfirmed: 4,
+      FulfillmentContradicted: 5,
+    })[status] ??
+    (() => {
+      throw new Error('Invalid bid status');
+    })();
 
   function deriveRootRole(managerAddress: AddressLike) {
     return ethers.solidityPackedKeccak256(['address'], [managerAddress]);
@@ -70,7 +78,7 @@ describe('OevAuctionHouse', function () {
   // This function also includes a toy example for how bid details can be encrypted.
   function encodeBidDetails(
     proxyWithOevAddress: AddressLike,
-    conditionType: BidConditionType,
+    conditionType: number,
     conditionValue: bigint,
     updateSenderAddress: AddressLike
   ) {
@@ -206,7 +214,7 @@ describe('OevAuctionHouse', function () {
     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
     const bidDetails = encodeBidDetails(
       proxyWithOevAddress,
-      BidConditionType.GTE,
+      bidConditionType('GTE'),
       ethers.parseEther('2000'),
       updateSenderAddress
     );
@@ -253,7 +261,7 @@ describe('OevAuctionHouse', function () {
     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
     const bidDetails = encodeBidDetails(
       proxyWithOevAddress,
-      BidConditionType.GTE,
+      bidConditionType('GTE'),
       ethers.parseEther('2000'),
       updateSenderAddress
     );
@@ -1277,7 +1285,7 @@ describe('OevAuctionHouse', function () {
                           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                           const bidDetails = encodeBidDetails(
                             proxyWithOevAddress,
-                            BidConditionType.GTE,
+                            bidConditionType('GTE'),
                             ethers.parseEther('2000'),
                             updateSenderAddress
                           );
@@ -1288,7 +1296,7 @@ describe('OevAuctionHouse', function () {
                           const expirationTimestamp = (await helpers.time.latest()) + 60 * 60;
                           const bidId = deriveBidId(roles.bidder!.address, bidTopic, bidDetails);
                           const bidBefore = await oevAuctionHouse.bids(bidId);
-                          expect(bidBefore.status).to.equal(BidStatus.None);
+                          expect(bidBefore.status).to.equal(bidStatus('None'));
                           expect(bidBefore.expirationTimestamp).to.equal(0);
                           expect(bidBefore.collateralAmount).to.equal(0);
                           expect(bidBefore.protocolFeeAmount).to.equal(0);
@@ -1318,7 +1326,7 @@ describe('OevAuctionHouse', function () {
                               protocolFeeAmount
                             );
                           const bid = await oevAuctionHouse.bids(bidId);
-                          expect(bid.status).to.equal(BidStatus.Placed);
+                          expect(bid.status).to.equal(bidStatus('Placed'));
                           expect(bid.expirationTimestamp).to.equal(expirationTimestamp);
                           expect(bid.collateralAmount).to.equal(collateralAmount);
                           expect(bid.protocolFeeAmount).to.equal(protocolFeeAmount);
@@ -1337,7 +1345,7 @@ describe('OevAuctionHouse', function () {
                           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                           const bidDetails = encodeBidDetails(
                             proxyWithOevAddress,
-                            BidConditionType.GTE,
+                            bidConditionType('GTE'),
                             ethers.parseEther('2000'),
                             updateSenderAddress
                           );
@@ -1377,7 +1385,7 @@ describe('OevAuctionHouse', function () {
                         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                         const bidDetails = encodeBidDetails(
                           proxyWithOevAddress,
-                          BidConditionType.GTE,
+                          bidConditionType('GTE'),
                           ethers.parseEther('2000'),
                           updateSenderAddress
                         );
@@ -1418,7 +1426,7 @@ describe('OevAuctionHouse', function () {
                       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                       const bidDetails = encodeBidDetails(
                         proxyWithOevAddress,
-                        BidConditionType.GTE,
+                        bidConditionType('GTE'),
                         ethers.parseEther('2000'),
                         updateSenderAddress
                       );
@@ -1460,7 +1468,7 @@ describe('OevAuctionHouse', function () {
                     const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                     const bidDetails = encodeBidDetails(
                       proxyWithOevAddress,
-                      BidConditionType.GTE,
+                      bidConditionType('GTE'),
                       ethers.parseEther('2000'),
                       updateSenderAddress
                     );
@@ -1513,7 +1521,7 @@ describe('OevAuctionHouse', function () {
                   const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                   const bidDetails = encodeBidDetails(
                     proxyWithOevAddress,
-                    BidConditionType.GTE,
+                    bidConditionType('GTE'),
                     ethers.parseEther('2000'),
                     updateSenderAddress
                   );
@@ -1552,7 +1560,7 @@ describe('OevAuctionHouse', function () {
                 const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
                 const bidDetails = encodeBidDetails(
                   proxyWithOevAddress,
-                  BidConditionType.GTE,
+                  bidConditionType('GTE'),
                   ethers.parseEther('2000'),
                   updateSenderAddress
                 );
@@ -1655,7 +1663,7 @@ describe('OevAuctionHouse', function () {
           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
           const bidDetails = encodeBidDetails(
             proxyWithOevAddress,
-            BidConditionType.GTE,
+            bidConditionType('GTE'),
             ethers.parseEther('2000'),
             updateSenderAddress
           );
@@ -1691,7 +1699,7 @@ describe('OevAuctionHouse', function () {
         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
         const bidDetails = encodeBidDetails(
           proxyWithOevAddress,
-          BidConditionType.GTE,
+          bidConditionType('GTE'),
           ethers.parseEther('2000'),
           updateSenderAddress
         );
@@ -1727,7 +1735,7 @@ describe('OevAuctionHouse', function () {
       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
       const bidDetails = encodeBidDetails(
         proxyWithOevAddress,
-        BidConditionType.GTE,
+        bidConditionType('GTE'),
         ethers.parseEther('2000'),
         updateSenderAddress
       );
@@ -1737,7 +1745,7 @@ describe('OevAuctionHouse', function () {
       const expirationTimestamp = nextTimestamp + MAXIMUM_BID_LIFETIME;
       const bidId = deriveBidId(roles.bidder!.address, bidTopic, bidDetails);
       const bidBefore = await oevAuctionHouse.bids(bidId);
-      expect(bidBefore.status).to.equal(BidStatus.None);
+      expect(bidBefore.status).to.equal(bidStatus('None'));
       expect(bidBefore.expirationTimestamp).to.equal(0);
       expect(bidBefore.collateralAmount).to.equal(0);
       expect(bidBefore.protocolFeeAmount).to.equal(0);
@@ -1759,7 +1767,7 @@ describe('OevAuctionHouse', function () {
           protocolFeeAmount
         );
       const bid = await oevAuctionHouse.bids(bidId);
-      expect(bid.status).to.equal(BidStatus.Placed);
+      expect(bid.status).to.equal(bidStatus('Placed'));
       expect(bid.expirationTimestamp).to.equal(expirationTimestamp);
       expect(bid.collateralAmount).to.equal(collateralAmount);
       expect(bid.protocolFeeAmount).to.equal(protocolFeeAmount);
@@ -1780,7 +1788,7 @@ describe('OevAuctionHouse', function () {
               const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
               const bidDetails = encodeBidDetails(
                 proxyWithOevAddress,
-                BidConditionType.GTE,
+                bidConditionType('GTE'),
                 ethers.parseEther('2000'),
                 updateSenderAddress
               );
@@ -1812,7 +1820,7 @@ describe('OevAuctionHouse', function () {
                 .to.emit(oevAuctionHouse, 'ExpeditedBidExpiration')
                 .withArgs(roles.bidder!.address, bidTopic, bidId, expeditedExpirationTimestamp);
               const bid = await oevAuctionHouse.bids(bidId);
-              expect(bid.status).to.equal(BidStatus.Placed);
+              expect(bid.status).to.equal(bidStatus('Placed'));
               expect(bid.expirationTimestamp).to.equal(expeditedExpirationTimestamp);
               expect(bid.collateralAmount).to.equal(collateralAmount);
               expect(bid.protocolFeeAmount).to.equal(protocolFeeAmount);
@@ -1828,7 +1836,7 @@ describe('OevAuctionHouse', function () {
               const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
               const bidDetails = encodeBidDetails(
                 proxyWithOevAddress,
-                BidConditionType.GTE,
+                bidConditionType('GTE'),
                 ethers.parseEther('2000'),
                 updateSenderAddress
               );
@@ -1873,7 +1881,7 @@ describe('OevAuctionHouse', function () {
             const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
             const bidDetails = encodeBidDetails(
               proxyWithOevAddress,
-              BidConditionType.GTE,
+              bidConditionType('GTE'),
               ethers.parseEther('2000'),
               updateSenderAddress
             );
@@ -1915,7 +1923,7 @@ describe('OevAuctionHouse', function () {
           const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
           const bidDetails = encodeBidDetails(
             proxyWithOevAddress,
-            BidConditionType.GTE,
+            bidConditionType('GTE'),
             ethers.parseEther('2000'),
             updateSenderAddress
           );
@@ -1955,7 +1963,7 @@ describe('OevAuctionHouse', function () {
         const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
         const bidDetails = encodeBidDetails(
           proxyWithOevAddress,
-          BidConditionType.GTE,
+          bidConditionType('GTE'),
           ethers.parseEther('2000'),
           updateSenderAddress
         );
@@ -1984,7 +1992,7 @@ describe('OevAuctionHouse', function () {
       const updateSenderAddress = ethers.getAddress(ethers.hexlify(ethers.randomBytes(20)));
       const bidDetails = encodeBidDetails(
         proxyWithOevAddress,
-        BidConditionType.GTE,
+        bidConditionType('GTE'),
         ethers.parseEther('2000'),
         updateSenderAddress
       );
@@ -2013,7 +2021,7 @@ describe('OevAuctionHouse', function () {
         .to.emit(oevAuctionHouse, 'ExpeditedBidExpiration')
         .withArgs(roles.bidder!.address, bidTopic, bidId, expeditedExpirationTimestamp);
       const bid = await oevAuctionHouse.bids(bidId);
-      expect(bid.status).to.equal(BidStatus.Placed);
+      expect(bid.status).to.equal(bidStatus('Placed'));
       expect(bid.expirationTimestamp).to.equal(expeditedExpirationTimestamp);
       expect(bid.collateralAmount).to.equal(collateralAmount);
       expect(bid.protocolFeeAmount).to.equal(protocolFeeAmount);
@@ -2068,7 +2076,7 @@ describe('OevAuctionHouse', function () {
                             expectedBidderDepositAfterBidAward
                           );
                         const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-                        expect(bid.status).to.equal(BidStatus.Awarded);
+                        expect(bid.status).to.equal(bidStatus('Awarded'));
                         expect(bid.expirationTimestamp).to.equal(expectedUpdatedExpirationTimestamp);
                         expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
                         expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2116,7 +2124,7 @@ describe('OevAuctionHouse', function () {
                             expectedBidderDepositAfterBidAward
                           );
                         const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-                        expect(bid.status).to.equal(BidStatus.Awarded);
+                        expect(bid.status).to.equal(bidStatus('Awarded'));
                         expect(bid.expirationTimestamp).to.equal(expectedUpdatedExpirationTimestamp);
                         expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
                         expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2340,7 +2348,7 @@ describe('OevAuctionHouse', function () {
                 .to.emit(oevAuctionHouse, 'ReportedFulfillment')
                 .withArgs(roles.bidder!.address, bidParameters.bidTopic, bidParameters.bidId, fulfillmentDetails);
               const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-              expect(bid.status).to.equal(BidStatus.FulfillmentReported);
+              expect(bid.status).to.equal(bidStatus('FulfillmentReported'));
               expect(bid.expirationTimestamp).to.equal(expirationTimestampBeforeFulfillmentReport);
               expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
               expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2485,7 +2493,7 @@ describe('OevAuctionHouse', function () {
                 expectedAccumulatedProtocolFeesAfterFulfillmentConfirmation
               );
             const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-            expect(bid.status).to.equal(BidStatus.FulfillmentConfirmed);
+            expect(bid.status).to.equal(bidStatus('FulfillmentConfirmed'));
             expect(bid.expirationTimestamp).to.equal(expirationTimestampBeforeFulfillmentConfirmation);
             expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
             expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2543,7 +2551,7 @@ describe('OevAuctionHouse', function () {
                 expectedAccumulatedProtocolFeesAfterFulfillmentConfirmation
               );
             const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-            expect(bid.status).to.equal(BidStatus.FulfillmentConfirmed);
+            expect(bid.status).to.equal(bidStatus('FulfillmentConfirmed'));
             expect(bid.expirationTimestamp).to.equal(expirationTimestampBeforeFulfillmentConfirmation);
             expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
             expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2651,7 +2659,7 @@ describe('OevAuctionHouse', function () {
                 expectedAccumulatedSlashedCollateralAfterFulfillmentContradiction
               );
             const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-            expect(bid.status).to.equal(BidStatus.FulfillmentContradicted);
+            expect(bid.status).to.equal(bidStatus('FulfillmentContradicted'));
             expect(bid.expirationTimestamp).to.equal(expirationTimestampBeforeFulfillmentContradiction);
             expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
             expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
@@ -2709,7 +2717,7 @@ describe('OevAuctionHouse', function () {
                 expectedAccumulatedSlashedCollateralAfterFulfillmentContradiction
               );
             const bid = await oevAuctionHouse.bids(bidParameters.bidId);
-            expect(bid.status).to.equal(BidStatus.FulfillmentContradicted);
+            expect(bid.status).to.equal(bidStatus('FulfillmentContradicted'));
             expect(bid.expirationTimestamp).to.equal(expirationTimestampBeforeFulfillmentContradiction);
             expect(bid.collateralAmount).to.equal(bidParameters.collateralAmount);
             expect(bid.protocolFeeAmount).to.equal(bidParameters.protocolFeeAmount);
