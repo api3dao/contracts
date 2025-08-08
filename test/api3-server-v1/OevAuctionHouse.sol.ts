@@ -4,9 +4,11 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import type { AddressLike, BytesLike } from 'ethers';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import type { MockApi3ReaderProxy } from '../../src/index';
+
+const { ethers } = hardhat;
 
 const PROXY_SETTER_ROLE_DESCRIPTION = 'Proxy setter';
 const WITHDRAWER_ROLE_DESCRIPTION = 'Withdrawer';

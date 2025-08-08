@@ -2,7 +2,7 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import type { HDNodeWallet } from 'ethers';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import type { AirseekerRegistry } from '../../src/index';
 import {
@@ -13,6 +13,8 @@ import {
   readBeacons,
   updateBeaconSet,
 } from '../test-utils';
+
+const { ethers } = hardhat;
 
 const MAXIMUM_BEACON_COUNT_IN_SET = 21;
 const MAXIMUM_UPDATE_PARAMETERS_LENGTH = 1024;

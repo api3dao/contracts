@@ -1,9 +1,11 @@
 import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import type { MockSort } from '../../../src/index';
+
+const { ethers } = hardhat;
 
 describe('Sort', function () {
   // Adapted from https://stackoverflow.com/a/37580979/14558682
