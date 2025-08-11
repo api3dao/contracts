@@ -7,7 +7,7 @@
       "enabled": false
     },
     {
-      "matchPackagePatterns": ["eslint"],
+      "matchPackagePatterns": ["chai", "solhint", "eslint"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
