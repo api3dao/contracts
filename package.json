@@ -86,7 +86,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "chai": "^4.5.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.2.1",
     "eslint": "^8.57.1",
     "glob": "^11.0.2",
     "hardhat": "^2.26.2",
@@ -105,7 +105,7 @@
   "dependencies": {
     "ethers": "^6.15.0",
     "viem": "^2.23.2",
-    "yargs": "^17.7.2",
+    "yargs": "^18.0.0",
     "zod": "^3.25.76"
   },
   "packageManager": "pnpm@10.14.0"
