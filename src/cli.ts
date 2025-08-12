@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as ethers from 'ethers';
-import yargs, { type ArgumentsCamelCase } from 'yargs';
+import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import {
@@ -51,26 +51,25 @@ yargs(hideBin(process.argv))
       'dapi-name': dapiName,
       strict,
     },
-    async (
-      args: ArgumentsCamelCase<{ 'dapp-alias': string; 'chain-id': string; 'dapi-name': string; strict: boolean }>
-    ) => {
-      const chain = CHAINS.find((chain) => chain.id === args.chainId);
+    async (args) => {
+      const chain = CHAINS.find((chain) => chain.id === args['chain-id']);
       if (!chain) {
-        console.error(`Chain with ID ${args.chainId} is not known`);
+        console.error(`Chain with ID ${args['chain-id']} is not known`);
         process.exit(1);
       }
-      console.log(`dApp alias: ${args.dappAlias}\nchain: ${chain.name}\ndAPI name: ${args.dapiName}`);
-      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args.dappAlias));
-      if (dappInfo) {
-        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args.dappAlias)!;
-        if (aliasInfo.description) console.log(`\nℹ️ ${aliasInfo.description}\n`);
-      } else {
-        const message = `⚠️ Could not find any record for alias "${args.dappAlias}"`;
+      console.log(`dApp alias: ${args['dapp-alias']}\nchain: ${chain.name}\ndAPI name: ${args['dapi-name']}`);
+      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
+      if (!dappInfo) {
+        const message = `⚠️ Could not find any record for alias "${args['dapp-alias']}"`;
         if (args.strict) {
           console.error(message);
           process.exit(1);
         }
         console.warn(message);
+      }
+      if (dappInfo) {
+        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args['dapp-alias'])!;
+        if (aliasInfo.description) console.log(`\nℹ️ ${aliasInfo.description}\n`);
       }
       const provider = new ethers.JsonRpcProvider(
         chain.providers.find((provider) => provider.alias === 'default')!.rpcUrl
@@ -80,10 +79,10 @@ yargs(hideBin(process.argv))
         Api3ServerV1__factory.abi,
         provider
       ) as unknown as Api3ServerV1;
-      let timestamp: bigint | undefined;
+      let timestamp;
       try {
         [, timestamp] = await api3ServerV1.readDataFeedWithDapiNameHash(
-          ethers.keccak256(ethers.encodeBytes32String(args.dapiName))
+          ethers.keccak256(ethers.encodeBytes32String(args['dapi-name']))
         );
       } catch (error) {
         const message = '⚠️ Attempted to read the feed and failed';
@@ -102,8 +101,12 @@ yargs(hideBin(process.argv))
         }
         console.warn(message);
       }
-      const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(args.dappAlias, args.chainId, args.dapiName);
-      let code: string | undefined;
+      const proxyAddress = computeDappSpecificApi3ReaderProxyV1Address(
+        args['dapp-alias'],
+        args['chain-id'],
+        args['dapi-name']
+      );
+      let code;
       try {
         code = await provider.getCode(proxyAddress);
       } catch (error) {
@@ -123,7 +126,7 @@ yargs(hideBin(process.argv))
         }
         console.warn(message);
       }
-      const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args.dapiName)}`;
+      const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
       console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
       console.log(
         `• Your proxy is at ${chain.explorer.browserUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
@@ -138,10 +141,10 @@ yargs(hideBin(process.argv))
       'chain-id': chainId,
       strict,
     },
-    (args: ArgumentsCamelCase<{ 'dapp-alias': string; 'chain-id': string; strict: boolean }>) => {
-      const chain = CHAINS.find((c) => c.id === args.chainId);
+    (args) => {
+      const chain = CHAINS.find((c) => c.id === args['chain-id']);
       if (!chain) {
-        const message = `⚠️  Chain with ID ${args.chainId} is not known`;
+        const message = `⚠️  Chain with ID ${args['chain-id']} is not known`;
         if (args.strict) {
           console.error(message);
           process.exit(1);
@@ -149,18 +152,18 @@ yargs(hideBin(process.argv))
         console.warn(message);
       }
 
-      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args.dappAlias));
+      const dappInfo = DAPPS.find((dapp) => Object.keys(dapp.aliases).includes(args['dapp-alias']));
       if (!dappInfo) {
-        const message = `⚠️  Could not find any record for alias "${args.dappAlias}"`;
+        const message = `⚠️  Could not find any record for alias "${args['dapp-alias']}"`;
         if (args.strict) {
           console.error(message);
           process.exit(1);
         }
         console.warn(message);
       } else if (chain) {
-        const aliasInfo = dappInfo.aliases[args.dappAlias];
+        const aliasInfo = dappInfo.aliases[args['dapp-alias']];
         if (!aliasInfo!.chains.includes(chain.alias)) {
-          const message = `⚠️  dApp alias "${args.dappAlias}" is not available on chain "${chain.name}"`;
+          const message = `⚠️  dApp alias "${args['dapp-alias']}" is not available on chain "${chain.name}"`;
           if (args.strict) {
             console.error(message);
             process.exit(1);
@@ -169,15 +172,14 @@ yargs(hideBin(process.argv))
         }
       }
 
-      console.log(`\ndApp alias: ${args.dappAlias}\nchain: ${chain?.name ?? args.chainId}`);
+      console.log(`\ndApp alias: ${args['dapp-alias']}\nchain: ${chain?.name ?? args['chain-id']}`);
       if (dappInfo) {
-        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args.dappAlias)!;
+        const [, aliasInfo] = Object.entries(dappInfo.aliases).find(([alias]) => alias === args['dapp-alias'])!;
         if (aliasInfo.description) console.log(`\nℹ️  ${aliasInfo.description}`);
       }
 
-      const dappId = unsafeComputeDappId(args.dappAlias, args.chainId);
+      const dappId = unsafeComputeDappId(args['dapp-alias'], args['chain-id']);
       console.log(`\n• dApp ID: ${dappId.toString()}`);
     }
   )
-  .help()
-  .parse();
+  .help().argv;
