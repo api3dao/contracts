@@ -68,25 +68,25 @@ describe('chainAlias', () => {
   });
 
   it('should reject chain aliases not in the CHAINS array', () => {
-    expect(() => chainAlias.parse('Mantle')).toThrow(
-      new ZodError([
-        {
-          code: 'invalid_format',
-          format: 'regex',
-          message: 'Invalid chain alias format: Mantle',
-          path: [],
-        },
-      ])
-    );
-    expect(() => chainAlias.parse('ethereum-mainnet')).toThrow(
-      new ZodError([
-        {
-          code: 'custom',
-          message: 'Invalid chain alias: ethereum-mainnet',
-          path: [],
-        },
-      ])
-    );
+    const resultInvalidFormat = chainAlias.safeParse('Mantle');
+    expect(resultInvalidFormat.error).toBeInstanceOf(ZodError);
+    expect(resultInvalidFormat.error?.issues).toStrictEqual([
+      {
+        origin: 'string',
+        code: 'invalid_format',
+        format: 'regex',
+        pattern: '/^[\\da-z-]+$/',
+        path: [],
+        message: 'Invalid string: must match pattern /^[\\da-z-]+$/',
+      },
+      { code: 'custom', path: [], message: 'Invalid chain alias: Mantle' },
+    ]);
+
+    const resultInvalidChainAlias = chainAlias.safeParse('ethereum-mainnet');
+    expect(resultInvalidChainAlias.error).toBeInstanceOf(ZodError);
+    expect(resultInvalidChainAlias.error?.issues).toStrictEqual([
+      { code: 'custom', path: [], message: 'Invalid chain alias: ethereum-mainnet' },
+    ]);
   });
 });
 
@@ -116,8 +116,8 @@ describe('dappSchema', () => {
       new ZodError([
         {
           code: 'custom',
-          message: 'Invalid chain alias: invalid-chain',
           path: ['aliases', 'invalid-chains', 'chains', 1],
+          message: 'Invalid chain alias: invalid-chain',
         },
       ])
     );

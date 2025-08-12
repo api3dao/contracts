@@ -115,23 +115,8 @@ export const aliasSchema = z.string().regex(/^[\da-z-]+$/);
 
 export type Alias = z.infer<typeof aliasSchema>;
 
-export const chainAlias = z.string().superRefine((value, ctx) => {
-  if (!/^[\da-z-]+$/.test(value)) {
-    ctx.addIssue({
-      code: 'invalid_format',
-      format: 'regex',
-      message: `Invalid chain alias format: ${value}`,
-    });
-    return;
-  }
-
-  const isKnown = CHAINS.some((chain) => chain.alias === value);
-  if (!isKnown) {
-    ctx.addIssue({
-      code: 'custom',
-      message: `Invalid chain alias: ${value}`,
-    });
-  }
+export const chainAlias = aliasSchema.refine((value) => CHAINS.some((chain) => chain.alias === value), {
+  error: (issue) => `Invalid chain alias: ${issue.input}`,
 });
 
 export type ChainAlias = z.infer<typeof chainAlias>;
