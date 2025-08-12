@@ -175,7 +175,7 @@ describe('chainProviderSchema', () => {
     );
   });
 
-  it('should reject an invalid provider if default rpcUrl is missing', () => {
+  it('should reject an invalid provider if either rpcUrl or homepageUrl is missing', () => {
     const invalidProvider = {
       alias: 'default',
     };
@@ -206,7 +206,7 @@ describe('chainProvidersSchema', () => {
       new ZodError([
         {
           code: 'custom',
-          path: ['providers', 'alias'],
+          path: [],
           message: "a provider with alias 'default' is required",
         },
       ])
@@ -222,7 +222,7 @@ describe('chainProvidersSchema', () => {
       new ZodError([
         {
           code: 'custom',
-          path: ['providers', 'alias'],
+          path: [],
           message: "cannot contain duplicate 'alias' values",
         },
       ])
@@ -230,12 +230,20 @@ describe('chainProvidersSchema', () => {
   });
 
   it('should reject if "default" or "public" provider does not have rpcUrl', () => {
-    const invalidProviders = [{ alias: 'default', homepageUrl: 'https://dummy-homepage.com' }];
+    const invalidProviders = [
+      { alias: 'default', homepageUrl: 'https://dummy-homepage.com' },
+      { alias: 'public', homepageUrl: 'https://public-homepage.com' },
+    ];
     expect(() => chainProvidersSchema.parse(invalidProviders)).toThrow(
       new ZodError([
         {
           code: 'custom',
-          path: ['providers', 'rpcUrl'],
+          path: [0, 'rpcUrl'],
+          message: "providers with alias 'default' or 'public' must also have an 'rpcUrl'",
+        },
+        {
+          code: 'custom',
+          path: [1, 'rpcUrl'],
           message: "providers with alias 'default' or 'public' must also have an 'rpcUrl'",
         },
       ])

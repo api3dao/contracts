@@ -36,7 +36,7 @@ export const chainProvidersSchema = z.array(chainProviderSchema).superRefine((pr
   if (!providers.some((p) => p.alias === 'default')) {
     ctx.issues.push({
       code: 'custom',
-      path: ['providers', 'alias'],
+      path: [],
       message: "a provider with alias 'default' is required",
       input: providers.map((p) => p.alias),
     });
@@ -45,17 +45,17 @@ export const chainProvidersSchema = z.array(chainProviderSchema).superRefine((pr
   if (!hasUniqueEntries(providers, 'alias')) {
     ctx.issues.push({
       code: 'custom',
-      path: ['providers', 'alias'],
+      path: [],
       message: "cannot contain duplicate 'alias' values",
       input: providers.map((p) => p.alias),
     });
   }
 
-  providers.forEach((p) => {
+  providers.forEach((p, index) => {
     if ((p.alias === 'default' || p.alias === 'public') && !p.rpcUrl) {
       ctx.issues.push({
         code: 'custom',
-        path: ['providers', 'rpcUrl'],
+        path: [index, 'rpcUrl'],
         message: "providers with alias 'default' or 'public' must also have an 'rpcUrl'",
         input: p.rpcUrl,
       });
