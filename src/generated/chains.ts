@@ -462,6 +462,19 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'injective-testnet',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://testnet.blockscout-api.injective.network/api' },
+      browserUrl: 'https://testnet.blockscout.injective.network/',
+    },
+    id: '1439',
+    name: 'Injective EVM testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://k8s.testnet.json-rpc.injective.network' }],
+    symbol: 'INJ',
+    testnet: true,
+  },
+  {
     alias: 'ink-sepolia-testnet',
     decimals: 18,
     explorer: {
@@ -492,6 +505,19 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+  },
+  {
+    alias: 'katana-sepolia-testnet',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://explorer-bokuto.katanarpc.com/api' },
+      browserUrl: 'https://explorer-bokuto.katanarpc.com/',
+    },
+    id: '737373',
+    name: 'Katana testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc-bokuto.katanarpc.com/' }],
+    symbol: 'ETH',
+    testnet: true,
   },
   {
     alias: 'katana',

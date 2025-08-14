@@ -1,0 +1,23 @@
+{
+  "alias": "katana-sepolia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://explorer-bokuto.katanarpc.com/api"
+    },
+    "browserUrl": "https://explorer-bokuto.katanarpc.com/"
+  },
+  "id": "737373",
+  "name": "Katana testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc-bokuto.katanarpc.com/"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true
+}
