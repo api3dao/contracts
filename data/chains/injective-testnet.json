@@ -1,5 +1,5 @@
 {
-  "alias": "injective-evm-testnet",
+  "alias": "injective-testnet",
   "decimals": 18,
   "explorer": {
     "api": {

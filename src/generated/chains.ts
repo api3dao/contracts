@@ -462,7 +462,7 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'injective-evm-testnet',
+    alias: 'injective-testnet',
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://testnet.blockscout-api.injective.network/api' },

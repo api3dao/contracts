@@ -2,4 +2,4 @@
 '@api3/contracts': minor
 ---
 
-Add dAPI and Market support to injective-evm-testnet and katana-sepolia-testnet
+Add Market support to injective-testnet and katana-sepolia-testnet
