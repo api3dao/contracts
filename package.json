@@ -8,7 +8,7 @@
     "oev"
   ],
   "license": "MIT",
-  "version": "26.2.1",
+  "version": "27.0.0",
   "engines": {
     "node": ">=22.18.0"
   },
@@ -106,7 +106,7 @@
     "ethers": "^6.15.0",
     "viem": "^2.23.2",
     "yargs": "^17.7.2",
-    "zod": "^3.25.76"
+    "zod": "^4.0.15"
   },
   "packageManager": "pnpm@10.14.0"
 }

@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 27.0.0
+
+### Major Changes
+
+- 407a6be: Migrates zod to v4
+
+### Minor Changes
+
+- 619bee2: Add Market support to injective-testnet and katana-sepolia-testnet
+
 ## 26.2.1
 
 ### Patch Changes

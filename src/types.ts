@@ -10,49 +10,54 @@ export const chainExplorerAPIKeySchema = z.object({
 
 export const chainExplorerAPISchema = z.object({
   key: chainExplorerAPIKeySchema,
-  url: z.string().url(),
+  url: z.url(),
 });
 
 export const chainExplorerSchema = z.object({
   api: chainExplorerAPISchema.optional(),
-  browserUrl: z.string().url(),
+  browserUrl: z.url(),
 });
 
 export const chainProviderSchema = z
   .object({
     alias: z.string(),
-    homepageUrl: z.string().url().optional(),
-    rpcUrl: z.string().url().optional(),
+    homepageUrl: z.url().optional(),
+    rpcUrl: z.url().optional(),
   })
   .refine(
     // Either rpcUrl or homepageUrl must be present
     (provider) => provider.rpcUrl ?? provider.homepageUrl,
-    { message: 'rpcUrl or homepageUrl is required' }
+    {
+      error: 'rpcUrl or homepageUrl is required',
+    }
   );
 
 export const chainProvidersSchema = z.array(chainProviderSchema).superRefine((providers, ctx) => {
   if (!providers.some((p) => p.alias === 'default')) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['providers', 'alias'],
+    ctx.issues.push({
+      code: 'custom',
+      path: [],
       message: "a provider with alias 'default' is required",
+      input: providers.map((p) => p.alias),
     });
   }
 
   if (!hasUniqueEntries(providers, 'alias')) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['providers', 'alias'],
+    ctx.issues.push({
+      code: 'custom',
+      path: [],
       message: "cannot contain duplicate 'alias' values",
+      input: providers.map((p) => p.alias),
     });
   }
 
-  providers.forEach((p) => {
+  providers.forEach((p, index) => {
     if ((p.alias === 'default' || p.alias === 'public') && !p.rpcUrl) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['providers', 'rpcUrl'],
+      ctx.issues.push({
+        code: 'custom',
+        path: [index, 'rpcUrl'],
         message: "providers with alias 'default' or 'public' must also have an 'rpcUrl'",
+        input: p.rpcUrl,
       });
     }
   });
@@ -110,10 +115,9 @@ export const aliasSchema = z.string().regex(/^[\da-z-]+$/);
 
 export type Alias = z.infer<typeof aliasSchema>;
 
-export const chainAlias = aliasSchema.refine(
-  (value) => CHAINS.some((chain) => chain.alias === value),
-  (value) => ({ message: `Invalid chain alias: ${value}` })
-);
+export const chainAlias = aliasSchema.refine((value) => CHAINS.some((chain) => chain.alias === value), {
+  error: (issue) => `Invalid chain alias: ${issue.input}`,
+});
 
 export type ChainAlias = z.infer<typeof chainAlias>;
 
@@ -126,7 +130,7 @@ export const dappSchema = z.strictObject({
       description: z.string().optional(),
     })
   ),
-  homepageUrl: z.string().url().optional(),
+  homepageUrl: z.url().optional(),
 });
 
 export type Dapp = z.infer<typeof dappSchema>;
