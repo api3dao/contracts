@@ -3,16 +3,12 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "matchPackageNames": ["node", "actions/node-versions", "pnpm"],
-      "enabled": false
-    },
-    {
       "matchPackagePatterns": ["chai", "solhint", "eslint"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
     {
-      "matchPackagePatterns": ["@types/node"],
+      "matchPackagePatterns": ["node", "actions/node-versions", "@types/node", "pnpm"],
       "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
