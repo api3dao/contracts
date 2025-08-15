@@ -1,7 +1,9 @@
 import type { AddressLike, BaseWallet, BigNumberish, BytesLike } from 'ethers';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import type { Api3ServerV1 } from '../src/index';
+
+const { ethers } = hardhat;
 
 const PROTOCOL_IDS = {
   RRP: '1',

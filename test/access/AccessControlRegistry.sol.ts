@@ -1,9 +1,11 @@
 import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import * as testUtils from '../test-utils';
+
+const { ethers } = hardhat;
 
 describe('AccessControlRegistry', function () {
   async function deploy() {

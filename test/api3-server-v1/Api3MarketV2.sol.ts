@@ -3,11 +3,13 @@ import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { expect } from 'chai';
 import { type AddressLike, type BigNumberish, type BytesLike, type HDNodeWallet } from 'ethers';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import { type Api3MarketV2 } from '../../src/index';
 import { signHash } from '../access/HashRegistry.sol';
 import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
+
+const { ethers } = hardhat;
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
 const DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
