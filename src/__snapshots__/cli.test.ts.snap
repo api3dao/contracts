@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`cli tests should match help output 1`] = `
+"cli.js [command]
+
+Commands:
+  cli.js print-api3readerproxyv1-address  Prints the dApp-specific
+                                          Api3ReaderProxyV1 address
+  cli.js compute-dapp-id                  Computes the dApp ID for a given dApp
+                                          alias and chain ID
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]"
+`;
+
+exports[`cli tests should print-api3readerproxyv1-address 1`] = `
+"dApp alias: lendle
+chain: Mantle
+dAPI name: ETH/USD
+• Please confirm that https://market.api3.org/mantle/eth-usd points to an active feed.
+• Your proxy is at https://mantlescan.xyz/address/0x776E79D916e49BBDb8FEe0F43fF148C2Ed3bE125
+Please confirm that there is a contract deployed at this address before using it."
+`;
