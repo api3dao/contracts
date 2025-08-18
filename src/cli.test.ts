@@ -32,13 +32,6 @@ describe('cli tests', () => {
     return stdout;
   };
 
-  it('should compute dApp ID', () => {
-    const output = execCommand('compute-dapp-id', ['--dapp-alias', 'lendle'], ['--chain-id', '5000']);
-    expect(output).toMatch(
-      'dApp alias: lendle\nchain: Mantle\n\n• dApp ID: 3006187377348428698321862179080566497381498372321749245241868771911713393091'
-    );
-  });
-
   it('should throw an error for an unknown chain id', () => {
     expect(() => {
       execCommand('compute-dapp-id', ['--dapp-alias', 'lendle'], ['--chain-id', '0']);
@@ -66,6 +59,20 @@ describe('cli tests', () => {
     );
     expect(output).toMatch(
       'dApp alias: unsupported-dapp\nchain: 0\n\n• dApp ID: 113044575011858809962820051290270246401920929513853405225169263442003318378526'
+    );
+  });
+
+  it('should compute dApp ID for lendle on mantle', () => {
+    const output = execCommand('compute-dapp-id', ['--dapp-alias', 'lendle'], ['--chain-id', '5000']);
+    expect(output).toMatch(
+      'dApp alias: lendle\nchain: Mantle\n\n• dApp ID: 3006187377348428698321862179080566497381498372321749245241868771911713393091'
+    );
+  });
+
+  it('should compute dApp ID for mach-finance on sonic', () => {
+    const output = execCommand('compute-dapp-id', ['--dapp-alias', 'mach-finance'], ['--chain-id', '146']);
+    expect(output).toMatch(
+      'dApp alias: mach-finance\nchain: Sonic\n\n• dApp ID: 103191103032841018751746810000516216875988320776131204933373404128958541332502'
     );
   });
 
@@ -107,12 +114,22 @@ describe('cli tests', () => {
     }).toThrow(/⚠️ Attempted to read the feed and failed/);
   });
 
-  it('should print-api3readerproxyv1-address', () => {
+  it('should succeed print-api3readerproxyv1-address on mantle', () => {
     const output = execCommand(
       'print-api3readerproxyv1-address',
       ['--dapp-alias', 'lendle'],
       ['--chain-id', '5000'],
       ['--dapi-name', 'ETH/USD']
+    );
+    expect(output).toMatchSnapshot();
+  });
+
+  it('should succeed print-api3readerproxyv1-address on sonic', () => {
+    const output = execCommand(
+      'print-api3readerproxyv1-address',
+      ['--dapp-alias', 'mach-finance'],
+      ['--chain-id', '146'],
+      ['--dapi-name', 'S/USD']
     );
     expect(output).toMatchSnapshot();
   });

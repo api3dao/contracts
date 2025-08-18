@@ -14,11 +14,20 @@ Options:
   --help     Show help                                                 [boolean]"
 `;
 
-exports[`cli tests should print-api3readerproxyv1-address 1`] = `
+exports[`cli tests should succeed print-api3readerproxyv1-address on mantle 1`] = `
 "dApp alias: lendle
 chain: Mantle
 dAPI name: ETH/USD
 • Please confirm that https://market.api3.org/mantle/eth-usd points to an active feed.
 • Your proxy is at https://mantlescan.xyz/address/0x776E79D916e49BBDb8FEe0F43fF148C2Ed3bE125
+Please confirm that there is a contract deployed at this address before using it."
+`;
+
+exports[`cli tests should succeed print-api3readerproxyv1-address on sonic 1`] = `
+"dApp alias: mach-finance
+chain: Sonic
+dAPI name: S/USD
+• Please confirm that https://market.api3.org/sonic/s-usd points to an active feed.
+• Your proxy is at https://sonicscan.org/address/0x2551A2a96988829D2a55c3b02b88E138023D1cE8
 Please confirm that there is a contract deployed at this address before using it."
 `;
