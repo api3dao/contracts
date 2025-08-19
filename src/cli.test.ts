@@ -9,15 +9,7 @@ type CommandArg = [string, string | number | boolean];
 describe('cli tests', () => {
   const execCommand = (command: string, ...args: CommandArg[]) => {
     const quote = (val: string) => `"${val}"`;
-    const formattedArgs = args
-      .map(([c, a]) => {
-        // if args is array then quote each elem and separate them with space
-        if (Array.isArray(a)) return `${c} ${a.map((element) => quote(element)).join(' ')}`;
-        // otherwise just quote each elem and separate them with space
-        else return `${c} ${quote(String(a))}`;
-      })
-      .join(' ');
-    const formattedCommand = `${command} ${formattedArgs}`;
+    const formattedCommand = `${command} ${args.map(([c, a]) => `${c} ${quote(String(a))}`).join(' ')}`;
     const goExecSync = goSync(() =>
       execSync(`node ${CLI_EXECUTABLE} ${formattedCommand}`, {
         stdio: ['pipe', 'pipe', 'pipe'],
@@ -111,7 +103,7 @@ describe('cli tests', () => {
         ['--chain-id', '5000'],
         ['--dapi-name', 'UNSUPPORTED/USD']
       );
-    }).toThrow(/⚠️ Attempted to read the feed and failed/);
+    }).toThrow('⚠️ Attempted to read the feed and failed');
   });
 
   it('should succeed print-api3readerproxyv1-address on mantle', () => {
