@@ -8,8 +8,7 @@ type CommandArg = [string, string | number | boolean];
 
 describe('cli tests', () => {
   const execCommand = (command: string, ...args: CommandArg[]) => {
-    const quote = (val: string) => `"${val}"`;
-    const formattedCommand = `${command} ${args.map(([c, a]) => `${c} ${quote(String(a))}`).join(' ')}`;
+    const formattedCommand = [command, ...args.flatMap(([c, a]) => [c, String(a)])].join(' ');
     const goExecSync = goSync(() =>
       execSync(`node ${CLI_EXECUTABLE} ${formattedCommand}`, {
         stdio: ['pipe', 'pipe', 'pipe'],
