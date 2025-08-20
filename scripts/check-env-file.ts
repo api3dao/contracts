@@ -6,14 +6,15 @@ import { toUpperSnakeCase } from '../src/utils/strings';
 async function main() {
   const logs: string[] = [];
 
-  const apiKeyEnvNames = CHAINS.filter((chain) => chain.explorer?.api?.key?.required).map(
-    (chain) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(chain.alias)}=`
-  );
-
-  const expectedEnvVars = ['MNEMONIC=', ...apiKeyEnvNames].join('\n');
+  const expectedEnvVars = [
+    'MNEMONIC=',
+    ...CHAINS.filter((c) => c.explorer?.api?.key?.required).map(
+      (c) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(c.alias)}=`
+    ),
+  ];
 
   const exampleEnvPath = './example.env';
-  let exampleEnvContents = '';
+  let exampleEnvContents: string;
 
   try {
     exampleEnvContents = fs.readFileSync(exampleEnvPath, `utf-8`);
@@ -23,14 +24,16 @@ async function main() {
     process.exit(1);
   }
 
-  const missingEnvVars = expectedEnvVars.split('\n').filter((line) => line && !exampleEnvContents.includes(line));
-  const extraEnvVars = exampleEnvContents.split('\n').filter((line) => line && !expectedEnvVars.includes(line));
+  const exampleLines = exampleEnvContents.split('\n').filter(Boolean);
 
-  if (missingEnvVars.length > 0) {
-    logs.push(`Missing env vars in example.env:\n${missingEnvVars.join('\n')}`);
+  const missing = expectedEnvVars.filter((v) => !exampleLines.includes(v));
+  const extra = exampleLines.filter((v) => !expectedEnvVars.includes(v));
+
+  if (missing.length > 0) {
+    logs.push(`Missing env vars in example.env:\n${missing.join('\n')}`);
   }
-  if (extraEnvVars.length > 0) {
-    logs.push(`Extra env vars in example.env:\n${extraEnvVars.join('\n')}`);
+  if (extra.length > 0) {
+    logs.push(`Extra env vars in example.env:\n${extra.join('\n')}`);
   }
 
   if (logs.length > 0) {
