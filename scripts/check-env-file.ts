@@ -1,18 +1,16 @@
 import * as fs from 'node:fs';
 
-import { hardhatConfig } from '../src/index';
+import { CHAINS } from '../src/generated/chains';
+import { toUpperSnakeCase } from '../src/utils/strings';
 
 async function main() {
   const logs: string[] = [];
 
-  const expectedEnvVars = hardhatConfig
-    .getEnvVariableNames()
-    .reduce((fileContents: string, envVariableName: string) => {
-      if (!envVariableName.startsWith('HARDHAT_HTTP_RPC_URL_')) {
-        return `${fileContents}${envVariableName}=\n`;
-      }
-      return fileContents;
-    }, '');
+  const apiKeyEnvNames = CHAINS.filter((chain) => chain.explorer?.api?.key?.required).map(
+    (chain) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(chain.alias)}=`
+  );
+
+  const expectedEnvVars = ['MNEMONIC=', ...apiKeyEnvNames].join('\n');
 
   const exampleEnvPath = './example.env';
   let exampleEnvContents = '';
