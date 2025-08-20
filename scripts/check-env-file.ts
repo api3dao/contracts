@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import * as fs from 'node:fs';
 
 import { CHAINS } from '../src/generated/chains';
@@ -26,14 +27,27 @@ async function main() {
 
   const exampleLines = exampleEnvContents.split('\n').filter(Boolean);
 
+  const hashExpectedEnvVars = createHash('sha256').update(expectedEnvVars.join('\n')).digest('hex');
+  const hashExampleLines = createHash('sha256').update(exampleLines.join('\n')).digest('hex');
+
   const missing = expectedEnvVars.filter((v) => !exampleLines.includes(v));
   const extra = exampleLines.filter((v) => !expectedEnvVars.includes(v));
+  const duplicates = exampleLines.filter((value, index, arr) => arr.indexOf(value) !== index);
+
+  if (hashExpectedEnvVars !== hashExampleLines) {
+    logs.push(`example.env file is not up to date with expected environment variables.`);
+  }
 
   if (missing.length > 0) {
     logs.push(`Missing env vars in example.env:\n${missing.join('\n')}`);
   }
+
   if (extra.length > 0) {
     logs.push(`Extra env vars in example.env:\n${extra.join('\n')}`);
+  }
+
+  if (duplicates.length > 0) {
+    logs.push(`Duplicate env vars in example.env:\n${[...new Set(duplicates)].join('\n')}`);
   }
 
   if (logs.length > 0) {
