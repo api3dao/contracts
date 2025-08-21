@@ -248,7 +248,7 @@ console.log(dappId);
 
 ### computeApi3ReaderProxyV1Address
 
-Computes the Api3ReaderProxyV1 address for a given chain ID, dapi name, dApp ID and metadata.
+Computes the Api3ReaderProxyV1 address for a given chain ID, dAPI name, dApp ID and metadata.
 
 ```ts
 import { computeApi3ReaderProxyV1Address } from '@api3/contracts';
@@ -266,7 +266,7 @@ console.log(address);
 
 ### computeCommunalApi3ReaderProxyV1Address
 
-Computes the Api3ReaderProxyV1 address being used by Api3 Market for a given dapi name and chain ID.
+Computes the Api3ReaderProxyV1 address being used by Api3 Market for a given dAPI name and chain ID.
 
 ```ts
 import { computeCommunalApi3ReaderProxyV1Address } from '@api3/contracts';
@@ -279,7 +279,7 @@ console.log(address);
 
 ### computeDappSpecificApi3ReaderProxyV1Address
 
-Computes the dApp-specific Api3ReaderProxyV1 address for a given dApp alias, chain ID, and dapi name. This function is useful for retrieving the proxy address for a specific dApp on a specific chain.
+Computes the dApp-specific Api3ReaderProxyV1 address for a given dApp alias, chain ID, and dAPI name. This function is useful for retrieving the proxy address for a specific dApp on a specific chain.
 
 ```ts
 import { computeDappSpecificApi3ReaderProxyV1Address } from '@api3/contracts';
