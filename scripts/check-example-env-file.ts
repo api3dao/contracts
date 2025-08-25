@@ -1,61 +1,57 @@
-import { createHash } from 'node:crypto';
 import * as fs from 'node:fs';
+import path from 'node:path';
 
 import { CHAINS } from '../src/generated/chains';
+import { type Chain } from '../src/types';
 import { toUpperSnakeCase } from '../src/utils/strings';
 
-async function main() {
-  const logs: string[] = [];
+const INPUT_DIR = path.join('data', 'chains');
 
-  const expectedEnvVars = [
-    'MNEMONIC=',
-    ...CHAINS.filter((c) => c.explorer?.api?.key?.required).map(
-      (c) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(c.alias)}=`
-    ),
-  ];
+const fileNames = fs.readdirSync(INPUT_DIR);
+const jsonFiles = fileNames.filter((fileName) => fileName.endsWith('.json'));
 
-  const exampleEnvPath = './example.env';
-  let exampleEnvContents: string;
+const logs: string[] = [];
 
-  try {
-    exampleEnvContents = fs.readFileSync(exampleEnvPath, `utf-8`);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(`Error reading ${exampleEnvPath}: ${error}`);
-    process.exit(1);
-  }
+const jsonChains: Chain[] = jsonFiles.map((filePath: string) => {
+  const fullPath = path.join(INPUT_DIR, filePath);
+  const fileContentRaw = fs.readFileSync(fullPath, 'utf8');
+  return JSON.parse(fileContentRaw);
+});
 
-  const exampleLines = exampleEnvContents.split('\n').filter(Boolean);
+const chainsMap = new Map(CHAINS.map((chain) => [chain.alias, chain]));
+const jsonChainsMap = new Map(jsonChains.map((chain) => [chain.alias, chain]));
 
-  const hashExpectedEnvVars = createHash('sha256').update(expectedEnvVars.join('\n')).digest('hex');
-  const hashExampleLines = createHash('sha256').update(exampleLines.join('\n')).digest('hex');
+const chainAliases = new Set(chainsMap.keys());
+const jsonAliases = new Set(jsonChainsMap.keys());
 
-  const missing = expectedEnvVars.filter((v) => !exampleLines.includes(v));
-  const extra = exampleLines.filter((v) => !expectedEnvVars.includes(v));
-  const duplicates = exampleLines.filter((value, index, arr) => arr.indexOf(value) !== index);
-
-  if (hashExpectedEnvVars !== hashExampleLines) {
-    logs.push(`example.env file is not up to date with expected environment variables.`);
-  }
-
-  if (missing.length > 0) {
-    logs.push(`Missing env vars in example.env:\n${missing.join('\n')}`);
-  }
-
-  if (extra.length > 0) {
-    logs.push(`Extra env vars in example.env:\n${extra.join('\n')}`);
-  }
-
-  if (duplicates.length > 0) {
-    logs.push(`Duplicate env vars in example.env:\n${[...new Set(duplicates)].join('\n')}`);
-  }
-
-  if (logs.length > 0) {
-    logs.push('Please update example.env running "pnpm write-example-env-file"');
-    // eslint-disable-next-line no-console
-    logs.forEach((log) => console.error(log));
-    process.exit(1);
-  }
+const missingInChains = [...jsonAliases].filter((alias) => !chainAliases.has(alias));
+if (missingInChains.length > 0) {
+  logs.push(`Missing in CHAINS: ${missingInChains.join(', ')}\n`);
+}
+const missingInJson = [...chainAliases].filter((alias) => !jsonAliases.has(alias));
+if (missingInJson.length > 0) {
+  logs.push(`Missing in JSON files: ${missingInJson.join(', ')}\n`);
 }
 
-main();
+const apiKeyEnvNames = jsonChains
+  .filter((chain) => chain.explorer?.api?.key?.required)
+  .map((chain) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(chain.alias)}`);
+
+const expectedEnvVars = ['MNEMONIC', ...apiKeyEnvNames];
+const expectedEnvFile = expectedEnvVars.reduce((fileContents: string, envVariableName: string) => {
+  return `${fileContents}${envVariableName}=\n`;
+}, '');
+
+const exampleEnvFile = fs.readFileSync('example.env', 'utf8');
+
+if (exampleEnvFile !== expectedEnvFile) {
+  logs.push('Please update example.env running "pnpm write-example-env-file"');
+}
+
+if (logs.length > 0) {
+  // eslint-disable-next-line no-console
+  logs.forEach((log) => console.error(log));
+  process.exit(1);
+}
+
+process.exit(0);
