@@ -34,7 +34,7 @@
   "scripts": {
     "build": "pnpm check && pnpm build:hardhat && pnpm generate && tsc -p tsconfig.build.json",
     "build:hardhat": "hardhat --config hardhat.build.config.ts compile",
-    "check": "pnpm check:chains && pnpm check:dapps && pnpm check:deployment-addresses && pnpm check:deployment-config && pnpm check:chain-support-order && pnpm check:example-env-file",
+    "check": "pnpm check:chain-support-order && pnpm check:deployment-config && pnpm check:deployment-addresses && pnpm check:chains && pnpm check:example-env-file && pnpm check:dapps",
     "check:chains": "ts-node scripts/check-chains.ts",
     "check:dapps": "ts-node scripts/check-dapps.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
@@ -109,5 +109,5 @@
     "yargs": "^17.7.2",
     "zod": "^4.0.15"
   },
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }
