@@ -48,6 +48,7 @@
     "generate:chains": "ts-node scripts/generate-chains.ts",
     "generate:dapps": "ts-node scripts/generate-dapps.ts",
     "generate:deployment-addresses": "ts-node scripts/generate-deployment-addresses.ts",
+    "generate:example-env-file": "hardhat run scripts/generate-example-env-file.ts",
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
     "lint:solhint": "solhint ./contracts/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
@@ -64,8 +65,7 @@
     "test:jest": "jest",
     "validate-deployments": "hardhat run scripts/validate-deployments.ts",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
-    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts",
-    "write-example-env-file": "hardhat run scripts/write-example-env-file.ts"
+    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
   },
   "devDependencies": {
     "@api3/eslint-plugin-commons": "^3.0.0",
