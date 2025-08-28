@@ -16,8 +16,16 @@
       "rpcUrl": "https://rpc.hypurrscan.io"
     },
     {
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    },
+    {
       "alias": "drpc",
       "homepageUrl": "https://drpc.org"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "HYPE",

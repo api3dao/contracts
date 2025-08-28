@@ -480,7 +480,9 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.hyperliquid.xyz/evm' },
       { alias: 'backup', rpcUrl: 'https://rpc.hypurrscan.io' },
+      { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'drpc', homepageUrl: 'https://drpc.org' },
+      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
     symbol: 'HYPE',
     testnet: false,
