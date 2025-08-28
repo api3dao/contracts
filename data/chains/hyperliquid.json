@@ -1,0 +1,25 @@
+{
+  "alias": "hyperliquid",
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://hyperevmscan.io/"
+  },
+  "id": "999",
+  "name": "Hyperliquid",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.hyperliquid.xyz/evm"
+    },
+    {
+      "alias": "backup",
+      "rpcUrl": "https://rpc.hypurrscan.io"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    }
+  ],
+  "symbol": "HYPE",
+  "testnet": false
+}
