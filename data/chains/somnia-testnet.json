@@ -1,0 +1,23 @@
+{
+  "alias": "somnia-testnet",
+  "decimals": 18,
+  "explorer": {
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://shannon-explorer.somnia.network/api"
+    },
+    "browserUrl": "https://shannon-explorer.somnia.network/"
+  },
+  "id": "50312",
+  "name": "Somnia testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://dream-rpc.somnia.network/"
+    }
+  ],
+  "symbol": "STT",
+  "testnet": true
+}
