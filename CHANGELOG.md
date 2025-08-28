@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 27.1.0
+
+### Minor Changes
+
+- afbecad: Add Market support to hyperliquid, hyperliquid-testnet and somnia-testnet
+
 ## 27.0.0
 
 ### Major Changes
