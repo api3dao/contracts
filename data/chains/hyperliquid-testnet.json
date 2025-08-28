@@ -1,0 +1,18 @@
+{
+  "alias": "hyperliquid-testnet",
+
+  "decimals": 18,
+  "explorer": {
+    "browserUrl": "https://testnet.purrsec.com/"
+  },
+  "id": "998",
+  "name": "Hyperliquid testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.hyperliquid-testnet.xyz/evm"
+    }
+  ],
+  "symbol": "HYPE",
+  "testnet": true
+}

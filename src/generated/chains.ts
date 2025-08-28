@@ -462,6 +462,32 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'hyperliquid-testnet',
+    decimals: 18,
+    explorer: { browserUrl: 'https://testnet.purrsec.com/' },
+    id: '998',
+    name: 'Hyperliquid testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.hyperliquid-testnet.xyz/evm' }],
+    symbol: 'HYPE',
+    testnet: true,
+  },
+  {
+    alias: 'hyperliquid',
+    decimals: 18,
+    explorer: { browserUrl: 'https://hyperevmscan.io/' },
+    id: '999',
+    name: 'Hyperliquid',
+    providers: [
+      { alias: 'default', rpcUrl: 'https://rpc.hyperliquid.xyz/evm' },
+      { alias: 'backup', rpcUrl: 'https://rpc.hypurrscan.io' },
+      { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
+      { alias: 'drpc', homepageUrl: 'https://drpc.org' },
+      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
+    ],
+    symbol: 'HYPE',
+    testnet: false,
+  },
+  {
     alias: 'injective-testnet',
     decimals: 18,
     explorer: {
@@ -1144,6 +1170,19 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'SEI',
     testnet: false,
+  },
+  {
+    alias: 'somnia-testnet',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://shannon-explorer.somnia.network/api' },
+      browserUrl: 'https://shannon-explorer.somnia.network/',
+    },
+    id: '50312',
+    name: 'Somnia testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://dream-rpc.somnia.network/' }],
+    symbol: 'STT',
+    testnet: true,
   },
   {
     alias: 'soneium-sepolia-testnet',

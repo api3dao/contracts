@@ -1,11 +1,13 @@
 import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../../../src/index';
 import type { Api3ReaderProxyV1 } from '../../../src/index';
 import * as testUtils from '../../test-utils';
+
+const { ethers } = hardhat;
 
 describe('Api3ReaderProxyV1Factory', function () {
   async function deploy() {

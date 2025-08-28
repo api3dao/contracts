@@ -2,10 +2,12 @@ import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 
 import type { Api3ServerV1 } from '../../src/index';
 import * as testUtils from '../test-utils';
+
+const { ethers } = hardhat;
 
 export function encodeData(decodedData: BigNumberish) {
   return ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [decodedData]);
