@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 27.2.0
+
+### Minor Changes
+
+- 1a4e118: Add rsETH/USDC and ezETH/USDC Morpho markets on Arbitrum
+
 ## 27.1.0
 
 ### Minor Changes
