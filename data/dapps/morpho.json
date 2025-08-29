@@ -49,6 +49,16 @@
       "chains": ["gnosis"],
       "title": "Morpho sDAI/USDC 86% LLTV",
       "description": "Only to be used for the sDAI/USDC 86% LLTV market."
+    },
+    "morpho-rseth-usdc-770-lltv": {
+      "chains": ["arbitrum"],
+      "title": "Morpho rsETH/USDC 77% LLTV",
+      "description": "Only to be used for the rsETH/USDC 77% LLTV market."
+    },
+    "morpho-ezeth-usdc-770-lltv": {
+      "chains": ["arbitrum"],
+      "title": "Morpho ezETH/USDC 77% LLTV",
+      "description": "Only to be used for the ezETH/USDC 77% LLTV market."
     }
   },
   "homepageUrl": "https://morpho.org/vaults/"
