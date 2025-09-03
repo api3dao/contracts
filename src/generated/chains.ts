@@ -1185,6 +1185,19 @@ export const CHAINS: Chain[] = [
     testnet: true,
   },
   {
+    alias: 'somnia',
+    decimals: 18,
+    explorer: {
+      api: { key: { required: false }, url: 'https://explorer.somnia.network/api' },
+      browserUrl: 'https://explorer.somnia.network/',
+    },
+    id: '5031',
+    name: 'Somnia',
+    providers: [{ alias: 'default', rpcUrl: 'https://api.infra.mainnet.somnia.network/' }],
+    symbol: 'SOMI',
+    testnet: false,
+  },
+  {
     alias: 'soneium-sepolia-testnet',
     decimals: 18,
     explorer: {
