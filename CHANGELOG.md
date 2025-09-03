@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 27.3.0
+
+### Minor Changes
+
+- 9b1d6fa: Add Market support to somnia
+
 ## 27.2.0
 
 ### Minor Changes
