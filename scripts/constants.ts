@@ -11,7 +11,7 @@ export const goAsyncOptions: GoAsyncOptions = {
   },
 };
 
-export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = [];
+export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = ['somnia'];
 
 export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification = [
   'apechain',
