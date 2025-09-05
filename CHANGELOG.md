@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 27.4.0
+
+### Minor Changes
+
+- b28b457: Add MachFi on Hyperliquid (HyperEVM) to dApp details
+
 ## 27.3.0
 
 ### Minor Changes
