@@ -24,7 +24,10 @@ export const DAPPS: Dapp[] = [
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
-  { aliases: { 'mach-finance': { chains: ['sonic'], title: 'MachFi' } }, homepageUrl: 'https://www.machfi.xyz/' },
+  {
+    aliases: { 'mach-finance': { chains: ['sonic', 'hyperliquid'], title: 'MachFi' } },
+    homepageUrl: 'https://www.machfi.xyz/',
+  },
   { aliases: { malda: { chains: ['linea'], title: 'Malda' } }, homepageUrl: 'https://malda.xyz/' },
   { aliases: { moonwell: { chains: ['moonbeam'], title: 'Moonwell' } }, homepageUrl: 'https://moonwell.fi/' },
   {
