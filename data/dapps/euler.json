@@ -1,0 +1,10 @@
+{
+  "aliases": {
+    "euler-clearstar": {
+      "chains": ["ethereum"],
+      "title": "Euler vaults by ClearStar",
+      "description": "Only to be used for Euler vaults by ClearStar."
+    }
+  },
+  "homepageUrl": "https://app.euler.finance/"
+}

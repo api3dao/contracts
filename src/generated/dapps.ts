@@ -21,6 +21,16 @@ export const DAPPS: Dapp[] = [
   },
   { aliases: { dtrinity: { chains: ['fraxtal', 'sonic'], title: 'dTRINITY' } }, homepageUrl: 'https://dtrinity.org/' },
   { aliases: { enclabs: { chains: ['sonic'], title: 'Enclabs' } }, homepageUrl: 'https://www.enclabs.finance/' },
+  {
+    aliases: {
+      'euler-clearstar': {
+        chains: ['ethereum'],
+        title: 'Euler vaults by ClearStar',
+        description: 'Only to be used for Euler vaults by ClearStar.',
+      },
+    },
+    homepageUrl: 'https://app.euler.finance/',
+  },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
@@ -38,7 +48,7 @@ export const DAPPS: Dapp[] = [
         description: 'Only to be used for the MVL/USDC 77% LLTV market.',
       },
       'morpho-wsteth-usdc-860-lltv': {
-        chains: ['ethereum', 'gnosis'],
+        chains: ['ethereum', 'gnosis', 'base'],
         title: 'Morpho wstETH/USDC 86% LLTV',
         description: 'Only to be used for the wstETH/USDC 86% LLTV market.',
       },
@@ -48,7 +58,7 @@ export const DAPPS: Dapp[] = [
         description: 'Only to be used for the WBTC/USDC 86% LLTV market.',
       },
       'morpho-cbbtc-usdc-860-lltv': {
-        chains: ['ethereum'],
+        chains: ['ethereum', 'base'],
         title: 'Morpho cbBTC/USDC 86% LLTV',
         description: 'Only to be used for the cbBTC/USDC 86% LLTV market.',
       },
@@ -91,6 +101,11 @@ export const DAPPS: Dapp[] = [
         chains: ['arbitrum'],
         title: 'Morpho ezETH/USDC 77% LLTV',
         description: 'Only to be used for the ezETH/USDC 77% LLTV market.',
+      },
+      'morpho-cbeth-usdc-860-lltv': {
+        chains: ['base'],
+        title: 'Morpho cbETH/USDC 86% LLTV',
+        description: 'Only to be used for the cbETH/USDC 86% LLTV market.',
       },
     },
     homepageUrl: 'https://morpho.org/vaults/',
