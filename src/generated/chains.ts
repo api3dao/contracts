@@ -627,19 +627,6 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
-    alias: 'lumia-sepolia-testnet',
-    decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet-explorer.lumia.org/api/' },
-      browserUrl: 'https://testnet-explorer.lumia.org/',
-    },
-    id: '1952959480',
-    name: 'Lumia testnet',
-    providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.lumia.org' }],
-    symbol: 'LUMIA',
-    testnet: true,
-  },
-  {
     alias: 'lumia',
     decimals: 18,
     explorer: {
