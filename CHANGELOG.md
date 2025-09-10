@@ -71,7 +71,6 @@
 ### Major Changes
 
 - adf5421: Remove support for following chain:
-
   - kroma
 
 ## 25.0.0
@@ -79,7 +78,6 @@
 ### Major Changes
 
 - 6171e77: Remove support for following chains:
-
   - atleta-testnet
   - inevm-testnet
   - inevm
@@ -97,7 +95,6 @@
 ### Patch Changes
 
 - cd423b4: Updates RPC provider configurations:
-
   - Update public provider for manta
   - Replace publicnode with tenderly-public for polygon-sepolia-testnet
 
@@ -132,7 +129,6 @@
 ### Patch Changes
 
 - ce97433: Updates RPC provider configurations:
-
   - Update default provider for ethereum-holesky-testnet
   - Remove publicnode from berachain
   - Remove blastapi from moonriver
@@ -158,13 +154,11 @@
 ### Major Changes
 
 - fe10931: Remove support for following chains:
-
   - rechain-testnet
 
 ### Patch Changes
 
 - 317509e: Update block explorer for following chains:
-
   - apechain-arbitrum-sepolia-testnet
   - berachain-testnet
   - kroma-sepolia-testnet
@@ -172,7 +166,6 @@
   - world-sepolia-testnet
 
 - 7cfebed: Updates RPC provider configurations:
-
   - Update default provider for atleta-testnet, ethereum-holesky-testnet, rari-arbitrum-sepolia-testnet, x-layer-sepolia-testnet
   - Remove not realible alternative providers from blast-sepolia-testnet, scroll-sepolia-testnet, scroll, taiko-holesky-testnet, zircuit-sepolia-testnet
 
@@ -194,7 +187,6 @@
 ### Patch Changes
 
 - 5170255: Updates RPC provider configurations:
-
   - Remove ankr from bitlayer, core, kava, moonbeam, taiko, x-layer
   - Update default provider for blast-sepolia-testnet, x-layer-sepolia-testnet, zircuit-sepolia-testnet, zircuit
   - Add blastapi for opbnb, ronin, sei
@@ -219,7 +211,6 @@
 ### Major Changes
 
 - cc71f82: Remove support for following chains:
-
   - conflux
   - conflux-testnet
 
@@ -247,7 +238,6 @@
 ### Major Changes
 
 - b295ca8: Remove support from the following chains:
-
   - camp-sepolia-testnet
   - hyperliquid-testnet
   - hyperliquid
@@ -268,7 +258,6 @@
 ### Patch Changes
 
 - a4f5948: Updates RPC provider configurations:
-
   - Add publicnode for berachain, fraxtal, metis-sepolia-testnet, metis, soneium-sepolia-test
     net, soneium, sonic-testnet, unichain-sepolia-testnet, and unichain
   - Add reblok for fraxtal
@@ -294,7 +283,6 @@
 ### Minor Changes
 
 - fc23880: Adds following chain:
-
   - rechain-testnet
 
 - daf17d7: Add dAPI and Market support to rechain-testnet
@@ -333,7 +321,6 @@
 ### Major Changes
 
 - 411cdb1: Remove support from the following chains:
-
   - astar
   - fantom
   - fantom-testnet
@@ -396,7 +383,6 @@
 ### Minor Changes
 
 - fd56b48: Add the following dApps:
-
   - aurelius
   - granary
   - ionic
@@ -416,7 +402,6 @@
 ### Major Changes
 
 - c30baba: Purge the following dApps (note that this merely means that you won't be able to derive dApp-specific Api3ReaderProxyV1 addresses using `@api3/contracts` for these dApps, they will be able to continue using data feed services as usual):
-
   - airpuff
   - aurelius
   - davos-protocol
@@ -444,7 +429,6 @@
   - wefi
 
 - a20ac37: Update the aliases of the following dApps:
-
   - hana-finance (to hana)
   - init-capital (to init)
   - orbit-protocol (to orbit)
@@ -454,7 +438,6 @@
 
 - a20ac37: Extend the dApp data schema to include name and homepage URL (optional)
 - aef7d46: Add the following dApps:
-
   - aave
   - abracadabra
   - aeroscraper
@@ -596,7 +579,6 @@
 ### Minor Changes
 
 - b8fb92d: Add dAPI and Market support to:
-
   - apechain
   - atleta-testnet
   - world
