@@ -11,7 +11,7 @@ export const goAsyncOptions: GoAsyncOptions = {
   },
 };
 
-export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = ['somnia'];
+export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = [];
 
 export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification = [
   'apechain',
@@ -48,7 +48,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'linea',
   'linea-sepolia-testnet',
   'lumia',
-  'lumia-sepolia-testnet',
   'manta',
   'manta-sepolia-testnet',
   'mantle',
