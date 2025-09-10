@@ -1,5 +1,18 @@
 # @api3/contracts
 
+## 28.0.0
+
+### Major Changes
+
+- 4e226a4: Remove support for following chain(s):
+
+  - lumia-sepolia-testnet
+
+### Minor Changes
+
+- 81f5ea3: Add Arenas on Somnia to dApp details
+- 7774f12: Add ClearStar curation to dApp details
+
 ## 27.4.0
 
 ### Minor Changes
