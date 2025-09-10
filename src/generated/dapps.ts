@@ -9,6 +9,7 @@ import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
   { aliases: { apebank: { chains: ['apechain'], title: 'ApeBank' } }, homepageUrl: 'https://ape-bank.netlify.app/' },
+  { aliases: { arenas: { chains: ['somnia'], title: 'Arenas' } }, homepageUrl: 'https://x.com/somnia_arenas' },
   {
     aliases: {
       'compound-finance-usde': {
