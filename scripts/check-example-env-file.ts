@@ -1,13 +1,8 @@
 import * as fs from 'node:fs';
 
-import { CHAINS } from '../src/generated/chains';
-import { toUpperSnakeCase } from '../src/utils/strings';
+const apiKeyEnvName = 'ETHERSCAN_API_KEY';
 
-const apiKeyEnvNames = CHAINS.filter((chain) => chain.explorer?.api?.key?.required).map(
-  (chain) => `ETHERSCAN_API_KEY_${toUpperSnakeCase(chain.alias)}`
-);
-
-const expectedEnvVars = ['MNEMONIC', ...apiKeyEnvNames];
+const expectedEnvVars = ['MNEMONIC', apiKeyEnvName];
 const expectedExampleEnvFileContents = expectedEnvVars.reduce((fileContents: string, envVariableName: string) => {
   return `${fileContents}${envVariableName}=\n`;
 }, '');
