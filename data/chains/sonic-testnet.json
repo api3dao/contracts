@@ -8,6 +8,7 @@
       },
       "url": "https://api-testnet.sonicscan.org/api"
     },
+    "provider": "legacy",
     "browserUrl": "https://testnet.sonicscan.org/"
   },
   "id": "57054",

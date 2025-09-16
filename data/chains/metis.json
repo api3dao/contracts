@@ -8,6 +8,7 @@
       },
       "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
     },
+    "provider": "other",
     "browserUrl": "https://explorer.metis.io/"
   },
   "id": "1088",

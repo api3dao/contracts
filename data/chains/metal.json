@@ -8,6 +8,7 @@
       },
       "url": "https://explorer.metall2.com/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer.metall2.com/"
   },
   "id": "1750",

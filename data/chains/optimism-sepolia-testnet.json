@@ -2,12 +2,7 @@
   "alias": "optimism-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia-optimism.etherscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia-optimism.etherscan.io/"
   },
   "id": "11155420",

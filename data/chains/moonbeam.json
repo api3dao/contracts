@@ -2,13 +2,7 @@
   "alias": "moonbeam",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonbeam",
-        "required": true
-      },
-      "url": "https://api-moonbeam.moonscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://moonscan.io/"
   },
   "id": "1284",

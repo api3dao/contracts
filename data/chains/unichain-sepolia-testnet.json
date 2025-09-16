@@ -2,12 +2,7 @@
   "alias": "unichain-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.uniscan.xyz/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.uniscan.xyz/"
   },
   "id": "1301",

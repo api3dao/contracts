@@ -8,6 +8,7 @@
       },
       "url": "https://pacific-explorer.sepolia-testnet.manta.network/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://pacific-explorer.sepolia-testnet.manta.network/"
   },
   "id": "3441006",

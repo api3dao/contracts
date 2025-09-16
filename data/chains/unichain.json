@@ -2,12 +2,7 @@
   "alias": "unichain",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.uniscan.xyz/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://uniscan.xyz/"
   },
   "id": "130",

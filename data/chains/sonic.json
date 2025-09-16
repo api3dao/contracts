@@ -2,12 +2,7 @@
   "alias": "sonic",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.sonicscan.org/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sonicscan.org/"
   },
   "id": "146",

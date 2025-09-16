@@ -8,6 +8,7 @@
       },
       "url": "https://openapi.coredao.org/api"
     },
+    "provider": "legacy",
     "browserUrl": "https://scan.coredao.org/"
   },
   "id": "1116",

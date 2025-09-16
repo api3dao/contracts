@@ -8,6 +8,7 @@
       },
       "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER_TESTNET"
     },
+    "provider": "other",
     "browserUrl": "https://www.okx.com/explorer/xlayer-test/"
   },
   "id": "195",

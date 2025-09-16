@@ -8,6 +8,7 @@
       },
       "url": "https://api.verify.mintscan.io/evm/api/0x8ae"
     },
+    "provider": "other",
     "browserUrl": "https://kavascan.com/"
   },
   "id": "2222",

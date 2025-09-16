@@ -2,6 +2,7 @@
   "alias": "arbitrum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.arbiscan.io/"
   },
   "id": "421614",

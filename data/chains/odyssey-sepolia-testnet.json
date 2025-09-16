@@ -8,6 +8,7 @@
       },
       "url": "https://odyssey-explorer.ithaca.xyz/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://odyssey-explorer.ithaca.xyz/"
   },
   "id": "911867",

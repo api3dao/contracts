@@ -2,12 +2,7 @@
   "alias": "polygon-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-amoy.polygonscan.com/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://amoy.polygonscan.com/"
   },
   "id": "80002",

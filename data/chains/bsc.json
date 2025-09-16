@@ -2,13 +2,7 @@
   "alias": "bsc",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "bsc",
-        "required": true
-      },
-      "url": "https://api.bscscan.com/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://bscscan.com/"
   },
   "id": "56",

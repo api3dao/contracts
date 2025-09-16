@@ -8,6 +8,7 @@
       },
       "url": "https://explorer-bokuto.katanarpc.com/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer-bokuto.katanarpc.com/"
   },
   "id": "737373",

@@ -2,6 +2,7 @@
   "alias": "arbitrum",
   "decimals": 18,
   "explorer": {
+    "provider": "etherscan",
     "browserUrl": "https://arbiscan.io/"
   },
   "id": "42161",

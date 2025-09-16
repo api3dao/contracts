@@ -8,6 +8,7 @@
       },
       "url": "https://scan.merlinchain.io/api"
     },
+    "provider": "other",
     "browserUrl": "https://scan.merlinchain.io/"
   },
   "id": "4200",

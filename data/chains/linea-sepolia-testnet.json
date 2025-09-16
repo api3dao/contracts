@@ -2,12 +2,7 @@
   "alias": "linea-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.lineascan.build/api/"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.lineascan.build/"
   },
   "id": "59141",

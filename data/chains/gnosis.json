@@ -2,13 +2,7 @@
   "alias": "gnosis",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "xdai",
-        "required": true
-      },
-      "url": "https://api.gnosisscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://gnosisscan.io/"
   },
   "id": "100",

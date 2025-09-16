@@ -2,13 +2,7 @@
   "alias": "ethereum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "sepolia",
-        "required": true
-      },
-      "url": "https://api-sepolia.etherscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.etherscan.io/"
   },
   "id": "11155111",

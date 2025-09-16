@@ -2,12 +2,7 @@
   "alias": "opbnb",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-opbnb.bscscan.com/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://opbnb.bscscan.com/"
   },
   "id": "204",

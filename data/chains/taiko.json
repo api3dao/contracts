@@ -2,12 +2,7 @@
   "alias": "taiko",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.taikoscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://taikoscan.io/"
   },
   "id": "167000",

@@ -8,6 +8,7 @@
       },
       "url": "https://sepolia.explorer.mode.network/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://sepolia.explorer.mode.network/"
   },
   "id": "919",

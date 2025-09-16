@@ -8,6 +8,7 @@
       },
       "url": "https://oev.explorer.api3.org/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://oev.explorer.api3.org/"
   },
   "id": "4913",

@@ -2,13 +2,7 @@
   "alias": "polygon",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "polygon",
-        "required": true
-      },
-      "url": "https://api.polygonscan.com/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://polygonscan.com/"
   },
   "id": "137",

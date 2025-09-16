@@ -2,13 +2,7 @@
   "alias": "moonbeam-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonbaseAlpha",
-        "required": true
-      },
-      "url": "https://api-moonbase.moonscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://moonbase.moonscan.io/"
   },
   "id": "1287",

@@ -2,12 +2,7 @@
   "alias": "mantle-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.mantlescan.xyz/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.mantlescan.xyz/"
   },
   "id": "5003",

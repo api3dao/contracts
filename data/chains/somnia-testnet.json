@@ -8,6 +8,7 @@
       },
       "url": "https://shannon-explorer.somnia.network/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://shannon-explorer.somnia.network/"
   },
   "id": "50312",

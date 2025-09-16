@@ -2,12 +2,7 @@
   "alias": "fraxtal-holesky-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-holesky.fraxscan.com/api/"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://holesky.fraxscan.com/"
   },
   "id": "2522",

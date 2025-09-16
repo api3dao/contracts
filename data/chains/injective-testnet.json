@@ -8,6 +8,7 @@
       },
       "url": "https://testnet.blockscout-api.injective.network/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://testnet.blockscout.injective.network/"
   },
   "id": "1439",

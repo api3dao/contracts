@@ -8,6 +8,7 @@
       },
       "url": "https://api.test2.btcs.network/api"
     },
+    "provider": "legacy",
     "browserUrl": "https://scan.test2.btcs.network/"
   },
   "id": "1114",

@@ -8,6 +8,7 @@
       },
       "url": "https://explorer.mode.network/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer.mode.network/"
   },
   "id": "34443",

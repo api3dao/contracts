@@ -2,13 +2,7 @@
   "alias": "ethereum-holesky-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "holesky",
-        "required": true
-      },
-      "url": "https://api-holesky.etherscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://holesky.etherscan.io/"
   },
   "id": "17000",

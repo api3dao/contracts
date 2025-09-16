@@ -8,6 +8,7 @@
       },
       "url": "https://sepolia-explorer-api.metisdevops.link/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://sepolia-explorer.metisdevops.link/"
   },
   "id": "59902",

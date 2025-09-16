@@ -8,6 +8,7 @@
       },
       "url": "https://explorer.lumia.org/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer.lumia.org/"
   },
   "id": "994873017",

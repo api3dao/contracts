@@ -4,11 +4,11 @@
   "explorer": {
     "api": {
       "key": {
-        "hardhatEtherscanAlias": "chiado",
         "required": false
       },
       "url": "https://gnosis-chiado.blockscout.com/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://gnosis-chiado.blockscout.com/"
   },
   "id": "10200",

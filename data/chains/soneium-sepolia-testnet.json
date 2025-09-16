@@ -6,9 +6,10 @@
       "key": {
         "required": false
       },
-      "url": "https://explorer-testnet.soneium.org/api"
+      "url": "https://soneium-minato.blockscout.com/api"
     },
-    "browserUrl": "https://explorer-testnet.soneium.org/"
+    "provider": "blockscout",
+    "browserUrl": "https://soneium-minato.blockscout.com/"
   },
   "id": "1946",
   "name": "Soneium testnet",

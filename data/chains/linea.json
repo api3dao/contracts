@@ -2,12 +2,7 @@
   "alias": "linea",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.lineascan.build/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://lineascan.build/"
   },
   "id": "59144",

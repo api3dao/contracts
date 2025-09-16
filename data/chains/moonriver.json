@@ -2,13 +2,7 @@
   "alias": "moonriver",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonriver",
-        "required": true
-      },
-      "url": "https://api-moonriver.moonscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://moonriver.moonscan.io/"
   },
   "id": "1285",

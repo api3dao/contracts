@@ -8,6 +8,7 @@
       },
       "url": "https://explorer-sepolia.inkonchain.com/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer-sepolia.inkonchain.com/"
   },
   "id": "763373",

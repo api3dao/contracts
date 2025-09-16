@@ -2,12 +2,7 @@
   "alias": "world-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.worldscan.org/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.worldscan.org/"
   },
   "id": "4801",

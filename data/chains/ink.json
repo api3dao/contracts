@@ -8,6 +8,7 @@
       },
       "url": "https://explorer.inkonchain.com/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer.inkonchain.com/"
   },
   "id": "57073",

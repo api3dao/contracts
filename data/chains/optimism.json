@@ -2,13 +2,7 @@
   "alias": "optimism",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "optimisticEthereum",
-        "required": true
-      },
-      "url": "https://api-optimistic.etherscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://optimistic.etherscan.io/"
   },
   "id": "10",

@@ -2,12 +2,7 @@
   "alias": "fraxtal",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.fraxscan.com/api/"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://fraxscan.com/"
   },
   "id": "252",
