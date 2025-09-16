@@ -1,5 +1,5 @@
 import { CHAINS } from './generated/chains';
-import { etherscan, etherscanApiKeyName, getEnvVariableNames, networkHttpRpcUrlName, networks } from './hardhat-config';
+import { etherscan, blockscout, etherscanApiKeyName, getEnvVariableNames, networkHttpRpcUrlName, networks } from './hardhat-config';
 import { type Chain } from './types';
 import { toUpperSnakeCase } from './utils/strings';
 
@@ -22,7 +22,7 @@ describe(getEnvVariableNames.name, () => {
   it('returns an array with expected env variables', () => {
     const apiKeyEnvName = etherscanApiKeyName();
     const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
-    const expected = ['MNEMONIC', ...apiKeyEnvName, ...networkRpcUrlNames];
+    const expected = ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
     expect(getEnvVariableNames()).toStrictEqual(expected);
   });
 });
@@ -70,11 +70,15 @@ describe(etherscan.name, () => {
     });
 
     it('includes all other chains', () => {
-      const { customChains } = etherscan();
+      const { customChains: etherscanCustom } = etherscan();
+      const { customChains: blockscoutCustom } = blockscout();
+
+      const allCustom = [...blockscoutCustom, ...etherscanCustom];
       const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
       const chainsWithoutAlias = chains.filter((c) => !c.explorer.api!.key.hardhatEtherscanAlias);
 
-      customChains.forEach((customChain) => {
+      allCustom.forEach((customChain) => {
+        console.log(customChain);
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
         expect(customChain).toStrictEqual({
           network: chain.alias,
