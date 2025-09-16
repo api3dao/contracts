@@ -7,12 +7,7 @@ import {
   networkHttpRpcUrlName,
   networks,
 } from './hardhat-config';
-import { type Chain } from './types';
 import { toUpperSnakeCase } from './utils/strings';
-
-function getRandomChain(): Chain {
-  return CHAINS[Math.floor(Math.random() * CHAINS.length)]!;
-}
 
 const OLD_ENV = process.env;
 
