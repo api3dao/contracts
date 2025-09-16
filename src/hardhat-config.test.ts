@@ -1,5 +1,12 @@
 import { CHAINS } from './generated/chains';
-import { etherscan, blockscout, etherscanApiKeyName, getEnvVariableNames, networkHttpRpcUrlName, networks } from './hardhat-config';
+import {
+  etherscan,
+  blockscout,
+  etherscanApiKeyName,
+  getEnvVariableNames,
+  networkHttpRpcUrlName,
+  networks,
+} from './hardhat-config';
 import { type Chain } from './types';
 import { toUpperSnakeCase } from './utils/strings';
 
@@ -73,12 +80,10 @@ describe(etherscan.name, () => {
       const { customChains: etherscanCustom } = etherscan();
       const { customChains: blockscoutCustom } = blockscout();
 
-      const allCustom = [...blockscoutCustom, ...etherscanCustom];
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const chainsWithoutAlias = chains.filter((c) => !c.explorer.api!.key.hardhatEtherscanAlias);
-      //TO-DO: This test fails as custom etherscan chains does not reqire strict equality
-      allCustom.forEach((customChain) => {
-        console.log(customChain);
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
+
+      blockscoutCustom.forEach((customChain) => {
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
         expect(customChain).toStrictEqual({
           network: chain.alias,
@@ -86,6 +91,18 @@ describe(etherscan.name, () => {
           urls: {
             apiURL: chain.explorer.api!.url,
             browserURL: chain.explorer.browserUrl,
+          },
+        });
+      });
+
+      etherscanCustom.forEach((customChain) => {
+        const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
+        expect(customChain).toStrictEqual({
+          network: chain.alias,
+          chainId: Number(chain.id),
+          urls: {
+            apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
+            browserURL: chain.explorer!.browserUrl,
           },
         });
       });
