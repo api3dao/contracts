@@ -10,6 +10,7 @@ import { task } from 'hardhat/config';
 import { hardhatConfig } from './src/index';
 
 const config: HardhatUserConfig = {
+  blockscout: hardhatConfig.blockscout(),
   etherscan: hardhatConfig.etherscan(),
   gasReporter: {
     enabled: process.env.REPORT_GAS ? true : false,
