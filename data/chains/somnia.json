@@ -6,8 +6,9 @@
       "key": {
         "required": false
       },
-      "url": "https://explorer.somnia.network/api"
+      "url": "https://explorer.somnia.network/api/"
     },
+    "provider": "blockscout",
     "browserUrl": "https://explorer.somnia.network/"
   },
   "id": "5031",

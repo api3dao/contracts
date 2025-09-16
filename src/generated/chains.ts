@@ -11,10 +11,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'apechain-arbitrum-sepolia-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-curtis.apescan.io/api' },
-      browserUrl: 'https://curtis.apescan.io/',
-    },
+    explorer: { browserUrl: 'https://curtis.apescan.io/' },
     id: '33111',
     name: 'ApeChain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://curtis.rpc.caldera.xyz/http' }],
@@ -24,10 +21,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'apechain',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.apescan.io/api' },
-      browserUrl: 'https://apescan.io/',
-    },
+    explorer: { browserUrl: 'https://apescan.io/' },
     id: '33139',
     name: 'ApeChain',
     providers: [
@@ -43,13 +37,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'arbitrum-sepolia-testnet',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'arbitrumSepolia', required: true },
-        url: 'https://api-sepolia.arbiscan.io/api',
-      },
-      browserUrl: 'https://sepolia.arbiscan.io/',
-    },
+    explorer: { browserUrl: 'https://sepolia.arbiscan.io/' },
     id: '421614',
     name: 'Arbitrum testnet',
     providers: [
@@ -62,10 +50,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'arbitrum',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'arbitrumOne', required: true }, url: 'https://api.arbiscan.io/api' },
-      browserUrl: 'https://arbiscan.io/',
-    },
+    explorer: { browserUrl: 'https://arbiscan.io/' },
     id: '42161',
     name: 'Arbitrum One',
     providers: [
@@ -82,10 +67,8 @@ export const CHAINS: Chain[] = [
     alias: 'avalanche-testnet',
     decimals: 18,
     explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'avalancheFujiTestnet', required: true },
-        url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api',
-      },
+      api: { key: { required: true }, url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api' },
+      provider: 'other',
       browserUrl: 'https://testnet.snowtrace.io/',
     },
     id: '43113',
@@ -101,10 +84,8 @@ export const CHAINS: Chain[] = [
     alias: 'avalanche',
     decimals: 18,
     explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'avalanche', required: true },
-        url: 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api',
-      },
+      api: { key: { required: true }, url: 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api' },
+      provider: 'other',
       browserUrl: 'https://snowtrace.io/',
     },
     id: '43114',
@@ -122,10 +103,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'base-sepolia-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.basescan.org/api' },
-      browserUrl: 'https://sepolia.basescan.org/',
-    },
+    explorer: { browserUrl: 'https://sepolia.basescan.org/' },
     id: '84532',
     name: 'Base testnet',
     providers: [
@@ -138,10 +116,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'base',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.basescan.org/api' },
-      browserUrl: 'https://basescan.org/',
-    },
+    explorer: { browserUrl: 'https://basescan.org/' },
     id: '8453',
     name: 'Base',
     providers: [
@@ -157,10 +132,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'berachain-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-testnet.berascan.com/api' },
-      browserUrl: 'https://testnet.berascan.com/',
-    },
+    explorer: { provider: 'etherscan', browserUrl: 'https://testnet.berascan.com/' },
     id: '80069',
     name: 'Berachain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://bepolia.rpc.berachain.com/' }],
@@ -170,10 +142,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'berachain',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.berascan.com/api' },
-      browserUrl: 'https://berascan.com/',
-    },
+    explorer: { provider: 'etherscan', browserUrl: 'https://berascan.com/' },
     id: '80094',
     name: 'Berachain',
     providers: [
@@ -190,6 +159,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://api-testnet.btrscan.com/scan/api' },
+      provider: 'other',
       browserUrl: 'https://testnet.btrscan.com/',
     },
     id: '200810',
@@ -206,6 +176,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://api.btrscan.com/scan/api' },
+      provider: 'other',
       browserUrl: 'https://www.btrscan.com/',
     },
     id: '200901',
@@ -221,10 +192,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'blast-sepolia-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.blastscan.io/api' },
-      browserUrl: 'https://sepolia.blastscan.io/',
-    },
+    explorer: { provider: 'etherscan', browserUrl: 'https://sepolia.blastscan.io/' },
     id: '168587773',
     name: 'Blast testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.ankr.com/blast_testnet_sepolia' }],
@@ -234,10 +202,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'blast',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.blastscan.io/api' },
-      browserUrl: 'https://blastscan.io/',
-    },
+    explorer: { provider: 'etherscan', browserUrl: 'https://blastscan.io/' },
     id: '81457',
     name: 'Blast',
     providers: [
@@ -255,6 +220,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://bob-sepolia.explorer.gobob.xyz/api' },
+      provider: 'blockscout',
       browserUrl: 'https://bob-sepolia.explorer.gobob.xyz/',
     },
     id: '808813',
@@ -268,6 +234,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://explorer.gobob.xyz/api' },
+      provider: 'blockscout',
       browserUrl: 'https://explorer.gobob.xyz/',
     },
     id: '60808',
@@ -474,7 +441,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'hyperliquid',
     decimals: 18,
-    explorer: { browserUrl: 'https://hyperevmscan.io/' },
+    explorer: { provider: 'etherscan', browserUrl: 'https://hyperevmscan.io/' },
     id: '999',
     name: 'Hyperliquid',
     providers: [
@@ -550,6 +517,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     explorer: {
       api: { key: { required: false }, url: 'https://explorer.katanarpc.com/api' },
+      provider: 'blockscout',
       browserUrl: 'https://explorer.katanarpc.com/',
     },
     id: '747474',
@@ -1175,7 +1143,8 @@ export const CHAINS: Chain[] = [
     alias: 'somnia',
     decimals: 18,
     explorer: {
-      api: { key: { required: false }, url: 'https://explorer.somnia.network/api' },
+      api: { key: { required: false }, url: 'https://explorer.somnia.network/api/' },
+      provider: 'blockscout',
       browserUrl: 'https://explorer.somnia.network/',
     },
     id: '5031',

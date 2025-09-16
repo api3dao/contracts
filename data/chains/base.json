@@ -2,12 +2,6 @@
   "alias": "base",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.basescan.org/api"
-    },
     "browserUrl": "https://basescan.org/"
   },
   "id": "8453",

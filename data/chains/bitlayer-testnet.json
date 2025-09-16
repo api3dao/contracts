@@ -8,6 +8,7 @@
       },
       "url": "https://api-testnet.btrscan.com/scan/api"
     },
+    "provider": "other",
     "browserUrl": "https://testnet.btrscan.com/"
   },
   "id": "200810",

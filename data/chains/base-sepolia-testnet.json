@@ -2,12 +2,6 @@
   "alias": "base-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.basescan.org/api"
-    },
     "browserUrl": "https://sepolia.basescan.org/"
   },
   "id": "84532",

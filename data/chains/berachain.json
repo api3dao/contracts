@@ -2,12 +2,7 @@
   "alias": "berachain",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.berascan.com/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://berascan.com/"
   },
   "id": "80094",

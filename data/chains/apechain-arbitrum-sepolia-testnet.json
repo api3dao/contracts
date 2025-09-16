@@ -2,12 +2,6 @@
   "alias": "apechain-arbitrum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-curtis.apescan.io/api"
-    },
     "browserUrl": "https://curtis.apescan.io/"
   },
   "id": "33111",

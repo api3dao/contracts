@@ -2,12 +2,7 @@
   "alias": "blast-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.blastscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://sepolia.blastscan.io/"
   },
   "id": "168587773",

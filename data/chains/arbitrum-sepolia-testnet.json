@@ -2,13 +2,6 @@
   "alias": "arbitrum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "arbitrumSepolia",
-        "required": true
-      },
-      "url": "https://api-sepolia.arbiscan.io/api"
-    },
     "browserUrl": "https://sepolia.arbiscan.io/"
   },
   "id": "421614",

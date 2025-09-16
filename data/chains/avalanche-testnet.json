@@ -4,11 +4,11 @@
   "explorer": {
     "api": {
       "key": {
-        "hardhatEtherscanAlias": "avalancheFujiTestnet",
         "required": true
       },
       "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
     },
+    "provider": "other",
     "browserUrl": "https://testnet.snowtrace.io/"
   },
   "id": "43113",

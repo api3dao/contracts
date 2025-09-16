@@ -2,13 +2,6 @@
   "alias": "arbitrum",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "arbitrumOne",
-        "required": true
-      },
-      "url": "https://api.arbiscan.io/api"
-    },
     "browserUrl": "https://arbiscan.io/"
   },
   "id": "42161",

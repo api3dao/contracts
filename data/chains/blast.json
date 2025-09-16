@@ -2,12 +2,7 @@
   "alias": "blast",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.blastscan.io/api"
-    },
+    "provider": "etherscan",
     "browserUrl": "https://blastscan.io/"
   },
   "id": "81457",

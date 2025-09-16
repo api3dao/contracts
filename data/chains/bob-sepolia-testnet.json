@@ -8,6 +8,7 @@
       },
       "url": "https://bob-sepolia.explorer.gobob.xyz/api"
     },
+    "provider": "blockscout",
     "browserUrl": "https://bob-sepolia.explorer.gobob.xyz/"
   },
   "id": "808813",
