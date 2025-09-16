@@ -76,7 +76,7 @@ describe(etherscan.name, () => {
       const allCustom = [...blockscoutCustom, ...etherscanCustom];
       const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
       const chainsWithoutAlias = chains.filter((c) => !c.explorer.api!.key.hardhatEtherscanAlias);
-
+      //TO-DO: This test fails as custom etherscan chains does not reqire strict equality
       allCustom.forEach((customChain) => {
         console.log(customChain);
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
