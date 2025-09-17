@@ -2,13 +2,6 @@
   "alias": "sonic-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-testnet.sonicscan.org/api"
-    },
-    "provider": "legacy",
     "browserUrl": "https://testnet.sonicscan.org/"
   },
   "id": "57054",
