@@ -280,11 +280,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'core-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.test2.btcs.network/api' },
-      provider: 'legacy',
-      browserUrl: 'https://scan.test2.btcs.network/',
-    },
+    explorer: { browserUrl: 'https://scan.test2.btcs.network/' },
     id: '1114',
     name: 'Core testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.test2.btcs.network/' }],
@@ -294,11 +290,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'core',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://openapi.coredao.org/api' },
-      provider: 'legacy',
-      browserUrl: 'https://scan.coredao.org/',
-    },
+    explorer: { browserUrl: 'https://scan.coredao.org/' },
     id: '1116',
     name: 'Core',
     providers: [
@@ -945,7 +937,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'polygon-zkevm-sepolia-testnet',
     decimals: 18,
-    explorer: { provider: 'legacy', browserUrl: 'https://cardona-zkevm.polygonscan.com/' },
+    explorer: { browserUrl: 'https://cardona-zkevm.polygonscan.com/' },
     id: '2442',
     name: 'Polygon zkEVM testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.cardona.zkevm-rpc.com' }],
@@ -987,7 +979,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'ronin-testnet',
     decimals: 18,
-    explorer: { browserUrl: 'https://saigon-app.roninchain.com/' },
+    explorer: { provider: 'sourcify', browserUrl: 'https://saigon-app.roninchain.com/' },
     id: '2021',
     name: 'Ronin testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://saigon-testnet.roninchain.com/rpc' }],
@@ -997,7 +989,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'ronin',
     decimals: 18,
-    explorer: { browserUrl: 'https://app.roninchain.com/' },
+    explorer: { provider: 'sourcify', browserUrl: 'https://app.roninchain.com/' },
     id: '2020',
     name: 'Ronin',
     providers: [
@@ -1038,7 +1030,11 @@ export const CHAINS: Chain[] = [
   {
     alias: 'sei-testnet',
     decimals: 18,
-    explorer: { browserUrl: 'https://testnet.seistream.app/' },
+    explorer: {
+      api: { key: { required: false }, url: 'https://seitrace.com/atlantic-2/api' },
+      provider: 'blockscout',
+      browserUrl: 'https://testnet.seitrace.com/',
+    },
     id: '1328',
     name: 'Sei testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' }],
@@ -1048,7 +1044,11 @@ export const CHAINS: Chain[] = [
   {
     alias: 'sei',
     decimals: 18,
-    explorer: { browserUrl: 'https://seitrace.com/' },
+    explorer: {
+      api: { key: { required: false }, url: 'https://seitrace.com/pacific-1/api' },
+      provider: 'blockscout',
+      browserUrl: 'https://seitrace.com/',
+    },
     id: '1329',
     name: 'Sei',
     providers: [
@@ -1129,11 +1129,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'sonic-testnet',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-testnet.sonicscan.org/api' },
-      provider: 'legacy',
-      browserUrl: 'https://testnet.sonicscan.org/',
-    },
+    explorer: { browserUrl: 'https://testnet.sonicscan.org/' },
     id: '57054',
     name: 'Sonic testnet',
     providers: [
@@ -1283,7 +1279,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'zircuit-sepolia-testnet',
     decimals: 18,
-    explorer: { browserUrl: 'https://explorer.garfield-testnet.zircuit.com/' },
+    explorer: { provider: 'sourcify', browserUrl: 'https://explorer.garfield-testnet.zircuit.com/' },
     id: '48898',
     name: 'Zircuit testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://garfield-testnet.zircuit.com' }],
@@ -1293,7 +1289,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'zircuit',
     decimals: 18,
-    explorer: { browserUrl: 'https://mainnet.zircuit.com/' },
+    explorer: { provider: 'sourcify', browserUrl: 'https://mainnet.zircuit.com/' },
     id: '48900',
     name: 'Zircuit',
     providers: [
