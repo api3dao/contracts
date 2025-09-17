@@ -11,11 +11,20 @@ module.exports = async () => {
     throw new Error(`${network.name} is not supported`);
   }
 
-  const blockExplorerProvider =
-    CHAINS.find((chain) => chain.alias === network.name)?.explorer?.provider === 'etherscan'
-      ? 'etherscan'
-      : 'blockscout';
-  const verifyTask = `verify:${blockExplorerProvider}`;
+  let verifyTask = 'verify:verify';
+
+  const blockExplorerProvider = CHAINS.find((chain) => chain.alias === network.name)?.explorer?.provider;
+
+  switch (blockExplorerProvider) {
+    case 'etherscan':
+    case 'blockscout':
+    case 'sourcify':
+      verifyTask = `verify:${blockExplorerProvider}`;
+      break;
+    case 'other':
+      verifyTask = 'verify:blockscout';
+      break;
+  }
 
   const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
   await run(verifyTask, {

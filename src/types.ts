@@ -13,7 +13,7 @@ export const chainExplorerAPISchema = z.object({
   url: z.url(),
 });
 
-export const chainExporerProviderSchema = z.enum(['etherscan', 'blockscout', 'other', 'legacy']);
+export const chainExporerProviderSchema = z.enum(['etherscan', 'blockscout', 'sourcify', 'other']);
 
 export const chainExplorerSchema = z.object({
   api: chainExplorerAPISchema.optional(),

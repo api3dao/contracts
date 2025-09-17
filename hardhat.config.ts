@@ -12,6 +12,11 @@ import { hardhatConfig } from './src/index';
 const config: HardhatUserConfig = {
   blockscout: hardhatConfig.blockscout(),
   etherscan: hardhatConfig.etherscan(),
+  sourcify: {
+    enabled: true,
+    apiUrl: 'https://sourcify.dev/server',
+    browserUrl: 'https://repo.sourcify.dev',
+  },
   gasReporter: {
     enabled: process.env.REPORT_GAS ? true : false,
     outputFile: 'gas_report',

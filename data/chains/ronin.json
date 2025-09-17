@@ -2,6 +2,7 @@
   "alias": "ronin",
   "decimals": 18,
   "explorer": {
+    "provider": "sourcify",
     "browserUrl": "https://app.roninchain.com/"
   },
   "id": "2020",
