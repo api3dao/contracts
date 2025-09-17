@@ -2,7 +2,14 @@
   "alias": "sei-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://testnet.seistream.app/"
+    "api": {
+      "key": {
+        "required": false
+      },
+      "url": "https://seitrace.com/atlantic-2/api"
+    },
+    "provider": "blockscout",
+    "browserUrl": "https://testnet.seitrace.com/"
   },
   "id": "1328",
   "name": "Sei testnet",
