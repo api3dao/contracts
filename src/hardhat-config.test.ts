@@ -29,6 +29,59 @@ describe(getEnvVariableNames.name, () => {
   });
 });
 
+describe(blockscout.name, () => {
+  beforeEach(() => {
+    // eslint-disable-next-line jest/no-standalone-expect
+    expect((global as any).window).toBeUndefined();
+  });
+
+  afterEach(() => {
+    delete (global as any).window;
+  });
+
+  it('throws an error if called in a browser-like environment', () => {
+    (global as any).window = {};
+    expect(() => blockscout()).toThrow('Cannot be called outside of a Node.js environment');
+  });
+
+  describe('customChains', () => {
+    it('ignores chains without an explorer', () => {
+      const { customChains } = blockscout();
+      const ids = CHAINS.filter((c) => !c.explorer).map((c) => c.id);
+      customChains.forEach((c) => {
+        expect(ids).not.toContain(c.chainId);
+      });
+    });
+
+    it('ignores chains without an explorer API', () => {
+      const { customChains } = blockscout();
+      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.id);
+      customChains.forEach((c) => {
+        expect(ids).not.toContain(c.chainId);
+      });
+    });
+
+    it('includes all other chains', () => {
+      const { customChains } = blockscout();
+
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
+
+      customChains.forEach((customChain) => {
+        const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
+        expect(customChain).toStrictEqual({
+          network: chain.alias,
+          chainId: Number(chain.id),
+          urls: {
+            apiURL: chain.explorer.api!.url,
+            browserURL: chain.explorer.browserUrl,
+          },
+        });
+      });
+    });
+  });
+});
+
 describe(etherscan.name, () => {
   beforeEach(() => {
     // eslint-disable-next-line jest/no-standalone-expect
@@ -72,25 +125,12 @@ describe(etherscan.name, () => {
     });
 
     it('includes all other chains', () => {
-      const { customChains: etherscanCustom } = etherscan();
-      const { customChains: blockscoutCustom } = blockscout();
+      const { customChains } = etherscan();
 
       const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
       const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
 
-      blockscoutCustom.forEach((customChain) => {
-        const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
-        expect(customChain).toStrictEqual({
-          network: chain.alias,
-          chainId: Number(chain.id),
-          urls: {
-            apiURL: chain.explorer.api!.url,
-            browserURL: chain.explorer.browserUrl,
-          },
-        });
-      });
-
-      etherscanCustom.forEach((customChain) => {
+      customChains.forEach((customChain) => {
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
         expect(customChain).toStrictEqual({
           network: chain.alias,
