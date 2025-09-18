@@ -2,8 +2,8 @@
   "alias": "world-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://sepolia.worldscan.org/"
+    "browserUrl": "https://sepolia.worldscan.org/",
+    "provider": "etherscan"
   },
   "id": "4801",
   "name": "World Chain testnet",

@@ -8,8 +8,8 @@
       },
       "url": "https://api-testnet.btrscan.com/scan/api"
     },
-    "provider": "other",
-    "browserUrl": "https://testnet.btrscan.com/"
+    "browserUrl": "https://testnet.btrscan.com/",
+    "provider": "other"
   },
   "id": "200810",
   "name": "Bitlayer testnet",

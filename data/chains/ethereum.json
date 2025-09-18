@@ -2,8 +2,8 @@
   "alias": "ethereum",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://etherscan.io/"
+    "browserUrl": "https://etherscan.io/",
+    "provider": "etherscan"
   },
   "id": "1",
   "name": "Ethereum",

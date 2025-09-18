@@ -8,8 +8,8 @@
       },
       "url": "https://explorer.metall2.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer.metall2.com/"
+    "browserUrl": "https://explorer.metall2.com/",
+    "provider": "blockscout"
   },
   "id": "1750",
   "name": "Metal L2",

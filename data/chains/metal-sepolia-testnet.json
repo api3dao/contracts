@@ -8,8 +8,8 @@
       },
       "url": "https://testnet.explorer.metall2.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://testnet.explorer.metall2.com/"
+    "browserUrl": "https://testnet.explorer.metall2.com/",
+    "provider": "blockscout"
   },
   "id": "1740",
   "name": "Metal L2 testnet",

@@ -8,8 +8,8 @@
       },
       "url": "https://gnosis-chiado.blockscout.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://gnosis-chiado.blockscout.com/"
+    "browserUrl": "https://gnosis-chiado.blockscout.com/",
+    "provider": "blockscout"
   },
   "id": "10200",
   "name": "Gnosis Chain testnet",

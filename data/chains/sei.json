@@ -8,8 +8,8 @@
       },
       "url": "https://seitrace.com/pacific-1/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://seitrace.com/"
+    "browserUrl": "https://seitrace.com/",
+    "provider": "blockscout"
   },
   "id": "1329",
   "name": "Sei",

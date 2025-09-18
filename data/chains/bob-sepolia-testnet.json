@@ -8,8 +8,8 @@
       },
       "url": "https://bob-sepolia.explorer.gobob.xyz/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://bob-sepolia.explorer.gobob.xyz/"
+    "browserUrl": "https://bob-sepolia.explorer.gobob.xyz/",
+    "provider": "blockscout"
   },
   "id": "808813",
   "name": "BOB testnet",

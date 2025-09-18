@@ -8,8 +8,8 @@
       },
       "url": "https://explorer.inkonchain.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer.inkonchain.com/"
+    "browserUrl": "https://explorer.inkonchain.com/",
+    "provider": "blockscout"
   },
   "id": "57073",
   "name": "Ink",

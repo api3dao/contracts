@@ -2,8 +2,8 @@
   "alias": "optimism",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://optimistic.etherscan.io/"
+    "browserUrl": "https://optimistic.etherscan.io/",
+    "provider": "etherscan"
   },
   "id": "10",
   "name": "Optimism",

@@ -2,8 +2,8 @@
   "alias": "moonbeam-testnet",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://moonbase.moonscan.io/"
+    "browserUrl": "https://moonbase.moonscan.io/",
+    "provider": "etherscan"
   },
   "id": "1287",
   "name": "Moonbeam testnet",

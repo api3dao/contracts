@@ -8,8 +8,8 @@
       },
       "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
     },
-    "provider": "other",
-    "browserUrl": "https://www.okx.com/explorer/xlayer/"
+    "browserUrl": "https://www.okx.com/explorer/xlayer/",
+    "provider": "other"
   },
   "id": "196",
   "name": "X Layer",

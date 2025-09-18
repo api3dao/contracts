@@ -2,8 +2,8 @@
   "alias": "opbnb",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://opbnb.bscscan.com/"
+    "browserUrl": "https://opbnb.bscscan.com/",
+    "provider": "etherscan"
   },
   "id": "204",
   "name": "opBNB",

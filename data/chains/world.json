@@ -2,8 +2,8 @@
   "alias": "world",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://worldscan.org/"
+    "browserUrl": "https://worldscan.org/",
+    "provider": "etherscan"
   },
   "id": "480",
   "name": "World Chain",

@@ -8,8 +8,8 @@
       },
       "url": "https://soneium.blockscout.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://soneium.blockscout.com/"
+    "browserUrl": "https://soneium.blockscout.com/",
+    "provider": "blockscout"
   },
   "id": "1868",
   "name": "Soneium",

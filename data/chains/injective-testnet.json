@@ -8,8 +8,8 @@
       },
       "url": "https://testnet.blockscout-api.injective.network/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://testnet.blockscout.injective.network/"
+    "browserUrl": "https://testnet.blockscout.injective.network/",
+    "provider": "blockscout"
   },
   "id": "1439",
   "name": "Injective EVM testnet",

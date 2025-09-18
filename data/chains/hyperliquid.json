@@ -2,8 +2,8 @@
   "alias": "hyperliquid",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://hyperevmscan.io/"
+    "browserUrl": "https://hyperevmscan.io/",
+    "provider": "etherscan"
   },
   "id": "999",
   "name": "Hyperliquid",

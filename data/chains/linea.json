@@ -2,8 +2,8 @@
   "alias": "linea",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://lineascan.build/"
+    "browserUrl": "https://lineascan.build/",
+    "provider": "etherscan"
   },
   "id": "59144",
   "name": "Linea",

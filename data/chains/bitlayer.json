@@ -8,8 +8,8 @@
       },
       "url": "https://api.btrscan.com/scan/api"
     },
-    "provider": "other",
-    "browserUrl": "https://www.btrscan.com/"
+    "browserUrl": "https://www.btrscan.com/",
+    "provider": "other"
   },
   "id": "200901",
   "name": "Bitlayer",

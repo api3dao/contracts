@@ -2,8 +2,8 @@
   "alias": "moonriver",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://moonriver.moonscan.io/"
+    "browserUrl": "https://moonriver.moonscan.io/",
+    "provider": "etherscan"
   },
   "id": "1285",
   "name": "Moonriver",

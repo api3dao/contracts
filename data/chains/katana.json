@@ -8,8 +8,8 @@
       },
       "url": "https://explorer.katanarpc.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer.katanarpc.com/"
+    "browserUrl": "https://explorer.katanarpc.com/",
+    "provider": "blockscout"
   },
   "id": "747474",
   "name": "Katana",

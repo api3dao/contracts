@@ -8,8 +8,8 @@
       },
       "url": "https://odyssey-explorer.ithaca.xyz/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://odyssey-explorer.ithaca.xyz/"
+    "browserUrl": "https://odyssey-explorer.ithaca.xyz/",
+    "provider": "blockscout"
   },
   "id": "911867",
   "name": "Odyssey testnet",

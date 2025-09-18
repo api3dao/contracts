@@ -8,8 +8,8 @@
       },
       "url": "https://explorer-sepolia.inkonchain.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer-sepolia.inkonchain.com/"
+    "browserUrl": "https://explorer-sepolia.inkonchain.com/",
+    "provider": "blockscout"
   },
   "id": "763373",
   "name": "Ink testnet",

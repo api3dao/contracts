@@ -2,8 +2,8 @@
   "alias": "optimism-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://sepolia-optimism.etherscan.io/"
+    "browserUrl": "https://sepolia-optimism.etherscan.io/",
+    "provider": "etherscan"
   },
   "id": "11155420",
   "name": "Optimism testnet",

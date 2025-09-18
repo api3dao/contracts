@@ -8,8 +8,8 @@
       },
       "url": "https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api"
     },
-    "provider": "other",
-    "browserUrl": "https://snowtrace.io/"
+    "browserUrl": "https://snowtrace.io/",
+    "provider": "other"
   },
   "id": "43114",
   "name": "Avalanche",

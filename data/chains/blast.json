@@ -2,8 +2,8 @@
   "alias": "blast",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://blastscan.io/"
+    "browserUrl": "https://blastscan.io/",
+    "provider": "etherscan"
   },
   "id": "81457",
   "name": "Blast",

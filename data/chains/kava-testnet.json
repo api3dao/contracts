@@ -8,8 +8,8 @@
       },
       "url": "https://api.verify.mintscan.io/evm/api/0x8ad"
     },
-    "provider": "other",
-    "browserUrl": "https://testnet.kavascan.com/"
+    "browserUrl": "https://testnet.kavascan.com/",
+    "provider": "other"
   },
   "id": "2221",
   "name": "Kava testnet",

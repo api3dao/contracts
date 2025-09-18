@@ -8,8 +8,8 @@
       },
       "url": "https://explorer.somnia.network/api/"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer.somnia.network/"
+    "browserUrl": "https://explorer.somnia.network/",
+    "provider": "blockscout"
   },
   "id": "5031",
   "name": "Somnia",

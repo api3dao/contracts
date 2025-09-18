@@ -8,8 +8,8 @@
       },
       "url": "https://testnet-scan.merlinchain.io/api"
     },
-    "provider": "other",
-    "browserUrl": "https://testnet-scan.merlinchain.io/"
+    "browserUrl": "https://testnet-scan.merlinchain.io/",
+    "provider": "other"
   },
   "id": "686868",
   "name": "Merlin testnet",

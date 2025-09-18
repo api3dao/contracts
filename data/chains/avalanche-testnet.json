@@ -8,8 +8,8 @@
       },
       "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
     },
-    "provider": "other",
-    "browserUrl": "https://testnet.snowtrace.io/"
+    "browserUrl": "https://testnet.snowtrace.io/",
+    "provider": "other"
   },
   "id": "43113",
   "name": "Avalanche testnet",

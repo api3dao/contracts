@@ -8,8 +8,8 @@
       },
       "url": "https://explorer-bokuto.katanarpc.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://explorer-bokuto.katanarpc.com/"
+    "browserUrl": "https://explorer-bokuto.katanarpc.com/",
+    "provider": "blockscout"
   },
   "id": "737373",
   "name": "Katana testnet",

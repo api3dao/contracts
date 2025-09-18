@@ -2,8 +2,8 @@
   "alias": "berachain-testnet",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://testnet.berascan.com/"
+    "browserUrl": "https://testnet.berascan.com/",
+    "provider": "etherscan"
   },
   "id": "80069",
   "name": "Berachain testnet",

@@ -8,8 +8,8 @@
       },
       "url": "https://soneium-minato.blockscout.com/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://soneium-minato.blockscout.com/"
+    "browserUrl": "https://soneium-minato.blockscout.com/",
+    "provider": "blockscout"
   },
   "id": "1946",
   "name": "Soneium testnet",

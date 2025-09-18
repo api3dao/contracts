@@ -8,8 +8,8 @@
       },
       "url": "https://seitrace.com/atlantic-2/api"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://testnet.seitrace.com/"
+    "browserUrl": "https://testnet.seitrace.com/",
+    "provider": "blockscout"
   },
   "id": "1328",
   "name": "Sei testnet",

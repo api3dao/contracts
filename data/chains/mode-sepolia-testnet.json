@@ -8,8 +8,8 @@
       },
       "url": "https://sepolia.explorer.mode.network/api/"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://sepolia.explorer.mode.network/"
+    "browserUrl": "https://sepolia.explorer.mode.network/",
+    "provider": "blockscout"
   },
   "id": "919",
   "name": "Mode testnet",

@@ -8,8 +8,8 @@
       },
       "url": "https://pacific-explorer.manta.network/api/"
     },
-    "provider": "blockscout",
-    "browserUrl": "https://pacific-explorer.manta.network/"
+    "browserUrl": "https://pacific-explorer.manta.network/",
+    "provider": "blockscout"
   },
   "id": "169",
   "name": "Manta",

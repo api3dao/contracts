@@ -2,8 +2,8 @@
   "alias": "base",
   "decimals": 18,
   "explorer": {
-    "provider": "etherscan",
-    "browserUrl": "https://basescan.org/"
+    "browserUrl": "https://basescan.org/",
+    "provider": "etherscan"
   },
   "id": "8453",
   "name": "Base",
