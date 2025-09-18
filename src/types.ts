@@ -17,8 +17,8 @@ export const chainExporerProviderSchema = z.enum(['etherscan', 'blockscout', 'so
 
 export const chainExplorerSchema = z.object({
   api: chainExplorerAPISchema.optional(),
-  provider: chainExporerProviderSchema.optional(),
   browserUrl: z.url(),
+  provider: chainExporerProviderSchema.optional(),
 });
 
 export const chainProviderSchema = z
