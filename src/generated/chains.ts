@@ -1289,7 +1289,7 @@ export const CHAINS: Chain[] = [
   {
     alias: 'zircuit',
     decimals: 18,
-    explorer: { provider: 'sourcify', browserUrl: 'https://mainnet.zircuit.com/' },
+    explorer: { provider: 'sourcify', browserUrl: 'https://explorer.zircuit.com/' },
     id: '48900',
     name: 'Zircuit',
     providers: [

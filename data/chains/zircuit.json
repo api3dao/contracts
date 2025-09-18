@@ -3,7 +3,7 @@
   "decimals": 18,
   "explorer": {
     "provider": "sourcify",
-    "browserUrl": "https://mainnet.zircuit.com/"
+    "browserUrl": "https://explorer.zircuit.com/"
   },
   "id": "48900",
   "name": "Zircuit",
