@@ -2,14 +2,8 @@
   "alias": "arbitrum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "arbitrumSepolia",
-        "required": true
-      },
-      "url": "https://api-sepolia.arbiscan.io/api"
-    },
-    "browserUrl": "https://sepolia.arbiscan.io/"
+    "browserUrl": "https://sepolia.arbiscan.io/",
+    "provider": "etherscan"
   },
   "id": "421614",
   "name": "Arbitrum testnet",

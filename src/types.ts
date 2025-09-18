@@ -13,9 +13,12 @@ export const chainExplorerAPISchema = z.object({
   url: z.url(),
 });
 
+export const chainExporerProviderSchema = z.enum(['etherscan', 'blockscout', 'sourcify', 'other']);
+
 export const chainExplorerSchema = z.object({
   api: chainExplorerAPISchema.optional(),
   browserUrl: z.url(),
+  provider: chainExporerProviderSchema.optional(),
 });
 
 export const chainProviderSchema = z
@@ -107,7 +110,12 @@ export interface HardhatEtherscanCustomChain {
 }
 
 export interface HardhatEtherscanConfig {
-  apiKey: { [alias: string]: string };
+  apiKey: string;
+  customChains: HardhatEtherscanCustomChain[];
+}
+
+export interface HardhatBlockscoutConfig {
+  enabled: boolean;
   customChains: HardhatEtherscanCustomChain[];
 }
 

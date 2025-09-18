@@ -8,7 +8,8 @@
       },
       "url": "https://explorer.gobob.xyz/api"
     },
-    "browserUrl": "https://explorer.gobob.xyz/"
+    "browserUrl": "https://explorer.gobob.xyz/",
+    "provider": "blockscout"
   },
   "id": "60808",
   "name": "BOB",

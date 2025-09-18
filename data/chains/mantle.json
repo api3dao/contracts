@@ -2,13 +2,8 @@
   "alias": "mantle",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.mantlescan.xyz/api"
-    },
-    "browserUrl": "https://mantlescan.xyz/"
+    "browserUrl": "https://mantlescan.xyz/",
+    "provider": "etherscan"
   },
   "id": "5000",
   "name": "Mantle",

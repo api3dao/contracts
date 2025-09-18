@@ -2,13 +2,8 @@
   "alias": "scroll",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.scrollscan.com/api"
-    },
-    "browserUrl": "https://scrollscan.com/"
+    "browserUrl": "https://scrollscan.com/",
+    "provider": "etherscan"
   },
   "id": "534352",
   "name": "Scroll",

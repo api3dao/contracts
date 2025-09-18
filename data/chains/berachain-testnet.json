@@ -2,13 +2,8 @@
   "alias": "berachain-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-testnet.berascan.com/api"
-    },
-    "browserUrl": "https://testnet.berascan.com/"
+    "browserUrl": "https://testnet.berascan.com/",
+    "provider": "etherscan"
   },
   "id": "80069",
   "name": "Berachain testnet",

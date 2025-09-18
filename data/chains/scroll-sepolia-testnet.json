@@ -2,13 +2,8 @@
   "alias": "scroll-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.scrollscan.com/api"
-    },
-    "browserUrl": "https://sepolia.scrollscan.com/"
+    "browserUrl": "https://sepolia.scrollscan.com/",
+    "provider": "etherscan"
   },
   "id": "534351",
   "name": "Scroll testnet",

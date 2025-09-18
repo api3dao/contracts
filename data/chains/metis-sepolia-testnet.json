@@ -8,7 +8,8 @@
       },
       "url": "https://sepolia-explorer-api.metisdevops.link/api"
     },
-    "browserUrl": "https://sepolia-explorer.metisdevops.link/"
+    "browserUrl": "https://sepolia-explorer.metisdevops.link/",
+    "provider": "blockscout"
   },
   "id": "59902",
   "name": "Metis testnet",

@@ -4,12 +4,12 @@
   "explorer": {
     "api": {
       "key": {
-        "hardhatEtherscanAlias": "chiado",
         "required": false
       },
       "url": "https://gnosis-chiado.blockscout.com/api"
     },
-    "browserUrl": "https://gnosis-chiado.blockscout.com/"
+    "browserUrl": "https://gnosis-chiado.blockscout.com/",
+    "provider": "blockscout"
   },
   "id": "10200",
   "name": "Gnosis Chain testnet",

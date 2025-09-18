@@ -2,14 +2,8 @@
   "alias": "ethereum-holesky-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "holesky",
-        "required": true
-      },
-      "url": "https://api-holesky.etherscan.io/api"
-    },
-    "browserUrl": "https://holesky.etherscan.io/"
+    "browserUrl": "https://holesky.etherscan.io/",
+    "provider": "etherscan"
   },
   "id": "17000",
   "name": "Ethereum Holesky testnet",

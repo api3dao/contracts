@@ -1,11 +1,13 @@
 import { CHAINS } from './generated/chains';
-import { etherscan, etherscanApiKeyName, getEnvVariableNames, networkHttpRpcUrlName, networks } from './hardhat-config';
-import { type Chain } from './types';
+import {
+  etherscan,
+  blockscout,
+  etherscanApiKeyName,
+  getEnvVariableNames,
+  networkHttpRpcUrlName,
+  networks,
+} from './hardhat-config';
 import { toUpperSnakeCase } from './utils/strings';
-
-function getRandomChain(): Chain {
-  return CHAINS[Math.floor(Math.random() * CHAINS.length)]!;
-}
 
 const OLD_ENV = process.env;
 
@@ -20,28 +22,63 @@ afterAll(() => {
 
 describe(getEnvVariableNames.name, () => {
   it('returns an array with expected env variables', () => {
-    const apiKeyEnvNames = CHAINS.filter((chain) => chain.explorer?.api?.key?.required).map((chain) =>
-      etherscanApiKeyName(chain)
-    );
+    const apiKeyEnvName = etherscanApiKeyName();
     const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
-    const expected = ['MNEMONIC', ...apiKeyEnvNames, ...networkRpcUrlNames];
+    const expected = ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
     expect(getEnvVariableNames()).toStrictEqual(expected);
   });
 });
 
-describe(etherscanApiKeyName.name, () => {
-  it('returns the expected Etherscan API key name', () => {
-    const randomChain = getRandomChain();
-    const expected = `ETHERSCAN_API_KEY_${toUpperSnakeCase(randomChain!.alias)}`;
-    expect(etherscanApiKeyName(randomChain!)).toStrictEqual(expected);
+describe(blockscout.name, () => {
+  beforeEach(() => {
+    // eslint-disable-next-line jest/no-standalone-expect
+    expect((global as any).window).toBeUndefined();
   });
-});
 
-describe(networkHttpRpcUrlName.name, () => {
-  it('returns the expected HTTP RPC URL name', () => {
-    const randomChain = getRandomChain();
-    const expected = `ETHERSCAN_API_KEY_${toUpperSnakeCase(randomChain!.alias)}`;
-    expect(etherscanApiKeyName(randomChain!)).toStrictEqual(expected);
+  afterEach(() => {
+    delete (global as any).window;
+  });
+
+  it('throws an error if called in a browser-like environment', () => {
+    (global as any).window = {};
+    expect(() => blockscout()).toThrow('Cannot be called outside of a Node.js environment');
+  });
+
+  describe('customChains', () => {
+    it('ignores chains without an explorer', () => {
+      const { customChains } = blockscout();
+      const ids = CHAINS.filter((c) => !c.explorer).map((c) => c.id);
+      customChains.forEach((c) => {
+        expect(ids).not.toContain(c.chainId);
+      });
+    });
+
+    it('ignores chains without an explorer API', () => {
+      const { customChains } = blockscout();
+      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.id);
+      customChains.forEach((c) => {
+        expect(ids).not.toContain(c.chainId);
+      });
+    });
+
+    it('includes all other chains', () => {
+      const { customChains } = blockscout();
+
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
+
+      customChains.forEach((customChain) => {
+        const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
+        expect(customChain).toStrictEqual({
+          network: chain.alias,
+          chainId: Number(chain.id),
+          urls: {
+            apiURL: chain.explorer.api!.url,
+            browserURL: chain.explorer.browserUrl,
+          },
+        });
+      });
+    });
   });
 });
 
@@ -89,8 +126,9 @@ describe(etherscan.name, () => {
 
     it('includes all other chains', () => {
       const { customChains } = etherscan();
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const chainsWithoutAlias = chains.filter((c) => !c.explorer.api!.key.hardhatEtherscanAlias);
+
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
 
       customChains.forEach((customChain) => {
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
@@ -98,8 +136,8 @@ describe(etherscan.name, () => {
           network: chain.alias,
           chainId: Number(chain.id),
           urls: {
-            apiURL: chain.explorer.api!.url,
-            browserURL: chain.explorer.browserUrl,
+            apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
+            browserURL: chain.explorer!.browserUrl,
           },
         });
       });
@@ -120,58 +158,6 @@ describe(etherscan.name, () => {
       const aliases = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.alias);
       Object.keys(apiKey).forEach((key) => {
         expect(aliases).not.toContain(key);
-      });
-    });
-
-    it('sets the API key value to dummy value for chains with a hardhat alias', () => {
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const chainsWithAlias = chains.filter((c) => {
-        return (
-          !!c.explorer.api!.key.hardhatEtherscanAlias && // has a hardhatEtherscanAlias
-          !c.explorer.api!.key.required
-        ); // but not required
-      });
-
-      const { apiKey } = etherscan();
-      chainsWithAlias.forEach((chain) => {
-        expect(apiKey[chain.explorer.api!.key.hardhatEtherscanAlias!]).toBe('DUMMY_VALUE');
-      });
-    });
-
-    it('sets the API key value to not found for chains with a hardhat alias', () => {
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const chainsWithAlias = chains.filter((c) => {
-        return (
-          !!c.explorer.api!.key.hardhatEtherscanAlias && // has a hardhatEtherscanAlias
-          c.explorer.api!.key.required
-        ); // and is required
-      });
-
-      const { apiKey } = etherscan();
-      chainsWithAlias.forEach((chain) => {
-        expect(apiKey[chain.explorer.api!.key.hardhatEtherscanAlias!]).toBe('NOT_FOUND');
-      });
-    });
-
-    it('sets the API value to the env variable value for chains with a hardhat alias', () => {
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const chainsWithAlias = chains.filter((c) => {
-        return (
-          !!c.explorer.api!.key.hardhatEtherscanAlias && // has a hardhatEtherscanAlias
-          c.explorer.api!.key.required
-        ); // and is required
-      });
-
-      chainsWithAlias.forEach((chain) => {
-        const envKey = etherscanApiKeyName(chain);
-        process.env[envKey] = `api-key-${chain.id}`;
-      });
-
-      // needs to be called AFTER env values are set
-      const { apiKey } = etherscan();
-
-      chainsWithAlias.forEach((chain) => {
-        expect(apiKey[chain.explorer.api!.key.hardhatEtherscanAlias!]).toBe(`api-key-${chain.id}`);
       });
     });
   });

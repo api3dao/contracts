@@ -2,12 +2,6 @@
   "alias": "core-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.test2.btcs.network/api"
-    },
     "browserUrl": "https://scan.test2.btcs.network/"
   },
   "id": "1114",

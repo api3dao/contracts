@@ -1,6 +1,5 @@
 {
   "alias": "hyperliquid-testnet",
-
   "decimals": 18,
   "explorer": {
     "browserUrl": "https://testnet.purrsec.com/"
