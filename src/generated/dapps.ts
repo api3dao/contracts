@@ -108,6 +108,11 @@ export const DAPPS: Dapp[] = [
         title: 'Morpho cbETH/USDC 86% LLTV',
         description: 'Only to be used for the cbETH/USDC 86% LLTV market.',
       },
+      feather: {
+        chains: ['sei'],
+        title: 'Morpho market(s) by Feather',
+        description: 'Only to be used for the Morpho market(s) by Feather.',
+      },
     },
     homepageUrl: 'https://morpho.org/vaults/',
   },
