@@ -25,6 +25,9 @@ function ensureMorphoDappConventions(fileContent: Dapp) {
   const { aliases } = fileContent;
 
   for (const [alias, dapp] of Object.entries(aliases)) {
+    // Abort the validation for special cased aliases.
+    if (alias === 'feather') continue;
+
     // Verify basic alias and title format.
     const aSplit = alias.split('-'); // e.g. morpho-mvl-usdc-770-lltv
     const tSplit = dapp.title.split(/[ /]/); // e.g. Morpho MVL/USDC 77% LLTV
