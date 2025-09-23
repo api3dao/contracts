@@ -11,9 +11,9 @@ module.exports = async () => {
     throw new Error(`${network.name} is not supported`);
   }
 
-  const blockExplorerProvider = CHAINS.find((chain) => chain.alias === network.name)?.explorer?.provider;
+  const verificationApiType = CHAINS.find((chain) => chain.alias === network.name)?.explorer.verificationApi?.type;
   const verifyTask =
-    blockExplorerProvider === 'other' ? 'verify:blockscout' : `verify:${blockExplorerProvider ?? 'verify'}`;
+    verificationApiType === 'other' ? 'verify:blockscout' : `verify:${verificationApiType ?? 'verify'}`;
 
   const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
   await run(verifyTask, {
