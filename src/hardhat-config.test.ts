@@ -55,7 +55,7 @@ describe(blockscout.name, () => {
 
     it('ignores chains without an explorer API', () => {
       const { customChains } = blockscout();
-      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.id);
+      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.verificationApi).map((c) => c.id);
       customChains.forEach((c) => {
         expect(ids).not.toContain(c.chainId);
       });
@@ -64,8 +64,8 @@ describe(blockscout.name, () => {
     it('includes all other chains', () => {
       const { customChains } = blockscout();
 
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
-      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.verificationApi);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.verificationApi?.type);
 
       customChains.forEach((customChain) => {
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
@@ -73,8 +73,8 @@ describe(blockscout.name, () => {
           network: chain.alias,
           chainId: Number(chain.id),
           urls: {
-            apiURL: chain.explorer.api!.url,
-            browserURL: chain.explorer.browserUrl,
+            apiURL: chain.explorer.verificationApi!.url,
+            browserURL: chain.explorer.blockExplorerUrl,
           },
         });
       });
@@ -108,7 +108,7 @@ describe(etherscan.name, () => {
 
     it('ignores chains without an explorer API', () => {
       const { customChains } = etherscan();
-      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.id);
+      const ids = CHAINS.filter((c) => !!c.explorer && !c.explorer.verificationApi).map((c) => c.id);
       customChains.forEach((c) => {
         expect(ids).not.toContain(c.chainId);
       });
@@ -116,8 +116,8 @@ describe(etherscan.name, () => {
 
     it('ignores chains with a hardhat etherscan alias', () => {
       const { customChains } = etherscan();
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.api);
-      const ids = chains.filter((c) => c.explorer.api!.key.hardhatEtherscanAlias).map((c) => c.id);
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.verificationApi);
+      const ids = chains.filter((c) => c.explorer.verificationApi?.key?.hardhatEtherscanAlias).map((c) => c.id);
 
       customChains.forEach((c) => {
         expect(ids).not.toContain(c.chainId);
@@ -127,8 +127,8 @@ describe(etherscan.name, () => {
     it('includes all other chains', () => {
       const { customChains } = etherscan();
 
-      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.provider);
-      const chainsWithoutAlias = chains.filter((c) => c.explorer.provider);
+      const chains = CHAINS.filter((c) => !!c.explorer && !!c.explorer.verificationApi?.type);
+      const chainsWithoutAlias = chains.filter((c) => c.explorer.verificationApi?.type);
 
       customChains.forEach((customChain) => {
         const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
@@ -137,7 +137,7 @@ describe(etherscan.name, () => {
           chainId: Number(chain.id),
           urls: {
             apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
-            browserURL: chain.explorer!.browserUrl,
+            browserURL: chain.explorer!.blockExplorerUrl,
           },
         });
       });
@@ -155,7 +155,7 @@ describe(etherscan.name, () => {
 
     it('ignores chains without an explorer API', () => {
       const { apiKey } = etherscan();
-      const aliases = CHAINS.filter((c) => !!c.explorer && !c.explorer.api).map((c) => c.alias);
+      const aliases = CHAINS.filter((c) => !!c.explorer && !c.explorer.verificationApi).map((c) => c.alias);
       Object.keys(apiKey).forEach((key) => {
         expect(aliases).not.toContain(key);
       });

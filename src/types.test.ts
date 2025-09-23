@@ -7,14 +7,10 @@ describe('chainSchema', () => {
     alias: 'ethereum',
     decimals: 18,
     explorer: {
-      api: {
-        key: {
-          hardhatEtherscanAlias: 'mainnet',
-          required: true,
-        },
-        url: 'https://api.etherscan.io/api',
+      blockExplorerUrl: 'https://etherscan.io/',
+      verificationApi: {
+        type: 'etherscan',
       },
-      browserUrl: 'https://etherscan.io/',
     },
     id: '1',
     name: 'Ethereum',
