@@ -2,14 +2,11 @@
   "alias": "sei",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://seitrace.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://seitrace.com/pacific-1/api"
-    },
-    "browserUrl": "https://seitrace.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "1329",
   "name": "Sei",

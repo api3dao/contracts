@@ -2,7 +2,7 @@
   "alias": "polygon-zkevm-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://cardona-zkevm.polygonscan.com/"
+    "blockExplorerUrl": "https://cardona-zkevm.polygonscan.com/"
   },
   "id": "2442",
   "name": "Polygon zkEVM testnet",

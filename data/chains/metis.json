@@ -2,14 +2,11 @@
   "alias": "metis",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.metis.io/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
-    },
-    "browserUrl": "https://explorer.metis.io/",
-    "provider": "other"
+    }
   },
   "id": "1088",
   "name": "Metis",

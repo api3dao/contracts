@@ -2,8 +2,10 @@
   "alias": "sonic",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sonicscan.org/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sonicscan.org/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "146",
   "name": "Sonic",

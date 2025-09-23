@@ -2,14 +2,11 @@
   "alias": "soneium",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://soneium.blockscout.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://soneium.blockscout.com/api"
-    },
-    "browserUrl": "https://soneium.blockscout.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "1868",
   "name": "Soneium",

@@ -2,8 +2,10 @@
   "alias": "arbitrum",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://arbiscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://arbiscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "42161",
   "name": "Arbitrum One",

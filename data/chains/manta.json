@@ -2,14 +2,11 @@
   "alias": "manta",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://pacific-explorer.manta.network/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://pacific-explorer.manta.network/api/"
-    },
-    "browserUrl": "https://pacific-explorer.manta.network/",
-    "provider": "blockscout"
+    }
   },
   "id": "169",
   "name": "Manta",

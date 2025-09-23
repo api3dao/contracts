@@ -2,14 +2,11 @@
   "alias": "merlin",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://scan.merlinchain.io/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://scan.merlinchain.io/api"
-    },
-    "browserUrl": "https://scan.merlinchain.io/",
-    "provider": "other"
+    }
   },
   "id": "4200",
   "name": "Merlin",

@@ -2,8 +2,10 @@
   "alias": "unichain",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://uniscan.xyz/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://uniscan.xyz/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "130",
   "name": "Unichain",

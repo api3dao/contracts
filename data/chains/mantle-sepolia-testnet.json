@@ -2,8 +2,10 @@
   "alias": "mantle-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sepolia.mantlescan.xyz/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sepolia.mantlescan.xyz/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "5003",
   "name": "Mantle testnet",

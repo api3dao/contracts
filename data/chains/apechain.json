@@ -2,8 +2,10 @@
   "alias": "apechain",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://apescan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://apescan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "33139",
   "name": "ApeChain",

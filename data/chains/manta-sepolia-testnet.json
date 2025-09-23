@@ -2,14 +2,11 @@
   "alias": "manta-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://pacific-explorer.sepolia-testnet.manta.network/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://pacific-explorer.sepolia-testnet.manta.network/api/"
-    },
-    "browserUrl": "https://pacific-explorer.sepolia-testnet.manta.network/",
-    "provider": "blockscout"
+    }
   },
   "id": "3441006",
   "name": "Manta testnet",

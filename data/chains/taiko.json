@@ -2,8 +2,10 @@
   "alias": "taiko",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://taikoscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://taikoscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "167000",
   "name": "Taiko",

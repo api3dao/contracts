@@ -2,14 +2,11 @@
   "alias": "avalanche-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://testnet.snowtrace.io/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
-    },
-    "browserUrl": "https://testnet.snowtrace.io/",
-    "provider": "other"
+    }
   },
   "id": "43113",
   "name": "Avalanche testnet",

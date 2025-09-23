@@ -2,14 +2,11 @@
   "alias": "soneium-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://soneium-minato.blockscout.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://soneium-minato.blockscout.com/api"
-    },
-    "browserUrl": "https://soneium-minato.blockscout.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "1946",
   "name": "Soneium testnet",

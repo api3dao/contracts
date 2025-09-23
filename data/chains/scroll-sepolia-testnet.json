@@ -2,8 +2,10 @@
   "alias": "scroll-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sepolia.scrollscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sepolia.scrollscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "534351",
   "name": "Scroll testnet",

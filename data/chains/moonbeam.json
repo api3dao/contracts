@@ -2,8 +2,10 @@
   "alias": "moonbeam",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://moonscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://moonscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "1284",
   "name": "Moonbeam",

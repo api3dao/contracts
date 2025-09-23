@@ -2,8 +2,10 @@
   "alias": "bsc",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://bscscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://bscscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "56",
   "name": "BNB Smart Chain",

@@ -2,14 +2,11 @@
   "alias": "kava",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://kavascan.com/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://api.verify.mintscan.io/evm/api/0x8ae"
-    },
-    "browserUrl": "https://kavascan.com/",
-    "provider": "other"
+    }
   },
   "id": "2222",
   "name": "Kava",

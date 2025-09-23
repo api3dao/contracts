@@ -2,7 +2,7 @@
   "alias": "core",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://scan.coredao.org/"
+    "blockExplorerUrl": "https://scan.coredao.org/"
   },
   "id": "1116",
   "name": "Core",

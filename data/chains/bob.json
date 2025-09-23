@@ -2,14 +2,11 @@
   "alias": "bob",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.gobob.xyz/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.gobob.xyz/api"
-    },
-    "browserUrl": "https://explorer.gobob.xyz/",
-    "provider": "blockscout"
+    }
   },
   "id": "60808",
   "name": "BOB",

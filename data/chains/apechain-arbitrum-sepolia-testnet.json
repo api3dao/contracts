@@ -2,8 +2,10 @@
   "alias": "apechain-arbitrum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://curtis.apescan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://curtis.apescan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "33111",
   "name": "ApeChain testnet",

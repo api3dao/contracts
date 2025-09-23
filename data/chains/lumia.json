@@ -2,14 +2,11 @@
   "alias": "lumia",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.lumia.org/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.lumia.org/api/"
-    },
-    "browserUrl": "https://explorer.lumia.org/",
-    "provider": "blockscout"
+    }
   },
   "id": "994873017",
   "name": "Lumia",

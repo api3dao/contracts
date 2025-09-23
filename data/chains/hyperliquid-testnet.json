@@ -2,7 +2,7 @@
   "alias": "hyperliquid-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://testnet.purrsec.com/"
+    "blockExplorerUrl": "https://testnet.purrsec.com/"
   },
   "id": "998",
   "name": "Hyperliquid testnet",

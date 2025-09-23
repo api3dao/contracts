@@ -2,8 +2,10 @@
   "alias": "unichain-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sepolia.uniscan.xyz/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sepolia.uniscan.xyz/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "1301",
   "name": "Unichain testnet",

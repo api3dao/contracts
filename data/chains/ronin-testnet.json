@@ -2,8 +2,10 @@
   "alias": "ronin-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://saigon-app.roninchain.com/",
-    "provider": "sourcify"
+    "blockExplorerUrl": "https://saigon-app.roninchain.com/",
+    "verificationApi": {
+      "type": "sourcify"
+    }
   },
   "id": "2021",
   "name": "Ronin testnet",

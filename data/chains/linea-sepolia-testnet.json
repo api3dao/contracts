@@ -2,8 +2,10 @@
   "alias": "linea-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sepolia.lineascan.build/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sepolia.lineascan.build/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "59141",
   "name": "Linea testnet",

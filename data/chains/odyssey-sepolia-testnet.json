@@ -2,14 +2,11 @@
   "alias": "odyssey-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://odyssey-explorer.ithaca.xyz/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://odyssey-explorer.ithaca.xyz/api"
-    },
-    "browserUrl": "https://odyssey-explorer.ithaca.xyz/",
-    "provider": "blockscout"
+    }
   },
   "id": "911867",
   "name": "Odyssey testnet",

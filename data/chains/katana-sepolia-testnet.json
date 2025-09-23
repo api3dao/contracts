@@ -2,14 +2,11 @@
   "alias": "katana-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer-bokuto.katanarpc.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer-bokuto.katanarpc.com/api"
-    },
-    "browserUrl": "https://explorer-bokuto.katanarpc.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "737373",
   "name": "Katana testnet",

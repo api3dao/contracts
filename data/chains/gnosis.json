@@ -2,8 +2,10 @@
   "alias": "gnosis",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://gnosisscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://gnosisscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "100",
   "name": "Gnosis Chain",

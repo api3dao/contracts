@@ -2,14 +2,11 @@
   "alias": "mode",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.mode.network/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.mode.network/api/"
-    },
-    "browserUrl": "https://explorer.mode.network/",
-    "provider": "blockscout"
+    }
   },
   "id": "34443",
   "name": "Mode",

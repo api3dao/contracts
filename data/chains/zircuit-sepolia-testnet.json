@@ -2,8 +2,10 @@
   "alias": "zircuit-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://explorer.garfield-testnet.zircuit.com/",
-    "provider": "sourcify"
+    "blockExplorerUrl": "https://explorer.garfield-testnet.zircuit.com/",
+    "verificationApi": {
+      "type": "sourcify"
+    }
   },
   "id": "48898",
   "name": "Zircuit testnet",

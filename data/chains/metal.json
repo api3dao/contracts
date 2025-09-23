@@ -2,14 +2,11 @@
   "alias": "metal",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.metall2.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.metall2.com/api"
-    },
-    "browserUrl": "https://explorer.metall2.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "1750",
   "name": "Metal L2",

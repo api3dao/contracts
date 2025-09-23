@@ -2,8 +2,10 @@
   "alias": "ronin",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://app.roninchain.com/",
-    "provider": "sourcify"
+    "blockExplorerUrl": "https://app.roninchain.com/",
+    "verificationApi": {
+      "type": "sourcify"
+    }
   },
   "id": "2020",
   "name": "Ronin",

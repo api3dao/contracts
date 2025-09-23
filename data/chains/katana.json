@@ -2,14 +2,11 @@
   "alias": "katana",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.katanarpc.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.katanarpc.com/api"
-    },
-    "browserUrl": "https://explorer.katanarpc.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "747474",
   "name": "Katana",

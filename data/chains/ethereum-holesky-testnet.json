@@ -2,8 +2,10 @@
   "alias": "ethereum-holesky-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://holesky.etherscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://holesky.etherscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "17000",
   "name": "Ethereum Holesky testnet",

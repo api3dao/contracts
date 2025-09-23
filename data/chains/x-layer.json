@@ -2,14 +2,11 @@
   "alias": "x-layer",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://www.okx.com/explorer/xlayer/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
-    },
-    "browserUrl": "https://www.okx.com/explorer/xlayer/",
-    "provider": "other"
+    }
   },
   "id": "196",
   "name": "X Layer",

@@ -2,8 +2,10 @@
   "alias": "mantle",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://mantlescan.xyz/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://mantlescan.xyz/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "5000",
   "name": "Mantle",

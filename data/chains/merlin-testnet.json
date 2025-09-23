@@ -2,14 +2,11 @@
   "alias": "merlin-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://testnet-scan.merlinchain.io/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://testnet-scan.merlinchain.io/api"
-    },
-    "browserUrl": "https://testnet-scan.merlinchain.io/",
-    "provider": "other"
+    }
   },
   "id": "686868",
   "name": "Merlin testnet",

@@ -2,14 +2,11 @@
   "alias": "ink-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer-sepolia.inkonchain.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer-sepolia.inkonchain.com/api"
-    },
-    "browserUrl": "https://explorer-sepolia.inkonchain.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "763373",
   "name": "Ink testnet",

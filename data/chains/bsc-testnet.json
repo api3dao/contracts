@@ -2,8 +2,10 @@
   "alias": "bsc-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://testnet.bscscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://testnet.bscscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "97",
   "name": "BNB Smart Chain testnet",

@@ -2,14 +2,11 @@
   "alias": "somnia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://shannon-explorer.somnia.network/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://shannon-explorer.somnia.network/api"
-    },
-    "browserUrl": "https://shannon-explorer.somnia.network/",
-    "provider": "blockscout"
+    }
   },
   "id": "50312",
   "name": "Somnia testnet",

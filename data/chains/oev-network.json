@@ -2,14 +2,11 @@
   "alias": "oev-network",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://oev.explorer.api3.org/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://oev.explorer.api3.org/api/"
-    },
-    "browserUrl": "https://oev.explorer.api3.org/",
-    "provider": "blockscout"
+    }
   },
   "id": "4913",
   "name": "OEV Network",

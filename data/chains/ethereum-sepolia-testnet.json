@@ -2,8 +2,10 @@
   "alias": "ethereum-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://sepolia.etherscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://sepolia.etherscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "11155111",
   "name": "Ethereum Sepolia testnet",

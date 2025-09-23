@@ -2,8 +2,10 @@
   "alias": "scroll",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://scrollscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://scrollscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "534352",
   "name": "Scroll",

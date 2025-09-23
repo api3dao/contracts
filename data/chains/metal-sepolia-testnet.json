@@ -2,14 +2,11 @@
   "alias": "metal-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://testnet.explorer.metall2.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://testnet.explorer.metall2.com/api"
-    },
-    "browserUrl": "https://testnet.explorer.metall2.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "1740",
   "name": "Metal L2 testnet",

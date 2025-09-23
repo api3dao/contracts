@@ -2,8 +2,10 @@
   "alias": "opbnb-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://opbnb-testnet.bscscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://opbnb-testnet.bscscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "5611",
   "name": "opBNB testnet",

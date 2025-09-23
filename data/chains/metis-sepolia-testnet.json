@@ -2,14 +2,11 @@
   "alias": "metis-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://sepolia-explorer.metisdevops.link/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://sepolia-explorer-api.metisdevops.link/api"
-    },
-    "browserUrl": "https://sepolia-explorer.metisdevops.link/",
-    "provider": "blockscout"
+    }
   },
   "id": "59902",
   "name": "Metis testnet",

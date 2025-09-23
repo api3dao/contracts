@@ -2,14 +2,11 @@
   "alias": "bitlayer-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://testnet.btrscan.com/",
+    "verificationApi": {
+      "type": "other",
       "url": "https://api-testnet.btrscan.com/scan/api"
-    },
-    "browserUrl": "https://testnet.btrscan.com/",
-    "provider": "other"
+    }
   },
   "id": "200810",
   "name": "Bitlayer testnet",

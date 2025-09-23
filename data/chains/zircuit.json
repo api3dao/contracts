@@ -2,8 +2,10 @@
   "alias": "zircuit",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://explorer.zircuit.com/",
-    "provider": "sourcify"
+    "blockExplorerUrl": "https://explorer.zircuit.com/",
+    "verificationApi": {
+      "type": "sourcify"
+    }
   },
   "id": "48900",
   "name": "Zircuit",

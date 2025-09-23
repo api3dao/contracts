@@ -2,8 +2,10 @@
   "alias": "fraxtal",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://fraxscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://fraxscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "252",
   "name": "Fraxtal",

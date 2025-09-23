@@ -2,14 +2,11 @@
   "alias": "somnia",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.somnia.network/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.somnia.network/api/"
-    },
-    "browserUrl": "https://explorer.somnia.network/",
-    "provider": "blockscout"
+    }
   },
   "id": "5031",
   "name": "Somnia",

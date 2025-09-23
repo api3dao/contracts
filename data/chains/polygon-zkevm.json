@@ -2,8 +2,10 @@
   "alias": "polygon-zkevm",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://zkevm.polygonscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://zkevm.polygonscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "1101",
   "name": "Polygon zkEVM",

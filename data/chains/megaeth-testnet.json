@@ -2,7 +2,7 @@
   "alias": "megaeth-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://www.megaexplorer.xyz/"
+    "blockExplorerUrl": "https://www.megaexplorer.xyz/"
   },
   "id": "6342",
   "name": "MegaETH testnet",

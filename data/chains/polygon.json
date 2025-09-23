@@ -2,8 +2,10 @@
   "alias": "polygon",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://polygonscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://polygonscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "137",
   "name": "Polygon",

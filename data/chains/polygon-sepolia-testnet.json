@@ -2,8 +2,10 @@
   "alias": "polygon-sepolia-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://amoy.polygonscan.com/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://amoy.polygonscan.com/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "80002",
   "name": "Polygon testnet",

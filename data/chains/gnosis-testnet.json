@@ -2,14 +2,11 @@
   "alias": "gnosis-testnet",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://gnosis-chiado.blockscout.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://gnosis-chiado.blockscout.com/api"
-    },
-    "browserUrl": "https://gnosis-chiado.blockscout.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "10200",
   "name": "Gnosis Chain testnet",

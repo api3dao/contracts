@@ -2,14 +2,11 @@
   "alias": "ink",
   "decimals": 18,
   "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
+    "blockExplorerUrl": "https://explorer.inkonchain.com/",
+    "verificationApi": {
+      "type": "blockscout",
       "url": "https://explorer.inkonchain.com/api"
-    },
-    "browserUrl": "https://explorer.inkonchain.com/",
-    "provider": "blockscout"
+    }
   },
   "id": "57073",
   "name": "Ink",

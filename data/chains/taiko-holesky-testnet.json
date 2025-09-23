@@ -2,8 +2,10 @@
   "alias": "taiko-holesky-testnet",
   "decimals": 18,
   "explorer": {
-    "browserUrl": "https://hekla.taikoscan.io/",
-    "provider": "etherscan"
+    "blockExplorerUrl": "https://hekla.taikoscan.io/",
+    "verificationApi": {
+      "type": "etherscan"
+    }
   },
   "id": "167009",
   "name": "Taiko testnet",
