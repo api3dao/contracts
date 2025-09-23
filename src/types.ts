@@ -3,22 +3,22 @@ import { z } from 'zod';
 import { CHAINS } from './generated/chains';
 import { hasUniqueEntries } from './utils/arrays';
 
-export const chainExplorerAPIKeySchema = z.object({
+export const verificationApiKeySchema = z.object({
   required: z.boolean(),
   hardhatEtherscanAlias: z.string().optional(),
 });
 
-export const chainExplorerAPISchema = z.object({
-  key: chainExplorerAPIKeySchema,
-  url: z.url(),
+export const verificationApiTypeSchema = z.enum(['etherscan', 'blockscout', 'sourcify', 'other']);
+
+export const verificationApiSchema = z.object({
+  key: verificationApiKeySchema.optional(),
+  type: verificationApiTypeSchema,
+  url: z.url().optional(),
 });
 
-export const chainExporerProviderSchema = z.enum(['etherscan', 'blockscout', 'sourcify', 'other']);
-
 export const chainExplorerSchema = z.object({
-  api: chainExplorerAPISchema.optional(),
-  browserUrl: z.url(),
-  provider: chainExporerProviderSchema.optional(),
+  blockExplorerUrl: z.url(),
+  verificationApi: verificationApiSchema.optional(),
 });
 
 export const chainProviderSchema = z
@@ -88,8 +88,8 @@ export const chainSchema = z.object({
 
 export type Chain = z.infer<typeof chainSchema>;
 export type ChainExplorer = z.infer<typeof chainExplorerSchema>;
-export type ChainExplorerAPI = z.infer<typeof chainExplorerAPISchema>;
-export type ChainExplorerAPIKey = z.infer<typeof chainExplorerAPIKeySchema>;
+export type VerificationApi = z.infer<typeof verificationApiSchema>;
+export type VerificationApiKey = z.infer<typeof verificationApiKeySchema>;
 export type ChainHardhatConfigOverrides = z.infer<typeof hardhatConfigOverrides>;
 export type ChainProviders = z.infer<typeof chainProvidersSchema>;
 export type ChainProvider = z.infer<typeof chainProviderSchema>;
