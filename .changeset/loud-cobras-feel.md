@@ -4,4 +4,4 @@
 
 Updates RPC provider configurations:
 
-- Add publicnode and 'stakely' providers for somnia chain.
+- Add publicnode and stakely providers for somnia chain.
