@@ -3,23 +3,12 @@ import { z } from 'zod';
 import { CHAINS } from './generated/chains';
 import { hasUniqueEntries } from './utils/arrays';
 
-export const verificationApiKeySchema = z.object({
-  required: z.boolean(),
-  hardhatEtherscanAlias: z.string().optional(),
-});
-
-export const verificationApiTypeSchema = z.enum(['etherscan', 'blockscout', 'sourcify', 'other']);
-
-export const verificationApiSchema = z.object({
-  key: verificationApiKeySchema.optional(),
-  type: verificationApiTypeSchema,
-  url: z.url().optional(),
-});
-
-export const chainExplorerSchema = z.object({
-  blockExplorerUrl: z.url(),
-  verificationApi: verificationApiSchema.optional(),
-});
+export const verificationApiSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('etherscan') }),
+  z.object({ type: z.literal('sourcify') }),
+  z.object({ type: z.literal('blockscout'), url: z.url() }),
+  z.object({ type: z.literal('other'), url: z.url() }),
+]);
 
 export const chainProviderSchema = z
   .object({
@@ -72,8 +61,8 @@ export const hardhatConfigOverrides = z.object({
 
 export const chainSchema = z.object({
   alias: z.string(),
+  blockExplorerUrl: z.url(),
   decimals: z.number().positive(),
-  explorer: chainExplorerSchema,
   hardhatConfigOverrides: hardhatConfigOverrides.optional(),
   // Most chain IDs are numbers, but to remain flexible this has purposefully been kept as a string
   // It can be adjusted if we want to support chains that don't use numbers.
@@ -84,12 +73,11 @@ export const chainSchema = z.object({
   skipProviderCheck: z.boolean().optional(), // For chains not supporting dAPIs
   symbol: z.string().min(1).max(6),
   testnet: z.boolean(),
+  verificationApi: verificationApiSchema.optional(),
 });
 
 export type Chain = z.infer<typeof chainSchema>;
-export type ChainExplorer = z.infer<typeof chainExplorerSchema>;
 export type VerificationApi = z.infer<typeof verificationApiSchema>;
-export type VerificationApiKey = z.infer<typeof verificationApiKeySchema>;
 export type ChainHardhatConfigOverrides = z.infer<typeof hardhatConfigOverrides>;
 export type ChainProviders = z.infer<typeof chainProvidersSchema>;
 export type ChainProvider = z.infer<typeof chainProviderSchema>;

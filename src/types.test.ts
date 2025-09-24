@@ -5,13 +5,8 @@ import { type Chain, chainAlias, chainSchema, chainProviderSchema, chainProvider
 describe('chainSchema', () => {
   const validChain: Chain = {
     alias: 'ethereum',
+    blockExplorerUrl: 'https://etherscan.io/',
     decimals: 18,
-    explorer: {
-      blockExplorerUrl: 'https://etherscan.io/',
-      verificationApi: {
-        type: 'etherscan',
-      },
-    },
     id: '1',
     name: 'Ethereum',
     providers: [
@@ -22,6 +17,9 @@ describe('chainSchema', () => {
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: {
+      type: 'etherscan',
+    },
   };
 
   it('should accept a valid chain', () => {
