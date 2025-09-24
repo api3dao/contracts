@@ -36,12 +36,12 @@ export function etherscan(): HardhatEtherscanConfig {
 
   return {
     apiKey: process.env[etherscanApiKeyName()] ?? '',
-    customChains: CHAINS.filter((chain) => chain.explorer.verificationApi?.type === 'etherscan').map((chain) => ({
+    customChains: CHAINS.filter((chain) => chain.verificationApi?.type === 'etherscan').map((chain) => ({
       network: chain.alias,
       chainId: Number(chain.id),
       urls: {
         apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
-        browserURL: chain.explorer.blockExplorerUrl,
+        browserURL: chain.blockExplorerUrl,
       },
     })),
   };
@@ -56,14 +56,16 @@ export function blockscout(): HardhatBlockscoutConfig {
   return {
     enabled: true,
     customChains: CHAINS.filter(
-      (chain) =>
-        chain.explorer.verificationApi?.type === 'blockscout' || chain.explorer.verificationApi?.type === 'other'
+      (chain) => chain.verificationApi?.type === 'blockscout' || chain.verificationApi?.type === 'other'
     ).map((chain) => ({
       network: chain.alias,
       chainId: Number(chain.id),
       urls: {
-        apiURL: chain.explorer.verificationApi!.url!,
-        browserURL: chain.explorer.blockExplorerUrl,
+        apiURL:
+          chain.verificationApi?.type === 'blockscout' || chain.verificationApi?.type === 'other'
+            ? chain.verificationApi?.url
+            : '',
+        browserURL: chain.blockExplorerUrl,
       },
     })),
   };

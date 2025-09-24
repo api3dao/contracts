@@ -45,7 +45,7 @@ export function chains() {
       blockExplorers: {
         default: {
           name: 'Explorer',
-          url: chain.explorer.blockExplorerUrl,
+          url: chain.blockExplorerUrl,
         },
       },
     });
