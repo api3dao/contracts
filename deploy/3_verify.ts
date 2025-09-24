@@ -11,7 +11,7 @@ module.exports = async () => {
     throw new Error(`${network.name} is not supported`);
   }
 
-  const verificationApiType = CHAINS.find((chain) => chain.alias === network.name)?.explorer.verificationApi?.type;
+  const verificationApiType = CHAINS.find((chain) => chain.alias === network.name)?.verificationApi?.type;
   const verifyTask =
     verificationApiType === 'other' ? 'verify:blockscout' : `verify:${verificationApiType ?? 'verify'}`;
 

@@ -129,7 +129,7 @@ yargs(hideBin(process.argv))
       const marketUrl = `https://market.api3.org/${chain.alias}/${slugify(args['dapi-name'])}`;
       console.log(`• Please confirm that ${marketUrl} points to an active feed.`);
       console.log(
-        `• Your proxy is at ${chain.explorer.blockExplorerUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
+        `• Your proxy is at ${chain.blockExplorerUrl}address/${proxyAddress}\nPlease confirm that there is a contract deployed at this address before using it.`
       );
     }
   )
