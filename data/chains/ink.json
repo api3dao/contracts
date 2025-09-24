@@ -1,13 +1,7 @@
 {
   "alias": "ink",
+  "blockExplorerUrl": "https://explorer.inkonchain.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.inkonchain.com/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer.inkonchain.com/api"
-    }
-  },
   "id": "57073",
   "name": "Ink",
   "providers": [
@@ -33,5 +27,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.inkonchain.com/api"
+  }
 }

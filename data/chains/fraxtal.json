@@ -1,12 +1,7 @@
 {
   "alias": "fraxtal",
+  "blockExplorerUrl": "https://fraxscan.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://fraxscan.com/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "252",
   "name": "Fraxtal",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "FXS",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

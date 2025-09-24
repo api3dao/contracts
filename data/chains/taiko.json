@@ -1,12 +1,7 @@
 {
   "alias": "taiko",
+  "blockExplorerUrl": "https://taikoscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://taikoscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "167000",
   "name": "Taiko",
   "providers": [
@@ -28,5 +23,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

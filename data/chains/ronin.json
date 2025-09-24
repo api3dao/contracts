@@ -1,12 +1,7 @@
 {
   "alias": "ronin",
+  "blockExplorerUrl": "https://app.roninchain.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://app.roninchain.com/",
-    "verificationApi": {
-      "type": "sourcify"
-    }
-  },
   "id": "2020",
   "name": "Ronin",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "RON",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "sourcify"
+  }
 }

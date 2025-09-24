@@ -1,13 +1,7 @@
 {
   "alias": "metis",
+  "blockExplorerUrl": "https://explorer.metis.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.metis.io/",
-    "verificationApi": {
-      "type": "other",
-      "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
-    }
-  },
   "id": "1088",
   "name": "Metis",
   "providers": [
@@ -33,5 +27,9 @@
     }
   ],
   "symbol": "METIS",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
+  }
 }

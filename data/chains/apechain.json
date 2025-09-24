@@ -1,12 +1,7 @@
 {
   "alias": "apechain",
+  "blockExplorerUrl": "https://apescan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://apescan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "33139",
   "name": "ApeChain",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "APE",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

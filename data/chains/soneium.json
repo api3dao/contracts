@@ -1,13 +1,7 @@
 {
   "alias": "soneium",
+  "blockExplorerUrl": "https://soneium.blockscout.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://soneium.blockscout.com/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://soneium.blockscout.com/api"
-    }
-  },
   "id": "1868",
   "name": "Soneium",
   "providers": [
@@ -33,5 +27,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://soneium.blockscout.com/api"
+  }
 }

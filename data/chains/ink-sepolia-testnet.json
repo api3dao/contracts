@@ -1,13 +1,7 @@
 {
   "alias": "ink-sepolia-testnet",
+  "blockExplorerUrl": "https://explorer-sepolia.inkonchain.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer-sepolia.inkonchain.com/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer-sepolia.inkonchain.com/api"
-    }
-  },
   "id": "763373",
   "name": "Ink testnet",
   "providers": [
@@ -17,5 +11,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer-sepolia.inkonchain.com/api"
+  }
 }

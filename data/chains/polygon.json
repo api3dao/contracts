@@ -1,12 +1,7 @@
 {
   "alias": "polygon",
+  "blockExplorerUrl": "https://polygonscan.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://polygonscan.com/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "137",
   "name": "Polygon",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "POL",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

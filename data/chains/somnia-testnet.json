@@ -1,13 +1,7 @@
 {
   "alias": "somnia-testnet",
+  "blockExplorerUrl": "https://shannon-explorer.somnia.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://shannon-explorer.somnia.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://shannon-explorer.somnia.network/api"
-    }
-  },
   "id": "50312",
   "name": "Somnia testnet",
   "providers": [
@@ -17,5 +11,9 @@
     }
   ],
   "symbol": "STT",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://shannon-explorer.somnia.network/api"
+  }
 }

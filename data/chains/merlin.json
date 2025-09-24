@@ -1,13 +1,7 @@
 {
   "alias": "merlin",
+  "blockExplorerUrl": "https://scan.merlinchain.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://scan.merlinchain.io/",
-    "verificationApi": {
-      "type": "other",
-      "url": "https://scan.merlinchain.io/api"
-    }
-  },
   "id": "4200",
   "name": "Merlin",
   "providers": [
@@ -25,5 +19,9 @@
     }
   ],
   "symbol": "BTC",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://scan.merlinchain.io/api"
+  }
 }

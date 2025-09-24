@@ -1,13 +1,7 @@
 {
   "alias": "x-layer",
+  "blockExplorerUrl": "https://www.okx.com/explorer/xlayer/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://www.okx.com/explorer/xlayer/",
-    "verificationApi": {
-      "type": "other",
-      "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
-    }
-  },
   "id": "196",
   "name": "X Layer",
   "providers": [
@@ -25,5 +19,9 @@
     }
   ],
   "symbol": "OKB",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
+  }
 }

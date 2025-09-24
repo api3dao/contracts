@@ -1,12 +1,7 @@
 {
   "alias": "berachain",
+  "blockExplorerUrl": "https://berascan.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://berascan.com/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "80094",
   "name": "Berachain",
   "providers": [
@@ -28,5 +23,8 @@
     }
   ],
   "symbol": "BERA",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

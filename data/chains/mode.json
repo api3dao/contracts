@@ -1,13 +1,7 @@
 {
   "alias": "mode",
+  "blockExplorerUrl": "https://explorer.mode.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.mode.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer.mode.network/api/"
-    }
-  },
   "id": "34443",
   "name": "Mode",
   "providers": [
@@ -29,5 +23,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.mode.network/api/"
+  }
 }

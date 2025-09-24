@@ -1,12 +1,7 @@
 {
   "alias": "blast-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.blastscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sepolia.blastscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "168587773",
   "name": "Blast testnet",
   "providers": [
@@ -16,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

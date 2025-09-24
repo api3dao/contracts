@@ -1,12 +1,7 @@
 {
   "alias": "moonriver",
+  "blockExplorerUrl": "https://moonriver.moonscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://moonriver.moonscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "1285",
   "name": "Moonriver",
   "providers": [
@@ -24,5 +19,8 @@
     }
   ],
   "symbol": "MOVR",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

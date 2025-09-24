@@ -1,9 +1,7 @@
 {
   "alias": "sonic-testnet",
+  "blockExplorerUrl": "https://testnet.sonicscan.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://testnet.sonicscan.org/"
-  },
   "id": "57054",
   "name": "Sonic testnet",
   "providers": [

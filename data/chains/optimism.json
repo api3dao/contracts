@@ -1,12 +1,7 @@
 {
   "alias": "optimism",
+  "blockExplorerUrl": "https://optimistic.etherscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://optimistic.etherscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "10",
   "name": "Optimism",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

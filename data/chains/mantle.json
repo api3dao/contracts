@@ -1,12 +1,7 @@
 {
   "alias": "mantle",
+  "blockExplorerUrl": "https://mantlescan.xyz/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://mantlescan.xyz/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "5000",
   "name": "Mantle",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "MNT",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

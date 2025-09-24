@@ -1,13 +1,7 @@
 {
   "alias": "bob",
+  "blockExplorerUrl": "https://explorer.gobob.xyz/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.gobob.xyz/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer.gobob.xyz/api"
-    }
-  },
   "id": "60808",
   "name": "BOB",
   "providers": [
@@ -29,5 +23,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.gobob.xyz/api"
+  }
 }

@@ -1,13 +1,7 @@
 {
   "alias": "injective-testnet",
+  "blockExplorerUrl": "https://testnet.blockscout.injective.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://testnet.blockscout.injective.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://testnet.blockscout-api.injective.network/api"
-    }
-  },
   "id": "1439",
   "name": "Injective EVM testnet",
   "providers": [
@@ -17,5 +11,9 @@
     }
   ],
   "symbol": "INJ",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://testnet.blockscout-api.injective.network/api"
+  }
 }

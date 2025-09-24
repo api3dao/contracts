@@ -1,12 +1,7 @@
 {
   "alias": "ethereum",
+  "blockExplorerUrl": "https://etherscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://etherscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "1",
   "name": "Ethereum",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

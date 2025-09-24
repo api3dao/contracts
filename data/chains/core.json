@@ -1,9 +1,7 @@
 {
   "alias": "core",
+  "blockExplorerUrl": "https://scan.coredao.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://scan.coredao.org/"
-  },
   "id": "1116",
   "name": "Core",
   "providers": [

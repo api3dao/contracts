@@ -1,12 +1,7 @@
 {
   "alias": "world",
+  "blockExplorerUrl": "https://worldscan.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://worldscan.org/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "480",
   "name": "World Chain",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

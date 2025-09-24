@@ -1,13 +1,7 @@
 {
   "alias": "somnia",
+  "blockExplorerUrl": "https://explorer.somnia.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.somnia.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer.somnia.network/api/"
-    }
-  },
   "id": "5031",
   "name": "Somnia",
   "providers": [
@@ -17,5 +11,9 @@
     }
   ],
   "symbol": "SOMI",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.somnia.network/api/"
+  }
 }

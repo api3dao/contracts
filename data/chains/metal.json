@@ -1,13 +1,7 @@
 {
   "alias": "metal",
+  "blockExplorerUrl": "https://explorer.metall2.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://explorer.metall2.com/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://explorer.metall2.com/api"
-    }
-  },
   "id": "1750",
   "name": "Metal L2",
   "providers": [
@@ -21,5 +15,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.metall2.com/api"
+  }
 }

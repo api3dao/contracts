@@ -1,9 +1,7 @@
 {
   "alias": "core-testnet",
+  "blockExplorerUrl": "https://scan.test2.btcs.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://scan.test2.btcs.network/"
-  },
   "id": "1114",
   "name": "Core testnet",
   "providers": [

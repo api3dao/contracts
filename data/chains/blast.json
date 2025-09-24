@@ -1,12 +1,7 @@
 {
   "alias": "blast",
+  "blockExplorerUrl": "https://blastscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://blastscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "81457",
   "name": "Blast",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

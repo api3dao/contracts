@@ -1,12 +1,7 @@
 {
   "alias": "world-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.worldscan.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sepolia.worldscan.org/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "4801",
   "name": "World Chain testnet",
   "providers": [
@@ -16,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

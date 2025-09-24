@@ -1,12 +1,7 @@
 {
   "alias": "ethereum-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.etherscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sepolia.etherscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "11155111",
   "name": "Ethereum Sepolia testnet",
   "providers": [
@@ -16,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,12 +1,7 @@
 {
   "alias": "hyperliquid",
+  "blockExplorerUrl": "https://hyperevmscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://hyperevmscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "999",
   "name": "Hyperliquid",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "HYPE",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

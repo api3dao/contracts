@@ -1,12 +1,7 @@
 {
   "alias": "arbitrum",
+  "blockExplorerUrl": "https://arbiscan.io/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://arbiscan.io/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "42161",
   "name": "Arbitrum One",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

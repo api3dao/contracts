@@ -1,13 +1,7 @@
 {
   "alias": "mode-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.explorer.mode.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sepolia.explorer.mode.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://sepolia.explorer.mode.network/api/"
-    }
-  },
   "id": "919",
   "name": "Mode testnet",
   "providers": [
@@ -17,5 +11,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://sepolia.explorer.mode.network/api/"
+  }
 }

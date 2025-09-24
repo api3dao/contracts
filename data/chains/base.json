@@ -1,12 +1,7 @@
 {
   "alias": "base",
+  "blockExplorerUrl": "https://basescan.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://basescan.org/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "8453",
   "name": "Base",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

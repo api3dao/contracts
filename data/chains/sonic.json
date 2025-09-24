@@ -1,12 +1,7 @@
 {
   "alias": "sonic",
+  "blockExplorerUrl": "https://sonicscan.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sonicscan.org/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "146",
   "name": "Sonic",
   "providers": [
@@ -32,5 +27,8 @@
     }
   ],
   "symbol": "S",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

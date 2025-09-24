@@ -1,13 +1,7 @@
 {
   "alias": "manta",
+  "blockExplorerUrl": "https://pacific-explorer.manta.network/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://pacific-explorer.manta.network/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://pacific-explorer.manta.network/api/"
-    }
-  },
   "id": "169",
   "name": "Manta",
   "providers": [
@@ -29,5 +23,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://pacific-explorer.manta.network/api/"
+  }
 }

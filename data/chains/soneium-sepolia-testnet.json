@@ -1,13 +1,7 @@
 {
   "alias": "soneium-sepolia-testnet",
+  "blockExplorerUrl": "https://soneium-minato.blockscout.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://soneium-minato.blockscout.com/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://soneium-minato.blockscout.com/api"
-    }
-  },
   "id": "1946",
   "name": "Soneium testnet",
   "providers": [
@@ -21,5 +15,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://soneium-minato.blockscout.com/api"
+  }
 }

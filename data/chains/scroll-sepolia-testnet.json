@@ -1,12 +1,7 @@
 {
   "alias": "scroll-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.scrollscan.com/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://sepolia.scrollscan.com/",
-    "verificationApi": {
-      "type": "etherscan"
-    }
-  },
   "id": "534351",
   "name": "Scroll testnet",
   "providers": [
@@ -16,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

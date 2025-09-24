@@ -1,13 +1,7 @@
 {
   "alias": "oev-network",
+  "blockExplorerUrl": "https://oev.explorer.api3.org/",
   "decimals": 18,
-  "explorer": {
-    "blockExplorerUrl": "https://oev.explorer.api3.org/",
-    "verificationApi": {
-      "type": "blockscout",
-      "url": "https://oev.explorer.api3.org/api/"
-    }
-  },
   "id": "4913",
   "name": "OEV Network",
   "providers": [
@@ -21,5 +15,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://oev.explorer.api3.org/api/"
+  }
 }
