@@ -1180,7 +1180,11 @@ export const CHAINS: Chain[] = [
     },
     id: '5031',
     name: 'Somnia',
-    providers: [{ alias: 'default', rpcUrl: 'https://api.infra.mainnet.somnia.network/' }],
+    providers: [
+      { alias: 'default', rpcUrl: 'https://api.infra.mainnet.somnia.network/' },
+      { alias: 'publicnode', rpcUrl: 'https://somnia-rpc.publicnode.com' },
+      { alias: 'validationcloud', homepageUrl: 'https://validationcloud.io/' },
+    ],
     symbol: 'SOMI',
     testnet: false,
   },
