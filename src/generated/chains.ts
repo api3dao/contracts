@@ -1183,7 +1183,7 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://api.infra.mainnet.somnia.network/' },
       { alias: 'publicnode', rpcUrl: 'https://somnia-rpc.publicnode.com' },
-      { alias: 'stakely', rpcUrl: 'https://somnia-json-rpc.stakely.io' },
+      { alias: 'validationcloud', homepageUrl: 'https://validationcloud.io/' },
     ],
     symbol: 'SOMI',
     testnet: false,

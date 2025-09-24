@@ -22,8 +22,8 @@
       "rpcUrl": "https://somnia-rpc.publicnode.com"
     },
     {
-      "alias": "stakely",
-      "rpcUrl": "https://somnia-json-rpc.stakely.io"
+      "alias": "validationcloud",
+      "homepageUrl": "https://validationcloud.io/"
     }
   ],
   "symbol": "SOMI",
