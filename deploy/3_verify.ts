@@ -12,8 +12,14 @@ module.exports = async () => {
   }
 
   const verificationApiType = CHAINS.find((chain) => chain.alias === network.name)?.verificationApi?.type;
-  const verifyTask =
-    verificationApiType === 'other' ? 'verify:blockscout' : `verify:${verificationApiType ?? 'verify'}`;
+
+  if (verificationApiType === undefined) {
+    // eslint-disable-next-line no-console
+    console.warn(`⚠️ Attention: Verification API type is not defined for ${network.name}, skipping verification.`);
+    return;
+  }
+
+  const verifyTask = verificationApiType === 'other' ? 'verify:blockscout' : `verify:${verificationApiType}`;
 
   const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
   await run(verifyTask, {
