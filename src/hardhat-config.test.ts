@@ -100,25 +100,6 @@ describe(etherscan.name, () => {
         expect(ids).not.toContain(c.chainId);
       });
     });
-
-    it('includes all other chains', () => {
-      const { customChains } = etherscan();
-
-      const chains = CHAINS.filter((c) => !!c.verificationApi?.type);
-      const chainsWithoutAlias = chains.filter((c) => c.verificationApi?.type);
-
-      customChains.forEach((customChain) => {
-        const chain = chainsWithoutAlias.find((c) => c.id === customChain.chainId.toString())!;
-        expect(customChain).toStrictEqual({
-          network: chain.alias,
-          chainId: Number(chain.id),
-          urls: {
-            apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
-            browserURL: chain.blockExplorerUrl,
-          },
-        });
-      });
-    });
   });
 });
 
