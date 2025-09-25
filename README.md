@@ -290,9 +290,28 @@ console.log(address);
 */
 ```
 
+### hardhatConfig.blockscout()
+
+Returns an object that can be used as the `blockscout` field of [`hardhat.config.js`](https://hardhat.org/hardhat-runner/docs/config) (requires the [`hardhat-etherscan` plugin](https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify)).
+
+It includes a `customChains` field that includes all chains that support Blockscout contract verification API.
+
+```ts
+import { hardhatConfig } from '@api3/contracts';
+console.log(hardhatConfig.blockscout());
+/*
+{
+  enabled: true,
+  customChains: [
+    ...
+  ]
+}
+*/
+```
+
 ### hardhatConfig.networks()
 
-Returns an object where the key is each chain's alias and the value is an object that can be used as the `networks` field of [`hardhat.config.js`](https://hardhat.org/hardhat-runner/docs/config).
+Returns an object where the key is each chain's alias and the value is an object that can be used as the `networks` field of [`hardhat.config.js`](https://v2.hardhat.org/hardhat-runner/docs/config).
 
 The default `url` values can be overridden with chain specific environment variables. These environment variables take the form of `HARDHAT_HTTP_RPC_URL_${toUpperSnakeCase(chain.alias)}`. e.g. `HARDHAT_HTTP_RPC_URL_ARBITRUM_SEPOLIA_TESTNET`.
 
@@ -313,18 +332,16 @@ console.log(hardhatConfig.networks());
 
 ### hardhatConfig.etherscan()
 
-Returns an object where the key is each chain's alias and the value is an object that can be used as the `etherscan` field of [`hardhat.config.js`](https://hardhat.org/hardhat-runner/docs/config) (requires the [`hardhat-etherscan` plugin](https://hardhat.org/hardhat-runner/plugins/nomiclabs-hardhat-etherscan)).
+Returns an object that can be used as the `etherscan` field of [`hardhat.config.js`](https://v2.hardhat.org/hardhat-runner/docs/config) (requires the [`hardhat-etherscan` plugin](https://v2.hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-verify)).
 
-NOTE: [hardhat-etherscan](https://www.npmjs.com/package/@nomiclabs/hardhat-etherscan) requires us to use a dummy API key with Blockscout block explorer APIs. We use "DUMMY_VALUE" but it could have been anything else.
+It includes an `apiKey` field that can be set through the `ETHERSCAN_API_KEY` environment variable. And a `customChains` field that includes all chains that support Etherscan V2 contract verification API.
 
 ```ts
 import { hardhatConfig } from '@api3/contracts';
 console.log(hardhatConfig.etherscan());
 /*
 {
-  apiKey: {
-    'arbitrumSepolia': { ... }
-  },
+  apiKey: someApiKey,
   customChains: [
     ...
   ]
@@ -334,9 +351,7 @@ console.log(hardhatConfig.etherscan());
 
 ### hardhatConfig.getEnvVariableNames()
 
-Returns an array of expected environment variable names for chains that have an API key required for the explorer. The array also includes a single `MNEMONIC` variable that can be used to configure all networks.
-
-NOTE: Each `ETHERSCAN_API_KEY_` and `HARDHAT_HTTP_RPC_URL_` environment variable has the chain alias as a suffix, where the alias has been converted to upper snake case.
+Returns an API key required for Etherscan V2 contract verification API and a single `MNEMONIC` variable that can be used to configure all networks.
 
 ```ts
 import { hardhatConfig } from '@api3/contracts';
@@ -344,8 +359,7 @@ console.log(hardhatConfig.getEnvVariableNames());
 /*
 [
   'MNEMONIC',
-  'ETHERSCAN_API_KEY',
-  'HARDHAT_HTTP_RPC_URL_APECHAIN_ARBITRUM_SEPOLIA_TESTNET',
+  'ETHERSCAN_API_KEY'
   ...
 ]
 */
