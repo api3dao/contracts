@@ -1,9 +1,7 @@
 {
   "alias": "sei",
+  "blockExplorerUrl": "https://seitrace.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://seitrace.com/"
-  },
   "id": "1329",
   "name": "Sei",
   "providers": [
@@ -29,5 +27,9 @@
     }
   ],
   "symbol": "SEI",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://seitrace.com/pacific-1/api"
+  }
 }

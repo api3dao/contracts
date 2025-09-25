@@ -1,16 +1,7 @@
 {
   "alias": "gnosis",
+  "blockExplorerUrl": "https://gnosisscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "xdai",
-        "required": true
-      },
-      "url": "https://api.gnosisscan.io/api"
-    },
-    "browserUrl": "https://gnosisscan.io/"
-  },
   "id": "100",
   "name": "Gnosis Chain",
   "providers": [
@@ -36,5 +27,8 @@
     }
   ],
   "symbol": "xDAI",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

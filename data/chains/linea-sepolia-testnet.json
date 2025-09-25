@@ -1,15 +1,7 @@
 {
   "alias": "linea-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.lineascan.build/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.lineascan.build/api/"
-    },
-    "browserUrl": "https://sepolia.lineascan.build/"
-  },
   "id": "59141",
   "name": "Linea testnet",
   "providers": [
@@ -23,5 +15,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

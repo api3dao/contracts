@@ -1,9 +1,7 @@
 {
   "alias": "ronin-testnet",
+  "blockExplorerUrl": "https://saigon-app.roninchain.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://saigon-app.roninchain.com/"
-  },
   "id": "2021",
   "name": "Ronin testnet",
   "providers": [
@@ -13,5 +11,8 @@
     }
   ],
   "symbol": "RON",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "sourcify"
+  }
 }

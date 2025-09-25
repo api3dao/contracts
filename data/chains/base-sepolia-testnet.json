@@ -1,15 +1,7 @@
 {
   "alias": "base-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.basescan.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.basescan.org/api"
-    },
-    "browserUrl": "https://sepolia.basescan.org/"
-  },
   "id": "84532",
   "name": "Base testnet",
   "providers": [
@@ -23,5 +15,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

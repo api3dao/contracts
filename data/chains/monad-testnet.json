@@ -1,9 +1,7 @@
 {
   "alias": "monad-testnet",
+  "blockExplorerUrl": "https://testnet.monadexplorer.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://testnet.monadexplorer.com/"
-  },
   "id": "10143",
   "name": "Monad testnet",
   "providers": [

@@ -1,16 +1,7 @@
 {
   "alias": "ethereum",
+  "blockExplorerUrl": "https://etherscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "mainnet",
-        "required": true
-      },
-      "url": "https://api.etherscan.io/api"
-    },
-    "browserUrl": "https://etherscan.io/"
-  },
   "id": "1",
   "name": "Ethereum",
   "providers": [
@@ -36,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

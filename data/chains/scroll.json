@@ -1,15 +1,7 @@
 {
   "alias": "scroll",
+  "blockExplorerUrl": "https://scrollscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.scrollscan.com/api"
-    },
-    "browserUrl": "https://scrollscan.com/"
-  },
   "id": "534352",
   "name": "Scroll",
   "providers": [
@@ -31,5 +23,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

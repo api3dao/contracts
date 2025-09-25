@@ -1,16 +1,7 @@
 {
   "alias": "bsc",
+  "blockExplorerUrl": "https://bscscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "bsc",
-        "required": true
-      },
-      "url": "https://api.bscscan.com/api"
-    },
-    "browserUrl": "https://bscscan.com/"
-  },
   "id": "56",
   "name": "BNB Smart Chain",
   "providers": [
@@ -36,5 +27,8 @@
     }
   ],
   "symbol": "BNB",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

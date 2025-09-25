@@ -1,16 +1,7 @@
 {
   "alias": "arbitrum-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.arbiscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "arbitrumSepolia",
-        "required": true
-      },
-      "url": "https://api-sepolia.arbiscan.io/api"
-    },
-    "browserUrl": "https://sepolia.arbiscan.io/"
-  },
   "id": "421614",
   "name": "Arbitrum testnet",
   "providers": [
@@ -24,5 +15,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

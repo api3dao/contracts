@@ -1,15 +1,7 @@
 {
   "alias": "sonic",
+  "blockExplorerUrl": "https://sonicscan.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.sonicscan.org/api"
-    },
-    "browserUrl": "https://sonicscan.org/"
-  },
   "id": "146",
   "name": "Sonic",
   "providers": [
@@ -35,5 +27,8 @@
     }
   ],
   "symbol": "S",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,9 +1,7 @@
 {
   "alias": "sei-testnet",
+  "blockExplorerUrl": "https://testnet.seitrace.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://testnet.seistream.app/"
-  },
   "id": "1328",
   "name": "Sei testnet",
   "providers": [
@@ -13,5 +11,9 @@
     }
   ],
   "symbol": "SEI",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://seitrace.com/atlantic-2/api"
+  }
 }

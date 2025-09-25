@@ -1,15 +1,7 @@
 {
   "alias": "unichain-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.uniscan.xyz/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.uniscan.xyz/api"
-    },
-    "browserUrl": "https://sepolia.uniscan.xyz/"
-  },
   "id": "1301",
   "name": "Unichain testnet",
   "providers": [
@@ -23,5 +15,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

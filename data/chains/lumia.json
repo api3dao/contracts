@@ -1,15 +1,7 @@
 {
   "alias": "lumia",
+  "blockExplorerUrl": "https://explorer.lumia.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://explorer.lumia.org/api/"
-    },
-    "browserUrl": "https://explorer.lumia.org/"
-  },
   "id": "994873017",
   "name": "Lumia",
   "providers": [
@@ -31,5 +23,9 @@
     }
   ],
   "symbol": "LUMIA",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.lumia.org/api/"
+  }
 }

@@ -1,16 +1,7 @@
 {
   "alias": "moonbeam",
+  "blockExplorerUrl": "https://moonscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonbeam",
-        "required": true
-      },
-      "url": "https://api-moonbeam.moonscan.io/api"
-    },
-    "browserUrl": "https://moonscan.io/"
-  },
   "id": "1284",
   "name": "Moonbeam",
   "providers": [
@@ -32,5 +23,8 @@
     }
   ],
   "symbol": "GLMR",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

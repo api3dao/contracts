@@ -1,15 +1,7 @@
 {
   "alias": "polygon-zkevm",
+  "blockExplorerUrl": "https://zkevm.polygonscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-zkevm.polygonscan.com/api"
-    },
-    "browserUrl": "https://zkevm.polygonscan.com/"
-  },
   "id": "1101",
   "name": "Polygon zkEVM",
   "providers": [
@@ -35,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

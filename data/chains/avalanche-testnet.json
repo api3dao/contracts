@@ -1,16 +1,7 @@
 {
   "alias": "avalanche-testnet",
+  "blockExplorerUrl": "https://testnet.snowtrace.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "avalancheFujiTestnet",
-        "required": true
-      },
-      "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
-    },
-    "browserUrl": "https://testnet.snowtrace.io/"
-  },
   "id": "43113",
   "name": "Avalanche testnet",
   "providers": [
@@ -24,5 +15,9 @@
     }
   ],
   "symbol": "AVAX",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
+  }
 }

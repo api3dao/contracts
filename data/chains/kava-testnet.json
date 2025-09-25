@@ -1,15 +1,7 @@
 {
   "alias": "kava-testnet",
+  "blockExplorerUrl": "https://testnet.kavascan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://api.verify.mintscan.io/evm/api/0x8ad"
-    },
-    "browserUrl": "https://testnet.kavascan.com/"
-  },
   "id": "2221",
   "name": "Kava testnet",
   "providers": [
@@ -19,5 +11,9 @@
     }
   ],
   "symbol": "KAVA",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.verify.mintscan.io/evm/api/0x8ad"
+  }
 }

@@ -1,15 +1,7 @@
 {
   "alias": "bob-sepolia-testnet",
+  "blockExplorerUrl": "https://bob-sepolia.explorer.gobob.xyz/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://bob-sepolia.explorer.gobob.xyz/api"
-    },
-    "browserUrl": "https://bob-sepolia.explorer.gobob.xyz/"
-  },
   "id": "808813",
   "name": "BOB testnet",
   "providers": [
@@ -19,5 +11,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://bob-sepolia.explorer.gobob.xyz/api/"
+  }
 }

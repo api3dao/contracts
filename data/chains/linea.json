@@ -1,15 +1,7 @@
 {
   "alias": "linea",
+  "blockExplorerUrl": "https://lineascan.build/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.lineascan.build/api"
-    },
-    "browserUrl": "https://lineascan.build/"
-  },
   "id": "59144",
   "name": "Linea",
   "providers": [
@@ -35,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

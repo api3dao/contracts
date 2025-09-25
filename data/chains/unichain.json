@@ -1,15 +1,7 @@
 {
   "alias": "unichain",
+  "blockExplorerUrl": "https://uniscan.xyz/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.uniscan.xyz/api"
-    },
-    "browserUrl": "https://uniscan.xyz/"
-  },
   "id": "130",
   "name": "Unichain",
   "providers": [
@@ -35,5 +27,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,15 +1,7 @@
 {
   "alias": "bitlayer-testnet",
+  "blockExplorerUrl": "https://testnet.btrscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://api-testnet.btrscan.com/scan/api"
-    },
-    "browserUrl": "https://testnet.btrscan.com/"
-  },
   "id": "200810",
   "name": "Bitlayer testnet",
   "providers": [
@@ -23,5 +15,9 @@
     }
   ],
   "symbol": "BTC",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api-testnet.btrscan.com/scan/api"
+  }
 }

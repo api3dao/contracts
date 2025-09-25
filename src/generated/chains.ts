@@ -10,24 +10,19 @@ import { type Chain } from '../types';
 export const CHAINS: Chain[] = [
   {
     alias: 'apechain-arbitrum-sepolia-testnet',
+    blockExplorerUrl: 'https://curtis.apescan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-curtis.apescan.io/api' },
-      browserUrl: 'https://curtis.apescan.io/',
-    },
     id: '33111',
     name: 'ApeChain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://curtis.rpc.caldera.xyz/http' }],
     symbol: 'APE',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'apechain',
+    blockExplorerUrl: 'https://apescan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.apescan.io/api' },
-      browserUrl: 'https://apescan.io/',
-    },
     id: '33139',
     name: 'ApeChain',
     providers: [
@@ -39,17 +34,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'APE',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'arbitrum-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.arbiscan.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'arbitrumSepolia', required: true },
-        url: 'https://api-sepolia.arbiscan.io/api',
-      },
-      browserUrl: 'https://sepolia.arbiscan.io/',
-    },
     id: '421614',
     name: 'Arbitrum testnet',
     providers: [
@@ -58,14 +48,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'arbitrum',
+    blockExplorerUrl: 'https://arbiscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'arbitrumOne', required: true }, url: 'https://api.arbiscan.io/api' },
-      browserUrl: 'https://arbiscan.io/',
-    },
     id: '42161',
     name: 'Arbitrum One',
     providers: [
@@ -77,17 +65,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'avalanche-testnet',
+    blockExplorerUrl: 'https://testnet.snowtrace.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'avalancheFujiTestnet', required: true },
-        url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api',
-      },
-      browserUrl: 'https://testnet.snowtrace.io/',
-    },
     id: '43113',
     name: 'Avalanche testnet',
     providers: [
@@ -96,17 +79,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'AVAX',
     testnet: true,
+    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api' },
   },
   {
     alias: 'avalanche',
+    blockExplorerUrl: 'https://snowtrace.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'avalanche', required: true },
-        url: 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api',
-      },
-      browserUrl: 'https://snowtrace.io/',
-    },
     id: '43114',
     name: 'Avalanche',
     providers: [
@@ -118,14 +96,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'AVAX',
     testnet: false,
+    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api' },
   },
   {
     alias: 'base-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.basescan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.basescan.org/api' },
-      browserUrl: 'https://sepolia.basescan.org/',
-    },
     id: '84532',
     name: 'Base testnet',
     providers: [
@@ -134,14 +110,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'base',
+    blockExplorerUrl: 'https://basescan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.basescan.org/api' },
-      browserUrl: 'https://basescan.org/',
-    },
     id: '8453',
     name: 'Base',
     providers: [
@@ -153,27 +127,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'berachain-testnet',
+    blockExplorerUrl: 'https://testnet.berascan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-testnet.berascan.com/api' },
-      browserUrl: 'https://testnet.berascan.com/',
-    },
     id: '80069',
     name: 'Berachain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://bepolia.rpc.berachain.com/' }],
     symbol: 'BERA',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'berachain',
+    blockExplorerUrl: 'https://berascan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.berascan.com/api' },
-      browserUrl: 'https://berascan.com/',
-    },
     id: '80094',
     name: 'Berachain',
     providers: [
@@ -184,14 +154,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BERA',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'bitlayer-testnet',
+    blockExplorerUrl: 'https://testnet.btrscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api-testnet.btrscan.com/scan/api' },
-      browserUrl: 'https://testnet.btrscan.com/',
-    },
     id: '200810',
     name: 'Bitlayer testnet',
     providers: [
@@ -200,14 +168,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BTC',
     testnet: true,
+    verificationApi: { type: 'other', url: 'https://api-testnet.btrscan.com/scan/api' },
   },
   {
     alias: 'bitlayer',
+    blockExplorerUrl: 'https://www.btrscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api.btrscan.com/scan/api' },
-      browserUrl: 'https://www.btrscan.com/',
-    },
     id: '200901',
     name: 'Bitlayer',
     providers: [
@@ -217,27 +183,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BTC',
     testnet: false,
+    verificationApi: { type: 'other', url: 'https://api.btrscan.com/scan/api' },
   },
   {
     alias: 'blast-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.blastscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.blastscan.io/api' },
-      browserUrl: 'https://sepolia.blastscan.io/',
-    },
     id: '168587773',
     name: 'Blast testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.ankr.com/blast_testnet_sepolia' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'blast',
+    blockExplorerUrl: 'https://blastscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.blastscan.io/api' },
-      browserUrl: 'https://blastscan.io/',
-    },
     id: '81457',
     name: 'Blast',
     providers: [
@@ -249,27 +211,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'bob-sepolia-testnet',
+    blockExplorerUrl: 'https://bob-sepolia.explorer.gobob.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://bob-sepolia.explorer.gobob.xyz/api' },
-      browserUrl: 'https://bob-sepolia.explorer.gobob.xyz/',
-    },
     id: '808813',
     name: 'BOB testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://bob-sepolia.rpc.gobob.xyz/' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://bob-sepolia.explorer.gobob.xyz/api/' },
   },
   {
     alias: 'bob',
+    blockExplorerUrl: 'https://explorer.gobob.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.gobob.xyz/api' },
-      browserUrl: 'https://explorer.gobob.xyz/',
-    },
     id: '60808',
     name: 'BOB',
     providers: [
@@ -280,14 +238,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.gobob.xyz/api' },
   },
   {
     alias: 'bsc-testnet',
+    blockExplorerUrl: 'https://testnet.bscscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'bscTestnet', required: true }, url: 'https://api-testnet.bscscan.com/api' },
-      browserUrl: 'https://testnet.bscscan.com/',
-    },
     id: '97',
     name: 'BNB Smart Chain testnet',
     providers: [
@@ -296,14 +252,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BNB',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'bsc',
+    blockExplorerUrl: 'https://bscscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'bsc', required: true }, url: 'https://api.bscscan.com/api' },
-      browserUrl: 'https://bscscan.com/',
-    },
     id: '56',
     name: 'BNB Smart Chain',
     providers: [
@@ -315,14 +269,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BNB',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'core-testnet',
+    blockExplorerUrl: 'https://scan.test2.btcs.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.test2.btcs.network/api' },
-      browserUrl: 'https://scan.test2.btcs.network/',
-    },
     id: '1114',
     name: 'Core testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.test2.btcs.network/' }],
@@ -331,11 +283,8 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'core',
+    blockExplorerUrl: 'https://scan.coredao.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://openapi.coredao.org/api' },
-      browserUrl: 'https://scan.coredao.org/',
-    },
     id: '1116',
     name: 'Core',
     providers: [
@@ -348,37 +297,30 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'ethereum-holesky-testnet',
+    blockExplorerUrl: 'https://holesky.etherscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'holesky', required: true }, url: 'https://api-holesky.etherscan.io/api' },
-      browserUrl: 'https://holesky.etherscan.io/',
-    },
     id: '17000',
     name: 'Ethereum Holesky testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://ethereum-holesky-rpc.publicnode.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'ethereum-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.etherscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'sepolia', required: true }, url: 'https://api-sepolia.etherscan.io/api' },
-      browserUrl: 'https://sepolia.etherscan.io/',
-    },
     id: '11155111',
     name: 'Ethereum Sepolia testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://ethereum-sepolia-rpc.publicnode.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'ethereum',
+    blockExplorerUrl: 'https://etherscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'mainnet', required: true }, url: 'https://api.etherscan.io/api' },
-      browserUrl: 'https://etherscan.io/',
-    },
     id: '1',
     name: 'Ethereum',
     providers: [
@@ -390,27 +332,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'fraxtal-holesky-testnet',
+    blockExplorerUrl: 'https://holesky.fraxscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-holesky.fraxscan.com/api/' },
-      browserUrl: 'https://holesky.fraxscan.com/',
-    },
     id: '2522',
     name: 'Fraxtal testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.testnet.frax.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'fraxtal',
+    blockExplorerUrl: 'https://fraxscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.fraxscan.com/api/' },
-      browserUrl: 'https://fraxscan.com/',
-    },
     id: '252',
     name: 'Fraxtal',
     providers: [
@@ -422,17 +360,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'FXS',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'gnosis-testnet',
+    blockExplorerUrl: 'https://gnosis-chiado.blockscout.com/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'chiado', required: false },
-        url: 'https://gnosis-chiado.blockscout.com/api',
-      },
-      browserUrl: 'https://gnosis-chiado.blockscout.com/',
-    },
     id: '10200',
     name: 'Gnosis Chain testnet',
     providers: [
@@ -441,14 +374,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'xDAI',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://gnosis-chiado.blockscout.com/api' },
   },
   {
     alias: 'gnosis',
+    blockExplorerUrl: 'https://gnosisscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'xdai', required: true }, url: 'https://api.gnosisscan.io/api' },
-      browserUrl: 'https://gnosisscan.io/',
-    },
     id: '100',
     name: 'Gnosis Chain',
     providers: [
@@ -460,11 +391,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'xDAI',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'hyperliquid-testnet',
+    blockExplorerUrl: 'https://testnet.purrsec.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://testnet.purrsec.com/' },
     id: '998',
     name: 'Hyperliquid testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.hyperliquid-testnet.xyz/evm' }],
@@ -473,8 +405,8 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'hyperliquid',
+    blockExplorerUrl: 'https://hyperevmscan.io/',
     decimals: 18,
-    explorer: { browserUrl: 'https://hyperevmscan.io/' },
     id: '999',
     name: 'Hyperliquid',
     providers: [
@@ -486,40 +418,34 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'HYPE',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'injective-testnet',
+    blockExplorerUrl: 'https://testnet.blockscout.injective.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet.blockscout-api.injective.network/api' },
-      browserUrl: 'https://testnet.blockscout.injective.network/',
-    },
     id: '1439',
     name: 'Injective EVM testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://k8s.testnet.json-rpc.injective.network' }],
     symbol: 'INJ',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://testnet.blockscout-api.injective.network/api' },
   },
   {
     alias: 'ink-sepolia-testnet',
+    blockExplorerUrl: 'https://explorer-sepolia.inkonchain.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer-sepolia.inkonchain.com/api' },
-      browserUrl: 'https://explorer-sepolia.inkonchain.com/',
-    },
     id: '763373',
     name: 'Ink testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc-qnd-sepolia.inkonchain.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://explorer-sepolia.inkonchain.com/api' },
   },
   {
     alias: 'ink',
+    blockExplorerUrl: 'https://explorer.inkonchain.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.inkonchain.com/api' },
-      browserUrl: 'https://explorer.inkonchain.com/',
-    },
     id: '57073',
     name: 'Ink',
     providers: [
@@ -531,27 +457,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.inkonchain.com/api' },
   },
   {
     alias: 'katana-sepolia-testnet',
+    blockExplorerUrl: 'https://explorer-bokuto.katanarpc.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer-bokuto.katanarpc.com/api' },
-      browserUrl: 'https://explorer-bokuto.katanarpc.com/',
-    },
     id: '737373',
     name: 'Katana testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc-bokuto.katanarpc.com/' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://explorer-bokuto.katanarpc.com/api' },
   },
   {
     alias: 'katana',
+    blockExplorerUrl: 'https://explorer.katanarpc.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.katanarpc.com/api' },
-      browserUrl: 'https://explorer.katanarpc.com/',
-    },
     id: '747474',
     name: 'Katana',
     providers: [
@@ -560,27 +482,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.katanarpc.com/api' },
   },
   {
     alias: 'kava-testnet',
+    blockExplorerUrl: 'https://testnet.kavascan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api.verify.mintscan.io/evm/api/0x8ad' },
-      browserUrl: 'https://testnet.kavascan.com/',
-    },
     id: '2221',
     name: 'Kava testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://evm.testnet.kava.io/' }],
     symbol: 'KAVA',
     testnet: true,
+    verificationApi: { type: 'other', url: 'https://api.verify.mintscan.io/evm/api/0x8ad' },
   },
   {
     alias: 'kava',
+    blockExplorerUrl: 'https://kavascan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api.verify.mintscan.io/evm/api/0x8ae' },
-      browserUrl: 'https://kavascan.com/',
-    },
     id: '2222',
     name: 'Kava',
     providers: [
@@ -590,14 +508,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'KAVA',
     testnet: false,
+    verificationApi: { type: 'other', url: 'https://api.verify.mintscan.io/evm/api/0x8ae' },
   },
   {
     alias: 'linea-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.lineascan.build/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.lineascan.build/api/' },
-      browserUrl: 'https://sepolia.lineascan.build/',
-    },
     id: '59141',
     name: 'Linea testnet',
     providers: [
@@ -606,14 +522,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'linea',
+    blockExplorerUrl: 'https://lineascan.build/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.lineascan.build/api' },
-      browserUrl: 'https://lineascan.build/',
-    },
     id: '59144',
     name: 'Linea',
     providers: [
@@ -625,14 +539,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'lumia',
+    blockExplorerUrl: 'https://explorer.lumia.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.lumia.org/api/' },
-      browserUrl: 'https://explorer.lumia.org/',
-    },
     id: '994873017',
     name: 'Lumia',
     providers: [
@@ -643,27 +555,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'LUMIA',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.lumia.org/api/' },
   },
   {
     alias: 'manta-sepolia-testnet',
+    blockExplorerUrl: 'https://pacific-explorer.sepolia-testnet.manta.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://pacific-explorer.sepolia-testnet.manta.network/api/' },
-      browserUrl: 'https://pacific-explorer.sepolia-testnet.manta.network/',
-    },
     id: '3441006',
     name: 'Manta testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://pacific-rpc.sepolia-testnet.manta.network/http' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://pacific-explorer.sepolia-testnet.manta.network/api/' },
   },
   {
     alias: 'manta',
+    blockExplorerUrl: 'https://pacific-explorer.manta.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://pacific-explorer.manta.network/api/' },
-      browserUrl: 'https://pacific-explorer.manta.network/',
-    },
     id: '169',
     name: 'Manta',
     providers: [
@@ -674,27 +582,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://pacific-explorer.manta.network/api/' },
   },
   {
     alias: 'mantle-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.mantlescan.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.mantlescan.xyz/api' },
-      browserUrl: 'https://sepolia.mantlescan.xyz/',
-    },
     id: '5003',
     name: 'Mantle testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.sepolia.mantle.xyz' }],
     symbol: 'MNT',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'mantle',
+    blockExplorerUrl: 'https://mantlescan.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.mantlescan.xyz/api' },
-      browserUrl: 'https://mantlescan.xyz/',
-    },
     id: '5000',
     name: 'Mantle',
     providers: [
@@ -706,11 +610,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'MNT',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'megaeth-testnet',
+    blockExplorerUrl: 'https://www.megaexplorer.xyz/',
     decimals: 18,
-    explorer: { browserUrl: 'https://www.megaexplorer.xyz/' },
     id: '6342',
     name: 'MegaETH testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://carrot.megaeth.com/rpc' }],
@@ -719,24 +624,19 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'merlin-testnet',
+    blockExplorerUrl: 'https://testnet-scan.merlinchain.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet-scan.merlinchain.io/api' },
-      browserUrl: 'https://testnet-scan.merlinchain.io/',
-    },
     id: '686868',
     name: 'Merlin testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.merlinchain.io' }],
     symbol: 'BTC',
     testnet: true,
+    verificationApi: { type: 'other', url: 'https://testnet-scan.merlinchain.io/api' },
   },
   {
     alias: 'merlin',
+    blockExplorerUrl: 'https://scan.merlinchain.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://scan.merlinchain.io/api' },
-      browserUrl: 'https://scan.merlinchain.io/',
-    },
     id: '4200',
     name: 'Merlin',
     providers: [
@@ -746,27 +646,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BTC',
     testnet: false,
+    verificationApi: { type: 'other', url: 'https://scan.merlinchain.io/api' },
   },
   {
     alias: 'metal-sepolia-testnet',
+    blockExplorerUrl: 'https://testnet.explorer.metall2.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://testnet.explorer.metall2.com/api' },
-      browserUrl: 'https://testnet.explorer.metall2.com/',
-    },
     id: '1740',
     name: 'Metal L2 testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://testnet.rpc.metall2.com/' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://testnet.explorer.metall2.com/api' },
   },
   {
     alias: 'metal',
+    blockExplorerUrl: 'https://explorer.metall2.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.metall2.com/api' },
-      browserUrl: 'https://explorer.metall2.com/',
-    },
     id: '1750',
     name: 'Metal L2',
     providers: [
@@ -775,14 +671,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.metall2.com/api' },
   },
   {
     alias: 'metis-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia-explorer.metisdevops.link/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://sepolia-explorer-api.metisdevops.link/api' },
-      browserUrl: 'https://sepolia-explorer.metisdevops.link/',
-    },
     id: '59902',
     name: 'Metis testnet',
     providers: [
@@ -791,14 +685,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'METIS',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://sepolia-explorer-api.metisdevops.link/api' },
   },
   {
     alias: 'metis',
+    blockExplorerUrl: 'https://explorer.metis.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api' },
-      browserUrl: 'https://explorer.metis.io/',
-    },
     id: '1088',
     name: 'Metis',
     providers: [
@@ -810,27 +702,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'METIS',
     testnet: false,
+    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api' },
   },
   {
     alias: 'mode-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.explorer.mode.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://sepolia.explorer.mode.network/api/' },
-      browserUrl: 'https://sepolia.explorer.mode.network/',
-    },
     id: '919',
     name: 'Mode testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://sepolia.mode.network' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://sepolia.explorer.mode.network/api/' },
   },
   {
     alias: 'mode',
+    blockExplorerUrl: 'https://explorer.mode.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.mode.network/api/' },
-      browserUrl: 'https://explorer.mode.network/',
-    },
     id: '34443',
     name: 'Mode',
     providers: [
@@ -841,11 +729,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.mode.network/api/' },
   },
   {
     alias: 'monad-testnet',
+    blockExplorerUrl: 'https://testnet.monadexplorer.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://testnet.monadexplorer.com/' },
     id: '10143',
     name: 'Monad testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.monad.xyz/' }],
@@ -854,27 +743,19 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'moonbeam-testnet',
+    blockExplorerUrl: 'https://moonbase.moonscan.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'moonbaseAlpha', required: true },
-        url: 'https://api-moonbase.moonscan.io/api',
-      },
-      browserUrl: 'https://moonbase.moonscan.io/',
-    },
     id: '1287',
     name: 'Moonbeam testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.api.moonbase.moonbeam.network' }],
     symbol: 'GLMR',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'moonbeam',
+    blockExplorerUrl: 'https://moonscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'moonbeam', required: true }, url: 'https://api-moonbeam.moonscan.io/api' },
-      browserUrl: 'https://moonscan.io/',
-    },
     id: '1284',
     name: 'Moonbeam',
     providers: [
@@ -885,17 +766,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'GLMR',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'moonriver',
+    blockExplorerUrl: 'https://moonriver.moonscan.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'moonriver', required: true },
-        url: 'https://api-moonriver.moonscan.io/api',
-      },
-      browserUrl: 'https://moonriver.moonscan.io/',
-    },
     id: '1285',
     name: 'Moonriver',
     providers: [
@@ -905,27 +781,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'MOVR',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'odyssey-sepolia-testnet',
+    blockExplorerUrl: 'https://odyssey-explorer.ithaca.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://odyssey-explorer.ithaca.xyz/api' },
-      browserUrl: 'https://odyssey-explorer.ithaca.xyz/',
-    },
     id: '911867',
     name: 'Odyssey testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://odyssey.ithaca.xyz' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://odyssey-explorer.ithaca.xyz/api' },
   },
   {
     alias: 'oev-network',
+    blockExplorerUrl: 'https://oev.explorer.api3.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://oev.explorer.api3.org/api/' },
-      browserUrl: 'https://oev.explorer.api3.org/',
-    },
     id: '4913',
     name: 'OEV Network',
     providers: [
@@ -934,14 +806,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://oev.explorer.api3.org/api/' },
   },
   {
     alias: 'opbnb-testnet',
+    blockExplorerUrl: 'https://opbnb-testnet.bscscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-opbnb-testnet.bscscan.com/api' },
-      browserUrl: 'https://opbnb-testnet.bscscan.com/',
-    },
     id: '5611',
     name: 'opBNB testnet',
     providers: [
@@ -950,14 +820,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BNB',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'opbnb',
+    blockExplorerUrl: 'https://opbnb.bscscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-opbnb.bscscan.com/api' },
-      browserUrl: 'https://opbnb.bscscan.com/',
-    },
     id: '204',
     name: 'opBNB',
     providers: [
@@ -969,14 +837,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'BNB',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'optimism-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia-optimism.etherscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia-optimism.etherscan.io/api' },
-      browserUrl: 'https://sepolia-optimism.etherscan.io/',
-    },
     id: '11155420',
     name: 'Optimism testnet',
     providers: [
@@ -985,17 +851,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'optimism',
+    blockExplorerUrl: 'https://optimistic.etherscan.io/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { hardhatEtherscanAlias: 'optimisticEthereum', required: true },
-        url: 'https://api-optimistic.etherscan.io/api',
-      },
-      browserUrl: 'https://optimistic.etherscan.io/',
-    },
     id: '10',
     name: 'Optimism',
     providers: [
@@ -1007,14 +868,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'polygon-sepolia-testnet',
+    blockExplorerUrl: 'https://amoy.polygonscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-amoy.polygonscan.com/api' },
-      browserUrl: 'https://amoy.polygonscan.com/',
-    },
     id: '80002',
     name: 'Polygon testnet',
     providers: [
@@ -1023,14 +882,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'POL',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'polygon-zkevm-sepolia-testnet',
+    blockExplorerUrl: 'https://cardona-zkevm.polygonscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-cardona-zkevm.polygonscan.com/api' },
-      browserUrl: 'https://cardona-zkevm.polygonscan.com/',
-    },
     id: '2442',
     name: 'Polygon zkEVM testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.cardona.zkevm-rpc.com' }],
@@ -1039,11 +896,8 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'polygon-zkevm',
+    blockExplorerUrl: 'https://zkevm.polygonscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-zkevm.polygonscan.com/api' },
-      browserUrl: 'https://zkevm.polygonscan.com/',
-    },
     id: '1101',
     name: 'Polygon zkEVM',
     providers: [
@@ -1055,14 +909,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'polygon',
+    blockExplorerUrl: 'https://polygonscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { hardhatEtherscanAlias: 'polygon', required: true }, url: 'https://api.polygonscan.com/api' },
-      browserUrl: 'https://polygonscan.com/',
-    },
     id: '137',
     name: 'Polygon',
     providers: [
@@ -1074,21 +926,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'POL',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'ronin-testnet',
+    blockExplorerUrl: 'https://saigon-app.roninchain.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://saigon-app.roninchain.com/' },
     id: '2021',
     name: 'Ronin testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://saigon-testnet.roninchain.com/rpc' }],
     symbol: 'RON',
     testnet: true,
+    verificationApi: { type: 'sourcify' },
   },
   {
     alias: 'ronin',
+    blockExplorerUrl: 'https://app.roninchain.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://app.roninchain.com/' },
     id: '2020',
     name: 'Ronin',
     providers: [
@@ -1100,27 +954,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'RON',
     testnet: false,
+    verificationApi: { type: 'sourcify' },
   },
   {
     alias: 'scroll-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.scrollscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.scrollscan.com/api' },
-      browserUrl: 'https://sepolia.scrollscan.com/',
-    },
     id: '534351',
     name: 'Scroll testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://sepolia-rpc.scroll.io' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'scroll',
+    blockExplorerUrl: 'https://scrollscan.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.scrollscan.com/api' },
-      browserUrl: 'https://scrollscan.com/',
-    },
     id: '534352',
     name: 'Scroll',
     providers: [
@@ -1131,21 +981,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'sei-testnet',
+    blockExplorerUrl: 'https://testnet.seitrace.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://testnet.seistream.app/' },
     id: '1328',
     name: 'Sei testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' }],
     symbol: 'SEI',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/atlantic-2/api' },
   },
   {
     alias: 'sei',
+    blockExplorerUrl: 'https://seitrace.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://seitrace.com/' },
     id: '1329',
     name: 'Sei',
     providers: [
@@ -1157,27 +1009,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'SEI',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/pacific-1/api' },
   },
   {
     alias: 'somnia-testnet',
+    blockExplorerUrl: 'https://shannon-explorer.somnia.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://shannon-explorer.somnia.network/api' },
-      browserUrl: 'https://shannon-explorer.somnia.network/',
-    },
     id: '50312',
     name: 'Somnia testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://dream-rpc.somnia.network/' }],
     symbol: 'STT',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://shannon-explorer.somnia.network/api' },
   },
   {
     alias: 'somnia',
+    blockExplorerUrl: 'https://explorer.somnia.network/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer.somnia.network/api' },
-      browserUrl: 'https://explorer.somnia.network/',
-    },
     id: '5031',
     name: 'Somnia',
     providers: [
@@ -1187,14 +1035,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'SOMI',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://explorer.somnia.network/api/' },
   },
   {
     alias: 'soneium-sepolia-testnet',
+    blockExplorerUrl: 'https://soneium-minato.blockscout.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://explorer-testnet.soneium.org/api' },
-      browserUrl: 'https://explorer-testnet.soneium.org/',
-    },
     id: '1946',
     name: 'Soneium testnet',
     providers: [
@@ -1203,14 +1049,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'blockscout', url: 'https://soneium-minato.blockscout.com/api' },
   },
   {
     alias: 'soneium',
+    blockExplorerUrl: 'https://soneium.blockscout.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: false }, url: 'https://soneium.blockscout.com/api' },
-      browserUrl: 'https://soneium.blockscout.com/',
-    },
     id: '1868',
     name: 'Soneium',
     providers: [
@@ -1222,14 +1066,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://soneium.blockscout.com/api' },
   },
   {
     alias: 'sonic-testnet',
+    blockExplorerUrl: 'https://testnet.sonicscan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-testnet.sonicscan.org/api' },
-      browserUrl: 'https://testnet.sonicscan.org/',
-    },
     id: '57054',
     name: 'Sonic testnet',
     providers: [
@@ -1241,11 +1083,8 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'sonic',
+    blockExplorerUrl: 'https://sonicscan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.sonicscan.org/api' },
-      browserUrl: 'https://sonicscan.org/',
-    },
     id: '146',
     name: 'Sonic',
     providers: [
@@ -1257,27 +1096,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'S',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'taiko-holesky-testnet',
+    blockExplorerUrl: 'https://hekla.taikoscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-hekla.taikoscan.io/api' },
-      browserUrl: 'https://hekla.taikoscan.io/',
-    },
     id: '167009',
     name: 'Taiko testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.hekla.taiko.xyz' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'taiko',
+    blockExplorerUrl: 'https://taikoscan.io/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.taikoscan.io/api' },
-      browserUrl: 'https://taikoscan.io/',
-    },
     id: '167000',
     name: 'Taiko',
     providers: [
@@ -1288,14 +1123,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'unichain-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.uniscan.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.uniscan.xyz/api' },
-      browserUrl: 'https://sepolia.uniscan.xyz/',
-    },
     id: '1301',
     name: 'Unichain testnet',
     providers: [
@@ -1304,14 +1137,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'unichain',
+    blockExplorerUrl: 'https://uniscan.xyz/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.uniscan.xyz/api' },
-      browserUrl: 'https://uniscan.xyz/',
-    },
     id: '130',
     name: 'Unichain',
     providers: [
@@ -1323,27 +1154,23 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'world-sepolia-testnet',
+    blockExplorerUrl: 'https://sepolia.worldscan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api-sepolia.worldscan.org/api' },
-      browserUrl: 'https://sepolia.worldscan.org/',
-    },
     id: '4801',
     name: 'World Chain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://worldchain-sepolia.g.alchemy.com/public' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'world',
+    blockExplorerUrl: 'https://worldscan.org/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://api.worldscan.org/api' },
-      browserUrl: 'https://worldscan.org/',
-    },
     id: '480',
     name: 'World Chain',
     providers: [
@@ -1355,17 +1182,12 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'x-layer-sepolia-testnet',
+    blockExplorerUrl: 'https://www.okx.com/explorer/xlayer-test/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { required: false },
-        url: 'https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER_TESTNET',
-      },
-      browserUrl: 'https://www.okx.com/explorer/xlayer-test/',
-    },
     id: '195',
     name: 'X Layer testnet',
     providers: [
@@ -1374,17 +1196,15 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'OKB',
     testnet: true,
+    verificationApi: {
+      type: 'other',
+      url: 'https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER_TESTNET',
+    },
   },
   {
     alias: 'x-layer',
+    blockExplorerUrl: 'https://www.okx.com/explorer/xlayer/',
     decimals: 18,
-    explorer: {
-      api: {
-        key: { required: false },
-        url: 'https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER',
-      },
-      browserUrl: 'https://www.okx.com/explorer/xlayer/',
-    },
     id: '196',
     name: 'X Layer',
     providers: [
@@ -1394,24 +1214,26 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'OKB',
     testnet: false,
+    verificationApi: {
+      type: 'other',
+      url: 'https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER',
+    },
   },
   {
     alias: 'zircuit-sepolia-testnet',
+    blockExplorerUrl: 'https://explorer.garfield-testnet.zircuit.com/',
     decimals: 18,
-    explorer: { browserUrl: 'https://explorer.garfield-testnet.zircuit.com/' },
     id: '48898',
     name: 'Zircuit testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://garfield-testnet.zircuit.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'sourcify' },
   },
   {
     alias: 'zircuit',
+    blockExplorerUrl: 'https://explorer.zircuit.com/',
     decimals: 18,
-    explorer: {
-      api: { key: { required: true }, url: 'https://explorer.zircuit.com/api/contractVerifyHardhat' },
-      browserUrl: 'https://explorer.zircuit.com/',
-    },
     id: '48900',
     name: 'Zircuit',
     providers: [
@@ -1422,5 +1244,6 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
+    verificationApi: { type: 'sourcify' },
   },
 ];

@@ -1,15 +1,7 @@
 {
   "alias": "mantle-sepolia-testnet",
+  "blockExplorerUrl": "https://sepolia.mantlescan.xyz/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-sepolia.mantlescan.xyz/api"
-    },
-    "browserUrl": "https://sepolia.mantlescan.xyz/"
-  },
   "id": "5003",
   "name": "Mantle testnet",
   "providers": [
@@ -19,5 +11,8 @@
     }
   ],
   "symbol": "MNT",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

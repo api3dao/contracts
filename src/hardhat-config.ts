@@ -1,19 +1,22 @@
 import { CHAINS } from './generated/chains';
-import { type Chain, type HardhatEtherscanConfig, type HardhatNetworksConfig } from './types';
+import {
+  type Chain,
+  type HardhatEtherscanConfig,
+  type HardhatBlockscoutConfig,
+  type HardhatNetworksConfig,
+} from './types';
 import { toUpperSnakeCase } from './utils/strings';
 
 export function getEnvVariableNames(): string[] {
-  const apiKeyEnvNames = CHAINS.filter((chain) => chain.explorer?.api?.key?.required).map((chain) =>
-    etherscanApiKeyName(chain)
-  );
+  const apiKeyEnvName = etherscanApiKeyName();
 
   const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
 
-  return ['MNEMONIC', ...apiKeyEnvNames, ...networkRpcUrlNames];
+  return ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
 }
 
-export function etherscanApiKeyName(chain: Chain): string {
-  return `ETHERSCAN_API_KEY_${toUpperSnakeCase(chain.alias)}`;
+export function etherscanApiKeyName(): string {
+  return `ETHERSCAN_API_KEY`;
 }
 
 export function networkHttpRpcUrlName(chain: Chain): string {
@@ -31,37 +34,41 @@ export function etherscan(): HardhatEtherscanConfig {
     throw new Error('Cannot be called outside of a Node.js environment');
   }
 
-  return CHAINS.reduce(
-    (etherscan, chain) => {
-      if (!chain.explorer || !chain.explorer.api) {
-        return etherscan;
-      }
+  return {
+    apiKey: process.env[etherscanApiKeyName()] ?? '',
+    customChains: CHAINS.filter((chain) => chain.verificationApi?.type === 'etherscan').map((chain) => ({
+      network: chain.alias,
+      chainId: Number(chain.id),
+      urls: {
+        apiURL: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
+        browserURL: chain.blockExplorerUrl,
+      },
+    })),
+  };
+}
 
-      const apiKey = chain.explorer.api.key;
+export function blockscout(): HardhatBlockscoutConfig {
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line unicorn/prefer-type-error
+    throw new Error('Cannot be called outside of a Node.js environment');
+  }
 
-      const apiKeyEnvName = etherscanApiKeyName(chain);
-      const apiKeyValue = apiKey.required ? (process.env[apiKeyEnvName] ?? 'NOT_FOUND') : 'DUMMY_VALUE';
-
-      if (apiKey.hardhatEtherscanAlias) {
-        etherscan.apiKey[apiKey.hardhatEtherscanAlias] = apiKeyValue;
-        return etherscan;
-      }
-
-      etherscan.customChains.push({
-        network: chain.alias,
-        chainId: Number(chain.id),
-        urls: {
-          apiURL: chain.explorer.api.url,
-          browserURL: chain.explorer.browserUrl,
-        },
-      });
-
-      etherscan.apiKey[chain.alias] = apiKeyValue;
-
-      return etherscan;
-    },
-    { apiKey: {}, customChains: [] } as HardhatEtherscanConfig
-  );
+  return {
+    enabled: true,
+    customChains: CHAINS.filter(
+      (chain) => chain.verificationApi?.type === 'blockscout' || chain.verificationApi?.type === 'other'
+    ).map((chain) => ({
+      network: chain.alias,
+      chainId: Number(chain.id),
+      urls: {
+        apiURL:
+          chain.verificationApi?.type === 'blockscout' || chain.verificationApi?.type === 'other'
+            ? chain.verificationApi?.url
+            : '',
+        browserURL: chain.blockExplorerUrl,
+      },
+    })),
+  };
 }
 
 export function networks(): HardhatNetworksConfig {
