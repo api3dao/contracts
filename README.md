@@ -359,7 +359,8 @@ console.log(hardhatConfig.getEnvVariableNames());
 /*
 [
   'MNEMONIC',
-  'ETHERSCAN_API_KEY'
+  'ETHERSCAN_API_KEY',
+  'HARDHAT_HTTP_RPC_URL_APECHAIN_ARBITRUM_SEPOLIA_TESTNET',
   ...
 ]
 */
