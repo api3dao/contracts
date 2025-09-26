@@ -1,6 +1,6 @@
 {
   "alias": "moonbeam",
-  "blockExplorerUrl": "https://moonscan.io/",
+  "blockExplorerUrl": "https://moonbeam.moonscan.io/",
   "decimals": 18,
   "id": "1284",
   "name": "Moonbeam",

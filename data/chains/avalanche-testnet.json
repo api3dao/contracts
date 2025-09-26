@@ -1,6 +1,6 @@
 {
   "alias": "avalanche-testnet",
-  "blockExplorerUrl": "https://testnet.snowtrace.io/",
+  "blockExplorerUrl": "https://testnet.snowscan.xyz/",
   "decimals": 18,
   "id": "43113",
   "name": "Avalanche testnet",
@@ -17,7 +17,6 @@
   "symbol": "AVAX",
   "testnet": true,
   "verificationApi": {
-    "type": "other",
-    "url": "https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api"
+    "type": "etherscan"
   }
 }
