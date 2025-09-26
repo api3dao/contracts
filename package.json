@@ -39,6 +39,7 @@
     "check:chains": "ts-node scripts/check-chains.ts",
     "check:dapps": "ts-node scripts/check-dapps.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
+    "check:etherscan-api": "ts-node scripts/check-etherscan-api.ts",
     "check:example-env-file": "ts-node scripts/check-example-env-file.ts",
     "cli": "ts-node bin/cli.ts",
     "deploy:deterministic": "pnpm check:chain-support && DETERMINISTIC=true hardhat deploy --network $NETWORK && pnpm generate:deployment-addresses",
