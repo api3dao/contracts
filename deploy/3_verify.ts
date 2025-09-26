@@ -24,13 +24,13 @@ module.exports = async () => {
   const GnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy');
   await run(verifyTask, {
     address: GnosisSafeWithoutProxy.address,
-    constructorArguments: GnosisSafeWithoutProxy.args,
+    constructorArgsParams: GnosisSafeWithoutProxy.args,
   });
 
   const OwnableCallForwarder = await deployments.get('OwnableCallForwarder');
   await run(verifyTask, {
     address: OwnableCallForwarder.address,
-    constructorArguments: [GnosisSafeWithoutProxy.address],
+    constructorArgsParams: [GnosisSafeWithoutProxy.address],
   });
 
   const AccessControlRegistry = await deployments.get('AccessControlRegistry');
@@ -41,13 +41,13 @@ module.exports = async () => {
   const Api3ServerV1 = await deployments.get('Api3ServerV1');
   await run(verifyTask, {
     address: Api3ServerV1.address,
-    constructorArguments: [AccessControlRegistry.address, 'Api3ServerV1 admin', OwnableCallForwarder.address],
+    constructorArgsParams: [AccessControlRegistry.address, 'Api3ServerV1 admin', OwnableCallForwarder.address],
   });
 
   const Api3ServerV1OevExtension = await deployments.get('Api3ServerV1OevExtension');
   await run(verifyTask, {
     address: Api3ServerV1OevExtension.address,
-    constructorArguments: [
+    constructorArgsParams: [
       AccessControlRegistry.address,
       'Api3ServerV1OevExtension admin',
       OwnableCallForwarder.address,
@@ -58,7 +58,7 @@ module.exports = async () => {
   const Api3ReaderProxyV1Factory = await deployments.get('Api3ReaderProxyV1Factory');
   await run(verifyTask, {
     address: Api3ReaderProxyV1Factory.address,
-    constructorArguments: [OwnableCallForwarder.address, Api3ServerV1OevExtension.address],
+    constructorArgsParams: [OwnableCallForwarder.address, Api3ServerV1OevExtension.address],
   });
 
   const dapiName = ethers.encodeBytes32String('ETH/USD');
@@ -81,7 +81,7 @@ module.exports = async () => {
   );
   await run(verifyTask, {
     address: api3ReaderProxyV1ImplementationAddress,
-    constructorArguments: [Api3ServerV1OevExtension.address, dapiName, dappId],
+    constructorArgsParams: [Api3ServerV1OevExtension.address, dapiName, dappId],
   });
 
   const api3ReaderProxyV1Initcode = ethers.solidityPacked(
@@ -101,13 +101,13 @@ module.exports = async () => {
   );
   await run(verifyTask, {
     address: api3ReaderProxyV1Address,
-    constructorArguments: [api3ReaderProxyV1ImplementationAddress, api3ReaderProxyV1Metadata],
+    constructorArgsParams: [api3ReaderProxyV1ImplementationAddress, api3ReaderProxyV1Metadata],
   });
 
   const Api3MarketV2 = await deployments.get('Api3MarketV2');
   await run(verifyTask, {
     address: Api3MarketV2.address,
-    constructorArguments: [
+    constructorArgsParams: [
       OwnableCallForwarder.address,
       Api3ReaderProxyV1Factory.address,
       MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
@@ -117,14 +117,14 @@ module.exports = async () => {
   const AirseekerRegistry = await deployments.get('AirseekerRegistry');
   await run(verifyTask, {
     address: AirseekerRegistry.address,
-    constructorArguments: [Api3MarketV2.address, Api3ServerV1.address],
+    constructorArgsParams: [Api3MarketV2.address, Api3ServerV1.address],
   });
 
   if (chainsSupportedByOevAuctions.includes(network.name)) {
     const OevAuctionHouse = await deployments.get('OevAuctionHouse');
     await run(verifyTask, {
       address: OevAuctionHouse.address,
-      constructorArguments: [AccessControlRegistry.address, 'OevAuctionHouse admin', OwnableCallForwarder.address],
+      constructorArgsParams: [AccessControlRegistry.address, 'OevAuctionHouse admin', OwnableCallForwarder.address],
     });
   }
 };
