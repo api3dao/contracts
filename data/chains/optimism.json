@@ -10,6 +10,10 @@
       "rpcUrl": "https://mainnet.optimism.io"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://optimism-rpc.publicnode.com"
+    },
+    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
     },

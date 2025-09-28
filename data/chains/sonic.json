@@ -10,6 +10,10 @@
       "rpcUrl": "https://rpc.soniclabs.com"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://sonic-rpc.publicnode.com:443"
+    },
+    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
     },

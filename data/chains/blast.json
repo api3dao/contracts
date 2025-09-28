@@ -10,6 +10,10 @@
       "rpcUrl": "https://rpc.blast.io"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://blast-rpc.publicnode.com"
+    },
+    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },

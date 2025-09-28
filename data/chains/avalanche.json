@@ -10,6 +10,10 @@
       "rpcUrl": "https://api.avax.network/ext/bc/C/rpc"
     },
     {
+      "alias": "publicnode",
+      "rpcUrl": "https://avalanche-c-chain-rpc.publicnode.com"
+    },
+    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },
