@@ -12,10 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://moonriver-rpc.publicnode.com"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
     }
   ],
   "symbol": "MOVR",

@@ -12,10 +12,6 @@
     {
       "alias": "okx",
       "rpcUrl": "https://xlayerrpc.okx.com/"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "OKB",

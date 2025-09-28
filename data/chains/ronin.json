@@ -10,10 +10,6 @@
       "rpcUrl": "https://api.roninchain.com/rpc/"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
     },

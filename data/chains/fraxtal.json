@@ -14,10 +14,6 @@
       "rpcUrl": "https://fraxtal-rpc.publicnode.com:443"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "tenderly",
       "homepageUrl": "https://tenderly.co/"
     },
