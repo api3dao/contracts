@@ -7,11 +7,11 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://mainnet.unichain.org/"
+      "rpcUrl": "https://unichain-rpc.publicnode.com"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://unichain-rpc.publicnode.com"
+      "alias": "public",
+      "rpcUrl": "https://mainnet.unichain.org/"
     },
     {
       "alias": "quicknode",
