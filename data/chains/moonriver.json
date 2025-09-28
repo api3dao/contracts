@@ -12,6 +12,10 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://moonriver-rpc.publicnode.com"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "MOVR",

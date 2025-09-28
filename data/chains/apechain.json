@@ -16,6 +16,10 @@
     {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "APE",

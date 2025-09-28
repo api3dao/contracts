@@ -20,6 +20,10 @@
     {
       "alias": "blockpi",
       "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",

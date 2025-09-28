@@ -12,6 +12,10 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "GLMR",
