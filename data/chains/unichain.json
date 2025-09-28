@@ -14,10 +14,6 @@
       "rpcUrl": "https://unichain-rpc.publicnode.com"
     },
     {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },

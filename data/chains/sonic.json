@@ -14,10 +14,6 @@
       "rpcUrl": "https://sonic-rpc.publicnode.com:443"
     },
     {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
     },
@@ -28,10 +24,6 @@
     {
       "alias": "blockpi",
       "homepageUrl": "https://blockpi.io"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "S",
