@@ -12,6 +12,10 @@
     {
       "alias": "okx",
       "rpcUrl": "https://xlayerrpc.okx.com/"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "OKB",
