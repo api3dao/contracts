@@ -20,6 +20,10 @@
     {
       "alias": "blockpi",
       "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "SEI",
