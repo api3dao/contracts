@@ -12,10 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
     }
   ],
   "symbol": "GLMR",

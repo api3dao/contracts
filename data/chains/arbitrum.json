@@ -10,10 +10,6 @@
       "rpcUrl": "https://arb1.arbitrum.io/rpc"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },

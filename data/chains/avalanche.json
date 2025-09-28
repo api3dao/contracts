@@ -10,10 +10,6 @@
       "rpcUrl": "https://api.avax.network/ext/bc/C/rpc"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },

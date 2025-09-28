@@ -10,10 +10,6 @@
       "rpcUrl": "https://worldchain-mainnet.g.alchemy.com/public"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },

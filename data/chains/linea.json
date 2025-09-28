@@ -14,10 +14,6 @@
       "rpcUrl": "https://linea-rpc.publicnode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
     }

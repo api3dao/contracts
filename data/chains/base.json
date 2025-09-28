@@ -10,10 +10,6 @@
       "rpcUrl": "https://mainnet.base.org"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },
