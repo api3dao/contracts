@@ -22,6 +22,7 @@ const ETHERSCAN_API_URL = 'https://api.etherscan.io/v2/chainlist';
 
 async function main() {
   const warnings: string[] = [];
+  const errors: string[] = [];
 
   const goResponse = await go(async () => fetch(ETHERSCAN_API_URL));
 
@@ -44,8 +45,8 @@ async function main() {
       const isSupported = etherscanSupportedChains.some((supportedChain) => supportedChain.chainid === chain.id);
 
       if (!isSupported) {
-        warnings.push(
-          `⚠️ ${chain.alias} (ID: ${chain.id}) is set to use Etherscan v2 API but is not supported according to Etherscan API.`
+        errors.push(
+          `🔴 ${chain.alias} (ID: ${chain.id}) is set to use Etherscan v2 API but is not supported according to Etherscan API.`
         );
       }
     }
@@ -78,6 +79,12 @@ async function main() {
   if (warnings.length > 0) {
     // eslint-disable-next-line no-console
     console.warn(warnings.join('\n'));
+  }
+
+  if (errors.length > 0) {
+    // eslint-disable-next-line no-console
+    console.error(errors.join('\n'));
+    throw new Error('Etherscan API check failed with errors.');
   }
 }
 
