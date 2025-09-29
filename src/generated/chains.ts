@@ -472,7 +472,7 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'katana',
-    blockExplorerUrl: 'https://explorer.katanarpc.com/',
+    blockExplorerUrl: 'https://katanascan.com/',
     decimals: 18,
     id: '747474',
     name: 'Katana',
@@ -482,7 +482,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
-    verificationApi: { type: 'blockscout', url: 'https://explorer.katanarpc.com/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'kava-testnet',
@@ -987,18 +987,18 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'sei-testnet',
-    blockExplorerUrl: 'https://testnet.seitrace.com/',
+    blockExplorerUrl: 'https://testnet.seiscan.io/',
     decimals: 18,
     id: '1328',
     name: 'Sei testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' }],
     symbol: 'SEI',
     testnet: true,
-    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/atlantic-2/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'sei',
-    blockExplorerUrl: 'https://seitrace.com/',
+    blockExplorerUrl: 'https://seiscan.io/',
     decimals: 18,
     id: '1329',
     name: 'Sei',
@@ -1011,7 +1011,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'SEI',
     testnet: false,
-    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/pacific-1/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'somnia-testnet',

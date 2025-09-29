@@ -1,6 +1,6 @@
 {
   "alias": "katana",
-  "blockExplorerUrl": "https://explorer.katanarpc.com/",
+  "blockExplorerUrl": "https://katanascan.com/",
   "decimals": 18,
   "id": "747474",
   "name": "Katana",
@@ -17,7 +17,6 @@
   "symbol": "ETH",
   "testnet": false,
   "verificationApi": {
-    "type": "blockscout",
-    "url": "https://explorer.katanarpc.com/api"
+    "type": "etherscan"
   }
 }
