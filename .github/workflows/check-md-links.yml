@@ -11,5 +11,4 @@ jobs:
     - name: Check Markdown links
       uses: tcort/github-action-markdown-link-check@v1
       with:
-        config-file: mlc_config.json,
-        check-modified-files-only: 'true'
+        config-file: mlc_config.json
