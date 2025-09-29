@@ -34,7 +34,7 @@
   "scripts": {
     "build": "pnpm check && pnpm build:hardhat && pnpm generate && tsc -p tsconfig.build.json",
     "build:hardhat": "hardhat --config hardhat.build.config.ts compile",
-    "check": "pnpm check:chains && pnpm check:chain-support && pnpm check:deployment-addresses && pnpm check:example-env-file && pnpm check:dapps",
+    "check": "pnpm check:chains && pnpm check:chain-support && pnpm check:deployment-addresses && pnpm check:etherscan-api && pnpm check:example-env-file && pnpm check:dapps",
     "check:chain-support": "ts-node scripts/check-chain-support.ts",
     "check:chains": "ts-node scripts/check-chains.ts",
     "check:dapps": "ts-node scripts/check-dapps.ts",
