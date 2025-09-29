@@ -70,10 +70,6 @@ async function main() {
         `⚠️ ${supportedChain.chainname} (ID: ${supportedChain.chainid}) supports Etherscan v2 API but verificationApi is not set in the local chain list.`
       );
     }
-
-    if (!chain) {
-      warnings.push(`Chain ${supportedChain.chainname} (ID: ${supportedChain.chainid}) is missing from the CHAINS.`);
-    }
   }
 
   if (warnings.length > 0) {
