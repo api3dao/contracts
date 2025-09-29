@@ -68,7 +68,7 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'avalanche-testnet',
-    blockExplorerUrl: 'https://testnet.snowtrace.io/',
+    blockExplorerUrl: 'https://testnet.snowscan.xyz/',
     decimals: 18,
     id: '43113',
     name: 'Avalanche testnet',
@@ -78,11 +78,11 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'AVAX',
     testnet: true,
-    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'avalanche',
-    blockExplorerUrl: 'https://snowtrace.io/',
+    blockExplorerUrl: 'https://snowscan.xyz/',
     decimals: 18,
     id: '43114',
     name: 'Avalanche',
@@ -95,7 +95,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'AVAX',
     testnet: false,
-    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'base-sepolia-testnet',
@@ -469,7 +469,7 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'katana',
-    blockExplorerUrl: 'https://explorer.katanarpc.com/',
+    blockExplorerUrl: 'https://katanascan.com/',
     decimals: 18,
     id: '747474',
     name: 'Katana',
@@ -480,7 +480,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
-    verificationApi: { type: 'blockscout', url: 'https://explorer.katanarpc.com/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'kava-testnet',
@@ -722,13 +722,14 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'monad-testnet',
-    blockExplorerUrl: 'https://testnet.monadexplorer.com/',
+    blockExplorerUrl: 'https://testnet.monadscan.com/',
     decimals: 18,
     id: '10143',
     name: 'Monad testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://testnet-rpc.monad.xyz/' }],
     symbol: 'MON',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'moonbeam-testnet',
@@ -743,7 +744,7 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'moonbeam',
-    blockExplorerUrl: 'https://moonscan.io/',
+    blockExplorerUrl: 'https://moonbeam.moonscan.io/',
     decimals: 18,
     id: '1284',
     name: 'Moonbeam',
@@ -880,6 +881,7 @@ export const CHAINS: Chain[] = [
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.cardona.zkevm-rpc.com' }],
     symbol: 'ETH',
     testnet: true,
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'polygon-zkevm',
@@ -969,18 +971,18 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'sei-testnet',
-    blockExplorerUrl: 'https://testnet.seitrace.com/',
+    blockExplorerUrl: 'https://testnet.seiscan.io/',
     decimals: 18,
     id: '1328',
     name: 'Sei testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' }],
     symbol: 'SEI',
     testnet: true,
-    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/atlantic-2/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'sei',
-    blockExplorerUrl: 'https://seitrace.com/',
+    blockExplorerUrl: 'https://seiscan.io/',
     decimals: 18,
     id: '1329',
     name: 'Sei',
@@ -993,7 +995,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'SEI',
     testnet: false,
-    verificationApi: { type: 'blockscout', url: 'https://seitrace.com/pacific-1/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'somnia-testnet',

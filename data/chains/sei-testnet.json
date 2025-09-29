@@ -1,6 +1,6 @@
 {
   "alias": "sei-testnet",
-  "blockExplorerUrl": "https://testnet.seitrace.com/",
+  "blockExplorerUrl": "https://testnet.seiscan.io/",
   "decimals": 18,
   "id": "1328",
   "name": "Sei testnet",
@@ -13,7 +13,6 @@
   "symbol": "SEI",
   "testnet": true,
   "verificationApi": {
-    "type": "blockscout",
-    "url": "https://seitrace.com/atlantic-2/api"
+    "type": "etherscan"
   }
 }
