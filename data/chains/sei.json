@@ -14,16 +14,16 @@
       "rpcUrl": "https://sei-evm-rpc.publicnode.com"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "SEI",

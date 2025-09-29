@@ -10,12 +10,8 @@
       "rpcUrl": "https://rpc.blast.io"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "publicnode",
+      "rpcUrl": "https://blast-rpc.publicnode.com"
     },
     {
       "alias": "quicknode",
@@ -24,6 +20,10 @@
     {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "ETH",

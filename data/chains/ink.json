@@ -18,12 +18,12 @@
       "homepageUrl": "https://tenderly.co/"
     },
     {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "ETH",

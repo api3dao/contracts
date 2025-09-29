@@ -16,10 +16,6 @@
     {
       "alias": "nirvanalabs",
       "rpcUrl": "https://manta.nirvanalabs.xyz/mantapublic"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",

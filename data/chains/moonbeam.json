@@ -14,12 +14,12 @@
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "GLMR",
