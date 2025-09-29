@@ -36,7 +36,12 @@ async function main() {
     throw new Error(`Etherscan API responded with status: ${response.status}`);
   }
 
-  const data = (await response.json()) as z.infer<typeof etherscanV2SupportListSchema>;
+  const parseData = etherscanV2SupportListSchema.safeParse(await response.json());
+  if (!parseData.success) {
+    const errors = parseData.error.issues.map((issue) => `  path: '${issue.path.join('.')}' => '${issue.message}' `);
+    throw new Error(`Etherscan API response schema mismatch:\n${errors.join('\n')}\n`);
+  }
+  const { data } = parseData;
 
   const etherscanSupportedChains = data.result;
 
