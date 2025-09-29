@@ -9,4 +9,4 @@ jobs:
     - name: Clone @api3/contracts
       uses: actions/checkout@v4
     - name: Check Markdown links
-      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      uses: tcort/github-action-markdown-link-check@v1
