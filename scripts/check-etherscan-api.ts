@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { type Chain, CHAINS } from '../src/index';
 
-const ResultSchema = z.object({
+const resultSchema = z.object({
   chainname: z.string(),
   chainid: z.string(),
   blockexplorer: z.string(),
@@ -12,13 +12,11 @@ const ResultSchema = z.object({
   comment: z.string(),
 });
 
-const EtherscanV2SupportListSchema = z.object({
+const etherscanV2SupportListSchema = z.object({
   comments: z.string(),
   totalcount: z.number(),
-  result: z.array(ResultSchema),
+  result: z.array(resultSchema),
 });
-
-type EtherscanV2SupportList = z.infer<typeof EtherscanV2SupportListSchema>;
 
 const ETHERSCAN_API_URL = 'https://api.etherscan.io/v2/chainlist';
 
@@ -37,7 +35,7 @@ async function main() {
     throw new Error(`Etherscan API responded with status: ${response.status}`);
   }
 
-  const data = (await response.json()) as EtherscanV2SupportList;
+  const data = (await response.json()) as z.infer<typeof etherscanV2SupportListSchema>;
 
   const etherscanSupportedChains = data.result;
 
