@@ -1,0 +1,10 @@
+{
+  "httpHeaders": [
+    {
+      "urls": ["https://www.npmjs.com/package/@api3/contracts"],
+      "headers": {
+        "User-Agent": "Mozilla/5.0"
+      }
+    }
+  ]
+}
