@@ -3,7 +3,8 @@
     {
       "urls": ["https://www.npmjs.com/package/@api3/contracts"],
       "headers": {
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "Accept": "text/html,application/xhtml+xml"
       }
     }
   ]
