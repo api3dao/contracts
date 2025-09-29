@@ -34,12 +34,11 @@
   "scripts": {
     "build": "pnpm check && pnpm build:hardhat && pnpm generate && tsc -p tsconfig.build.json",
     "build:hardhat": "hardhat --config hardhat.build.config.ts compile",
-    "check": "pnpm check:chains && pnpm check:chain-support && pnpm check:deployment-addresses && pnpm check:etherscan-api && pnpm check:example-env-file && pnpm check:dapps",
+    "check": "pnpm check:chains && pnpm check:chain-support && pnpm check:deployment-addresses && pnpm check:example-env-file && pnpm check:dapps",
     "check:chain-support": "ts-node scripts/check-chain-support.ts",
     "check:chains": "ts-node scripts/check-chains.ts",
     "check:dapps": "ts-node scripts/check-dapps.ts",
     "check:deployment-addresses": "ts-node scripts/check-deployment-addresses.ts",
-    "check:etherscan-api": "ts-node scripts/check-etherscan-api.ts",
     "check:example-env-file": "ts-node scripts/check-example-env-file.ts",
     "cli": "ts-node bin/cli.ts",
     "deploy:deterministic": "pnpm check:chain-support && DETERMINISTIC=true hardhat deploy --network $NETWORK && pnpm generate:deployment-addresses",
@@ -63,6 +62,7 @@
     "test:hardhat:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:hardhat:gas": "REPORT_GAS=TRUE hardhat test",
     "test:jest": "jest",
+    "validate-verification-api": "ts-node scripts/validate-verification-api.ts",
     "validate-deployments": "hardhat run scripts/validate-deployments.ts",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
     "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
