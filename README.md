@@ -43,7 +43,7 @@ For bug reports, contact `security@api3.org`
 
 The most common type of change would be adding or updating a chain. This can be done by creating or editing the relevant JSON file in the `data/chains/` directory.
 
-If any changes are made to chains, you will need to "regenerate" the chains. This will compile all of the JSON files into a single TypeScript file for projects to import. Please check the [Developer instructions](#developer-instructions) section for more information on how to do this.
+If any changes are made to chains, you will need to "regenerate" the chains. This will compile all of the JSON files into a single TypeScript file for projects to import. Please check the [Developer instructions](#-developer-instructions) section for more information on how to do this.
 
 The list of TypeScript chains is also validated against all of the list of JSON files to ensure that everything is in sync.
 
