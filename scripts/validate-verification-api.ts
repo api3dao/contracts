@@ -66,13 +66,13 @@ async function main() {
 
     if (chain.verificationApi?.type === 'etherscan' && chain.blockExplorerUrl !== supportedChain.blockexplorer) {
       errors.push(
-        `🔴 ${supportedChain.chainname} (ID: ${supportedChain.chainid}) has a different block explorer URL. Local: ${chain.blockExplorerUrl}, Etherscan: ${supportedChain.blockexplorer}`
+        `🔴 ${chain.alias} (ID: ${chain.id}) has a different block explorer URL. Local: ${chain.blockExplorerUrl}, Etherscan: ${supportedChain.blockexplorer}`
       );
     }
 
     if (!chain.verificationApi || chain.verificationApi.type !== 'etherscan') {
       warnings.push(
-        `⚠️ ${supportedChain.chainname} (ID: ${supportedChain.chainid}) supports Etherscan v2 API but verificationApi is not set in the local chain list.`
+        `⚠️ ${chain.alias} (ID: ${chain.id}) supports Etherscan v2 API but verificationApi is not set in the local chain list.`
       );
     }
   }
