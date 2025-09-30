@@ -1,5 +1,46 @@
 # @api3/contracts
 
+## 29.0.0
+
+### Major Changes
+
+- 8c05c33: Update hardhat config to use Etherscan V2 API
+  Update chains schema to use verificationApi instead of api
+  Update chains schema to use blockExplorerUrl instead of browserUrl
+
+### Patch Changes
+
+- 3e126b2: Updates RPC provider configurations:
+
+  - Remove drpc from all
+  - Remove blastapi from all
+  - Add quicknode for linea, soneium, and sonic
+  - Add blockpi for arbitrum, avalanche, base, berachain, blast, bsc, ethereum, gnosis, hyperliquid, ink, linea, mantle, metis, optimism, polygon-zkevm, polygon, scroll, sei, sonic, taiko, unichain, and x-layer
+  - Add publicnode for arbitrum, avalanche, berachain, blast, bsc, optimism, scroll, and sonic
+  - Add tenderly for apechain, berachain, ethereum, katana, metis, moonbeam, moonriver, optimism, polygon, scroll, taiko, and unichain
+  - Add 0xrpc for gnosis
+  - Remove alchemy from berachain, ink, optimism, polygon-zkevm, sonic, and unichain
+  - Use publicnode as default provider for unichain
+  - Add reblok for moonbeam and sei
+
+- b064c46: Updates RPC provider configurations:
+
+  - Add publicnode and validationcloud providers for somnia chain.
+
+- baadb85: Update block explorer and verification API for following chains:
+
+  - avalanche
+  - avalanche-testnet
+  - katana
+  - monad-testnet
+  - moonbeam
+  - sei
+  - sei-testnet
+
+  Update verification API for:
+
+  - polygon-zkevm-sepolia-testnet
+
 ## 28.0.0
 
 ### Major Changes
