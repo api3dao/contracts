@@ -1,15 +1,7 @@
 {
   "alias": "apechain-arbitrum-sepolia-testnet",
+  "blockExplorerUrl": "https://curtis.apescan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-curtis.apescan.io/api"
-    },
-    "browserUrl": "https://curtis.apescan.io/"
-  },
   "id": "33111",
   "name": "ApeChain testnet",
   "providers": [
@@ -19,5 +11,8 @@
     }
   ],
   "symbol": "APE",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

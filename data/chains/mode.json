@@ -1,15 +1,7 @@
 {
   "alias": "mode",
+  "blockExplorerUrl": "https://explorer.mode.network/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://explorer.mode.network/api/"
-    },
-    "browserUrl": "https://explorer.mode.network/"
-  },
   "id": "34443",
   "name": "Mode",
   "providers": [
@@ -18,18 +10,14 @@
       "rpcUrl": "https://mainnet.mode.network"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
-    },
-    {
       "alias": "tenderly",
       "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.mode.network/api/"
+  }
 }

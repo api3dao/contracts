@@ -1,15 +1,7 @@
 {
   "alias": "apechain",
+  "blockExplorerUrl": "https://apescan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.apescan.io/api"
-    },
-    "browserUrl": "https://apescan.io/"
-  },
   "id": "33139",
   "name": "ApeChain",
   "providers": [
@@ -26,14 +18,13 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "APE",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

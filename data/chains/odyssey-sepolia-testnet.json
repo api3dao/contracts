@@ -1,15 +1,7 @@
 {
   "alias": "odyssey-sepolia-testnet",
+  "blockExplorerUrl": "https://odyssey-explorer.ithaca.xyz/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://odyssey-explorer.ithaca.xyz/api"
-    },
-    "browserUrl": "https://odyssey-explorer.ithaca.xyz/"
-  },
   "id": "911867",
   "name": "Odyssey testnet",
   "providers": [
@@ -19,5 +11,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://odyssey-explorer.ithaca.xyz/api"
+  }
 }

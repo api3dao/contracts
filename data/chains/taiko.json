@@ -1,15 +1,7 @@
 {
   "alias": "taiko",
+  "blockExplorerUrl": "https://taikoscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.taikoscan.io/api"
-    },
-    "browserUrl": "https://taikoscan.io/"
-  },
   "id": "167000",
   "name": "Taiko",
   "providers": [
@@ -22,14 +14,21 @@
       "rpcUrl": "https://rpc.mainnet.taiko.xyz"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

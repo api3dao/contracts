@@ -1,15 +1,7 @@
 {
   "alias": "zircuit",
+  "blockExplorerUrl": "https://explorer.zircuit.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://explorer.zircuit.com/api/contractVerifyHardhat"
-    },
-    "browserUrl": "https://explorer.zircuit.com/"
-  },
   "id": "48900",
   "name": "Zircuit",
   "providers": [
@@ -24,12 +16,11 @@
     {
       "alias": "liquify",
       "rpcUrl": "https://zircuit1-mainnet.liquify.com"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "sourcify"
+  }
 }

@@ -1,15 +1,7 @@
 {
   "alias": "core-testnet",
+  "blockExplorerUrl": "https://scan.test2.btcs.network/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.test2.btcs.network/api"
-    },
-    "browserUrl": "https://scan.test2.btcs.network/"
-  },
   "id": "1114",
   "name": "Core testnet",
   "providers": [

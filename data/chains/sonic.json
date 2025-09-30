@@ -1,15 +1,7 @@
 {
   "alias": "sonic",
+  "blockExplorerUrl": "https://sonicscan.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.sonicscan.org/api"
-    },
-    "browserUrl": "https://sonicscan.org/"
-  },
   "id": "146",
   "name": "Sonic",
   "providers": [
@@ -18,22 +10,25 @@
       "rpcUrl": "https://rpc.soniclabs.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.com"
+      "alias": "publicnode",
+      "rpcUrl": "https://sonic-rpc.publicnode.com:443"
     },
     {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "S",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

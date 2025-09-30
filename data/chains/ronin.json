@@ -1,9 +1,7 @@
 {
   "alias": "ronin",
+  "blockExplorerUrl": "https://app.roninchain.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://app.roninchain.com/"
-  },
   "id": "2020",
   "name": "Ronin",
   "providers": [
@@ -12,16 +10,8 @@
       "rpcUrl": "https://api.roninchain.com/rpc/"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
     },
     {
       "alias": "tenderly",
@@ -29,5 +19,8 @@
     }
   ],
   "symbol": "RON",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "sourcify"
+  }
 }

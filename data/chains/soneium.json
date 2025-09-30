@@ -1,15 +1,7 @@
 {
   "alias": "soneium",
+  "blockExplorerUrl": "https://soneium.blockscout.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://soneium.blockscout.com/api"
-    },
-    "browserUrl": "https://soneium.blockscout.com/"
-  },
   "id": "1868",
   "name": "Soneium",
   "providers": [
@@ -26,14 +18,18 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "tenderly",
       "homepageUrl": "https://tenderly.co/"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://soneium.blockscout.com/api"
+  }
 }

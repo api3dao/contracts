@@ -1,16 +1,7 @@
 {
   "alias": "bsc",
+  "blockExplorerUrl": "https://bscscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "bsc",
-        "required": true
-      },
-      "url": "https://api.bscscan.com/api"
-    },
-    "browserUrl": "https://bscscan.com/"
-  },
   "id": "56",
   "name": "BNB Smart Chain",
   "providers": [
@@ -19,12 +10,8 @@
       "rpcUrl": "https://bsc-dataseed1.binance.org/"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "publicnode",
+      "rpcUrl": "https://bsc-rpc.publicnode.com"
     },
     {
       "alias": "quicknode",
@@ -33,8 +20,15 @@
     {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "BNB",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,15 +1,7 @@
 {
   "alias": "manta-sepolia-testnet",
+  "blockExplorerUrl": "https://pacific-explorer.sepolia-testnet.manta.network/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://pacific-explorer.sepolia-testnet.manta.network/api/"
-    },
-    "browserUrl": "https://pacific-explorer.sepolia-testnet.manta.network/"
-  },
   "id": "3441006",
   "name": "Manta testnet",
   "providers": [
@@ -19,5 +11,9 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://pacific-explorer.sepolia-testnet.manta.network/api/"
+  }
 }

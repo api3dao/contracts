@@ -1,15 +1,7 @@
 {
   "alias": "polygon-sepolia-testnet",
+  "blockExplorerUrl": "https://amoy.polygonscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-amoy.polygonscan.com/api"
-    },
-    "browserUrl": "https://amoy.polygonscan.com/"
-  },
   "id": "80002",
   "name": "Polygon testnet",
   "providers": [
@@ -23,5 +15,8 @@
     }
   ],
   "symbol": "POL",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

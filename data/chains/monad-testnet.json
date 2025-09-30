@@ -1,9 +1,7 @@
 {
   "alias": "monad-testnet",
+  "blockExplorerUrl": "https://testnet.monadscan.com/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://testnet.monadexplorer.com/"
-  },
   "id": "10143",
   "name": "Monad testnet",
   "providers": [
@@ -13,5 +11,8 @@
     }
   ],
   "symbol": "MON",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,16 +1,7 @@
 {
   "alias": "polygon",
+  "blockExplorerUrl": "https://polygonscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "polygon",
-        "required": true
-      },
-      "url": "https://api.polygonscan.com/api"
-    },
-    "browserUrl": "https://polygonscan.com/"
-  },
   "id": "137",
   "name": "Polygon",
   "providers": [
@@ -23,18 +14,21 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "POL",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

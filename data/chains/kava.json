@@ -1,15 +1,7 @@
 {
   "alias": "kava",
+  "blockExplorerUrl": "https://kavascan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://api.verify.mintscan.io/evm/api/0x8ae"
-    },
-    "browserUrl": "https://kavascan.com/"
-  },
   "id": "2222",
   "name": "Kava",
   "providers": [
@@ -20,12 +12,12 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://kava-evm-rpc.publicnode.com/"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
     }
   ],
   "symbol": "KAVA",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.verify.mintscan.io/evm/api/0x8ae"
+  }
 }

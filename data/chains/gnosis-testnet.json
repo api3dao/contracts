@@ -1,16 +1,7 @@
 {
   "alias": "gnosis-testnet",
+  "blockExplorerUrl": "https://gnosis-chiado.blockscout.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "chiado",
-        "required": false
-      },
-      "url": "https://gnosis-chiado.blockscout.com/api"
-    },
-    "browserUrl": "https://gnosis-chiado.blockscout.com/"
-  },
   "id": "10200",
   "name": "Gnosis Chain testnet",
   "providers": [
@@ -24,5 +15,9 @@
     }
   ],
   "symbol": "xDAI",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://gnosis-chiado.blockscout.com/api"
+  }
 }

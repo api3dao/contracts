@@ -1,15 +1,7 @@
 {
   "alias": "opbnb",
+  "blockExplorerUrl": "https://opbnb.bscscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-opbnb.bscscan.com/api"
-    },
-    "browserUrl": "https://opbnb.bscscan.com/"
-  },
   "id": "204",
   "name": "opBNB",
   "providers": [
@@ -24,16 +16,11 @@
     {
       "alias": "alchemy",
       "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
     }
   ],
   "symbol": "BNB",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

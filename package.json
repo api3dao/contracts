@@ -62,6 +62,7 @@
     "test:hardhat:extended": "EXTENDED_TEST=TRUE hardhat test --parallel",
     "test:hardhat:gas": "REPORT_GAS=TRUE hardhat test",
     "test:jest": "jest",
+    "validate-verification-api": "ts-node scripts/validate-verification-api.ts",
     "validate-deployments": "hardhat run scripts/validate-deployments.ts",
     "verify-deployments": "hardhat run scripts/verify-deployments.ts",
     "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"

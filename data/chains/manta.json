@@ -1,15 +1,7 @@
 {
   "alias": "manta",
+  "blockExplorerUrl": "https://pacific-explorer.manta.network/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://pacific-explorer.manta.network/api/"
-    },
-    "browserUrl": "https://pacific-explorer.manta.network/"
-  },
   "id": "169",
   "name": "Manta",
   "providers": [
@@ -24,12 +16,12 @@
     {
       "alias": "nirvanalabs",
       "rpcUrl": "https://manta.nirvanalabs.xyz/mantapublic"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://pacific-explorer.manta.network/api/"
+  }
 }

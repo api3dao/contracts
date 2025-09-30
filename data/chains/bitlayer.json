@@ -1,15 +1,7 @@
 {
   "alias": "bitlayer",
+  "blockExplorerUrl": "https://www.btrscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://api.btrscan.com/scan/api"
-    },
-    "browserUrl": "https://www.btrscan.com/"
-  },
   "id": "200901",
   "name": "Bitlayer",
   "providers": [
@@ -27,5 +19,9 @@
     }
   ],
   "symbol": "BTC",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.btrscan.com/scan/api"
+  }
 }

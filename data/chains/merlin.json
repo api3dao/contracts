@@ -1,15 +1,7 @@
 {
   "alias": "merlin",
+  "blockExplorerUrl": "https://scan.merlinchain.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://scan.merlinchain.io/api"
-    },
-    "browserUrl": "https://scan.merlinchain.io/"
-  },
   "id": "4200",
   "name": "Merlin",
   "providers": [
@@ -20,12 +12,12 @@
     {
       "alias": "blockpi",
       "homepageUrl": "https://blockpi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
     }
   ],
   "symbol": "BTC",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://scan.merlinchain.io/api"
+  }
 }

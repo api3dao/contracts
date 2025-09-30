@@ -1,15 +1,7 @@
 {
   "alias": "linea",
+  "blockExplorerUrl": "https://lineascan.build/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.lineascan.build/api"
-    },
-    "browserUrl": "https://lineascan.build/"
-  },
   "id": "59144",
   "name": "Linea",
   "providers": [
@@ -22,18 +14,21 @@
       "rpcUrl": "https://linea-rpc.publicnode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
-    },
-    {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

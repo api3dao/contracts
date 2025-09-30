@@ -1,15 +1,7 @@
 {
   "alias": "x-layer-sepolia-testnet",
+  "blockExplorerUrl": "https://www.okx.com/explorer/xlayer-test/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER_TESTNET"
-    },
-    "browserUrl": "https://www.okx.com/explorer/xlayer-test/"
-  },
   "id": "195",
   "name": "X Layer testnet",
   "providers": [
@@ -23,5 +15,9 @@
     }
   ],
   "symbol": "OKB",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER_TESTNET"
+  }
 }

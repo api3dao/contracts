@@ -1,16 +1,7 @@
 {
   "alias": "moonriver",
+  "blockExplorerUrl": "https://moonriver.moonscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonriver",
-        "required": true
-      },
-      "url": "https://api-moonriver.moonscan.io/api"
-    },
-    "browserUrl": "https://moonriver.moonscan.io/"
-  },
   "id": "1285",
   "name": "Moonriver",
   "providers": [
@@ -23,10 +14,13 @@
       "rpcUrl": "https://moonriver-rpc.publicnode.com"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "MOVR",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

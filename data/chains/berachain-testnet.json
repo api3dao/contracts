@@ -1,15 +1,7 @@
 {
   "alias": "berachain-testnet",
+  "blockExplorerUrl": "https://testnet.berascan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-testnet.berascan.com/api"
-    },
-    "browserUrl": "https://testnet.berascan.com/"
-  },
   "id": "80069",
   "name": "Berachain testnet",
   "providers": [
@@ -19,5 +11,8 @@
     }
   ],
   "symbol": "BERA",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,29 +1,13 @@
 {
   "alias": "world",
+  "blockExplorerUrl": "https://worldscan.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.worldscan.org/api"
-    },
-    "browserUrl": "https://worldscan.org/"
-  },
   "id": "480",
   "name": "World Chain",
   "providers": [
     {
       "alias": "default",
       "rpcUrl": "https://worldchain-mainnet.g.alchemy.com/public"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     },
     {
       "alias": "quicknode",
@@ -35,5 +19,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -55,7 +55,7 @@ describe(chains.name, () => {
         blockExplorers: {
           default: {
             name: 'Explorer',
-            url: chain.explorer.browserUrl,
+            url: chain.blockExplorerUrl,
           },
         },
         serializers: undefined,
@@ -101,7 +101,7 @@ describe(chains.name, () => {
         blockExplorers: {
           default: {
             name: 'Explorer',
-            url: chain.explorer.browserUrl,
+            url: chain.blockExplorerUrl,
           },
         },
         serializers: undefined,

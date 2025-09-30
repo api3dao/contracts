@@ -1,16 +1,7 @@
 {
   "alias": "optimism",
+  "blockExplorerUrl": "https://optimistic.etherscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "optimisticEthereum",
-        "required": true
-      },
-      "url": "https://api-optimistic.etherscan.io/api"
-    },
-    "browserUrl": "https://optimistic.etherscan.io/"
-  },
   "id": "10",
   "name": "Optimism",
   "providers": [
@@ -19,22 +10,25 @@
       "rpcUrl": "https://mainnet.optimism.io"
     },
     {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "publicnode",
+      "rpcUrl": "https://optimism-rpc.publicnode.com"
     },
     {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

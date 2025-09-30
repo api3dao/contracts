@@ -1,9 +1,7 @@
 {
   "alias": "sei",
+  "blockExplorerUrl": "https://seiscan.io/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://seitrace.com/"
-  },
   "id": "1329",
   "name": "Sei",
   "providers": [
@@ -16,18 +14,21 @@
       "rpcUrl": "https://sei-evm-rpc.publicnode.com"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "SEI",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

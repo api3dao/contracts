@@ -1,15 +1,7 @@
 {
   "alias": "taiko-holesky-testnet",
+  "blockExplorerUrl": "https://hekla.taikoscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-hekla.taikoscan.io/api"
-    },
-    "browserUrl": "https://hekla.taikoscan.io/"
-  },
   "id": "167009",
   "name": "Taiko testnet",
   "providers": [
@@ -19,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

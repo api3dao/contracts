@@ -1,15 +1,7 @@
 {
   "alias": "lumia",
+  "blockExplorerUrl": "https://explorer.lumia.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://explorer.lumia.org/api/"
-    },
-    "browserUrl": "https://explorer.lumia.org/"
-  },
   "id": "994873017",
   "name": "Lumia",
   "providers": [
@@ -22,14 +14,14 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
       "alias": "nirvanalabs",
       "homepageUrl": "https://nirvanalabs.com"
     }
   ],
   "symbol": "LUMIA",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.lumia.org/api/"
+  }
 }

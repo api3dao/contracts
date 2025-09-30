@@ -1,16 +1,7 @@
 {
   "alias": "moonbeam",
+  "blockExplorerUrl": "https://moonbeam.moonscan.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "hardhatEtherscanAlias": "moonbeam",
-        "required": true
-      },
-      "url": "https://api-moonbeam.moonscan.io/api"
-    },
-    "browserUrl": "https://moonscan.io/"
-  },
   "id": "1284",
   "name": "Moonbeam",
   "providers": [
@@ -23,14 +14,17 @@
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org/"
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "GLMR",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

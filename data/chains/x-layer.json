@@ -1,15 +1,7 @@
 {
   "alias": "x-layer",
+  "blockExplorerUrl": "https://www.okx.com/explorer/xlayer/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
-    },
-    "browserUrl": "https://www.okx.com/explorer/xlayer/"
-  },
   "id": "196",
   "name": "X Layer",
   "providers": [
@@ -22,10 +14,14 @@
       "rpcUrl": "https://xlayerrpc.okx.com/"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "OKB",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER"
+  }
 }

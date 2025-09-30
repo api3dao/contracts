@@ -1,15 +1,7 @@
 {
   "alias": "scroll",
+  "blockExplorerUrl": "https://scrollscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.scrollscan.com/api"
-    },
-    "browserUrl": "https://scrollscan.com/"
-  },
   "id": "534352",
   "name": "Scroll",
   "providers": [
@@ -18,18 +10,25 @@
       "rpcUrl": "https://rpc.scroll.io"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "publicnode",
+      "rpcUrl": "https://scroll-rpc.publicnode.com"
     },
     {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

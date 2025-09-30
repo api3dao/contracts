@@ -1,9 +1,7 @@
 {
   "alias": "hyperliquid",
+  "blockExplorerUrl": "https://hyperevmscan.io/",
   "decimals": 18,
-  "explorer": {
-    "browserUrl": "https://hyperevmscan.io/"
-  },
   "id": "999",
   "name": "Hyperliquid",
   "providers": [
@@ -20,14 +18,17 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "HYPE",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

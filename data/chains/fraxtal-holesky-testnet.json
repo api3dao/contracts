@@ -1,15 +1,7 @@
 {
   "alias": "fraxtal-holesky-testnet",
+  "blockExplorerUrl": "https://holesky.fraxscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-holesky.fraxscan.com/api/"
-    },
-    "browserUrl": "https://holesky.fraxscan.com/"
-  },
   "id": "2522",
   "name": "Fraxtal testnet",
   "providers": [
@@ -19,5 +11,8 @@
     }
   ],
   "symbol": "ETH",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

@@ -1,15 +1,7 @@
 {
   "alias": "opbnb-testnet",
+  "blockExplorerUrl": "https://opbnb-testnet.bscscan.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api-opbnb-testnet.bscscan.com/api"
-    },
-    "browserUrl": "https://opbnb-testnet.bscscan.com/"
-  },
   "id": "5611",
   "name": "opBNB testnet",
   "providers": [
@@ -23,5 +15,8 @@
     }
   ],
   "symbol": "BNB",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

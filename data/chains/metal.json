@@ -1,27 +1,19 @@
 {
   "alias": "metal",
+  "blockExplorerUrl": "https://explorer.metall2.com/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://explorer.metall2.com/api"
-    },
-    "browserUrl": "https://explorer.metall2.com/"
-  },
   "id": "1750",
   "name": "Metal L2",
   "providers": [
     {
       "alias": "default",
       "rpcUrl": "https://rpc.metall2.com/"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.metall2.com/api"
+  }
 }

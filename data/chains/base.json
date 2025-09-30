@@ -1,15 +1,7 @@
 {
   "alias": "base",
+  "blockExplorerUrl": "https://basescan.org/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": true
-      },
-      "url": "https://api.basescan.org/api"
-    },
-    "browserUrl": "https://basescan.org/"
-  },
   "id": "8453",
   "name": "Base",
   "providers": [
@@ -18,22 +10,25 @@
       "rpcUrl": "https://mainnet.base.org"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
-    },
-    {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
     },
     {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
+    },
+    {
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }

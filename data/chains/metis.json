@@ -1,15 +1,7 @@
 {
   "alias": "metis",
+  "blockExplorerUrl": "https://explorer.metis.io/",
   "decimals": 18,
-  "explorer": {
-    "api": {
-      "key": {
-        "required": false
-      },
-      "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
-    },
-    "browserUrl": "https://explorer.metis.io/"
-  },
   "id": "1088",
   "name": "Metis",
   "providers": [
@@ -26,14 +18,18 @@
       "homepageUrl": "https://alchemy.com"
     },
     {
-      "alias": "blastapi",
-      "homepageUrl": "https://blastapi.io"
+      "alias": "blockpi",
+      "homepageUrl": "https://blockpi.io"
     },
     {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
+      "alias": "tenderly",
+      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "METIS",
-  "testnet": false
+  "testnet": false,
+  "verificationApi": {
+    "type": "other",
+    "url": "https://api.routescan.io/v2/network/mainnet/evm/1088/etherscan/api"
+  }
 }
