@@ -2,18 +2,17 @@
   "alias": "sonic-testnet",
   "blockExplorerUrl": "https://testnet.sonicscan.org/",
   "decimals": 18,
-  "id": "57054",
+  "id": "14601",
   "name": "Sonic testnet",
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.blaze.soniclabs.com"
-    },
-    {
-      "alias": "publicnode",
-      "rpcUrl": "https://sonic-blaze-rpc.publicnode.com:443"
+      "rpcUrl": "https://rpc.testnet.soniclabs.com"
     }
   ],
   "symbol": "S",
-  "testnet": true
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
 }
