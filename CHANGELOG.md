@@ -1,5 +1,23 @@
 # @api3/contracts
 
+## 30.0.0
+
+### Major Changes
+
+- 84e5301: Remove support for following chains:
+
+  - linea-sepolia-testnet
+  - megaeth-testnet
+  - odyssey-sepolia-testnet
+  - polygon-zkevm
+  - polygon-zkevm-sepolia-testnet
+  - sonic-testnet (57054)
+  - x-layer-sepolia-testnet
+
+### Minor Changes
+
+- b0fb5c9: Add Market support to sonic-testnet (14601)
+
 ## 29.0.0
 
 ### Major Changes
