@@ -994,6 +994,17 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'blockscout', url: 'https://soneium.blockscout.com/api' },
   },
   {
+    alias: 'sonic-testnet',
+    blockExplorerUrl: 'https://testnet.sonicscan.org/',
+    decimals: 18,
+    id: '14601',
+    name: 'Sonic testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.testnet.soniclabs.com' }],
+    symbol: 'S',
+    testnet: true,
+    verificationApi: { type: 'etherscan' },
+  },
+  {
     alias: 'sonic',
     blockExplorerUrl: 'https://sonicscan.org/',
     decimals: 18,

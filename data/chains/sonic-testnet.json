@@ -1,0 +1,18 @@
+{
+  "alias": "sonic-testnet",
+  "blockExplorerUrl": "https://testnet.sonicscan.org/",
+  "decimals": 18,
+  "id": "14601",
+  "name": "Sonic testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.testnet.soniclabs.com"
+    }
+  ],
+  "symbol": "S",
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
+}
