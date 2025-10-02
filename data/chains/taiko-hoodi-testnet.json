@@ -3,7 +3,7 @@
   "blockExplorerUrl": "https://blockscout.hoodi.taiko.xyz/",
   "decimals": 18,
   "id": "167012",
-  "name": "Taiko",
+  "name": "Taiko Hoodi testnet",
   "providers": [
     {
       "alias": "default",

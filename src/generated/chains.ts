@@ -1019,7 +1019,7 @@ export const CHAINS: Chain[] = [
     blockExplorerUrl: 'https://blockscout.hoodi.taiko.xyz/',
     decimals: 18,
     id: '167012',
-    name: 'Taiko',
+    name: 'Taiko Hoodi testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.hoodi.taiko.xyz' }],
     symbol: 'ETH',
     testnet: true,
