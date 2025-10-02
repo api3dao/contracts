@@ -9,6 +9,4 @@ jobs:
     - name: Clone @api3/contracts
       uses: actions/checkout@v4
     - name: Check Markdown links
-      uses: tcort/github-action-markdown-link-check@v1
-      with:
-        config-file: mlc_config.json
+      uses: JustinBeckwith/linkinator-action@v1
