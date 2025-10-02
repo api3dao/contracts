@@ -294,6 +294,21 @@ export const CHAINS: Chain[] = [
     testnet: false,
   },
   {
+    alias: 'ethereum-hoodi-testnet',
+    blockExplorerUrl: 'https://hoodi.etherscan.io/',
+    decimals: 18,
+    id: '560048',
+    name: 'Ethereum Hoodi testnet',
+    providers: [
+      { alias: 'default', rpcUrl: 'https://ethereum-hoodi-rpc.publicnode.com' },
+      { alias: '0xrpc', rpcUrl: 'https://0xrpc.io/hoodi' },
+      { alias: 'ethpandaops', rpcUrl: 'https://rpc.hoodi.ethpandaops.io' },
+    ],
+    symbol: 'ETH',
+    testnet: true,
+    verificationApi: { type: 'etherscan' },
+  },
+  {
     alias: 'ethereum-sepolia-testnet',
     blockExplorerUrl: 'https://sepolia.etherscan.io/',
     decimals: 18,
@@ -998,6 +1013,20 @@ export const CHAINS: Chain[] = [
     symbol: 'S',
     testnet: false,
     verificationApi: { type: 'etherscan' },
+  },
+  {
+    alias: 'taiko-hoodi-testnet',
+    blockExplorerUrl: 'https://blockscout.hoodi.taiko.xyz/',
+    decimals: 18,
+    id: '167012',
+    name: 'Taiko',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.hoodi.taiko.xyz' }],
+    symbol: 'ETH',
+    testnet: true,
+    verificationApi: {
+      type: 'blockscout',
+      url: 'https://blockscoutapi.hoodi.taiko.xyz/api?module=contract&action=verify',
+    },
   },
   {
     alias: 'taiko',

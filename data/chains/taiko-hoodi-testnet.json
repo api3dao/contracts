@@ -1,0 +1,19 @@
+{
+  "alias": "taiko-hoodi-testnet",
+  "blockExplorerUrl": "https://blockscout.hoodi.taiko.xyz/",
+  "decimals": 18,
+  "id": "167012",
+  "name": "Taiko",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.hoodi.taiko.xyz"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://blockscoutapi.hoodi.taiko.xyz/api?module=contract&action=verify"
+  }
+}
