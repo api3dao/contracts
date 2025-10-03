@@ -1,0 +1,26 @@
+{
+  "alias": "ethereum-hoodi-testnet",
+  "blockExplorerUrl": "https://hoodi.etherscan.io/",
+  "decimals": 18,
+  "id": "560048",
+  "name": "Ethereum Hoodi testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://ethereum-hoodi-rpc.publicnode.com"
+    },
+    {
+      "alias": "0xrpc",
+      "rpcUrl": "https://0xrpc.io/hoodi"
+    },
+    {
+      "alias": "ethpandaops",
+      "rpcUrl": "https://rpc.hoodi.ethpandaops.io"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true,
+  "verificationApi": {
+    "type": "etherscan"
+  }
+}
