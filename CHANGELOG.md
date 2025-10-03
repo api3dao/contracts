@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 31.0.0
+
+### Major Changes
+
+- 84539d2: Remove support for following chains:
+
+  - ethereum-holesky-testnet
+  - fraxtal-holesky-testnet
+  - taiko-holesky-testnet
+
+### Minor Changes
+
+- 127e459: Add Market support to ethereum-hoodi-testnet and taiko-hoodi-testnet
+
 ## 30.0.0
 
 ### Major Changes
