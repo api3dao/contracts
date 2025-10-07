@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 31.1.0
+
+### Minor Changes
+
+- 8b759e4: Add Market support to injective
+
 ## 31.0.0
 
 ### Major Changes
