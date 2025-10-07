@@ -422,6 +422,20 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'blockscout', url: 'https://testnet.blockscout-api.injective.network/api' },
   },
   {
+    alias: 'injective',
+    blockExplorerUrl: 'https://blockscout.injective.network/',
+    decimals: 18,
+    id: '1776',
+    name: 'Injective EVM',
+    providers: [
+      { alias: 'default', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
+      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
+    ],
+    symbol: 'INJ',
+    testnet: false,
+    verificationApi: { type: 'blockscout', url: 'https://blockscout-api.injective.network/api' },
+  },
+  {
     alias: 'ink-sepolia-testnet',
     blockExplorerUrl: 'https://explorer-sepolia.inkonchain.com/',
     decimals: 18,
