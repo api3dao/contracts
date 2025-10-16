@@ -147,6 +147,6 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://www.takotako.xyz/',
   },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
-  { aliases: { yei: { chains: ['sei'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
+  { aliases: { yei: { chains: ['sei', 'injective'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
   { aliases: { zerolend: { chains: ['zircuit'], title: 'ZeroLend' } }, homepageUrl: 'https://zerolend.xyz/' },
 ];
