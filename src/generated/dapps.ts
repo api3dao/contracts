@@ -108,6 +108,11 @@ export const DAPPS: Dapp[] = [
         title: 'Morpho cbETH/USDC 86% LLTV',
         description: 'Only to be used for the cbETH/USDC 86% LLTV market.',
       },
+      feather: {
+        chains: ['sei'],
+        title: 'Morpho market(s) by Feather',
+        description: 'Only to be used for the Morpho market(s) by Feather.',
+      },
     },
     homepageUrl: 'https://morpho.org/vaults/',
   },
@@ -142,6 +147,6 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://www.takotako.xyz/',
   },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
-  { aliases: { yei: { chains: ['sei'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
+  { aliases: { yei: { chains: ['sei', 'injective'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
   { aliases: { zerolend: { chains: ['zircuit'], title: 'ZeroLend' } }, homepageUrl: 'https://zerolend.xyz/' },
 ];

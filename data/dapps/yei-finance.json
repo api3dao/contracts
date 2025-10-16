@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "yei": { "chains": ["sei"], "title": "Yei Finance" }
+    "yei": { "chains": ["sei", "injective"], "title": "Yei Finance" }
   },
   "homepageUrl": "https://www.yei.finance/"
 }
