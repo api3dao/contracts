@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 31.2.0
+
+### Minor Changes
+
+- 7828b9a: Add Yei on Injective
+- a51ada0: Add Feather to dApp details
+
+### Patch Changes
+
+- ae7e24d: Update block explorer URLs and verification API types for following testnets:
+
+  - katana-sepolia-testnet
+  - taiko-hoodi-testnet
+
 ## 31.1.0
 
 ### Minor Changes
