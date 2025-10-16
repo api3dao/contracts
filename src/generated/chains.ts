@@ -465,14 +465,14 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'katana-sepolia-testnet',
-    blockExplorerUrl: 'https://explorer-bokuto.katanarpc.com/',
+    blockExplorerUrl: 'https://bokuto.katanascan.com/',
     decimals: 18,
     id: '737373',
     name: 'Katana testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc-bokuto.katanarpc.com/' }],
     symbol: 'ETH',
     testnet: true,
-    verificationApi: { type: 'blockscout', url: 'https://explorer-bokuto.katanarpc.com/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'katana',
@@ -1030,17 +1030,14 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'taiko-hoodi-testnet',
-    blockExplorerUrl: 'https://blockscout.hoodi.taiko.xyz/',
+    blockExplorerUrl: 'https://hoodi.taikoscan.io/',
     decimals: 18,
     id: '167012',
     name: 'Taiko Hoodi testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.hoodi.taiko.xyz' }],
     symbol: 'ETH',
     testnet: true,
-    verificationApi: {
-      type: 'blockscout',
-      url: 'https://blockscoutapi.hoodi.taiko.xyz/api?module=contract&action=verify',
-    },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'taiko',

@@ -1,6 +1,6 @@
 {
   "alias": "katana-sepolia-testnet",
-  "blockExplorerUrl": "https://explorer-bokuto.katanarpc.com/",
+  "blockExplorerUrl": "https://bokuto.katanascan.com/",
   "decimals": 18,
   "id": "737373",
   "name": "Katana testnet",
@@ -13,7 +13,6 @@
   "symbol": "ETH",
   "testnet": true,
   "verificationApi": {
-    "type": "blockscout",
-    "url": "https://explorer-bokuto.katanarpc.com/api"
+    "type": "etherscan"
   }
 }
