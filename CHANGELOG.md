@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 31.3.0
+
+### Minor Changes
+
+- b263002: Add Api3 to Euler dApp details
+
 ## 31.2.0
 
 ### Minor Changes
