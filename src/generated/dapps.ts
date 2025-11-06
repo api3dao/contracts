@@ -29,6 +29,11 @@ export const DAPPS: Dapp[] = [
         title: 'Euler vaults by ClearStar',
         description: 'Only to be used for Euler vaults by ClearStar.',
       },
+      'euler-api3': {
+        chains: ['ethereum', 'bsc'],
+        title: 'Euler vaults by Api3',
+        description: 'Only to be used for Euler vaults by Api3.',
+      },
     },
     homepageUrl: 'https://app.euler.finance/',
   },
