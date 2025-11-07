@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 31.4.0
+
+### Minor Changes
+
+- 32f70e7: Add Moonwell on Moonriver to dApp details
+
 ## 31.3.0
 
 ### Minor Changes
