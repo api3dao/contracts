@@ -45,7 +45,10 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://www.machfi.xyz/',
   },
   { aliases: { malda: { chains: ['linea'], title: 'Malda' } }, homepageUrl: 'https://malda.xyz/' },
-  { aliases: { moonwell: { chains: ['moonbeam'], title: 'Moonwell' } }, homepageUrl: 'https://moonwell.fi/' },
+  {
+    aliases: { moonwell: { chains: ['moonbeam', 'moonriver'], title: 'Moonwell' } },
+    homepageUrl: 'https://moonwell.fi/',
+  },
   {
     aliases: {
       'morpho-mvl-usdc-770-lltv': {
