@@ -1,5 +1,8 @@
-import * as chainSupport from '../data/chain-support.json';
+import * as chainSupportData from '../data/chain-support.json';
 import { CHAINS } from '../src/generated/chains';
+import type { ChainSupport } from '../src/types';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 function isArrayAlphabeticallyOrdered(arr: string[]): boolean {
   const sortedArr = [...arr].sort();
@@ -8,22 +11,22 @@ function isArrayAlphabeticallyOrdered(arr: string[]): boolean {
 
 function main(): void {
   const chainAliases = new Set(CHAINS.map((chain) => chain.alias));
-  [chainSupport.chainsSupportedByMarket, chainSupport.chainsSupportedByOevAuctions].forEach((supportedChainAliases) => {
+  [chainsSupportedByMarket, chainsSupportedByOevAuctions].forEach((supportedChainAliases) => {
     supportedChainAliases.forEach((supportedChainAlias) => {
       if (!chainAliases.has(supportedChainAlias)) {
         throw new Error(`Supported chain with alias ${supportedChainAlias} does not exist`);
       }
     });
   });
-  chainSupport.chainsSupportedByOevAuctions.forEach((chainAlias) => {
-    if (!chainSupport.chainsSupportedByMarket.includes(chainAlias)) {
+  chainsSupportedByOevAuctions.forEach((chainAlias) => {
+    if (!chainsSupportedByMarket.includes(chainAlias)) {
       throw new Error(`OEV auction-supported chain with alias ${chainAlias} is not market-supported`);
     }
   });
 
   const logs: string[] = [];
 
-  for (const [arrayName, array] of Object.entries(chainSupport)) {
+  for (const [arrayName, array] of Object.entries(chainSupportData)) {
     if (Array.isArray(array) && !isArrayAlphabeticallyOrdered(array as string[])) {
       logs.push(`Error: ${arrayName} is not alphabetically ordered`);
     }

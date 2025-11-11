@@ -1,8 +1,10 @@
 import { deployments, ethers, network, run } from 'hardhat';
 
-import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import * as chainSupportData from '../data/chain-support.json';
 import { CHAINS } from '../src/generated/chains';
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../src/index';
+import { type ChainSupport, Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../src/index';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
