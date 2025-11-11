@@ -48,5 +48,4 @@ This fact can often be exploited to extract funds from the users of the data fee
 
 OEV can also be seen as a subset of Maximal Extractable Value (MEV) that oracles have priority on extracting by batching additional operations with their updates.
 Furthermore, instead of searching for such OEV opportunities themselves, oracles can auction off this privilege.
-API3 holds transparent and permissionless auctions for OEV opportunities around their data feeds on OEV Network, and returns the auction proceeds to dApps.
 This effectively creates an entirely new revenue stream for dApps.
