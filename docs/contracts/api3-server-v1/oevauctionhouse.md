@@ -1,7 +1,7 @@
 # OevAuctionHouse
 
 OevAuctionHouse implements a general purpose auction platform for a centralized entity to auction off data in a transparent and retrospectively verifiable manner.
-API3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
+API3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) on [OEV Network](../../glossary.md#oev-network), where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
 
 ## On-chain auctions
 
@@ -69,6 +69,10 @@ Failing to do so results in them being charged a collateral amount and the rest 
 - Bid placement transactions must be confirmed in the bid phase for the auctioneer to consider them.
   On the other hand, bidders will prefer to place bids as late as possible to base them on fresh information.
   This means that there is a trade-off to be made regarding how late one should attempt to place their bids.
+
+- OevAuctionHouse is on OEV Network, which currently is an Arbitrum Nitro L2.
+  Its sequencing is centralized, with block times of ~250ms.
+  Therefore, an OevAuctionHouse interaction can be approximated to an API call under normal conditions, i.e., it will be fairly fast and final.
 
 - Chains on which bids are paid and OEV is extracted may provide weaker finality guarantees.
   It is the bidder's responsibility to wait for adequate finality before calling `reportFulfillment()`.

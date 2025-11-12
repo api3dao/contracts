@@ -217,12 +217,18 @@ This is both a net gain for the dApps (which otherwise would have bled these fun
 
 ## OEV auction
 
-API3 periodically holds time-limited [OEV](#oev) auctions where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.
+API3 periodically holds time-limited [OEV](#oev) auctions at [OEV Network](#oev-network) where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.
 
 ## OEV feed
 
 Each [data feed](#data-feed) has a [base version](#base-feed) that lives in [Api3ServerV1](./contracts/api3-server-v1/api3serverv1.md), and an [OEV version](#oev-feed) that lives in [Api3ServerV1OevExtension](./contracts/api3-server-v1/api3serverv1oevextension.md).
 The OEV feed can be updated by the [searcher](#searcher) that has won the respective [OEV auction](#oev-auction) by using the [signed data](#signed-data) served by the [signed API](#signed-api).
+
+## OEV Network
+
+[OEV](#oev) Network is an Arbitrum Nitro L2.
+Its chain ID is 4913 and it uses ETH as the gas token.
+[OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) is deployed on OEV Network, and [searchers](#searcher) bridge ETH to OEV Network to use as [collateral](#collateral).
 
 ## Protocol fee
 
