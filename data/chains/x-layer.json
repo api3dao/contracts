@@ -16,6 +16,10 @@
     {
       "alias": "blockpi",
       "homepageUrl": "https://blockpi.io"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "OKB",
