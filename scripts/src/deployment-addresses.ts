@@ -3,8 +3,11 @@ import { join } from 'node:path';
 
 import type { AddressLike } from 'ethers';
 
-import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../../data/chain-support.json';
+import * as chainSupportData from '../../data/chain-support.json';
 import { CHAINS } from '../../src/generated/chains';
+import type { ChainSupport } from '../../src/types';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 function getDeploymentAddresses() {
   const references: Record<string, Record<string, AddressLike>> = {

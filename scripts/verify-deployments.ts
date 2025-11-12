@@ -11,10 +11,12 @@ import { go } from '@api3/promise-utils';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
 
-import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../data/chain-support.json';
-import { CHAINS } from '../src/index';
+import * as chainSupportData from '../data/chain-support.json';
+import { type ChainSupport, CHAINS } from '../src/index';
 
 import { goAsyncOptions, skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification } from './constants';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address

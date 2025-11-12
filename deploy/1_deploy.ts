@@ -1,9 +1,11 @@
 import { deployments, ethers, network } from 'hardhat';
 
-import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import * as chainSupportData from '../data/chain-support.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
 import { CHAINS } from '../src/index';
-import type { Api3ReaderProxyV1Factory, OwnableCallForwarder } from '../src/index';
+import type { Api3ReaderProxyV1Factory, ChainSupport, OwnableCallForwarder } from '../src/index';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 

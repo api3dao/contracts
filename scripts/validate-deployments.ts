@@ -5,7 +5,7 @@ import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
 import * as auctioneerMetadata from '../data/auctioneer-metadata.json';
-import { chainsSupportedByMarket, chainsSupportedByOevAuctions } from '../data/chain-support.json';
+import * as chainSupportData from '../data/chain-support.json';
 import {
   dapiManagementMerkleRootSigners,
   dapiPricingMerkleRootSigners,
@@ -17,6 +17,7 @@ import type {
   Api3MarketV2,
   Api3ReaderProxyV1Factory,
   Chain,
+  ChainSupport,
   GnosisSafeWithoutProxy,
   IApi3ReaderProxy,
   OevAuctionHouse,
@@ -25,6 +26,8 @@ import type {
 import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index';
 
 import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants';
+
+const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 const chainSymbolToTicker: Record<string, string> = {
   xDAI: 'DAI',

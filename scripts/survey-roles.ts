@@ -8,10 +8,12 @@ import { join } from 'node:path';
 import { go } from '@api3/promise-utils';
 import { config, ethers } from 'hardhat';
 
-import { chainsSupportedByMarket } from '../data/chain-support.json';
-import { CHAINS } from '../src/index';
+import * as chainSupportData from '../data/chain-support.json';
+import { type ChainSupport, CHAINS } from '../src/index';
 
 import { goAsyncOptions } from './constants';
+
+const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 
 const MAXIMUM_GETLOGS_BLOCK_RANGE = 50_000;
 
