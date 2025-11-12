@@ -10,8 +10,8 @@
       "rpcUrl": "https://mainnet.mode.network"
     },
     {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
     }
   ],
   "symbol": "ETH",
