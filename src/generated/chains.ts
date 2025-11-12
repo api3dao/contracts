@@ -594,7 +594,7 @@ export const CHAINS: Chain[] = [
     name: 'Mode',
     providers: [
       { alias: 'default', rpcUrl: 'https://mainnet.mode.network' },
-      { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
+      { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
     ],
     symbol: 'ETH',
     testnet: false,
@@ -966,6 +966,7 @@ export const CHAINS: Chain[] = [
       { alias: 'default', rpcUrl: 'https://rpc.xlayer.tech/' },
       { alias: 'okx', rpcUrl: 'https://xlayerrpc.okx.com/' },
       { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
+      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
     symbol: 'OKB',
     testnet: false,
