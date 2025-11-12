@@ -70,9 +70,7 @@ Failing to do so results in them being charged a collateral amount and the rest 
   On the other hand, bidders will prefer to place bids as late as possible to base them on fresh information.
   This means that there is a trade-off to be made regarding how late one should attempt to place their bids.
 
-- OevAuctionHouse is on OEV Network, which currently is an Arbitrum Nitro L2.
-  Its sequencing is centralized, with block times of ~250ms.
-  Therefore, an OevAuctionHouse interaction can be approximated to an API call under normal conditions, i.e., it will be fairly fast and final.
+- OevAuctionHouse is on OEV Network, which is expected to have fast block times and reliable finality. As a result, OevAuctionHouse interactions can be approximated to an API call under normal conditions, i.e., they will be fairly fast and final.
 
 - Chains on which bids are paid and OEV is extracted may provide weaker finality guarantees.
   It is the bidder's responsibility to wait for adequate finality before calling `reportFulfillment()`.
