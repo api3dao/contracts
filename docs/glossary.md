@@ -226,7 +226,9 @@ The OEV feed can be updated by the [searcher](#searcher) that has won the respec
 
 ## OEV Network
 
-[OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) is designed to be deployed on OEV Network, where [searchers](#searcher) deposit funds to use as [collateral](#collateral).
+[OEV](#oev) Network is an Arbitrum Nitro L2.
+Its chain ID is 4913 and it uses ETH as the gas token.
+[OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) is deployed on OEV Network, and [searchers](#searcher) bridge ETH to OEV Network to use as [collateral](#collateral).
 
 ## Protocol fee
 
