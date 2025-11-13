@@ -1,5 +1,6 @@
 {
   "aliases": {
     "evro": { "chains": ["gnosis"], "title": "EVRO" }
-  }
+  },
+  "homepageUrl": "https://www.evro.finance/"
 }
