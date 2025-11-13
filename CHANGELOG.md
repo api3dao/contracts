@@ -1,5 +1,36 @@
 # @api3/contracts
 
+## 32.0.0
+
+### Major Changes
+
+- c91ee03: Remove support for following chains:
+
+  - berachain-testnet
+  - ink-sepolia-testnet
+  - ink
+  - merlin-testnet
+  - metal-sepolia-testnet
+  - metal
+  - metis-sepolia-testnet
+  - metis
+  - oev-network
+  - opbnb-testnet
+  - opbnb
+  - taiko-hoodi-testnet
+
+### Minor Changes
+
+- a63736a: Add EVRO to dApp details
+- 8a140e1: Add Market support to lumia-beam-testnet and taiko-hoodi-testnet (167013)
+
+### Patch Changes
+
+- 8eaec21: Update RPC provider configurations:
+
+  - Replace tenderly with alchemy for mode
+  - Add quicknode for x-layer
+
 ## 31.4.0
 
 ### Minor Changes
