@@ -107,6 +107,11 @@ export interface HardhatBlockscoutConfig {
   customChains: HardhatEtherscanCustomChain[];
 }
 
+export interface ChainSupport {
+  chainsSupportedByMarket: Alias[];
+  chainsSupportedByOevAuctions: Alias[];
+}
+
 export const aliasSchema = z.string().regex(/^[\da-z-]+$/);
 
 export type Alias = z.infer<typeof aliasSchema>;

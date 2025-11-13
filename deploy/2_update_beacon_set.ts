@@ -2,8 +2,10 @@ import { type HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signer
 import type { BytesLike } from 'ethers';
 import { deployments, ethers, network } from 'hardhat';
 
-import { chainsSupportedByMarket } from '../data/chain-support.json';
-import { Api3ServerV1__factory } from '../src/index';
+import * as chainSupportData from '../data/chain-support.json';
+import { type ChainSupport, Api3ServerV1__factory } from '../src/index';
+
+const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 
 const EXAMPLE_AIRNODE_ADDRESS = ethers.getAddress('0x07b589f06bD0A5324c4E2376d66d2F4F25921DE1');
 const BEACON_SET_BEACON_COUNT = 7;

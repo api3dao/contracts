@@ -2,12 +2,12 @@
   "alias": "taiko-hoodi-testnet",
   "blockExplorerUrl": "https://hoodi.taikoscan.io/",
   "decimals": 18,
-  "id": "167012",
+  "id": "167013",
   "name": "Taiko Hoodi testnet",
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.hoodi.taiko.xyz"
+      "rpcUrl": "https://rpc.hoodi.taiko.xyz/"
     }
   ],
   "symbol": "ETH",

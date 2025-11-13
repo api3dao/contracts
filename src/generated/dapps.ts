@@ -37,6 +37,7 @@ export const DAPPS: Dapp[] = [
     },
     homepageUrl: 'https://app.euler.finance/',
   },
+  { aliases: { evro: { chains: ['gnosis'], title: 'EVRO' } }, homepageUrl: 'https://www.evro.finance/' },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
   { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
