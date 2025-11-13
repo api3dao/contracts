@@ -1,0 +1,19 @@
+{
+  "alias": "lumia-beam-testnet",
+  "blockExplorerUrl": "https://beam-explorer.lumia.org/",
+  "decimals": 18,
+  "id": "2030232745",
+  "name": "Lumia testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://beam-rpc.lumia.org/"
+    }
+  ],
+  "symbol": "LUMIA",
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://beam-explorer.lumia.org/api/"
+  }
+}
