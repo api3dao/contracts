@@ -3,7 +3,7 @@
   "blockExplorerUrl": "https://hoodi.taikoscan.io/",
   "decimals": 18,
   "id": "167013",
-  "name": "Taiko Hoodi Testnet",
+  "name": "Taiko Hoodi testnet",
   "providers": [
     {
       "alias": "default",

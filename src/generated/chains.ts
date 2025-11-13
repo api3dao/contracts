@@ -898,7 +898,7 @@ export const CHAINS: Chain[] = [
     blockExplorerUrl: 'https://hoodi.taikoscan.io/',
     decimals: 18,
     id: '167013',
-    name: 'Taiko Hoodi Testnet',
+    name: 'Taiko Hoodi testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.hoodi.taiko.xyz/' }],
     symbol: 'ETH',
     testnet: true,
