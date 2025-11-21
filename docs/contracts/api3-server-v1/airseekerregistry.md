@@ -91,9 +91,9 @@ where `airnodes` is of `address[]` type and `templateIds` is of `bytes32[]` type
 ## How to use AirseekerRegistry
 
 AirseekerRegistry is an Ownable contract where the owner cannot transfer or renounce the ownership.
-The owner is responsible with leaving the state of this contract in a way that Airseeker expects.
+The owner is responsible for leaving the state of this contract in a way that Airseeker expects.
 Otherwise, Airseeker behavior is not defined (but it can be expected that the respective data feed will not be updated under any condition).
-The points to consider while activating a data feed name are as follow:
+The points to consider while activating a data feed name are as follows:
 
 - If a [dAPI](../../glossary.md#dapi) name is being used, it should be set at [Api3ServerV1](./api3serverv1.md).
 - The data feed should be registered by calling `registerDataFeed()`.

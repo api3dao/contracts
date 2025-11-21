@@ -49,7 +49,7 @@ There are two requirements for this:
 1. The searcher needs to know exactly what updates they are bidding for.
 1. The OEV opportunities that the bid amount calculation is based on should not be capturable through base feed updates or by the winner of the previous auction.
 
-To achieve this, where `T` is one [auction period](../../glossary.md#auction-period) (i.e., 30 seconds), the signed API endpoint that serves the signed data used to execute base feed updates delay the data by `2T`, and the award signature is signed in a way that Api3ServerV1OevExtension allows the auction winner to execute OEV updates with signed data that is at least `T`-old.
+To achieve this, where `T` is one [auction period](../../glossary.md#auction-period) (i.e., 30 seconds), the signed API endpoint that serves the signed data used to execute base feed updates delays the data by `2T`, and the award signature is signed in a way that Api3ServerV1OevExtension allows the auction winner to execute OEV updates with signed data that is at least `T`-old.
 In other words, there are three uses of signed data across time:
 
 1. Signed API publishes real-time data signed to allow the auction winner to execute OEV feed updates.
@@ -75,7 +75,7 @@ At this point, the OEV extraction contract is allowed to update the respective O
 Before returning, the OEV extraction contract must ensure that Api3ServerV1OevExtension is sent at least the bid amount.
 Failing to pay the bid amount before returning will cause the transaction to revert.
 
-Alternatively to the intended flow, it is possible for the OEV extraction contract to call `payOevBid()` with a callback that only pays the bid amount, and extract the OEV outside of the `payOevBid()` callback.
+As an alternative to the intended flow, it is possible for the OEV extraction contract to call `payOevBid()` with a callback that only pays the bid amount, and extract the OEV outside of the `payOevBid()` callback.
 This approach is not advised as it does not allow the bid amount to be paid out of the extracted OEV.
 
 ## How are the OEV auction proceeds handled?

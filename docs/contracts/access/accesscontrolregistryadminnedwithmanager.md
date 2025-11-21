@@ -1,6 +1,6 @@
 # AccessControlRegistryAdminnedWithManager
 
-AccessControlRegistryAdminnedWithManager is designed to be inherited by contracts that require a single role tree that live in [AccessControlRegistry](./accesscontrolregistry.md).
+AccessControlRegistryAdminnedWithManager is designed to be inherited by contracts that require a single role tree that lives in [AccessControlRegistry](./accesscontrolregistry.md).
 Since it implements a single role tree, it has a single [manager](../../glossary.md#manager).
 
 ```

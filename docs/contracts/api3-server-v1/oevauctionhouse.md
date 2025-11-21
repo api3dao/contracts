@@ -14,7 +14,7 @@ OEV auctions are done on-chain to address two issues:
    Considering that we are building the OEV auction platform for all dApps living on all chains, simply scaling up the infrastructure to meet this demand is not realistic, and we should have a mechanism to downregulate the demand.
    This is a long-solved problem in blockchain transactions through the gas fee, and thus hosting the auctions on-chain is an obvious solution to this problem.
 2. An OEV auction is an oracle service in essence, for which it is important to be able to prove a good track record.
-   For this, a paper trail of the entire communication between the [auctioneers](../../glossary.md#auctioneer) and the searchers need to be kept, and a blockchain is a natural solution to this.
+   For this, a paper trail of the entire communication between the [auctioneers](../../glossary.md#auctioneer) and the searchers needs to be kept, and a blockchain is a natural solution to this.
    Consider this for a counterexample:
    A searcher claims that they call the (hypothetical) auctioneer API to make bids that should win, but the auctioneer keeps [awarding](../../glossary.md#award) the updates to other, smaller bids.
    The auctioneer would not be able to disprove this claim, as it is not possible to prove that an API call has not been received, yet whether an on-chain transaction has been confirmed is conclusively verifiable.
@@ -49,8 +49,8 @@ Therefore, for this dApp, a new auction will start at every UNIX timestamp `k * 
 ## Collateral and protocol fee
 
 Whenever a bidder wins an auction, OevAuctionHouse locks up some of their funds to charge either a [collateral](../../glossary.md#collateral) or a [protocol fee](../../glossary.md#protocol-fee).
-In the case that the winner promptly pays their bid and report that they have done so, they are charged a protocol fee out of the locked funds and the rest of the funds gets released.
-Failing to do so results in them being charged a collateral amount and the rest of the funds gets released.
+In the case that the winner promptly pays their bid and reports that they have done so, they are charged a protocol fee out of the locked funds and the rest of the funds get released.
+Failing to do so results in them being charged a collateral amount and the rest of the funds get released.
 
 > [!WARNING]  
 > Since the initial implementation, we have decided to implement the protocol monetization logic elsewhere.
@@ -87,7 +87,7 @@ However, it was also designed to be flexible enough to support various auction s
 One thing to consider here is that the `expirationTimestamp` specified while calling `placeBid()` and `MAXIMUM_BID_LIFETIME` have become largely obsolete with this switch.
 
 If a searcher is placing a bid during `A1` (i.e., for `t=30–55`), they can set their `expirationTimestamp` to be `55` (i.e., end of the bid phase during which they aim to execute OEV updates).
-Any less risks their bid to not be considered due to expiring too soon, and any more risks their bid to be awarded too late.
+Any less risks their bid not being considered due to expiring too soon, and any more risks their bid being awarded too late.
 (The latter should never happen as long as the auctioneer calls `awardBid()` with suitable `awardExpirationTimestamp`.)
 In the case that `T` is much smaller than `MAXIMUM_BID_LIFETIME`, `MAXIMUM_BID_LIFETIME` stops becoming a factor and can be safely ignored.
 
@@ -286,7 +286,7 @@ Below are the important points to consider while implementing a contract that ca
 - `reportFulfillment()` has to be called by the same account that has placed the bid.
   Therefore, one should design a flow that has the same contract report the respective fulfillments.
 - `initiateWithdrawal()` and `withdraw()` has to be called by the same account for which funds were deposited (which is also the account that places the bids).
-  Therefore, one should design a flow that has the same contract calls the `initiateWithdrawal()` and `withdraw()` functions in succession to withdraw funds.
+  Therefore, one should design a flow that has the same contract call the `initiateWithdrawal()` and `withdraw()` functions in succession to withdraw funds.
   Optionally, `cancelWithdrawal()` support may be implemented.
 - The withdrawal recipient is specified in the `withdraw()` call.
   In the case that the recipient is the said contract, it should be `payable` (to execute the withdrawal), and allow funds in the native currency be withdrawn from it.

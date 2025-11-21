@@ -16,7 +16,7 @@ The Api3 stack is designed to achieve two main objectives:
 
 All oracle solutions involve referring to an API for off-chain data and submitting it to a chain.
 The [Api3 whitepaper](https://github.com/api3dao/api3-whitepaper/blob/master/api3-whitepaper.pdf) points out that these APIs do not materialize spontaneously in the wild, but rather are built and maintained by businesses as products.
-Furthermore, for any serious use-case, there is only a few number of such APIs that are viable.
+Furthermore, for any serious use-case, there are only a few such APIs that are viable.
 Then, the optimal architecture for an oracle solution must only depend on the providers of these APIs, and includes no middlemen.
 
 An API provider that provides oracle services is called a **first-party oracle**.
@@ -30,7 +30,7 @@ Frustrated chains and dApps were complaining about having signed contracts, paid
 
 This could not have gone on with the wave of L2s coming, and one response to this was "pull oracles".
 Based on the presumption that data feed integrations are inherently impossible to do at scale, a lighter product was invented.
-The lightness comes at a cost that we will not elaborate here, but in short, the resulting product ended up not being a viable alternative to traditional data feeds in many use-cases.
+The lightness comes at a cost that we will not elaborate on here, but in short, the resulting product ended up not being a viable alternative to traditional data feeds in many use-cases.
 
 Api3 took a step back here and asked:
 "Are traditional data feeds actually obsolete, or can they be served in a way that meets the demands of the modern Ethereum landscape?"

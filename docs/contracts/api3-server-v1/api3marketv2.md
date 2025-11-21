@@ -9,7 +9,7 @@ For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is 
 
 Api3MarketV2 inherits [HashRegistry](../access/hashregistry.md), which inherits Ownable, which means Api3MarketV2 has an owner.
 Unlike HashRegistry, the Api3MarketV2 ownership cannot be transferred or renounced (i.e., the owner specified at the deployment is immutable).
-In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3MarketV2 allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decomissioned urgently, without waiting for the ongoing subscriptions to end.
+In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3MarketV2 allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decommissioned urgently, without waiting for the ongoing subscriptions to end.
 
 ## Merkle roots as HashRegistry hash types
 
@@ -31,7 +31,7 @@ These Merkle trees are then published for the users to be able to provide the re
 
 ### dAPI management Merkle tree
 
-The leaves of the dAPI management Merkle tree is the hash of the following values:
+The leaves of the dAPI management Merkle tree are the hashes of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`).
 - Data feed ID (`bytes32`): The ID of the data feed that the dAPI is to be pointed at.
@@ -46,7 +46,7 @@ In the case that a dAPI name is being decommissioned, rather than omitting it in
 
 ### dAPI pricing Merkle tree
 
-The leaves of the dAPI pricing Merkle tree is the hash of the following values:
+The leaves of the dAPI pricing Merkle tree are the hashes of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`)
 - Chain ID (`uint256`): The ID of the chain for which the price will apply
@@ -70,7 +70,7 @@ In the case of overpricing, the funds will roll over to the next subscription pu
 
 ### Signed API URL Merkle tree
 
-The leaves of the signed API URL Merkle tree is the hash of the following values:
+The leaves of the signed API URL Merkle tree are the hashes of the following values:
 
 - [Airnode address](../../glossary.md#airnode-address) (`address`)
 - Signed API URL (`string`): The URL of the [signed API](../../glossary.md#signed-api) that serves the data signed by the [Airnode feed](../../glossary.md#airnode-feed).
@@ -84,7 +84,7 @@ The user needs to prepare the states of [Api3ServerV1](./api3serverv1.md) and [A
 Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the Api3 Market frontend, which abstracts away this complexity.
 This section describes what happens under the hood of the Api3 Market frontend.
 
-The requirements for a `buySubscription()` call to succeed are as follow:
+The requirements for a `buySubscription()` call to succeed are as follows:
 
 - The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3MarketV2, are valid.
 - The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3MarketV2 deployment) items.

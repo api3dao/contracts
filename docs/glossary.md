@@ -2,7 +2,7 @@
 
 ## Admin role
 
-The access control contracts in this repo uses the term "admin role" in two different contexts:
+The access control contracts in this repo use the term "admin role" in two different contexts:
 
 1. `adminRole` in [AccessControlRegistry](./contracts/access/accesscontrolregistry.md), in the same way that OpenZeppelin uses it in AccessControl (i.e., if Role A is the admin role of Role B, accounts that have Role A can grant and revoke Role B)
 2. `adminRole` in [AccessControlRegistryAdminned](./contracts/access/accesscontrolregistryadminned.md) and [AccessControlRegistryAdminnedWithManager](./contracts/access/accesscontrolregistryadminnedwithmanager.md), referring to the abstraction layer between the [root role](#root-role) and the contract-specific roles.
@@ -53,11 +53,11 @@ Api3 Market is a dApp where users can purchase [dAPI](#dapi) plans, which get re
 ## Auctioneer
 
 An auctioneer is an account that has the auctioneer role on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md).
-Auctioneers are hot wallets used in [auctioner resolvers](#auction-resolver) and [auction cops](#auction-cop), which are managed by Api3 to facilitate [OEV aucitons](#oev-auction).
+Auctioneers are hot wallets used in [auctioner resolvers](#auction-resolver) and [auction cops](#auction-cop), which are managed by Api3 to facilitate [OEV auctions](#oev-auction).
 
 ## Auction cop
 
-Auction cop is an application that confirms or contradicts [fulfillments](#fulfillment) related to [awarded](#award) [OEV auctions](#oev-auction).
+An auction cop is an application that confirms or contradicts [fulfillments](#fulfillment) related to [awarded](#award) [OEV auctions](#oev-auction).
 In other words, it slashes the [collateral](#collateral) of winning OEV auction participants that did not pay their [bid](#bid) amounts.
 An auction cop controls a hot wallet that has the [auctioneer](#auctioneer) role on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md).
 
@@ -68,7 +68,7 @@ The amount of time that an auction takes is called the auction period.
 
 ## Auction resolver
 
-Auction resolver is an application that [awards](#award) [bids](#bid) placed on an [OEV auction](#oev-auction).
+An auction resolver is an application that [awards](#award) [bids](#bid) placed on an [OEV auction](#oev-auction).
 An auction resolver controls a hot wallet that has the [auctioneer](#auctioneer) role on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) and [Api3ServerV1OevExtension](./contracts/api3-server-v1/api3serverv1oevextension.md).
 
 ## Award
@@ -78,7 +78,7 @@ This award transaction provides a signature that allows the [searcher](#searcher
 
 ## Award phase
 
-Award phase is the second phase of an [OEV auction](#oev-auction) where [auction resolves](#auction-resolver) are supposed to [award](#award) [searchers'](#searcher) [bids](#bid).
+The award phase is the second phase of an [OEV auction](#oev-auction) where [auction resolves](#auction-resolver) are supposed to [award](#award) [searchers'](#searcher) [bids](#bid).
 It is preceded by the [bid phase](#bid-phase).
 
 ## Base feed
@@ -122,7 +122,7 @@ Most generally, the bid specifies what update the searcher wants to do and how m
 
 ## Bid phase
 
-Bid phase is the first phase of an [OEV auction](#oev-auction) where [searchers](#searcher) are supposed to place their [bids](#bid).
+The bid phase is the first phase of an [OEV auction](#oev-auction) where [searchers](#searcher) are supposed to place their [bids](#bid).
 It is followed by the [award phase](#award-phase).
 
 ## Collateral
@@ -320,7 +320,7 @@ templateId = keccak256(abi.encode(endpointID, parameters));
 
 ## Third-party oracles
 
-A middlemen that calls an API operated by an [API provider](#api-provider) and provides a downstream oracle service.
+A middleman that calls an API operated by an [API provider](#api-provider) and provides a downstream oracle service.
 In other words, an oracle that is not a [first-party oracle](#first-party-oracles).
 
 ## Update parameters

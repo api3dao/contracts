@@ -16,7 +16,7 @@ Api3 [data feeds](../../glossary.md#data-feed) are updated asynchronously for tr
 Conversely, synchronous updates are preferred because they allow multi-party cryptographic methods to be used for off-chain aggregation, which sacrifices security guarantees to reduce gas costs.
 
 Synchronous updates happen in rounds, where all parties share their version of the truth with each other and then come to a consensus that can be verified on-chain.
-In practice, downtime and latency of individual parties is a common issue, and thus waiting until all parties report is not a viable option.
+In practice, downtime and latency of individual parties are common issues, and thus waiting until all parties report is not a viable option.
 However, the alternative to requiring full participation causes a critical vulnerability.
 
 Say that the data from 21 parties are aggregated in a synchronous manner.
