@@ -54,3 +54,5 @@ This effectively creates an entirely new revenue stream for dApps.
 > [!WARNING]  
 > [OEV Network has been deprecated,](https://x.com/Api3DAO/status/1982840223752212907) and any on-chain OEV auctions will be held on existing chains.
 > These docs were written with OEV Network in mind, and are left as is for historical reference.
+>
+> TODO: Add note about the case with no on-chain auctions.
