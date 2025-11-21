@@ -12,7 +12,7 @@ Although these base feeds can be read by calling Api3ServerV1 directly, the user
 
 ## Asynchronous updates
 
-API3 [data feeds](../../glossary.md#data-feed) are updated asynchronously for trust-minimization, which is the main difference in their architecture compared to alternative solutions.
+Api3 [data feeds](../../glossary.md#data-feed) are updated asynchronously for trust-minimization, which is the main difference in their architecture compared to alternative solutions.
 Conversely, synchronous updates are preferred because they allow multi-party cryptographic methods to be used for off-chain aggregation, which sacrifices security guarantees to reduce gas costs.
 
 Synchronous updates happen in rounds, where all parties share their version of the truth with each other and then come to a consensus that can be verified on-chain.

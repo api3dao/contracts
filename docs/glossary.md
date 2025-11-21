@@ -46,14 +46,14 @@ In the case that the signed APIs are publicly accessible, anyone can operate an 
 
 An API provider is a business that has productized their services in the form of an API.
 
-## API3 Market
+## Api3 Market
 
-API3 Market is a dApp where users can purchase [dAPI](#dapi) plans, which get reflected on-chain immediately.
+Api3 Market is a dApp where users can purchase [dAPI](#dapi) plans, which get reflected on-chain immediately.
 
 ## Auctioneer
 
 An auctioneer is an account that has the auctioneer role on [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md).
-Auctioneers are hot wallets used in [auctioner resolvers](#auction-resolver) and [auction cops](#auction-cop), which are managed by API3 to facilitate [OEV aucitons](#oev-auction).
+Auctioneers are hot wallets used in [auctioner resolvers](#auction-resolver) and [auction cops](#auction-cop), which are managed by Api3 to facilitate [OEV aucitons](#oev-auction).
 
 ## Auction cop
 
@@ -137,7 +137,7 @@ This is followed by an [auction cop](#auction-cop) confirming the fulfillment, w
 
 ## dAPI
 
-The [API3 whitepaper](https://github.com/api3dao/api3-whitepaper/blob/master/api3-whitepaper.pdf) definition of a dAPI is a [first-party oracle](#first-party-oracles)-based data feed that is managed decentrally.
+The [Api3 whitepaper](https://github.com/api3dao/api3-whitepaper/blob/master/api3-whitepaper.pdf) definition of a dAPI is a [first-party oracle](#first-party-oracles)-based data feed that is managed decentrally.
 
 The [Api3ServerV1](./contracts/api3-server-v1/api3serverv1.md) implementation of this concept is simply an abstraction layer that maps `bytes32` strings to [data feed](#data-feed) IDs, which is managed by a dAPI name setter role.
 
@@ -147,8 +147,8 @@ We use the term dApp interchangeably to refer to the whole entity, its implement
 
 ## dApp ID
 
-API3 holds separate [OEV auctions](#oev-auction) for different [dApps](#dapp) to be able to keep their proceeds isolated.
-In this scheme, dApps are identified by IDs that are assigned by API3.
+Api3 holds separate [OEV auctions](#oev-auction) for different [dApps](#dapp) to be able to keep their proceeds isolated.
+In this scheme, dApps are identified by IDs that are assigned by Api3.
 The dApps are required to use [proxies](#proxy) with the respective dApp IDs to receive any OEV proceeds.
 
 ## Data feed
@@ -200,7 +200,7 @@ In the context of [AccessControlRegistry](./contracts/access/accesscontrolregist
 
 ## Manager multisig
 
-On each chain, an [OwnableCallForwarder](./contracts/access/ownablecallforwarder.md) deployment is designated as the [manager](#manager) of the contracts that facilitate API3 [data feed](#data-feed) services.
+On each chain, an [OwnableCallForwarder](./contracts/access/ownablecallforwarder.md) deployment is designated as the [manager](#manager) of the contracts that facilitate Api3 [data feed](#data-feed) services.
 The owner of each of these OwnableCallForwarder deployments is currently set to be a [GnosisSafeWithoutProxy](./contracts/access/gnosissafewithoutproxy.md) deployment on the respective chain.
 Since these GnosisSafeWithoutProxy deployments effectively act as the manager on the respective chain, they are referred to as the manager multisigs.
 
@@ -212,12 +212,12 @@ Maximal extractable value (MEV) is a superset of [OEV](#oev) that can be extract
 
 Oracle extractable value (OEV) is a subset of [MEV](#mev) that can be extracted by guaranteeing a specific relative order of oracle updates and related interactions within a transaction.
 
-API3 monetizes its [dAPI](#dapi) services by holding [OEV auctions](#oev-auction) and forwarding the proceeds to the respective [dApps](#dapp).
-This is both a net gain for the dApps (which otherwise would have bled these funds to [MEV](#mev) bots and validators), and a fair and scalable business model for API3.
+Api3 monetizes its [dAPI](#dapi) services by holding [OEV auctions](#oev-auction) and forwarding the proceeds to the respective [dApps](#dapp).
+This is both a net gain for the dApps (which otherwise would have bled these funds to [MEV](#mev) bots and validators), and a fair and scalable business model for Api3.
 
 ## OEV auction
 
-API3 periodically holds time-limited [OEV](#oev) auctions at [OEV Network](#oev-network) where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.
+Api3 periodically holds time-limited [OEV](#oev) auctions at [OEV Network](#oev-network) where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.
 
 ## OEV feed
 
@@ -233,7 +233,7 @@ Its chain ID is 4913 and it uses ETH as the gas token.
 ## Protocol fee
 
 > [!WARNING]  
-> This concept is deprecated as API3 will monetize [OEV](#oev) independently from the data feed implementation.
+> This concept is deprecated as Api3 will monetize [OEV](#oev) independently from the data feed implementation.
 > As such, the protocol fee at [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) will be set to zero.
 
 [OevAuctionHouse](./contracts/api3-server-v1/oevauctionhouse.md) specifies that a percentage of the [bid](#bid) amount will be charged as a protocol fee.
@@ -300,7 +300,7 @@ By announcing the extended public key of `m/44'/60'/0'` of the Airseeker HD wall
 
 ## Subscription
 
-[dApps](#dapp) can go to [API3 Market](#api3-market) to purchase a 3 month-long subscription plan for any [dAPI](#dapi) they want with specific [update parameters](#update-parameters) on a specific chain.
+[dApps](#dapp) can go to [Api3 Market](#api3-market) to purchase a 3 month-long subscription plan for any [dAPI](#dapi) they want with specific [update parameters](#update-parameters) on a specific chain.
 The purchase of the subscription guarantees the respective [update parameters](#update-parameters) to be upheld regardless of the gas price conditions.
 
 ## Template

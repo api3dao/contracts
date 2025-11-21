@@ -1,6 +1,6 @@
 # Api3MarketV2
 
-API3 users interact with Api3MarketV2 over the [API3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
+Api3 users interact with Api3MarketV2 over the [Api3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
 Api3MarketV2 has an accompanying [AirseekerRegistry](./airseekerregistry.md) that it owns.
 User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../../glossary.md#airseeker).
 For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is currently deactivated will activate it and set its [update parameters](../../glossary.md#update-parameters) as the ones from the subscription plan, causing Airseeker to immediately start executing updates as specified.
@@ -24,7 +24,7 @@ The Api3MarketV2 owner can set different signers for each of these.
 
 ## Merkle trees
 
-Api3MarketV2 enables API3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
+Api3MarketV2 enables Api3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
 These Merkle trees are then published for the users to be able to provide the respective Merkle proofs while interacting with Api3MarketV2.
 
 `@openzeppelin/merkle-tree` is used to generate the Merkle trees, and Api3MarketV2 uses OpenZeppelin's MerkleProof contract library to verify the proofs.
@@ -40,7 +40,7 @@ The leaves of the dAPI management Merkle tree is the hash of the following value
 
 Each dAPI name in a dAPI management Merkle tree is intended to be unique.
 
-The dAPI sponsor wallet address is derived out of the extended public key of the API3 Airseeker and the dAPI name, meaning that it will be unique per dAPI name.
+The dAPI sponsor wallet address is derived out of the extended public key of the Api3 Airseeker and the dAPI name, meaning that it will be unique per dAPI name.
 
 In the case that a dAPI name is being decommissioned, rather than omitting it in the future iterations of the tree, it should be left in permanently with a `bytes32(0)` data feed ID and `address(0)` sponsor wallet address instead.
 
@@ -63,9 +63,9 @@ Otherwise, a subscription having been purchased may block the purchase of anothe
 
 #### How are prices determined?
 
-API3 does not intend to monetize data feed operation.
+Api3 does not intend to monetize data feed operation.
 Instead, an operation cost is estimated for each subscription, and this exact amount is offered as the respective price.
-In the case of underpricing, which will cause the sponsor wallet to run out before the subscription period ends, API3 will top up the sponsor wallet to uphold the advertised specs.
+In the case of underpricing, which will cause the sponsor wallet to run out before the subscription period ends, Api3 will top up the sponsor wallet to uphold the advertised specs.
 In the case of overpricing, the funds will roll over to the next subscription purchase that uses the same sponsor wallet.
 
 ### Signed API URL Merkle tree
@@ -81,8 +81,8 @@ Each Airnode address in a signed API URL Merkle tree is intended to be unique.
 ## Buying a subscription
 
 The user needs to prepare the states of [Api3ServerV1](./api3serverv1.md) and [AirseekerRegistry](./airseekerregistry.md), and provide the respective Merkle proofs to buy a subscription.
-Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the API3 Market frontend, which abstracts away this complexity.
-This section describes what happens under the hood of the API3 Market frontend.
+Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the Api3 Market frontend, which abstracts away this complexity.
+This section describes what happens under the hood of the Api3 Market frontend.
 
 The requirements for a `buySubscription()` call to succeed are as follow:
 

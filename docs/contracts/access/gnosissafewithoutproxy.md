@@ -1,6 +1,6 @@
 # GnosisSafeWithoutProxy
 
-The first step of a new chain integration for [API3 Market](../../glossary.md#api3-market) is deploying GnosisSafeWithoutProxy as the [manager multisig](../../glossary.md#manager-multisig).
+The first step of a new chain integration for [Api3 Market](../../glossary.md#api3-market) is deploying GnosisSafeWithoutProxy as the [manager multisig](../../glossary.md#manager-multisig).
 
 ## Why customize the Safe contract?
 

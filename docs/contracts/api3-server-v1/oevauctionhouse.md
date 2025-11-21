@@ -1,7 +1,7 @@
 # OevAuctionHouse
 
 OevAuctionHouse implements a general purpose auction platform for a centralized entity to auction off data in a transparent and retrospectively verifiable manner.
-API3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) on [OEV Network](../../glossary.md#oev-network), where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
+Api3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) on [OEV Network](../../glossary.md#oev-network), where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
 
 ## On-chain auctions
 
@@ -261,10 +261,10 @@ An account with the auctioneer role can
 
 Accounts with the auctioneer role are trusted to facilitate the auctions honestly, see [the section above](#security-implications) for the related security implications.
 
-In the way that API3 intends to use this contract, the manager of OevAuctionHouse is an [OwnableCallForwarder](https://github.com/api3dao/airnode-protocol-v1/blob/main/contracts/utils/OwnableCallForwarder.sol) that is owned by a Safe contract (4-of-8 at the time this is being written) that is owned by members of the API3 technical team, which are familiar with how these contracts are designed to be used and general best practices regarding controlling a wallet and interacting with a contract.
+In the way that Api3 intends to use this contract, the manager of OevAuctionHouse is an [OwnableCallForwarder](https://github.com/api3dao/airnode-protocol-v1/blob/main/contracts/utils/OwnableCallForwarder.sol) that is owned by a Safe contract (4-of-8 at the time this is being written) that is owned by members of the Api3 technical team, which are familiar with how these contracts are designed to be used and general best practices regarding controlling a wallet and interacting with a contract.
 This manager account will create the contract admin role, grant it to itself, and then create the auctioneer role as a child of the admin role.
 Following this, it will grant the auctioneer role to a set of EOAs that will be used by an auctioneer bot instance each.
-Auctioneer bots are, in a way, oracle nodes (in that they detect on-chain oracle requests in the form of bids, do intensive off-chain computation and/or API calls to read off-chain data, and write the response back to the chain), and will be operated by the API3 technical team.
+Auctioneer bots are, in a way, oracle nodes (in that they detect on-chain oracle requests in the form of bids, do intensive off-chain computation and/or API calls to read off-chain data, and write the response back to the chain), and will be operated by the Api3 technical team.
 Optionally, the manager can delegate the proxy setting and withdrawing responsibilities to another account (such as a trustless contract) to streamline the respective processes.
 
 ## On interacting with OevAuctionHouse through a contract
