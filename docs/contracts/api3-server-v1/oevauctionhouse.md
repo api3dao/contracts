@@ -1,5 +1,8 @@
 # OevAuctionHouse
 
+> [!WARNING]  
+> [OEV Network has been deprecated,](https://x.com/Api3DAO/status/1982840223752212907) and any on-chain OEV auctions will be held on existing chains.
+
 OevAuctionHouse implements a general purpose auction platform for a centralized entity to auction off data in a transparent and retrospectively verifiable manner.
 Api3 uses it to hold [OEV auctions](../../glossary.md#oev-auction) on [OEV Network](../../glossary.md#oev-network), where [searchers](../../glossary.md#searcher) [bid](../../glossary.md#bid) for the privilege to be the only party that can update [OEV feeds](../../glossary.md#oev-feed) of a specific [dApp](../../glossary.md#dapp) for a short duration.
 

@@ -50,3 +50,7 @@ OEV can also be seen as a subset of Maximal Extractable Value (MEV) that oracles
 Furthermore, instead of searching for such OEV opportunities themselves, oracles can auction off this privilege.
 Api3 holds transparent and permissionless auctions for OEV opportunities around their data feeds on OEV Network, and returns the auction proceeds to dApps.
 This effectively creates an entirely new revenue stream for dApps.
+
+> [!WARNING]  
+> [OEV Network has been deprecated,](https://x.com/Api3DAO/status/1982840223752212907) and any on-chain OEV auctions will be held on existing chains.
+> These docs were written with OEV Network in mind, and are left as is for historical reference.

@@ -217,6 +217,9 @@ This is both a net gain for the dApps (which otherwise would have bled these fun
 
 ## OEV auction
 
+> [!WARNING]  
+> [OEV Network has been deprecated,](https://x.com/Api3DAO/status/1982840223752212907) and any on-chain OEV auctions will be held on existing chains.
+
 Api3 periodically holds time-limited [OEV](#oev) auctions at [OEV Network](#oev-network) where [searchers](#searcher) [bid](#bid) to receive priority on updating data feeds of a specific [dApp](#dapp) for a period of time.
 
 ## OEV feed
@@ -225,6 +228,9 @@ Each [data feed](#data-feed) has a [base version](#base-feed) that lives in [Api
 The OEV feed can be updated by the [searcher](#searcher) that has won the respective [OEV auction](#oev-auction) by using the [signed data](#signed-data) served by the [signed API](#signed-api).
 
 ## OEV Network
+
+> [!WARNING]  
+> [OEV Network has been deprecated,](https://x.com/Api3DAO/status/1982840223752212907) and any on-chain OEV auctions will be held on existing chains.
 
 [OEV](#oev) Network is an Arbitrum Nitro L2.
 Its chain ID is 4913 and it uses ETH as the gas token.
