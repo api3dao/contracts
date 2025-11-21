@@ -1,6 +1,6 @@
 # Api3MarketV2
 
-API3 users interact with Api3MarketV2 over the [API3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
+Api3 users interact with Api3MarketV2 over the [Api3 market](../../glossary.md#api3-market) frontend to purchase [data feed](../../glossary.md#data-feed) [subscriptions](../../glossary.md#subscription).
 Api3MarketV2 has an accompanying [AirseekerRegistry](./airseekerregistry.md) that it owns.
 User interactions update AirseekerRegistry, which immediately reconfigures the respective [Airseeker](../../glossary.md#airseeker).
 For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is currently deactivated will activate it and set its [update parameters](../../glossary.md#update-parameters) as the ones from the subscription plan, causing Airseeker to immediately start executing updates as specified.
@@ -9,7 +9,7 @@ For example, buying a subscription for a [dAPI](../../glossary.md#dapi) that is 
 
 Api3MarketV2 inherits [HashRegistry](../access/hashregistry.md), which inherits Ownable, which means Api3MarketV2 has an owner.
 Unlike HashRegistry, the Api3MarketV2 ownership cannot be transferred or renounced (i.e., the owner specified at the deployment is immutable).
-In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3MarketV2 allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decomissioned urgently, without waiting for the ongoing subscriptions to end.
+In addition to [HashRegistry functionality](../access/hashregistry.md#the-owner), Api3MarketV2 allows its owner to cancel all subscriptions for a dAPI by calling `cancelSubscriptions()` in case the dAPI needs to be decommissioned urgently, without waiting for the ongoing subscriptions to end.
 
 ## Merkle roots as HashRegistry hash types
 
@@ -24,14 +24,14 @@ The Api3MarketV2 owner can set different signers for each of these.
 
 ## Merkle trees
 
-Api3MarketV2 enables API3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
+Api3MarketV2 enables Api3 to predetermine the decisions related to its data feed services and publish them on-chain in the form of roots of Merkle trees.
 These Merkle trees are then published for the users to be able to provide the respective Merkle proofs while interacting with Api3MarketV2.
 
 `@openzeppelin/merkle-tree` is used to generate the Merkle trees, and Api3MarketV2 uses OpenZeppelin's MerkleProof contract library to verify the proofs.
 
 ### dAPI management Merkle tree
 
-The leaves of the dAPI management Merkle tree is the hash of the following values:
+The leaves of the dAPI management Merkle tree are the hashes of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`).
 - Data feed ID (`bytes32`): The ID of the data feed that the dAPI is to be pointed at.
@@ -40,13 +40,13 @@ The leaves of the dAPI management Merkle tree is the hash of the following value
 
 Each dAPI name in a dAPI management Merkle tree is intended to be unique.
 
-The dAPI sponsor wallet address is derived out of the extended public key of the API3 Airseeker and the dAPI name, meaning that it will be unique per dAPI name.
+The dAPI sponsor wallet address is derived out of the extended public key of the Api3 Airseeker and the dAPI name, meaning that it will be unique per dAPI name.
 
 In the case that a dAPI name is being decommissioned, rather than omitting it in the future iterations of the tree, it should be left in permanently with a `bytes32(0)` data feed ID and `address(0)` sponsor wallet address instead.
 
 ### dAPI pricing Merkle tree
 
-The leaves of the dAPI pricing Merkle tree is the hash of the following values:
+The leaves of the dAPI pricing Merkle tree are the hashes of the following values:
 
 - dAPI name (`bytes32`): The name that describes what data the dAPI provides (e.g., `ETH/USD`)
 - Chain ID (`uint256`): The ID of the chain for which the price will apply
@@ -63,14 +63,14 @@ Otherwise, a subscription having been purchased may block the purchase of anothe
 
 #### How are prices determined?
 
-API3 does not intend to monetize data feed operation.
+Api3 does not intend to monetize data feed operation.
 Instead, an operation cost is estimated for each subscription, and this exact amount is offered as the respective price.
-In the case of underpricing, which will cause the sponsor wallet to run out before the subscription period ends, API3 will top up the sponsor wallet to uphold the advertised specs.
+In the case of underpricing, which will cause the sponsor wallet to run out before the subscription period ends, Api3 will top up the sponsor wallet to uphold the advertised specs.
 In the case of overpricing, the funds will roll over to the next subscription purchase that uses the same sponsor wallet.
 
 ### Signed API URL Merkle tree
 
-The leaves of the signed API URL Merkle tree is the hash of the following values:
+The leaves of the signed API URL Merkle tree are the hashes of the following values:
 
 - [Airnode address](../../glossary.md#airnode-address) (`address`)
 - Signed API URL (`string`): The URL of the [signed API](../../glossary.md#signed-api) that serves the data signed by the [Airnode feed](../../glossary.md#airnode-feed).
@@ -81,10 +81,10 @@ Each Airnode address in a signed API URL Merkle tree is intended to be unique.
 ## Buying a subscription
 
 The user needs to prepare the states of [Api3ServerV1](./api3serverv1.md) and [AirseekerRegistry](./airseekerregistry.md), and provide the respective Merkle proofs to buy a subscription.
-Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the API3 Market frontend, which abstracts away this complexity.
-This section describes what happens under the hood of the API3 Market frontend.
+Since this is too complex for most users, they are recommended to interact with Api3MarketV2 over the Api3 Market frontend, which abstracts away this complexity.
+This section describes what happens under the hood of the Api3 Market frontend.
 
-The requirements for a `buySubscription()` call to succeed are as follow:
+The requirements for a `buySubscription()` call to succeed are as follows:
 
 - The `dapiManagementAndDapiPricingMerkleData`, which prove that the rest of the arguments are from the Merkle trees whose roots are currently registered on Api3MarketV2, are valid.
 - The subscription can be added to the queue of the dAPI, which means that it objectively improves the queue and does not cause it to exceed the maximum limit of `maximumSubscriptionQueueLength` (whose value is determined at Api3MarketV2 deployment) items.

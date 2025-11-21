@@ -1,11 +1,11 @@
 # GnosisSafeWithoutProxy
 
-The first step of a new chain integration for [API3 Market](../../glossary.md#api3-market) is deploying GnosisSafeWithoutProxy as the [manager multisig](../../glossary.md#manager-multisig).
+The first step of a new chain integration for [Api3 Market](../../glossary.md#api3-market) is deploying GnosisSafeWithoutProxy as the [manager multisig](../../glossary.md#manager-multisig).
 
 ## Why customize the Safe contract?
 
 At the time that the manager multisig needs to be deployed, the official Safe contracts are often not deployed yet.
-Although [instructions](https://github.com/safe-global/safe-singleton-factory/tree/9b54922c6ee118ac609da0c746afa2e77837a3eb?tab=readme-ov-file#how-to-get-the-singleton-deployed-to-your-network) for how to initiate this process is provided, they do not apply to our use-case because:
+Although [instructions](https://github.com/safe-global/safe-singleton-factory/tree/9b54922c6ee118ac609da0c746afa2e77837a3eb?tab=readme-ov-file#how-to-get-the-singleton-deployed-to-your-network) for how to initiate this process are provided, they do not apply to our use-case because:
 
 1. The chain is often not launched at this point and there is an embargo on even the most basic information like the chain ID or the RPC URLs
 2. We cannot afford to wait for the Safe team to provide signatures

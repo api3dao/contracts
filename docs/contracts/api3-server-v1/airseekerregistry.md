@@ -1,14 +1,14 @@
 # AirseekerRegistry
 
 [Base feeds](../../glossary.md#base-feed) are served over the [Api3ServerV1](./api3serverv1.md) contract.
-[Airseeker](../../glossary.md#airseeker) is a piece of API3 infrastructure that pushes [API provider](../../glossary.md#api-provider)-[signed data](../../glossary.md#signed-data) to Api3ServerV1 when the conditions specified on AirseekerRegistry are satisfied.
+[Airseeker](../../glossary.md#airseeker) is a piece of Api3 infrastructure that pushes [API provider](../../glossary.md#api-provider)-[signed data](../../glossary.md#signed-data) to Api3ServerV1 when the conditions specified on AirseekerRegistry are satisfied.
 In other words, AirseekerRegistry is an on-chain configuration file for Airseeker.
 This is preferred for two reasons:
 
 - The reconfiguration of data feed infrastructure through a redeployment or an API call is error-prone and should be avoided.
   On-chain reconfiguration is preferable because it can be restricted according to rules enforced by a contract (e.g., a multisig would require a specific number of signatures), which may reduce the probability of errors and severity of consequences.
 - The on-chain reconfiguration can be integrated to other contracts to streamline the process.
-  For example, [Api3MarketV2](./api3marketv2.md) automatically updates AirseekerRegistry based on user payments made over the [API3 Market](../../glossary.md#api3-market) frontend, removing the need for any manual steps.
+  For example, [Api3MarketV2](./api3marketv2.md) automatically updates AirseekerRegistry based on user payments made over the [Api3 Market](../../glossary.md#api3-market) frontend, removing the need for any manual steps.
 
 ## How Airseeker uses AirseekerRegistry
 
@@ -91,9 +91,9 @@ where `airnodes` is of `address[]` type and `templateIds` is of `bytes32[]` type
 ## How to use AirseekerRegistry
 
 AirseekerRegistry is an Ownable contract where the owner cannot transfer or renounce the ownership.
-The owner is responsible with leaving the state of this contract in a way that Airseeker expects.
+The owner is responsible for leaving the state of this contract in a way that Airseeker expects.
 Otherwise, Airseeker behavior is not defined (but it can be expected that the respective data feed will not be updated under any condition).
-The points to consider while activating a data feed name are as follow:
+The points to consider while activating a data feed name are as follows:
 
 - If a [dAPI](../../glossary.md#dapi) name is being used, it should be set at [Api3ServerV1](./api3serverv1.md).
 - The data feed should be registered by calling `registerDataFeed()`.
