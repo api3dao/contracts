@@ -3,7 +3,7 @@
 There are two popular multicall contracts out there:
 
 - OpenZeppelin's Multicall is inherited by a contract to enable senders to batch their calls
-- MakerDAO's Multicall is a standalone contract that enable callers to batch their reads
+- MakerDAO's Multicall is a standalone contract that enables callers to batch their reads
 
 SelfMulticall's main purpose is similar to OpenZeppelin's Multicall, in that it is meant to be inherited by a contract to enable batched calls without affecting `msg.sender`.
 However, it implements an additional `tryMulticall()` function similar to the `try...()` functions of MakerDAO's Multicall, which does not require all batched calls to succeed.

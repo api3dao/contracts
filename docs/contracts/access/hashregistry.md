@@ -10,7 +10,7 @@ This would allow anyone to be able to register the Merkle root at any HashRegist
 The governance decisions that are registered at HashRegistry can be referred to by other contracts.
 For example, the user of such a contract can provide a Merkle root and a matching proof, and the contract would only proceed to verify the Merkle proof if the Merkle root is the currently registered one at HashRegistry.
 
-As the name implies, HashRegistry allows any hash of `bytes32` type to be registered, and is agnostic to if the hash is a Merkle root or something else.
+As the name implies, HashRegistry allows any hash of `bytes32` type to be registered, and is agnostic to whether the hash is a Merkle root or something else.
 
 ## Why not use Safe?
 
@@ -31,7 +31,7 @@ Note that despite being a pseudo-multisig, HashRegistry does not support many co
 HashRegistry has an owner, which can set signers for specific hash types and set specific hashes.
 The owner can override the decisions of the signers it sets, and thus should be trusted enough to be able to do so.
 
-The ownership can be transferred or revoked similar to a generic Ownable contract, unless this functionality is overriden.
+The ownership can be transferred or revoked similar to a generic Ownable contract, unless this functionality is overridden.
 
 ### Setting the signers for a hash type
 
@@ -103,7 +103,7 @@ bytes32 ethSignedMessageHash = toEthSignedMessageHash(
 ```
 
 This signature allows the hash signatures of the delegate to be used as a valid replacement of the (delegation) signer across all hash types until the delegation end timestamp.
-Having an active delegation does not stop the signatures of the (delegation) signer to be used to register hashes.
+Having an active delegation does not stop the signatures of the (delegation) signer from being used to register hashes.
 
 There is no functionality for (delegation) signers to cancel their delegations through a transaction, as expecting the signer to send this transaction to all instances of HashRegistry would be error-prone.
 Instead, the signer can be swapped out to make their delegations invalid.
