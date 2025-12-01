@@ -84,7 +84,8 @@ export type ChainProvider = z.infer<typeof chainProviderSchema>;
 
 export interface HardhatNetworksConfig {
   [key: string]: {
-    accounts: { mnemonic: string };
+    accounts?: { mnemonic: string };
+    keycardAccount?: string;
     chainId: number;
     url: string;
   };

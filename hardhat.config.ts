@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import { glob } from 'glob';
 import type { HardhatUserConfig } from 'hardhat/config';
 import '@nomicfoundation/hardhat-toolbox';
+import 'keycard-hardhat-provider';
 import 'hardhat-deploy';
 import 'dotenv/config';
 import { task } from 'hardhat/config';
