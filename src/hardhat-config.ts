@@ -12,7 +12,7 @@ export function getEnvVariableNames(): string[] {
 
   const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
 
-  return ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
+  return ['MNEMONIC', 'KEYCARD_ACCOUNT', apiKeyEnvName, ...networkRpcUrlNames];
 }
 
 export function etherscanApiKeyName(): string {
