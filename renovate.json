@@ -8,7 +8,7 @@
       "enabled": false
     },
     {
-      "matchPackagePatterns": ["node", "actions/node-versions", "@types/node", "pnpm"],
+      "matchPackagePatterns": ["node", "actions/node-versions", "@types/node", "pnpm", "prettier-plugin-solidity"],
       "matchUpdateTypes": ["major", "minor"],
       "enabled": false
     },
