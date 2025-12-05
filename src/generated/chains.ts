@@ -417,7 +417,8 @@ export const CHAINS: Chain[] = [
     id: '1776',
     name: 'Injective EVM',
     providers: [
-      { alias: 'default', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
+      { alias: 'default', rpcUrl: 'https://injectiveevm-rpc.polkachu.com' },
+      { alias: 'public', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
     symbol: 'INJ',
@@ -911,8 +912,7 @@ export const CHAINS: Chain[] = [
     id: '167000',
     name: 'Taiko',
     providers: [
-      { alias: 'default', rpcUrl: 'https://taiko-rpc.publicnode.com' },
-      { alias: 'public', rpcUrl: 'https://rpc.mainnet.taiko.xyz' },
+      { alias: 'default', rpcUrl: 'https://rpc.mainnet.taiko.xyz' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
       { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
