@@ -105,7 +105,12 @@ module.exports = async () => {
     api3ReaderProxyV1Metadata
   );
   if ((await ethers.provider.getCode(expectedApi3ReaderProxyV1Address)) === '0x') {
-    await api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(dapiName, dappId, api3ReaderProxyV1Metadata);
+    const proxyTransactionResponse = await api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(
+      dapiName,
+      dappId,
+      api3ReaderProxyV1Metadata
+    );
+    await proxyTransactionResponse.wait(1);
     log(`Deployed example Api3ReaderProxyV1 at ${expectedApi3ReaderProxyV1Address}`);
   }
 
