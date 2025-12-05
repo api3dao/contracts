@@ -7,10 +7,6 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://taiko-rpc.publicnode.com"
-    },
-    {
-      "alias": "public",
       "rpcUrl": "https://rpc.mainnet.taiko.xyz"
     },
     {
