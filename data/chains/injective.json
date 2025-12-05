@@ -7,6 +7,10 @@
   "providers": [
     {
       "alias": "default",
+      "rpcUrl": "https://injectiveevm-rpc.polkachu.com"
+    },
+    {
+      "alias": "public",
       "rpcUrl": "https://sentry.evm-rpc.injective.network"
     },
     {
