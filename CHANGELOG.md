@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 32.0.1
+
+### Patch Changes
+
+- 3e5d58f: Update signer metadata for dAPI management and pricing MTs
+- 4ef898b: Update default provider for injective and taiko
+
 ## 32.0.0
 
 ### Major Changes
