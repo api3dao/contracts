@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 32.0.2
+
+### Patch Changes
+
+- f382405: Add Tokos on Somnia
+- f4fe861: Updates auctioneer-metadata
+
 ## 32.0.1
 
 ### Patch Changes
