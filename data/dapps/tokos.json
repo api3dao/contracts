@@ -1,6 +1,6 @@
 {
   "aliases": {
-    "tokos": { "chains": ["somnia"], "title": "Tokos" }
+    "arenas": { "chains": ["somnia"], "title": "Tokos" }
   },
   "homepageUrl": "https://tokos.fi/"
 }
