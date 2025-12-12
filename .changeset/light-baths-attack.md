@@ -1,5 +1,5 @@
 ---
-'@api3/contracts': patch
+'@api3/contracts': minor
 ---
 
 Add Tokos on Somnia
