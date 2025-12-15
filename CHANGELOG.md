@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 32.1.1
+
+### Patch Changes
+
+- 8011d54: Fix Tokos on Somnia dApp details
+
 ## 32.1.0
 
 ### Minor Changes
