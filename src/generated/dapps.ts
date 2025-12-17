@@ -9,7 +9,6 @@ import { type Dapp } from '../types';
 
 export const DAPPS: Dapp[] = [
   { aliases: { apebank: { chains: ['apechain'], title: 'ApeBank' } }, homepageUrl: 'https://ape-bank.netlify.app/' },
-  { aliases: { arenas: { chains: ['somnia'], title: 'Tokos' } }, homepageUrl: 'https://tokos.fi/' },
   {
     aliases: {
       'compound-finance-usde': {
@@ -122,6 +121,11 @@ export const DAPPS: Dapp[] = [
         title: 'Morpho market(s) by Feather',
         description: 'Only to be used for the Morpho market(s) by Feather.',
       },
+      'morpho-api3': {
+        chains: ['ethereum'],
+        title: 'Morpho market(s) by Api3',
+        description: 'Only to be used for the Morpho market(s) by Api3.',
+      },
     },
     homepageUrl: 'https://morpho.org/vaults/',
   },
@@ -155,6 +159,7 @@ export const DAPPS: Dapp[] = [
     },
     homepageUrl: 'https://www.takotako.xyz/',
   },
+  { aliases: { arenas: { chains: ['somnia'], title: 'Tokos' } }, homepageUrl: 'https://tokos.fi/' },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
   { aliases: { yei: { chains: ['sei', 'injective'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
   { aliases: { zerolend: { chains: ['zircuit'], title: 'ZeroLend' } }, homepageUrl: 'https://zerolend.xyz/' },
