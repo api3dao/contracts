@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 32.2.0
+
+### Minor Changes
+
+- a177020: Add morpho-api3 alias to Morpho dApp details
+
 ## 32.1.1
 
 ### Patch Changes
