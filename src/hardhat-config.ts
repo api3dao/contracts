@@ -12,7 +12,7 @@ export function getEnvVariableNames(): string[] {
 
   const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
 
-  return ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
+  return ['MNEMONIC', 'KEYCARD_ACCOUNT', apiKeyEnvName, ...networkRpcUrlNames];
 }
 
 export function etherscanApiKeyName(): string {
@@ -77,12 +77,16 @@ export function networks(): HardhatNetworksConfig {
     throw new Error('Cannot be called outside of a Node.js environment');
   }
 
+  const credentials = process.env.KEYCARD_ACCOUNT
+    ? { keycardAccount: process.env.KEYCARD_ACCOUNT }
+    : { accounts: { mnemonic: process.env.MNEMONIC ?? '' } };
+
   return CHAINS.reduce((networks, chain) => {
     const defaultProvider = chain.providers.find((p) => p.alias === 'default');
     const overrides = chain.hardhatConfigOverrides?.networks ?? {};
 
     networks[chain.alias] = {
-      accounts: { mnemonic: process.env.MNEMONIC ?? '' },
+      ...credentials,
       chainId: Number(chain.id),
       url: process.env[networkHttpRpcUrlName(chain)] ?? defaultProvider!.rpcUrl!,
       ...overrides,

@@ -351,7 +351,7 @@ console.log(hardhatConfig.etherscan());
 
 ### hardhatConfig.getEnvVariableNames()
 
-Returns an API key required for Etherscan V2 contract verification API and a single `MNEMONIC` variable that can be used to configure all networks.
+Returns environment variable names that are expected to be set for Hardhat configuration.
 
 ```ts
 import { hardhatConfig } from '@api3/contracts';
@@ -359,6 +359,7 @@ console.log(hardhatConfig.getEnvVariableNames());
 /*
 [
   'MNEMONIC',
+  'KEYCARD_ACCOUNT',
   'ETHERSCAN_API_KEY',
   'HARDHAT_HTTP_RPC_URL_APECHAIN_ARBITRUM_SEPOLIA_TESTNET',
   ...
