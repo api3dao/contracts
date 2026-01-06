@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 32.3.0
+
+### Minor Changes
+
+- 409bbca: Add basedollar on Base to dApp details
+
 ## 32.2.0
 
 ### Minor Changes
