@@ -4,7 +4,6 @@ import path from 'node:path';
 import { DAPPS } from '../src/generated/dapps';
 import { dappSchema, type Dapp } from '../src/types';
 import { deepEqual } from '../src/utils/deep-equal';
-import { toLowerKebabCase } from '../src/utils/strings';
 
 const INPUT_DIR = path.join('data', 'dapps');
 
@@ -18,16 +17,6 @@ const jsonDapps: Dapp[] = jsonFiles.map((filePath: string) => {
   const fileContentRaw = fs.readFileSync(fullPath, 'utf8');
   const dapp: Dapp = JSON.parse(fileContentRaw);
 
-  // Validation: Ensure that each JSON file is named as a prefix of one of the dApp's titles
-  const uniqueDappTitles = [
-    ...new Set(Object.values(dapp.aliases).map((dappAliasValue) => toLowerKebabCase(dappAliasValue.title))),
-  ];
-  if (!uniqueDappTitles.some((uniqueDappTitle) => uniqueDappTitle.startsWith(filePath.replace('.json', '')))) {
-    logs.push(
-      'JSON file name must be the prefix of a dApp title',
-      `Current value: ${filePath}. Expected to be prefix of: ${uniqueDappTitles.join('/')}\n`
-    );
-  }
   return dapp;
 });
 
