@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 
-const expectedEnvVars = ['MNEMONIC', 'ETHERSCAN_API_KEY'];
+const expectedEnvVars = ['MNEMONIC', 'KEYCARD_ACCOUNT', 'ETHERSCAN_API_KEY'];
 const expectedExampleEnvFileContents = expectedEnvVars.reduce((fileContents: string, envVariableName: string) => {
   return `${fileContents}${envVariableName}=\n`;
 }, '');

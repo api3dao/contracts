@@ -99,6 +99,9 @@ importers:
       jest:
         specifier: ^30.0.5
         version: 30.0.5(@types/node@22.17.1)(ts-node@10.9.2(@types/node@22.17.1)(typescript@5.9.2))
+      keycard-hardhat-provider:
+        specifier: ^0.1.2
+        version: 0.1.2(@typechain/ethers-v6@0.5.1(ethers@6.15.0)(typechain@8.3.2(typescript@5.9.2))(typescript@5.9.2))(hardhat@2.26.3(ts-node@10.9.2(@types/node@22.17.1)(typescript@5.9.2))(typescript@5.9.2))(typechain@8.3.2(typescript@5.9.2))
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
@@ -2236,8 +2239,8 @@ packages:
   elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
 
-  elliptic@6.5.7:
-    resolution: {integrity: sha512-ESVCtTwiA+XhY3wyh24QqRGBoP3rEdDUl3EDUUo9tft074fi19IrdpH7hLCMMP3CIj7jb3W96rn8lt/BqIlt5Q==}
+  elliptic@6.6.1:
+    resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
 
   emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -3580,6 +3583,16 @@ packages:
   keccak@3.0.4:
     resolution: {integrity: sha512-3vKuW0jV8J3XNTzvfyicFR5qvxrSAGl7KIhvgOu5cmWwM7tZRj3fMbj/pfIf4be7aznbc+prBWGjywox/g2Y6Q==}
     engines: {node: '>=10.0.0'}
+
+  keycard-hardhat-provider@0.1.2:
+    resolution: {integrity: sha512-GgM+PxF8asQtNxiNqkOPHf3jAf7igOfs1J+c/46nWRfO5xLiRVxsINshzpwYPgGCZDx+VjOfThexYKiI/JSlDg==}
+    peerDependencies:
+      hardhat: ^2.26.0
+
+  keycard-manager@0.9.6:
+    resolution: {integrity: sha512-pEeSm1amKhtquykQDXDIlTzzR2jd2h+GU9uXDq5nz9hGzzufVlV7Iv6CPjGTTLVtqLnQVBJM4IK/S6xLeOCmqw==}
+    peerDependencies:
+      ethers: ^6.15.0
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -7882,7 +7895,7 @@ snapshots:
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
 
-  elliptic@6.5.7:
+  elliptic@6.6.1:
     dependencies:
       bn.js: 4.12.0
       brorand: 1.1.0
@@ -9896,6 +9909,24 @@ snapshots:
       node-gyp-build: 4.8.0
       readable-stream: 3.6.2
 
+  keycard-hardhat-provider@0.1.2(@typechain/ethers-v6@0.5.1(ethers@6.15.0)(typechain@8.3.2(typescript@5.9.2))(typescript@5.9.2))(hardhat@2.26.3(ts-node@10.9.2(@types/node@22.17.1)(typescript@5.9.2))(typescript@5.9.2))(typechain@8.3.2(typescript@5.9.2)):
+    dependencies:
+      '@typechain/hardhat': 9.1.0(@typechain/ethers-v6@0.5.1(ethers@6.15.0)(typechain@8.3.2(typescript@5.9.2))(typescript@5.9.2))(ethers@6.15.0)(hardhat@2.26.3(ts-node@10.9.2(@types/node@22.17.1)(typescript@5.9.2))(typescript@5.9.2))(typechain@8.3.2(typescript@5.9.2))
+      '@types/node': 22.17.1
+      ethers: 6.15.0
+      hardhat: 2.26.3(ts-node@10.9.2(@types/node@22.17.1)(typescript@5.9.2))(typescript@5.9.2)
+      keycard-manager: 0.9.6(ethers@6.15.0)
+    transitivePeerDependencies:
+      - '@typechain/ethers-v6'
+      - bufferutil
+      - typechain
+      - utf-8-validate
+
+  keycard-manager@0.9.6(ethers@6.15.0):
+    dependencies:
+      elliptic: 6.6.1
+      ethers: 6.15.0
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -10712,7 +10743,7 @@ snapshots:
 
   secp256k1@4.0.4:
     dependencies:
-      elliptic: 6.5.7
+      elliptic: 6.6.1
       node-addon-api: 5.1.0
       node-gyp-build: 4.8.0
 

@@ -93,6 +93,7 @@
     "hardhat": "^2.26.2",
     "hardhat-deploy": "1.0.2",
     "hardhat-gas-reporter": "^2.3.0",
+    "keycard-hardhat-provider": "^0.1.2",
     "jest": "^30.0.5",
     "prettier": "^3.5.3",
     "prettier-plugin-solidity": "^2.0.0",
