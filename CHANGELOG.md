@@ -1,5 +1,40 @@
 # @api3/contracts
 
+## 32.3.0
+
+### Minor Changes
+
+- 409bbca: Add basedollar on Base to dApp details
+
+## 32.2.0
+
+### Minor Changes
+
+- a177020: Add morpho-api3 alias to Morpho dApp details
+
+## 32.1.1
+
+### Patch Changes
+
+- 8011d54: Fix Tokos on Somnia dApp details
+
+## 32.1.0
+
+### Minor Changes
+
+- f382405: Add Tokos on Somnia
+
+### Patch Changes
+
+- f4fe861: Updates auctioneer-metadata
+
+## 32.0.1
+
+### Patch Changes
+
+- 3e5d58f: Update signer metadata for dAPI management and pricing MTs
+- 4ef898b: Update default provider for injective and taiko
+
 ## 32.0.0
 
 ### Major Changes
