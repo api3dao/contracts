@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone @api3/contracts
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Check Markdown links
       uses: tcort/github-action-markdown-link-check@v1
       with:
