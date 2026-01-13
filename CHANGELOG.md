@@ -1,5 +1,16 @@
 # @api3/contracts
 
+## 33.0.0
+
+### Major Changes
+
+- 8b92800: Remove support for following chains:
+
+  - lumia
+  - lumia-beam-testnet
+  - merlin
+  - monad-testnet
+
 ## 32.3.0
 
 ### Minor Changes
