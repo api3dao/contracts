@@ -24,7 +24,7 @@ describe(getEnvVariableNames.name, () => {
   it('returns an array with expected env variables', () => {
     const apiKeyEnvName = etherscanApiKeyName();
     const networkRpcUrlNames = CHAINS.map((chain) => networkHttpRpcUrlName(chain));
-    const expected = ['MNEMONIC', apiKeyEnvName, ...networkRpcUrlNames];
+    const expected = ['MNEMONIC', 'KEYCARD_ACCOUNT', apiKeyEnvName, ...networkRpcUrlNames];
     expect(getEnvVariableNames()).toStrictEqual(expected);
   });
 });
