@@ -7,7 +7,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.ankr.com/blast_testnet_sepolia"
+      "rpcUrl": "https://sepolia.blast.io"
     }
   ],
   "symbol": "ETH",
