@@ -8,6 +8,10 @@
     {
       "alias": "default",
       "rpcUrl": "https://sepolia.blast.io"
+    },
+    {
+      "alias": "nodies",
+      "rpcUrl": "https://blast-testnet-public.nodies.app"
     }
   ],
   "symbol": "ETH",
