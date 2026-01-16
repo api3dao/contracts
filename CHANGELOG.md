@@ -1,5 +1,16 @@
 # @api3/contracts
 
+## 33.0.1
+
+### Patch Changes
+
+- 76f1b97: Update RPC provider configurations:
+
+  - Update default provider for blast-sepolia-testnet
+  - Add nodies for blast-sepolia-testnet
+  - Replace nirvanalabs with dwellir for manta
+  - Add dwellir for ronin and world
+
 ## 33.0.0
 
 ### Major Changes
