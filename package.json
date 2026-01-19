@@ -105,10 +105,10 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "ethers": "^6.15.0",
-    "viem": "^2.23.2",
+    "ethers": "^6.16.0",
+    "viem": "^2.44.4",
     "yargs": "^17.7.2",
-    "zod": "^4.0.15"
+    "zod": "^4.3.5"
   },
   "packageManager": "pnpm@10.14.0"
 }
