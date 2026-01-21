@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>api3dao/renovate-config", "docker:disable"],
-  "major": {
-    "dependencyDashboardApproval": true
-  },
+  "extends": ["local>api3dao/renovate-config"],
   "packageRules": [
     {
       "matchPackagePatterns": ["chai", "solhint", "eslint"],
@@ -11,22 +8,18 @@
       "enabled": false
     },
     {
-      "matchPackageNames": ["node", "actions/node-versions", "@types/node", "pnpm"],
-      "matchUpdateTypes": ["major", "minor"],
-      "enabled": false
-    },
-    {
       "matchPackageNames": ["@api3/*"],
       "matchUpdateTypes": ["major"],
       "schedule": ["before 6pm"],
       "groupName": "api3 major updates",
-      "dependencyDashboardApproval": false
+      "minimumReleaseAge": null
     },
     {
       "matchPackageNames": ["@api3/*"],
       "matchUpdateTypes": ["patch", "minor"],
       "schedule": ["before 6pm"],
-      "groupName": "api3"
+      "groupName": "api3",
+      "minimumReleaseAge": null
     }
   ],
   "reviewers": ["bbenligiray", "hiletmis"]
