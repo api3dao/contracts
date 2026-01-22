@@ -162,6 +162,7 @@ export const DAPPS: Dapp[] = [
   },
   { aliases: { arenas: { chains: ['somnia'], title: 'Tokos' } }, homepageUrl: 'https://tokos.fi/' },
   { aliases: { tunnl: { chains: ['polygon'], title: 'tunnl' } }, homepageUrl: 'https://www.tunnl.exchange/' },
+  { aliases: { vyro: { chains: ['unichain'], title: 'Vyro' } }, homepageUrl: 'https://vyro.finance/' },
   { aliases: { yei: { chains: ['sei', 'injective'], title: 'Yei Finance' } }, homepageUrl: 'https://www.yei.finance/' },
   { aliases: { zerolend: { chains: ['zircuit'], title: 'ZeroLend' } }, homepageUrl: 'https://zerolend.xyz/' },
 ];
