@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 33.1.0
+
+### Minor Changes
+
+- 55bfddc: Add Vyro on Unichain
+
 ## 33.0.1
 
 ### Patch Changes

@@ -146,20 +146,6 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'etherscan' },
   },
   {
-    alias: 'bitlayer-testnet',
-    blockExplorerUrl: 'https://testnet.btrscan.com/',
-    decimals: 18,
-    id: '200810',
-    name: 'Bitlayer testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://testnet-rpc.bitlayer.org' },
-      { alias: 'public', rpcUrl: 'https://testnet-rpc.bitlayer-rpc.com' },
-    ],
-    symbol: 'BTC',
-    testnet: true,
-    verificationApi: { type: 'other', url: 'https://api-testnet.btrscan.com/scan/api' },
-  },
-  {
     alias: 'bitlayer',
     blockExplorerUrl: 'https://www.btrscan.com/',
     decimals: 18,
@@ -173,20 +159,6 @@ export const CHAINS: Chain[] = [
     symbol: 'BTC',
     testnet: false,
     verificationApi: { type: 'other', url: 'https://api.btrscan.com/scan/api' },
-  },
-  {
-    alias: 'blast-sepolia-testnet',
-    blockExplorerUrl: 'https://sepolia.blastscan.io/',
-    decimals: 18,
-    id: '168587773',
-    name: 'Blast testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://sepolia.blast.io' },
-      { alias: 'nodies', rpcUrl: 'https://blast-testnet-public.nodies.app' },
-    ],
-    symbol: 'ETH',
-    testnet: true,
-    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'blast',
