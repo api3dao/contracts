@@ -1,0 +1,6 @@
+# See: https://pnpm.io/supply-chain-security
+blockExoticSubdeps: true
+minimumReleaseAge: 20160 # 14 days
+
+minimumReleaseAgeExclude:
+  - '@api3/*'
