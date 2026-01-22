@@ -1,5 +1,14 @@
 # @api3/contracts
 
+## 34.0.0
+
+### Major Changes
+
+- 3a91ed6: Remove support for following chains:
+
+  - bitlayer-testnet
+  - blast-sepolia-testnet
+
 ## 33.1.0
 
 ### Minor Changes
