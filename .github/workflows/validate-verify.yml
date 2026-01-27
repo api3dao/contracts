@@ -40,7 +40,7 @@ jobs:
         if: steps.build.outcome == 'success' && !cancelled()
 
       - name: Verify contract deployment
-        run: pnpm node
+        run: pnpm deploy:hardhat
         if: steps.build.outcome == 'success' && !cancelled()
 
       - name: Validate verification API
