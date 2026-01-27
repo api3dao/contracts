@@ -9,7 +9,7 @@ const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
 
 module.exports = async () => {
-  if (!chainsSupportedByMarket.includes(network.name)) {
+  if (!chainsSupportedByMarket.includes(network.name) && network.name !== 'hardhat') {
     throw new Error(`${network.name} is not supported`);
   }
 
