@@ -51,6 +51,7 @@
     "lint": "pnpm run prettier:check && pnpm run lint:eslint && pnpm run lint:solhint",
     "lint:solhint": "solhint ./contracts/**/*.sol",
     "lint:eslint": "eslint . --ext .js,.ts",
+    "node": "hardhat node",
     "prepack": "./prepack.sh",
     "prettier:check": "prettier --check \"./**/*.{js,ts,md,json,sol}\"",
     "prettier": "prettier --write \"./**/*.{js,ts,md,json,sol}\"",
