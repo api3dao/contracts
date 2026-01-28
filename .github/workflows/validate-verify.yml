@@ -31,14 +31,18 @@ jobs:
         run: pnpm build
         id: build
 
-      - name: Validate verification API
-        run: pnpm validate-verification-api
-        if: steps.build.outcome == 'success'
-
       - name: Validate deployments
         run: pnpm validate-deployments
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && !cancelled()
 
       - name: Verify deployments
         run: pnpm verify-deployments
+        if: steps.build.outcome == 'success' && !cancelled()
+
+      - name: Verify contract deployment
+        run: pnpm deploy:hardhat
+        if: steps.build.outcome == 'success' && !cancelled()
+
+      - name: Validate verification API
+        run: pnpm validate-verification-api
         if: steps.build.outcome == 'success' && !cancelled()

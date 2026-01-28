@@ -47,7 +47,7 @@ module.exports = async () => {
   // If the first signer returned by ethers is the expected deployer address, it will do both (1) and (2).
   // Otherwise, it will only do (1). In both cases, (1) is done using hardcoded signatures by the expected
   // deployer address.
-  if (!chainsSupportedByMarket.includes(network.name)) {
+  if (!chainsSupportedByMarket.includes(network.name) && network.name !== 'hardhat') {
     throw new Error(`${network.name} is not supported`);
   }
 
