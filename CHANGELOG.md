@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 35.0.0
+
+### Major Changes
+
+- fed9521: Remove Moonwell on Moonriver from dApp details
+- fed9521: Remove support for following chains:
+
+  - berachain
+  - moonriver
+
 ## 34.0.0
 
 ### Major Changes
