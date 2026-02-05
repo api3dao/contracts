@@ -3,7 +3,15 @@
   "extends": ["local>api3dao/renovate-config"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["chai", "solhint", "eslint"],
+      "matchPackageNames": [
+        "chai",
+        "solhint",
+        "eslint",
+        "@nomicfoundation/*",
+        "hardhat",
+        "hardhat-deploy",
+        "solidity-coverage"
+      ],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },

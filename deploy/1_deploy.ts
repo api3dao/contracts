@@ -13,7 +13,7 @@ module.exports = async () => {
   const { deploy, log } = deployments;
   const [deployer] = await ethers.getSigners();
 
-  if (!chainsSupportedByMarket.includes(network.name)) {
+  if (!chainsSupportedByMarket.includes(network.name) && network.name !== 'hardhat') {
     throw new Error(`${network.name} is not supported`);
   }
   const gnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy').catch(async () => {
