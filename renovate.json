@@ -23,7 +23,8 @@
       "matchUpdateTypes": ["major"],
       "schedule": ["before 6pm"],
       "groupName": "api3 major updates",
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "dependencyDashboardApproval": false
     },
     {
       "matchPackageNames": ["@api3/*"],
