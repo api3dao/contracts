@@ -305,10 +305,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     id: '10200',
     name: 'Gnosis Chain testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.chiadochain.net' },
-      { alias: 'publicnode', rpcUrl: 'https://gnosis-chiado-rpc.publicnode.com' },
-    ],
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.chiadochain.net' }],
     symbol: 'xDAI',
     testnet: true,
     verificationApi: { type: 'blockscout', url: 'https://gnosis-chiado.blockscout.com/api' },
@@ -321,7 +318,6 @@ export const CHAINS: Chain[] = [
     name: 'Gnosis Chain',
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.gnosischain.com' },
-      { alias: '0xrpc', rpcUrl: 'https://0xrpc.io/gno' },
       { alias: 'publicnode', rpcUrl: 'https://gnosis-rpc.publicnode.com/' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
       { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
@@ -910,8 +906,8 @@ export const CHAINS: Chain[] = [
     name: 'Zircuit',
     providers: [
       { alias: 'default', rpcUrl: 'https://mainnet.zircuit.com' },
-      { alias: 'chainstack', rpcUrl: 'https://zircuit1-mainnet.p2pify.com/' },
-      { alias: 'liquify', rpcUrl: 'https://zircuit1-mainnet.liquify.com' },
+      { alias: 'sentio', rpcUrl: 'https://rpc.sentio.xyz/zircuit' },
+      { alias: 'drpc', homepageUrl: 'https://drpc.org' },
     ],
     symbol: 'ETH',
     testnet: false,
