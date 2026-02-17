@@ -10,10 +10,6 @@
       "rpcUrl": "https://rpc.gnosischain.com"
     },
     {
-      "alias": "0xrpc",
-      "rpcUrl": "https://0xrpc.io/gno"
-    },
-    {
       "alias": "publicnode",
       "rpcUrl": "https://gnosis-rpc.publicnode.com/"
     },

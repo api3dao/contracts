@@ -10,12 +10,12 @@
       "rpcUrl": "https://mainnet.zircuit.com"
     },
     {
-      "alias": "chainstack",
-      "rpcUrl": "https://zircuit1-mainnet.p2pify.com/"
+      "alias": "sentio",
+      "rpcUrl": "https://rpc.sentio.xyz/zircuit"
     },
     {
-      "alias": "liquify",
-      "rpcUrl": "https://zircuit1-mainnet.liquify.com"
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",
