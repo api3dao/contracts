@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 36.0.0
+
+### Major Changes
+
+- adb0c16: Update deprecated ronin-testnet chain ID from 2021 to 202601, reusing the same deployments under the existing alias
+
+### Patch Changes
+
+- ba27d56: Update block explorer and verification API for ronin-testnet
+
 ## 35.0.0
 
 ### Major Changes
