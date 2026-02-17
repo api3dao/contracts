@@ -1,6 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>api3dao/renovate-config"],
+  "major": {
+    "dependencyDashboardApproval": true
+  },
   "packageRules": [
     {
       "matchPackageNames": [
@@ -20,7 +23,8 @@
       "matchUpdateTypes": ["major"],
       "schedule": ["before 6pm"],
       "groupName": "api3 major updates",
-      "minimumReleaseAge": null
+      "minimumReleaseAge": null,
+      "dependencyDashboardApproval": false
     },
     {
       "matchPackageNames": ["@api3/*"],
