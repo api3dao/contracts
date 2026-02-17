@@ -621,14 +621,14 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'ronin-testnet',
-    blockExplorerUrl: 'https://saigon-app.roninchain.com/',
+    blockExplorerUrl: 'https://saigon-explorer.roninchain.com/',
     decimals: 18,
-    id: '2021',
+    id: '202601',
     name: 'Ronin testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://saigon-testnet.roninchain.com/rpc' }],
     symbol: 'RON',
     testnet: true,
-    verificationApi: { type: 'sourcify' },
+    verificationApi: { type: 'blockscout', url: 'https://saigon-explorer.roninchain.com/api' },
   },
   {
     alias: 'ronin',
