@@ -69,7 +69,7 @@
     "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
   },
   "devDependencies": {
-    "@api3/eslint-plugin-commons": "^3.0.0",
+    "@api3/eslint-plugin-commons": "^3.1.1",
     "@api3/promise-utils": "^0.4.0",
     "@changesets/cli": "^2.29.8",
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
