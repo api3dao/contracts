@@ -10,7 +10,6 @@
 
 - ba27d56: Update block explorer and verification API for ronin-testnet
 - edb1c91: Update RPC provider configurations:
-
   - Remove publicnode from gnosis-testnet
   - Remove 0xrpc from gnosis
   - Replace chainstack and liquify with sentio and drpc for zircuit, respectively
@@ -21,7 +20,6 @@
 
 - fed9521: Remove Moonwell on Moonriver from dApp details
 - fed9521: Remove support for following chains:
-
   - berachain
   - moonriver
 
@@ -30,7 +28,6 @@
 ### Major Changes
 
 - 3a91ed6: Remove support for following chains:
-
   - bitlayer-testnet
   - blast-sepolia-testnet
 
@@ -45,7 +42,6 @@
 ### Patch Changes
 
 - 76f1b97: Update RPC provider configurations:
-
   - Update default provider for blast-sepolia-testnet
   - Add nodies for blast-sepolia-testnet
   - Replace nirvanalabs with dwellir for manta
@@ -56,7 +52,6 @@
 ### Major Changes
 
 - 8b92800: Remove support for following chains:
-
   - lumia
   - lumia-beam-testnet
   - merlin
@@ -102,7 +97,6 @@
 ### Major Changes
 
 - c91ee03: Remove support for following chains:
-
   - berachain-testnet
   - ink-sepolia-testnet
   - ink
@@ -124,7 +118,6 @@
 ### Patch Changes
 
 - 8eaec21: Update RPC provider configurations:
-
   - Replace tenderly with alchemy for mode
   - Add quicknode for x-layer
 
@@ -150,7 +143,6 @@
 ### Patch Changes
 
 - ae7e24d: Update block explorer URLs and verification API types for following testnets:
-
   - katana-sepolia-testnet
   - taiko-hoodi-testnet
 
@@ -165,7 +157,6 @@
 ### Major Changes
 
 - 84539d2: Remove support for following chains:
-
   - ethereum-holesky-testnet
   - fraxtal-holesky-testnet
   - taiko-holesky-testnet
@@ -179,7 +170,6 @@
 ### Major Changes
 
 - 84e5301: Remove support for following chains:
-
   - linea-sepolia-testnet
   - megaeth-testnet
   - odyssey-sepolia-testnet
@@ -203,7 +193,6 @@
 ### Patch Changes
 
 - 3e126b2: Updates RPC provider configurations:
-
   - Remove drpc from all
   - Remove blastapi from all
   - Add quicknode for linea, soneium, and sonic
@@ -216,11 +205,9 @@
   - Add reblok for moonbeam and sei
 
 - b064c46: Updates RPC provider configurations:
-
   - Add publicnode and validationcloud providers for somnia chain.
 
 - baadb85: Update block explorer and verification API for following chains:
-
   - avalanche
   - avalanche-testnet
   - katana
@@ -230,7 +217,6 @@
   - sei-testnet
 
   Update verification API for:
-
   - polygon-zkevm-sepolia-testnet
 
 ## 28.0.0
@@ -238,7 +224,6 @@
 ### Major Changes
 
 - 4e226a4: Remove support for following chain(s):
-
   - lumia-sepolia-testnet
 
 ### Minor Changes
@@ -304,7 +289,6 @@
 ### Major Changes
 
 - adf5421: Remove support for following chain:
-
   - kroma
 
 ## 25.0.0
@@ -312,7 +296,6 @@
 ### Major Changes
 
 - 6171e77: Remove support for following chains:
-
   - atleta-testnet
   - inevm-testnet
   - inevm
@@ -330,7 +313,6 @@
 ### Patch Changes
 
 - cd423b4: Updates RPC provider configurations:
-
   - Update public provider for manta
   - Replace publicnode with tenderly-public for polygon-sepolia-testnet
 
@@ -365,7 +347,6 @@
 ### Patch Changes
 
 - ce97433: Updates RPC provider configurations:
-
   - Update default provider for ethereum-holesky-testnet
   - Remove publicnode from berachain
   - Remove blastapi from moonriver
@@ -391,13 +372,11 @@
 ### Major Changes
 
 - fe10931: Remove support for following chains:
-
   - rechain-testnet
 
 ### Patch Changes
 
 - 317509e: Update block explorer for following chains:
-
   - apechain-arbitrum-sepolia-testnet
   - berachain-testnet
   - kroma-sepolia-testnet
@@ -405,7 +384,6 @@
   - world-sepolia-testnet
 
 - 7cfebed: Updates RPC provider configurations:
-
   - Update default provider for atleta-testnet, ethereum-holesky-testnet, rari-arbitrum-sepolia-testnet, x-layer-sepolia-testnet
   - Remove not realible alternative providers from blast-sepolia-testnet, scroll-sepolia-testnet, scroll, taiko-holesky-testnet, zircuit-sepolia-testnet
 
@@ -427,7 +405,6 @@
 ### Patch Changes
 
 - 5170255: Updates RPC provider configurations:
-
   - Remove ankr from bitlayer, core, kava, moonbeam, taiko, x-layer
   - Update default provider for blast-sepolia-testnet, x-layer-sepolia-testnet, zircuit-sepolia-testnet, zircuit
   - Add blastapi for opbnb, ronin, sei
@@ -452,7 +429,6 @@
 ### Major Changes
 
 - cc71f82: Remove support for following chains:
-
   - conflux
   - conflux-testnet
 
@@ -480,7 +456,6 @@
 ### Major Changes
 
 - b295ca8: Remove support from the following chains:
-
   - camp-sepolia-testnet
   - hyperliquid-testnet
   - hyperliquid
@@ -501,7 +476,6 @@
 ### Patch Changes
 
 - a4f5948: Updates RPC provider configurations:
-
   - Add publicnode for berachain, fraxtal, metis-sepolia-testnet, metis, soneium-sepolia-test
     net, soneium, sonic-testnet, unichain-sepolia-testnet, and unichain
   - Add reblok for fraxtal
@@ -527,7 +501,6 @@
 ### Minor Changes
 
 - fc23880: Adds following chain:
-
   - rechain-testnet
 
 - daf17d7: Add dAPI and Market support to rechain-testnet
@@ -566,7 +539,6 @@
 ### Major Changes
 
 - 411cdb1: Remove support from the following chains:
-
   - astar
   - fantom
   - fantom-testnet
@@ -629,7 +601,6 @@
 ### Minor Changes
 
 - fd56b48: Add the following dApps:
-
   - aurelius
   - granary
   - ionic
@@ -649,7 +620,6 @@
 ### Major Changes
 
 - c30baba: Purge the following dApps (note that this merely means that you won't be able to derive dApp-specific Api3ReaderProxyV1 addresses using `@api3/contracts` for these dApps, they will be able to continue using data feed services as usual):
-
   - airpuff
   - aurelius
   - davos-protocol
@@ -677,7 +647,6 @@
   - wefi
 
 - a20ac37: Update the aliases of the following dApps:
-
   - hana-finance (to hana)
   - init-capital (to init)
   - orbit-protocol (to orbit)
@@ -687,7 +656,6 @@
 
 - a20ac37: Extend the dApp data schema to include name and homepage URL (optional)
 - aef7d46: Add the following dApps:
-
   - aave
   - abracadabra
   - aeroscraper
@@ -829,7 +797,6 @@
 ### Minor Changes
 
 - b8fb92d: Add dAPI and Market support to:
-
   - apechain
   - atleta-testnet
   - world
