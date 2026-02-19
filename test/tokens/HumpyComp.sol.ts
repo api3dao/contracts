@@ -193,6 +193,23 @@ describe('HumpyComp', function () {
       expect(await mockComp.getCurrentVotes(roles.delegateeA.address)).to.equal(0);
       expect(await mockComp.getCurrentVotes(roles.delegateeB.address)).to.equal(amount);
     });
+
+    it('delegatee keeps votes after user deposit', async function () {
+      const { roles, humpyComp, mockComp, mintedAmount } = await helpers.loadFixture(deploy);
+      const amount = ethers.parseEther('30');
+
+      await mockComp.connect(roles.user).delegate(roles.delegateeA.address);
+      expect(await mockComp.getCurrentVotes(roles.delegateeA.address)).to.equal(mintedAmount);
+
+      await mockComp.connect(roles.user).approve(await humpyComp.getAddress(), amount);
+      await humpyComp.connect(roles.user).deposit(amount);
+
+      expect(await mockComp.getCurrentVotes(roles.delegateeA.address)).to.equal(mintedAmount);
+      expect(await mockComp.delegates(await humpyComp.getAddress())).to.equal(roles.delegateeA.address);
+      expect(await humpyComp.delegatee()).to.equal(roles.delegateeA.address);
+      expect(await mockComp.balanceOf(await humpyComp.getAddress())).to.equal(amount);
+      expect(await mockComp.balanceOf(roles.user.address)).to.equal(mintedAmount - amount);
+    });
   });
 
   describe('Ownable2Step', function () {
