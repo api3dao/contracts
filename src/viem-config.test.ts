@@ -37,6 +37,7 @@ describe(chains.name, () => {
 
       const res = result.find((r) => r.id.toString() === chain.id);
       expect(res).toStrictEqual({
+        extend: expect.any(Function),
         fees: undefined,
         formatters: undefined,
         id: Number(chain.id),
@@ -77,6 +78,7 @@ describe(chains.name, () => {
 
       const res = result.find((r) => r.id.toString() === chain.id);
       expect(res).toStrictEqual({
+        extend: expect.any(Function),
         fees: undefined,
         formatters: undefined,
         id: Number(chain.id),

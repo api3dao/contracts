@@ -7,6 +7,10 @@
   "providers": [
     {
       "alias": "default",
+      "rpcUrl": "https://sei-testnet-public.nodies.app"
+    },
+    {
+      "alias": "public",
       "rpcUrl": "https://evm-rpc-testnet.sei-apis.com"
     }
   ],

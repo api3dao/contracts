@@ -10,12 +10,12 @@
       "rpcUrl": "https://rpc.coredao.org/"
     },
     {
-      "alias": "icecreamswap",
-      "rpcUrl": "https://rpc-core.icecreamswap.com/"
+      "alias": "public",
+      "rpcUrl": "https://rpcar.coredao.org/"
     },
     {
-      "alias": "infstones",
-      "homepageUrl": "https://infstones.com"
+      "alias": "icecreamswap",
+      "rpcUrl": "https://rpc-core.icecreamswap.com/"
     }
   ],
   "symbol": "CORE",
