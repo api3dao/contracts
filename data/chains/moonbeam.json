@@ -7,15 +7,15 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://rpc.api.moonbeam.network"
-    },
-    {
-      "alias": "publicnode",
       "rpcUrl": "https://moonbeam-rpc.publicnode.com"
     },
     {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
+      "alias": "public",
+      "rpcUrl": "https://rpc.api.moonbeam.network"
+    },
+    {
+      "alias": "unitedbloc",
+      "rpcUrl": "https://moonbeam.unitedbloc.com"
     },
     {
       "alias": "reblok",
