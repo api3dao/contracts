@@ -370,8 +370,7 @@ export const CHAINS: Chain[] = [
     id: '1776',
     name: 'Injective EVM',
     providers: [
-      { alias: 'default', rpcUrl: 'https://injectiveevm-rpc.polkachu.com' },
-      { alias: 'public', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
+      { alias: 'default', rpcUrl: 'https://sentry.evm-rpc.injective.network' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
     symbol: 'INJ',
