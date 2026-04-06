@@ -33,6 +33,6 @@ jobs:
             fi
 
       - name: Create release PR
-        run: gh pr create -B production -H main --title 'Initiate release' --body 'Merges main into production' --reviewer bbenligiray
+        run: gh pr create -B production -H main --title 'Initiate release' --body 'Merges main into production' --reviewer bdrhn9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
