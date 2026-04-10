@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 37.0.0
+
+### Major Changes
+
+- 2c8836c: Remove support for following chains:
+  - bitlayer
+  - x-layer
+
 ## 36.0.2
 
 ### Patch Changes
