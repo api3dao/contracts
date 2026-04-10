@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 36.0.2
+
+### Patch Changes
+
+- b219f70: Update RPC provider configurations:
+  - Promote public to default, remove previous default for injective
+
 ## 36.0.1
 
 ### Patch Changes
