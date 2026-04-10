@@ -11,6 +11,7 @@ module.exports = {
     'functional/no-try-statements': 'off',
 
     'jest/no-conditional-in-test': 'off',
+    'jest/prefer-ending-with-an-expect': 'off',
 
     'lodash/prefer-constant': 'off',
     'lodash/prefer-lodash-typecheck': 'off',
@@ -21,10 +22,13 @@ module.exports = {
     'unicorn/prefer-export-from': 'off',
     'unicorn/prefer-object-from-entries': 'off',
     'unicorn/prefer-ternary': 'off',
+    'unicorn/prefer-math-min-max': 'off',
+    'unicorn/prefer-global-this': 'off',
 
     '@typescript-eslint/max-params': 'off',
     '@typescript-eslint/no-unnecessary-type-assertion': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/require-await': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
   },
 };
