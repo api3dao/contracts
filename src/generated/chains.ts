@@ -129,21 +129,6 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'etherscan' },
   },
   {
-    alias: 'bitlayer',
-    blockExplorerUrl: 'https://www.btrscan.com/',
-    decimals: 18,
-    id: '200901',
-    name: 'Bitlayer',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.bitlayer.org' },
-      { alias: 'public', rpcUrl: 'https://rpc.bitlayer-rpc.com' },
-      { alias: 'rockx', homepageUrl: 'https://rockx.com/' },
-    ],
-    symbol: 'BTC',
-    testnet: false,
-    verificationApi: { type: 'other', url: 'https://api.btrscan.com/scan/api' },
-  },
-  {
     alias: 'blast',
     blockExplorerUrl: 'https://blastscan.io/',
     decimals: 18,
@@ -871,25 +856,6 @@ export const CHAINS: Chain[] = [
     symbol: 'ETH',
     testnet: false,
     verificationApi: { type: 'etherscan' },
-  },
-  {
-    alias: 'x-layer',
-    blockExplorerUrl: 'https://www.okx.com/explorer/xlayer/',
-    decimals: 18,
-    id: '196',
-    name: 'X Layer',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.xlayer.tech/' },
-      { alias: 'okx', rpcUrl: 'https://xlayerrpc.okx.com/' },
-      { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
-      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
-    ],
-    symbol: 'OKB',
-    testnet: false,
-    verificationApi: {
-      type: 'other',
-      url: 'https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER',
-    },
   },
   {
     alias: 'zircuit-sepolia-testnet',

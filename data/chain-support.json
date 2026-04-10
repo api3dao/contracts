@@ -8,7 +8,6 @@
     "avalanche-testnet",
     "base",
     "base-sepolia-testnet",
-    "bitlayer",
     "blast",
     "bob",
     "bob-sepolia-testnet",
@@ -61,7 +60,6 @@
     "unichain-sepolia-testnet",
     "world",
     "world-sepolia-testnet",
-    "x-layer",
     "zircuit",
     "zircuit-sepolia-testnet"
   ],

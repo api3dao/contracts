@@ -22,7 +22,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'avalanche-testnet',
   'base',
   'base-sepolia-testnet',
-  'bitlayer',
   'blast',
   'bob',
   'bob-sepolia-testnet',
@@ -66,6 +65,5 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'unichain-sepolia-testnet',
   'world',
   'world-sepolia-testnet',
-  'x-layer',
   'zircuit',
 ];
