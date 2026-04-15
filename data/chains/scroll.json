@@ -29,6 +29,7 @@
   "symbol": "ETH",
   "testnet": false,
   "verificationApi": {
-    "type": "etherscan"
+    "type": "blockscout",
+    "url": "https://scrollscan.com/api"
   }
 }
