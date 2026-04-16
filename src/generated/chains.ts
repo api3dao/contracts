@@ -637,7 +637,7 @@ export const CHAINS: Chain[] = [
     providers: [{ alias: 'default', rpcUrl: 'https://sepolia-rpc.scroll.io' }],
     symbol: 'ETH',
     testnet: true,
-    verificationApi: { type: 'etherscan' },
+    verificationApi: { type: 'blockscout', url: 'https://sepolia.scrollscan.com/api' },
   },
   {
     alias: 'scroll',
@@ -654,7 +654,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'ETH',
     testnet: false,
-    verificationApi: { type: 'etherscan' },
+    verificationApi: { type: 'blockscout', url: 'https://scrollscan.com/api' },
   },
   {
     alias: 'sei-testnet',
