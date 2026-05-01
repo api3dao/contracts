@@ -13,6 +13,7 @@
   "symbol": "ETH",
   "testnet": true,
   "verificationApi": {
-    "type": "etherscan"
+    "type": "blockscout",
+    "url": "https://sepolia.scrollscan.com/api"
   }
 }
