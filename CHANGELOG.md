@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 37.0.1
+
+### Patch Changes
+
+- 3105fdc: Update verification API for following chains:
+  - scroll
+  - scroll-sepolia-testnet
+
 ## 37.0.0
 
 ### Major Changes
