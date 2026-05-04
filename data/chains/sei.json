@@ -7,11 +7,11 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://evm-rpc.sei-apis.com/"
+      "rpcUrl": "https://sei-evm-rpc.publicnode.com"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://sei-evm-rpc.publicnode.com"
+      "alias": "public",
+      "rpcUrl": "https://evm-rpc.sei-apis.com/"
     },
     {
       "alias": "quicknode",
