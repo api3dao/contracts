@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 37.0.2
+
+### Patch Changes
+
+- 503d5d1: Update RPC provider configurations:
+  - Swap default and publicnode providers for sei
+
 ## 37.0.1
 
 ### Patch Changes
