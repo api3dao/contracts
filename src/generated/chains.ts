@@ -677,8 +677,8 @@ export const CHAINS: Chain[] = [
     id: '1329',
     name: 'Sei',
     providers: [
-      { alias: 'default', rpcUrl: 'https://evm-rpc.sei-apis.com/' },
-      { alias: 'publicnode', rpcUrl: 'https://sei-evm-rpc.publicnode.com' },
+      { alias: 'default', rpcUrl: 'https://sei-evm-rpc.publicnode.com' },
+      { alias: 'public', rpcUrl: 'https://evm-rpc.sei-apis.com/' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
       { alias: 'infura', homepageUrl: 'https://infura.io' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
