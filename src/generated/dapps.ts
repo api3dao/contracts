@@ -39,7 +39,7 @@ export const DAPPS: Dapp[] = [
   },
   { aliases: { evro: { chains: ['gnosis'], title: 'EVRO' } }, homepageUrl: 'https://www.evro.finance/' },
   { aliases: { hana: { chains: ['taiko'], title: 'Hana Finance' } }, homepageUrl: 'https://www.hana.finance/' },
-  { aliases: { init: { chains: ['blast', 'mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
+  { aliases: { init: { chains: ['mantle'], title: 'INIT Capital' } }, homepageUrl: 'https://init.capital/' },
   { aliases: { lendle: { chains: ['mantle'], title: 'Lendle' } }, homepageUrl: 'https://www.lendle.xyz/' },
   {
     aliases: { 'mach-finance': { chains: ['sonic', 'hyperliquid'], title: 'MachFi' } },
@@ -128,7 +128,6 @@ export const DAPPS: Dapp[] = [
     homepageUrl: 'https://morpho.org/vaults/',
   },
   { aliases: { nerite: { chains: ['arbitrum'], title: 'Nerite' } }, homepageUrl: 'https://www.nerite.org/' },
-  { aliases: { orbit: { chains: ['blast'], title: 'Orbit Protocol' } }, homepageUrl: 'https://orbitlending.io/' },
   {
     aliases: { 'segment-finance': { chains: ['bob', 'core'], title: 'Segment Finance' } },
     homepageUrl: 'https://www.segment.finance/',

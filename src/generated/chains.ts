@@ -129,23 +129,6 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'etherscan' },
   },
   {
-    alias: 'blast',
-    blockExplorerUrl: 'https://blastscan.io/',
-    decimals: 18,
-    id: '81457',
-    name: 'Blast',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://rpc.blast.io' },
-      { alias: 'publicnode', rpcUrl: 'https://blast-rpc.publicnode.com' },
-      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
-      { alias: 'reblok', homepageUrl: 'https://reblok.io' },
-      { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
-    ],
-    symbol: 'ETH',
-    testnet: false,
-    verificationApi: { type: 'etherscan' },
-  },
-  {
     alias: 'bob-sepolia-testnet',
     blockExplorerUrl: 'https://bob-sepolia.explorer.gobob.xyz/',
     decimals: 18,
