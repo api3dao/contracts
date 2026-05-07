@@ -22,7 +22,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'avalanche-testnet',
   'base',
   'base-sepolia-testnet',
-  'blast',
   'bob',
   'bob-sepolia-testnet',
   'bsc',
