@@ -1,5 +1,23 @@
 # @api3/contracts
 
+## 38.0.0
+
+### Major Changes
+
+- 0d8a3f8: Remove support for following dApps:
+  - orbit
+
+- 0d8a3f8: Remove support for following chains:
+  - blast
+
+- 0d8a3f8: Remove following chains from dApp details:
+  - blast on init
+
+### Patch Changes
+
+- a9bce05: Update RPC provider configurations:
+  - Swap default and publicnode providers for unichain-sepolia-testnet
+
 ## 37.0.2
 
 ### Patch Changes
