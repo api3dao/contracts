@@ -7,11 +7,11 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://sepolia.unichain.org"
+      "rpcUrl": "https://unichain-sepolia-rpc.publicnode.com"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://unichain-sepolia-rpc.publicnode.com"
+      "alias": "public",
+      "rpcUrl": "https://sepolia.unichain.org"
     }
   ],
   "symbol": "ETH",
