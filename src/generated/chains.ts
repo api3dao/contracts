@@ -789,8 +789,8 @@ export const CHAINS: Chain[] = [
     id: '1301',
     name: 'Unichain testnet',
     providers: [
-      { alias: 'default', rpcUrl: 'https://sepolia.unichain.org' },
-      { alias: 'publicnode', rpcUrl: 'https://unichain-sepolia-rpc.publicnode.com' },
+      { alias: 'default', rpcUrl: 'https://unichain-sepolia-rpc.publicnode.com' },
+      { alias: 'public', rpcUrl: 'https://sepolia.unichain.org' },
     ],
     symbol: 'ETH',
     testnet: true,
