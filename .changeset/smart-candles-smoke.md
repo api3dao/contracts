@@ -8,3 +8,4 @@ Update RPC provider configurations:
 - Add quicknode for katana
 - Update default RPC URL for kava
 - Add sentio for mode
+- Add drpc as default and keep previous default as public for ronin

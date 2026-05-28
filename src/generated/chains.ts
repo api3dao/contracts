@@ -604,7 +604,8 @@ export const CHAINS: Chain[] = [
     id: '2020',
     name: 'Ronin',
     providers: [
-      { alias: 'default', rpcUrl: 'https://api.roninchain.com/rpc/' },
+      { alias: 'default', rpcUrl: 'https://ronin.drpc.org' },
+      { alias: 'public', rpcUrl: 'https://api.roninchain.com/rpc/' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
       { alias: 'dwellir', homepageUrl: 'https://dwellir.com' },
