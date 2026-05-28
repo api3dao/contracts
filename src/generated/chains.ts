@@ -119,10 +119,10 @@ export const CHAINS: Chain[] = [
     name: 'Base',
     providers: [
       { alias: 'default', rpcUrl: 'https://mainnet.base.org' },
+      { alias: 'publicnode', rpcUrl: 'https://base-rpc.publicnode.com' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
       { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
-      { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
     ],
     symbol: 'ETH',
     testnet: false,
@@ -366,6 +366,7 @@ export const CHAINS: Chain[] = [
       { alias: 'default', rpcUrl: 'https://rpc.katana.network' },
       { alias: 'conduit', homepageUrl: 'https://conduit.xyz' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
+      { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
     symbol: 'ETH',
     testnet: false,
@@ -389,7 +390,7 @@ export const CHAINS: Chain[] = [
     id: '2222',
     name: 'Kava',
     providers: [
-      { alias: 'default', rpcUrl: 'https://evm.kava.io/' },
+      { alias: 'default', rpcUrl: 'https://evm.kava-rpc.com/' },
       { alias: 'publicnode', rpcUrl: 'https://kava-evm-rpc.publicnode.com/' },
     ],
     symbol: 'KAVA',
@@ -486,6 +487,7 @@ export const CHAINS: Chain[] = [
     name: 'Mode',
     providers: [
       { alias: 'default', rpcUrl: 'https://mainnet.mode.network' },
+      { alias: 'sentio', rpcUrl: 'https://mode-mainnet.rpc.sentio.xyz' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
     ],
     symbol: 'ETH',
@@ -602,7 +604,8 @@ export const CHAINS: Chain[] = [
     id: '2020',
     name: 'Ronin',
     providers: [
-      { alias: 'default', rpcUrl: 'https://api.roninchain.com/rpc/' },
+      { alias: 'default', rpcUrl: 'https://ronin.drpc.org' },
+      { alias: 'public', rpcUrl: 'https://api.roninchain.com/rpc/' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
       { alias: 'dwellir', homepageUrl: 'https://dwellir.com' },

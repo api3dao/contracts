@@ -7,7 +7,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://evm.kava.io/"
+      "rpcUrl": "https://evm.kava-rpc.com/"
     },
     {
       "alias": "publicnode",

@@ -16,6 +16,10 @@
     {
       "alias": "tenderly",
       "homepageUrl": "https://tenderly.co/"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "ETH",
