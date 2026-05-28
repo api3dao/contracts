@@ -1,5 +1,16 @@
 # @api3/contracts
 
+## 38.0.1
+
+### Patch Changes
+
+- 7be963f: Update RPC provider configurations:
+  - Replace tenderly with publicnode for base
+  - Add quicknode for katana
+  - Update default RPC URL for kava
+  - Add sentio for mode
+  - Add drpc as default and keep previous default as public for ronin
+
 ## 38.0.0
 
 ### Major Changes
