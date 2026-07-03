@@ -1,5 +1,17 @@
 # @api3/contracts
 
+## 38.0.2
+
+### Patch Changes
+
+- 0747e62: Update RPC provider configurations:
+
+  - Make publicnode default and keep previous default as public for base
+  - Remove icecreamswap from core
+  - Remove conduit from katana
+  - Remove unitedbloc from moonbeam
+  - Remove unresponsive default provider and promote public to default for sei-testnet
+
 ## 38.0.1
 
 ### Patch Changes
