@@ -14,10 +14,6 @@
       "rpcUrl": "https://rpc.api.moonbeam.network"
     },
     {
-      "alias": "unitedbloc",
-      "rpcUrl": "https://moonbeam.unitedbloc.com"
-    },
-    {
       "alias": "reblok",
       "homepageUrl": "https://reblok.io"
     }
