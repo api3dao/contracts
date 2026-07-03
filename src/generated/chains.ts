@@ -118,8 +118,8 @@ export const CHAINS: Chain[] = [
     id: '8453',
     name: 'Base',
     providers: [
-      { alias: 'default', rpcUrl: 'https://mainnet.base.org' },
-      { alias: 'publicnode', rpcUrl: 'https://base-rpc.publicnode.com' },
+      { alias: 'default', rpcUrl: 'https://base-rpc.publicnode.com' },
+      { alias: 'public', rpcUrl: 'https://mainnet.base.org' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
       { alias: 'blockpi', homepageUrl: 'https://blockpi.io' },
@@ -203,7 +203,6 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.coredao.org/' },
       { alias: 'public', rpcUrl: 'https://rpcar.coredao.org/' },
-      { alias: 'icecreamswap', rpcUrl: 'https://rpc-core.icecreamswap.com/' },
     ],
     symbol: 'CORE',
     testnet: false,
@@ -364,7 +363,6 @@ export const CHAINS: Chain[] = [
     name: 'Katana',
     providers: [
       { alias: 'default', rpcUrl: 'https://rpc.katana.network' },
-      { alias: 'conduit', homepageUrl: 'https://conduit.xyz' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
       { alias: 'quicknode', homepageUrl: 'https://quicknode.com' },
     ],
@@ -517,7 +515,6 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://moonbeam-rpc.publicnode.com' },
       { alias: 'public', rpcUrl: 'https://rpc.api.moonbeam.network' },
-      { alias: 'unitedbloc', rpcUrl: 'https://moonbeam.unitedbloc.com' },
       { alias: 'reblok', homepageUrl: 'https://reblok.io' },
     ],
     symbol: 'GLMR',
@@ -648,10 +645,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     id: '1328',
     name: 'Sei testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://sei-testnet-public.nodies.app' },
-      { alias: 'public', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' },
-    ],
+    providers: [{ alias: 'default', rpcUrl: 'https://evm-rpc-testnet.sei-apis.com' }],
     symbol: 'SEI',
     testnet: true,
     verificationApi: { type: 'etherscan' },

@@ -7,11 +7,11 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://mainnet.base.org"
+      "rpcUrl": "https://base-rpc.publicnode.com"
     },
     {
-      "alias": "publicnode",
-      "rpcUrl": "https://base-rpc.publicnode.com"
+      "alias": "public",
+      "rpcUrl": "https://mainnet.base.org"
     },
     {
       "alias": "quicknode",

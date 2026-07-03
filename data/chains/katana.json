@@ -10,10 +10,6 @@
       "rpcUrl": "https://rpc.katana.network"
     },
     {
-      "alias": "conduit",
-      "homepageUrl": "https://conduit.xyz"
-    },
-    {
       "alias": "tenderly",
       "homepageUrl": "https://tenderly.co/"
     },
