@@ -12,10 +12,6 @@
     {
       "alias": "public",
       "rpcUrl": "https://rpcar.coredao.org/"
-    },
-    {
-      "alias": "icecreamswap",
-      "rpcUrl": "https://rpc-core.icecreamswap.com/"
     }
   ],
   "symbol": "CORE",
