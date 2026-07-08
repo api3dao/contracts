@@ -41,6 +41,8 @@
     "optimism-sepolia-testnet",
     "polygon",
     "polygon-sepolia-testnet",
+    "robinhood",
+    "robinhood-sepolia-testnet",
     "ronin",
     "ronin-testnet",
     "scroll",

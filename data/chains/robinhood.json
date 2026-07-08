@@ -1,0 +1,27 @@
+{
+  "alias": "robinhood",
+  "blockExplorerUrl": "https://robinhoodchain.blockscout.com/",
+  "decimals": 18,
+  "id": "4663",
+  "name": "Robinhood",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.mainnet.chain.robinhood.com"
+    },
+    {
+      "alias": "alchemy",
+      "homepageUrl": "https://alchemy.com"
+    },
+    {
+      "alias": "quicknode",
+      "homepageUrl": "https://quicknode.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://robinhoodchain.blockscout.com/api"
+  }
+}
