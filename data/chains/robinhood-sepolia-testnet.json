@@ -3,7 +3,7 @@
   "blockExplorerUrl": "https://explorer.testnet.chain.robinhood.com/",
   "decimals": 18,
   "id": "46630",
-  "name": "Robinhood testnet",
+  "name": "Robinhood Chain testnet",
   "providers": [
     {
       "alias": "default",

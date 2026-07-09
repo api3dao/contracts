@@ -3,7 +3,7 @@
   "blockExplorerUrl": "https://robinhoodchain.blockscout.com/",
   "decimals": 18,
   "id": "4663",
-  "name": "Robinhood",
+  "name": "Robinhood Chain",
   "providers": [
     {
       "alias": "default",
@@ -16,6 +16,10 @@
     {
       "alias": "quicknode",
       "homepageUrl": "https://quicknode.com"
+    },
+    {
+      "alias": "reblok",
+      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "ETH",
