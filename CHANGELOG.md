@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 38.1.0
+
+### Minor Changes
+
+- 569886e: Add Market support to robinhood and robinhood-sepolia-testnet
+
 ## 38.0.2
 
 ### Patch Changes
