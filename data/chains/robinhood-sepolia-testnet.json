@@ -1,0 +1,19 @@
+{
+  "alias": "robinhood-sepolia-testnet",
+  "blockExplorerUrl": "https://explorer.testnet.chain.robinhood.com/",
+  "decimals": 18,
+  "id": "46630",
+  "name": "Robinhood Chain testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://rpc.testnet.chain.robinhood.com"
+    }
+  ],
+  "symbol": "ETH",
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://explorer.testnet.chain.robinhood.com/api"
+  }
+}
