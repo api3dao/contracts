@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 38.2.0
+
+### Minor Changes
+
+- ef77c79: Add 40 Acres to dApp details
+- 642ac86: Add Robinhood support to morpho-api3 dApp alias data
+
+### Patch Changes
+
+- 5ccc65a: Update RPC provider configurations:
+
+  - Remove blockpi from polygon
+  - Update default provider for zircuit-sepolia-testnet
+
 ## 38.1.0
 
 ### Minor Changes
