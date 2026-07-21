@@ -7,7 +7,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://garfield-testnet.zircuit.com"
+      "rpcUrl": "https://rpc.garfield-testnet.zircuit.com"
     }
   ],
   "symbol": "ETH",

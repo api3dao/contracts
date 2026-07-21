@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "40-acres": { "chains": ["ethereum", "base"], "title": "40 Acres" }
+  },
+  "homepageUrl": "https://www.40acres.finance/"
+}
