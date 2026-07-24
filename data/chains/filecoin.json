@@ -1,0 +1,23 @@
+{
+  "alias": "filecoin",
+  "blockExplorerUrl": "https://filecoin.blockscout.com",
+  "decimals": 18,
+  "id": "314",
+  "name": "Filecoin",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.node.glif.io/rpc/v1"
+    },
+    {
+      "alias": "drpc",
+      "homepageUrl": "https://drpc.org"
+    }
+  ],
+  "symbol": "FIL",
+  "testnet": false,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://filecoin.blockscout.com/api"
+  }
+}

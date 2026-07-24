@@ -17,6 +17,8 @@
     "ethereum",
     "ethereum-hoodi-testnet",
     "ethereum-sepolia-testnet",
+    "filecoin",
+    "filecoin-testnet",
     "fraxtal",
     "gnosis",
     "gnosis-testnet",
