@@ -1,0 +1,19 @@
+{
+  "alias": "filecoin-testnet",
+  "blockExplorerUrl": "https://filecoin-testnet.blockscout.com",
+  "decimals": 18,
+  "id": "314159",
+  "name": "Filecoin testnet",
+  "providers": [
+    {
+      "alias": "default",
+      "rpcUrl": "https://api.calibration.node.glif.io/rpc/v1"
+    }
+  ],
+  "symbol": "FIL",
+  "testnet": true,
+  "verificationApi": {
+    "type": "blockscout",
+    "url": "https://filecoin-testnet.blockscout.com/api"
+  }
+}
