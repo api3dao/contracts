@@ -7,10 +7,6 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://moonbase.unitedbloc.com"
-    },
-    {
-      "alias": "public",
       "rpcUrl": "https://rpc.api.moonbase.moonbeam.network"
     }
   ],
