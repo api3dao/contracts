@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 38.2.1
+
+### Patch Changes
+
+- 93c4862: Update default provider for moonbeam-testnet and polygon-sepolia-testnet
+
 ## 38.2.0
 
 ### Minor Changes
