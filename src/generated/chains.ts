@@ -498,10 +498,7 @@ export const CHAINS: Chain[] = [
     decimals: 18,
     id: '1287',
     name: 'Moonbeam testnet',
-    providers: [
-      { alias: 'default', rpcUrl: 'https://moonbase.unitedbloc.com' },
-      { alias: 'public', rpcUrl: 'https://rpc.api.moonbase.moonbeam.network' },
-    ],
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.api.moonbase.moonbeam.network' }],
     symbol: 'GLMR',
     testnet: true,
     verificationApi: { type: 'etherscan' },
@@ -559,7 +556,7 @@ export const CHAINS: Chain[] = [
     id: '80002',
     name: 'Polygon testnet',
     providers: [
-      { alias: 'default', rpcUrl: 'https://rpc-amoy.polygon.technology' },
+      { alias: 'default', rpcUrl: 'https://polygon-amoy-bor-rpc.publicnode.com' },
       { alias: 'tenderly-public', rpcUrl: 'https://polygon-amoy.gateway.tenderly.co' },
     ],
     symbol: 'POL',
