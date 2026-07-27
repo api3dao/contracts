@@ -275,6 +275,17 @@ export const CHAINS: Chain[] = [
     verificationApi: { type: 'blockscout', url: 'https://filecoin.blockscout.com/api' },
   },
   {
+    alias: 'fraxtal-hoodi-testnet',
+    blockExplorerUrl: 'https://hoodi.fraxscan.com/',
+    decimals: 18,
+    id: '2523',
+    name: 'Fraxtal Hoodi testnet',
+    providers: [{ alias: 'default', rpcUrl: 'https://rpc.testnet.frax.com/' }],
+    symbol: 'FXS',
+    testnet: true,
+    verificationApi: { type: 'etherscan' },
+  },
+  {
     alias: 'fraxtal',
     blockExplorerUrl: 'https://fraxscan.com/',
     decimals: 18,
