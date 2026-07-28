@@ -14,7 +14,11 @@ import type { Deployment } from 'hardhat-deploy/dist/types';
 import * as chainSupportData from '../data/chain-support.json';
 import { type ChainSupport, CHAINS } from '../src/index';
 
-import { goAsyncOptions, skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification } from './constants';
+import {
+  goAsyncOptions,
+  skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
+  skippedChainAliasesInUndeterministicDeploymentVerification,
+} from './constants';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
@@ -171,6 +175,14 @@ async function verifyDeployments(network: string) {
       }
       if (goFetchContractCode.data === '0x') {
         throw new Error(`${network} ${contractName} (deterministic) contract code does not exist`);
+      }
+    } else if (skippedChainAliasesInUndeterministicDeploymentVerification.includes(network)) {
+      const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
+      if (!goFetchContractCode.success || !goFetchContractCode.data) {
+        throw new Error(`${network} ${contractName} (undeterministic) contract code could not be fetched`);
+      }
+      if (goFetchContractCode.data === '0x') {
+        throw new Error(`${network} ${contractName} (undeterministic) contract code does not exist`);
       }
     } else {
       const goFetchCreationTx = await go(
