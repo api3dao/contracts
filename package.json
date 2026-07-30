@@ -8,7 +8,7 @@
     "oev"
   ],
   "license": "MIT",
-  "version": "38.2.1",
+  "version": "38.3.0",
   "engines": {
     "node": ">=22.18.0"
   },

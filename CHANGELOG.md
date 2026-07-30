@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 38.3.0
+
+### Minor Changes
+
+- 5e4ef02: Add Market support to filecoin and filecoin-testnet
+- 0e4dfbb: Add Base support to morpho-api3 dApp alias data
+- ed204fe: Add Market support to fraxtal-hoodi-testnet
+
 ## 38.2.1
 
 ### Patch Changes
