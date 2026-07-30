@@ -168,21 +168,15 @@ async function verifyDeployments(network: string) {
       ethers.solidityPackedKeccak256(['bytes', 'bytes'], [artifact.bytecode, expectedEncodedConstructorArguments])
     );
 
-    if (deployment.address === expectedDeterministicDeploymentAddress) {
+    const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
+    if (deployedDeterministically || skippedChainAliasesInUndeterministicDeploymentVerification.includes(network)) {
+      const deploymentType = deployedDeterministically ? 'deterministic' : 'undeterministic';
       const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
-        throw new Error(`${network} ${contractName} (deterministic) contract code could not be fetched`);
+        throw new Error(`${network} ${contractName} (${deploymentType}) contract code could not be fetched`);
       }
       if (goFetchContractCode.data === '0x') {
-        throw new Error(`${network} ${contractName} (deterministic) contract code does not exist`);
-      }
-    } else if (skippedChainAliasesInUndeterministicDeploymentVerification.includes(network)) {
-      const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
-      if (!goFetchContractCode.success || !goFetchContractCode.data) {
-        throw new Error(`${network} ${contractName} (undeterministic) contract code could not be fetched`);
-      }
-      if (goFetchContractCode.data === '0x') {
-        throw new Error(`${network} ${contractName} (undeterministic) contract code does not exist`);
+        throw new Error(`${network} ${contractName} (${deploymentType}) contract code does not exist`);
       }
     } else {
       const goFetchCreationTx = await go(
