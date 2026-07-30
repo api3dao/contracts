@@ -14,7 +14,11 @@ import type { Deployment } from 'hardhat-deploy/dist/types';
 import * as chainSupportData from '../data/chain-support.json';
 import { type ChainSupport, CHAINS } from '../src/index';
 
-import { goAsyncOptions, skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification } from './constants';
+import {
+  goAsyncOptions,
+  skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
+  skippedChainAliasesInUndeterministicDeploymentVerification,
+} from './constants';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
@@ -129,6 +133,12 @@ async function verifyDeployments(network: string) {
     throw new Error(`${network} is not supported`);
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const skipUndeterministicDeploymentVerification =
+    skippedChainAliasesInUndeterministicDeploymentVerification.includes(network);
+  if (skipUndeterministicDeploymentVerification) {
+    // eslint-disable-next-line no-console
+    console.log(`Skip verify-deployments on ${network}, whose RPC does not index historical transactions`);
+  }
   const contractNames = [
     ...(chainsSupportedByMarket.includes(network)
       ? [
@@ -164,13 +174,15 @@ async function verifyDeployments(network: string) {
       ethers.solidityPackedKeccak256(['bytes', 'bytes'], [artifact.bytecode, expectedEncodedConstructorArguments])
     );
 
-    if (deployment.address === expectedDeterministicDeploymentAddress) {
+    const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
+    if (deployedDeterministically || skipUndeterministicDeploymentVerification) {
+      const deploymentType = deployedDeterministically ? 'deterministic' : 'undeterministic';
       const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
-        throw new Error(`${network} ${contractName} (deterministic) contract code could not be fetched`);
+        throw new Error(`${network} ${contractName} (${deploymentType}) contract code could not be fetched`);
       }
       if (goFetchContractCode.data === '0x') {
-        throw new Error(`${network} ${contractName} (deterministic) contract code does not exist`);
+        throw new Error(`${network} ${contractName} (${deploymentType}) contract code does not exist`);
       }
     } else {
       const goFetchCreationTx = await go(

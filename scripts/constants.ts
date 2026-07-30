@@ -13,6 +13,8 @@ export const goAsyncOptions: GoAsyncOptions = {
 
 export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = [];
 
+export const skippedChainAliasesInUndeterministicDeploymentVerification = ['filecoin', 'filecoin-testnet'];
+
 export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification = [
   'apechain',
   'apechain-arbitrum-sepolia-testnet',
