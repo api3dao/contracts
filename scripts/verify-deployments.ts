@@ -133,6 +133,12 @@ async function verifyDeployments(network: string) {
     throw new Error(`${network} is not supported`);
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const skipUndeterministicDeploymentVerification =
+    skippedChainAliasesInUndeterministicDeploymentVerification.includes(network);
+  if (skipUndeterministicDeploymentVerification) {
+    // eslint-disable-next-line no-console
+    console.log(`Skip verify-deployments on ${network}, whose RPC does not index historical transactions`);
+  }
   const contractNames = [
     ...(chainsSupportedByMarket.includes(network)
       ? [
@@ -169,7 +175,7 @@ async function verifyDeployments(network: string) {
     );
 
     const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
-    if (deployedDeterministically || skippedChainAliasesInUndeterministicDeploymentVerification.includes(network)) {
+    if (deployedDeterministically || skipUndeterministicDeploymentVerification) {
       const deploymentType = deployedDeterministically ? 'deterministic' : 'undeterministic';
       const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
