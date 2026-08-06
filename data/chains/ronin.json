@@ -7,7 +7,7 @@
   "providers": [
     {
       "alias": "default",
-      "rpcUrl": "https://ronin.drpc.org"
+      "rpcUrl": "https://ronin.gateway.tenderly.co"
     },
     {
       "alias": "public",

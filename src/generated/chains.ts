@@ -634,7 +634,7 @@ export const CHAINS: Chain[] = [
     id: '2020',
     name: 'Ronin',
     providers: [
-      { alias: 'default', rpcUrl: 'https://ronin.drpc.org' },
+      { alias: 'default', rpcUrl: 'https://ronin.gateway.tenderly.co' },
       { alias: 'public', rpcUrl: 'https://api.roninchain.com/rpc/' },
       { alias: 'alchemy', homepageUrl: 'https://alchemy.com' },
       { alias: 'tenderly', homepageUrl: 'https://tenderly.co/' },
@@ -890,7 +890,6 @@ export const CHAINS: Chain[] = [
     providers: [
       { alias: 'default', rpcUrl: 'https://mainnet.zircuit.com' },
       { alias: 'sentio', rpcUrl: 'https://rpc.sentio.xyz/zircuit' },
-      { alias: 'drpc', homepageUrl: 'https://drpc.org' },
     ],
     symbol: 'ETH',
     testnet: false,
