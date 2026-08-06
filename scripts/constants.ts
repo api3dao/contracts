@@ -44,8 +44,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'mantle-sepolia-testnet',
   'mode',
   'mode-sepolia-testnet',
-  'moonbeam',
-  'moonbeam-testnet',
   'opbnb',
   'opbnb-testnet',
   'optimism',
