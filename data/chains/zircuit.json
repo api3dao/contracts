@@ -12,10 +12,6 @@
     {
       "alias": "sentio",
       "rpcUrl": "https://rpc.sentio.xyz/zircuit"
-    },
-    {
-      "alias": "drpc",
-      "homepageUrl": "https://drpc.org"
     }
   ],
   "symbol": "ETH",
