@@ -1,5 +1,25 @@
 # @api3/contracts
 
+## 39.0.0
+
+### Major Changes
+
+- c506aae: Remove support for following dApps:
+
+  - moonwell
+
+- c506aae: Remove support for following chains:
+
+  - moonbeam
+  - moonbeam-testnet
+
+### Patch Changes
+
+- e742f49: Update RPC provider configurations:
+
+  - Replace default with tenderly for ronin
+  - Remove drpc from zircuit
+
 ## 38.3.0
 
 ### Minor Changes
