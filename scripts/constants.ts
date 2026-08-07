@@ -1,4 +1,4 @@
-import type { GoAsyncOptions } from '@api3/promise-utils';
+import type { GoAsyncOptions } from '@api3/commons';
 
 export const goAsyncOptions: GoAsyncOptions = {
   retries: 5,

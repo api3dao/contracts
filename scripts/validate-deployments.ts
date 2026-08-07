@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { go } from '@api3/promise-utils';
+import { go } from '@api3/commons';
 import { config, ethers } from 'hardhat';
 
 import * as auctioneerMetadata from '../data/auctioneer-metadata.json';

@@ -7,7 +7,7 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { go } from '@api3/promise-utils';
+import { go } from '@api3/commons';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
 

@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 
-import { goSync } from '@api3/promise-utils';
+import { goSync } from '@api3/commons';
 
 const CLI_EXECUTABLE = 'dist/src/cli.js';
 
