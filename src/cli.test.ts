@@ -1,6 +1,6 @@
 import { execSync } from 'node:child_process';
 
-import { goSync } from '@api3/promise-utils';
+import { goSync } from '@api3/commons';
 
 const CLI_EXECUTABLE = 'dist/src/cli.js';
 
@@ -16,7 +16,7 @@ describe('cli tests', () => {
     );
     if (!goExecSync.success) {
       // rethrow the output of the CLI
-      throw new Error((goExecSync.error as any).reason.stderr.toString().trim());
+      throw new Error((goExecSync.error as any).stderr.toString().trim());
     }
 
     const stdout = goExecSync.data?.toString().trim() || '';

@@ -1,4 +1,4 @@
-import { go } from '@api3/promise-utils';
+import { go } from '@api3/commons';
 import { z } from 'zod';
 
 import { type Chain, CHAINS } from '../src/index';
