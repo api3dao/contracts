@@ -16,7 +16,7 @@ describe('cli tests', () => {
     );
     if (!goExecSync.success) {
       // rethrow the output of the CLI
-      throw new Error((goExecSync.error as any).reason.stderr.toString().trim());
+      throw new Error((goExecSync.error as any).stderr.toString().trim());
     }
 
     const stdout = goExecSync.data?.toString().trim() || '';
