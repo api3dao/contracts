@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { goSync } from '@api3/promise-utils';
+import { goSync } from '@api3/commons';
 import { format } from 'prettier';
 
 import { type Dapp, dappSchema } from '../src/types';
