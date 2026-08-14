@@ -56,16 +56,14 @@ async function validateDeployments(network: string) {
   }
   const { owners: managerMultisigOwners, threshold: managerMultisigThreshold } =
     managerMultisigMetadata[CHAINS.find((chain) => chain.alias === network)?.testnet ? 'testnet' : 'mainnet'];
-  if (
-    !(
-      managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
-      managerMultisigOwners.every((managerMultisigOwner: string) =>
-        goFetchGnosisSafeWithoutProxyOwners.data
-          .map((owner) => ethers.getAddress(owner))
-          .includes(ethers.getAddress(managerMultisigOwner))
-      )
+  if (!(
+    managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
+    managerMultisigOwners.every((managerMultisigOwner: string) =>
+      goFetchGnosisSafeWithoutProxyOwners.data
+        .map((owner) => ethers.getAddress(owner))
+        .includes(ethers.getAddress(managerMultisigOwner))
     )
-  ) {
+  )) {
     throw new Error(
       `${network} GnosisSafeWithoutProxy owners are expected to be\n${managerMultisigOwners}\nbut are\n${goFetchGnosisSafeWithoutProxyOwners.data}`
     );
