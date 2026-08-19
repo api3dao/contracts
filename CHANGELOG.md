@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 39.1.0
+
+### Minor Changes
+
+- a3fef85: Add SWAN Protocol to dApp details
+
 ## 39.0.0
 
 ### Major Changes
