@@ -1,0 +1,6 @@
+{
+  "aliases": {
+    "swan-protocol": { "chains": ["robinhood"], "title": "SWAN Protocol" }
+  },
+  "homepageUrl": "https://swanprotocol.xyz/"
+}
