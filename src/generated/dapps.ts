@@ -147,6 +147,10 @@ export const DAPPS: Dapp[] = [
   },
   { aliases: { stability: { chains: ['sonic'], title: 'Stability' } }, homepageUrl: 'https://stability.farm/' },
   { aliases: { stout: { chains: ['sonic'], title: 'Stout' } }, homepageUrl: 'https://stout.fi/' },
+  {
+    aliases: { 'swan-protocol': { chains: ['robinhood'], title: 'SWAN Protocol' } },
+    homepageUrl: 'https://swanprotocol.xyz/',
+  },
   { aliases: { takara: { chains: ['sei'], title: 'Takara Lend' } }, homepageUrl: 'https://takaralend.com/' },
   {
     aliases: {
