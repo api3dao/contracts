@@ -1,4 +1,4 @@
-import type { GoAsyncOptions } from '@api3/promise-utils';
+import type { GoAsyncOptions } from '@api3/commons';
 
 export const goAsyncOptions: GoAsyncOptions = {
   retries: 5,
@@ -13,7 +13,9 @@ export const goAsyncOptions: GoAsyncOptions = {
 
 export const skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation: string[] = [];
 
-export const skippedChainAliasesInUndeterministicDeploymentVerification = ['filecoin', 'filecoin-testnet'];
+// The creation tx of an undeterministic deployment cannot be fetched on these chains, so its deployed bytecode is
+// compared with the local compilation output instead
+export const chainAliasesWithoutHistoricalTransactionIndexing = ['filecoin', 'filecoin-testnet'];
 
 export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification = [
   'apechain',

@@ -7,7 +7,7 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import { go } from '@api3/promise-utils';
+import { go } from '@api3/commons';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
 
@@ -15,9 +15,9 @@ import * as chainSupportData from '../data/chain-support.json';
 import { type ChainSupport, CHAINS } from '../src/index';
 
 import {
+  chainAliasesWithoutHistoricalTransactionIndexing,
   goAsyncOptions,
   skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
-  skippedChainAliasesInUndeterministicDeploymentVerification,
 } from './constants';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
@@ -25,6 +25,14 @@ const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = 
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
+
+function maskImmutableVariables(bytecode: string, immutableByteRanges: { length: number; start: number }[]) {
+  const bytecodeBytes = ethers.getBytes(bytecode);
+  for (const { length, start } of immutableByteRanges) {
+    bytecodeBytes.fill(0, start, start + length);
+  }
+  return ethers.hexlify(bytecodeBytes);
+}
 
 function validateDeploymentArguments(network: string, deployment: Deployment, contractName: string) {
   let expectedDeploymentArgs: string[];
@@ -133,11 +141,12 @@ async function verifyDeployments(network: string) {
     throw new Error(`${network} is not supported`);
   }
   const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
-  const skipUndeterministicDeploymentVerification =
-    skippedChainAliasesInUndeterministicDeploymentVerification.includes(network);
-  if (skipUndeterministicDeploymentVerification) {
+  const creationTxUnavailable = chainAliasesWithoutHistoricalTransactionIndexing.includes(network);
+  if (creationTxUnavailable) {
     // eslint-disable-next-line no-console
-    console.log(`Skip verify-deployments on ${network}, whose RPC does not index historical transactions`);
+    console.log(
+      `${network} has no historical tx indexing; verifying undeterministic deployments via deployed bytecode`
+    );
   }
   const contractNames = [
     ...(chainsSupportedByMarket.includes(network)
@@ -175,7 +184,7 @@ async function verifyDeployments(network: string) {
     );
 
     const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
-    if (deployedDeterministically || skipUndeterministicDeploymentVerification) {
+    if (deployedDeterministically || creationTxUnavailable) {
       const deploymentType = deployedDeterministically ? 'deterministic' : 'undeterministic';
       const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
@@ -183,6 +192,28 @@ async function verifyDeployments(network: string) {
       }
       if (goFetchContractCode.data === '0x') {
         throw new Error(`${network} ${contractName} (${deploymentType}) contract code does not exist`);
+      }
+      if (!deployedDeterministically) {
+        // The immutable variable values are masked out, which means that they are not verified here. The byte
+        // ranges that they occupy are only available in the extended artifact.
+        const { evm } = await deployments.getExtendedArtifact(contractName);
+        const immutableByteRanges = Object.values<{ length: number; start: number }[]>(
+          evm.deployedBytecode.immutableReferences ?? {}
+        ).flat();
+        const deployedBytecode = maskImmutableVariables(goFetchContractCode.data, immutableByteRanges);
+        const deployedBytecodeWithoutMetadataHash = deployedBytecode.slice(0, -METADATA_HASH_LENGTH);
+        const deployedMetadataHash = deployedBytecode.slice(-METADATA_HASH_LENGTH);
+
+        const expectedDeployedBytecode = maskImmutableVariables(artifact.deployedBytecode, immutableByteRanges);
+        const expectedDeployedBytecodeWithoutMetadataHash = expectedDeployedBytecode.slice(0, -METADATA_HASH_LENGTH);
+        const expectedDeployedMetadataHash = expectedDeployedBytecode.slice(-METADATA_HASH_LENGTH);
+        if (deployedBytecodeWithoutMetadataHash !== expectedDeployedBytecodeWithoutMetadataHash) {
+          throw new Error(`${network} ${contractName} (${deploymentType}) deployed bytecode does not match`);
+        }
+        if (deployedMetadataHash !== expectedDeployedMetadataHash) {
+          // eslint-disable-next-line no-console
+          console.log(`${network} ${contractName} (${deploymentType}) deployed bytecode metadata hash does not match`);
+        }
       }
     } else {
       const goFetchCreationTx = await go(
