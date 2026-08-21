@@ -55,7 +55,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'ronin',
   'ronin-testnet',
   'scroll',
-  'scroll-sepolia-testnet',
   'sei',
   'sei-testnet',
   'soneium',
