@@ -1,5 +1,13 @@
 # @api3/contracts
 
+## 40.0.0
+
+### Major Changes
+
+- 3499451: Remove support for following chains:
+
+  - scroll-sepolia-testnet
+
 ## 39.1.0
 
 ### Minor Changes
