@@ -22,8 +22,8 @@ importers:
         version: 4.4.3
     devDependencies:
       '@api3/commons':
-        specifier: ^1.3.0
-        version: 1.3.0
+        specifier: ^2.0.0
+        version: 2.0.0
       '@api3/eslint-plugin-commons':
         specifier: ^3.1.1
         version: 3.1.1(eslint@8.57.1)(jest@30.4.2(@types/node@22.19.21)(ts-node@10.9.2(@types/node@22.19.21)(typescript@5.9.3)))(prettier@3.9.6)(typescript@5.9.3)
@@ -132,8 +132,8 @@ packages:
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
 
-  '@api3/commons@1.3.0':
-    resolution: {integrity: sha512-2LqiFSa4l+1LwyfJSTpHRrRWBfDCL9xYlcRGO+RlAoRQz9/2Ym55iwuLpsvO2jQt4npNvsEUaOfFIpAohXjJIg==}
+  '@api3/commons@2.0.0':
+    resolution: {integrity: sha512-GsotpgLO6ZKOHdC+8/BPjTqtd+iH8xIcnTJ71/3Y9O4VhSF1ThLuWfomXzCJk9arnEtTOHWZD7zZOk+4UNC0yw==}
     engines: {node: '>=18.20.8'}
 
   '@api3/eslint-plugin-commons@3.1.1':
@@ -4944,7 +4944,7 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.1': {}
 
-  '@api3/commons@1.3.0':
+  '@api3/commons@2.0.0':
     dependencies:
       '@api3/ois': 3.0.0
       '@octokit/rest': 20.1.2
