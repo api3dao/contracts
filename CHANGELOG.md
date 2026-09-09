@@ -1,5 +1,14 @@
 # @api3/contracts
 
+## 41.0.0
+
+### Major Changes
+
+- 052bb06: Remove support for following chains:
+
+  - filecoin
+  - filecoin-testnet
+
 ## 40.0.0
 
 ### Major Changes
