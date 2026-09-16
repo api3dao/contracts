@@ -8,10 +8,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://sentry.evm-rpc.injective.network"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "INJ",

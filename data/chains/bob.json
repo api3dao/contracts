@@ -8,10 +8,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://rpc.gobob.xyz/"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",

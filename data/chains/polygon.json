@@ -8,18 +8,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://polygon-bor-rpc.publicnode.com"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "POL",

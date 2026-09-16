@@ -12,18 +12,6 @@
     {
       "alias": "public",
       "rpcUrl": "https://evm-rpc.sei-apis.com/"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "infura",
-      "homepageUrl": "https://infura.io"
-    },
-    {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "SEI",

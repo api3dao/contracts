@@ -12,18 +12,6 @@
     {
       "alias": "backup",
       "rpcUrl": "https://rpc.hypurrscan.io"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "blockpi",
-      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "HYPE",
