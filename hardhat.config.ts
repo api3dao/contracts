@@ -1,115 +1,72 @@
-import * as fs from 'node:fs';
-
-import { glob } from 'glob';
-import type { HardhatUserConfig } from 'hardhat/config';
-import '@nomicfoundation/hardhat-toolbox';
-import 'keycard-hardhat-provider';
-import 'hardhat-deploy';
+import hardhatToolboxMochaEthers from '@nomicfoundation/hardhat-toolbox-mocha-ethers';
 import 'dotenv/config';
-import { task } from 'hardhat/config';
+import { defineConfig } from 'hardhat/config';
+import keycardProvider from 'keycard-hardhat-provider';
 
-import { hardhatConfig } from './src/index.js';
+// ./src/index re-exports ../typechain-types, which does not exist before the first build.
+import * as hardhatConfig from './src/hardhat-config.js';
 
-const config: HardhatUserConfig = {
-  blockscout: hardhatConfig.blockscout(),
-  etherscan: hardhatConfig.etherscan(),
-  sourcify: {
-    enabled: true,
-    apiUrl: 'https://sourcify.dev/server',
-    browserUrl: 'https://repo.sourcify.dev',
-  },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS ? true : false,
-    outputFile: 'gas_report',
-    noColors: true,
-  },
-  mocha: {
-    timeout: process.env.EXTENDED_TEST ? 60 * 60_000 : 60_000,
-  },
-  networks: hardhatConfig.networks(),
-  paths: {
-    tests: process.env.EXTENDED_TEST ? './test-extended' : './test',
-  },
-  solidity: {
-    compilers: [
-      {
-        version: '0.8.12',
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
-      },
-      {
-        version: '0.8.17',
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
-      {
-        version: '0.8.27',
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 1000,
-          },
-        },
-      },
-    ],
+// The deployment records hold metadata and storageLayout, and verification needs metadata.
+const outputSelection = {
+  '*': {
+    '*': ['metadata', 'storageLayout', 'devdoc', 'userdoc', 'evm.gasEstimates'],
   },
 };
 
-task(
-  'compile',
-  'Compiles the entire project, building all artifacts, and overwrites contract metadata hash for consistent deterministic deployment addresses',
-  async (args, hre, runSuper) => {
-    await runSuper();
-    const contractMetadataHashes = {
-      AccessControlRegistry: {
-        oldMetadataHash:
-          'a2646970667358221220ae4f3421aaad5b1af12510ac03d7ec2649209de4471e48601a849e44cc2f1d5864736f6c63430008110033',
-        newMetadataHash:
-          'a264697066735822122049e79d59fec464055a13b1a550ea1be46e16effaf1876c0da61e0fcc8bfda86364736f6c63430008110033',
-      },
-      Api3ServerV1: {
-        oldMetadataHash:
-          'a2646970667358221220693313c61a998d79d0e9b250367bd14ac439bd3d1d1f36bf50317fc99059456d64736f6c63430008110033',
-        newMetadataHash:
-          'a2646970667358221220a4d1beae5a583496c3fd546c22d8d7b6026f64446d7a97937beedaa142a134b564736f6c63430008110033',
-      },
-      OwnableCallForwarder: {
-        oldMetadataHash:
-          'a26469706673582212209bc00d30ca9753335445fb76197730f010383979aa0fd4b393e2e8826680071064736f6c63430008110033',
-        newMetadataHash:
-          'a2646970667358221220c6d60bcd12cea7d82a3c5388fa1fa84ca1d8dfa2917c4e9e0037441302a9a50e64736f6c63430008110033',
-      },
-    };
-    for (const contractName of Object.keys(contractMetadataHashes)) {
-      const [artifactFilePath] = await glob(`./artifacts/contracts/**/${contractName}.json`);
-      const artifact = fs.readFileSync(artifactFilePath!, 'utf8');
-      const overwrittenArtifact = Object.values(contractMetadataHashes).reduce(
-        (acc, { oldMetadataHash, newMetadataHash }) => {
-          return acc.replaceAll(newMetadataHash, oldMetadataHash);
-        },
-        artifact
-      );
-      fs.writeFileSync(artifactFilePath!, overwrittenArtifact);
-      const [factoryFilePath] = await glob(`./typechain-types/factories/**/${contractName}__factory.ts`);
-      const factory = fs.readFileSync(factoryFilePath!, 'utf8');
-      const overwrittenFactory = Object.values(contractMetadataHashes).reduce(
-        (acc, { oldMetadataHash, newMetadataHash }) => {
-          return acc.replaceAll(newMetadataHash, oldMetadataHash);
-        },
-        factory
-      );
-      fs.writeFileSync(factoryFilePath!, overwrittenFactory);
-    }
-  }
-);
+// Left unset, solc targets cancun for 0.8.27, which changes the bytecode and every deterministic
+// address built with it.
+const settingsFor = (runs: number, evmVersion: string) => ({
+  optimizer: { enabled: true, runs },
+  evmVersion,
+  metadata: { useLiteralContent: true },
+  outputSelection,
+});
+
+const compilers = [
+  { version: '0.8.12', settings: settingsFor(200, 'london') },
+  { version: '0.8.17', settings: settingsFor(1000, 'london') },
+  { version: '0.8.27', settings: settingsFor(1000, 'paris') },
+];
 
 // eslint-disable-next-line import/no-default-export
-export default config;
+export default defineConfig({
+  plugins: [
+    hardhatToolboxMochaEthers,
+    // Signs with a Keycard when KEYCARD_ACCOUNT is set, which is the field
+    // hardhatConfig.networks() puts on each network in place of a mnemonic.
+    keycardProvider,
+    {
+      id: 'api3-solc-source-names',
+      hookHandlers: { solidity: async () => import('./plugins/solc-source-names.js') },
+    },
+    {
+      id: 'api3-deployed-metadata-hashes',
+      hookHandlers: { solidity: async () => import('./plugins/deployed-metadata-hashes.js') },
+    },
+  ],
+  // Verification uses the production profile, and Hardhat derives an undeclared one from the
+  // default by dropping its settings, so leaving it implicit changes the bytecode.
+  solidity: {
+    profiles: {
+      default: { compilers },
+      production: { compilers },
+    },
+  },
+  typechain: { outDir: 'typechain-types' },
+  networks: hardhatConfig.v3.networks(),
+  chainDescriptors: hardhatConfig.v3.chainDescriptors(),
+  verify: hardhatConfig.v3.verify(),
+  paths: {
+    tests: { mocha: process.env.EXTENDED_TEST ? './test-extended' : './test' },
+  },
+  test: {
+    mocha: {
+      timeout: process.env.EXTENDED_TEST ? 60 * 60_000 : 60_000,
+      parallel: process.env.NO_PARALLEL !== 'true',
+    },
+  },
+  coverage: {
+    // These match user source names, not directory prefixes.
+    skipFiles: ['contracts/mock/**', 'contracts/test/**', 'contracts/vendor/**'],
+  },
+});
