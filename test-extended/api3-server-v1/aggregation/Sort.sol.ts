@@ -1,11 +1,8 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
-import hardhat from 'hardhat';
 
 import type { MockSort } from '../../../src/index.js';
-
-const { ethers } = hardhat;
+import { ethers, helpers } from '../../../test/test-utils.js';
 
 describe('Sort', function () {
   // Adapted from https://stackoverflow.com/a/37580979/14558682
@@ -64,9 +61,9 @@ describe('Sort', function () {
     context('Array length is larger than 9', function () {
       it('reverts', async function () {
         const { sort } = await helpers.loadFixture(deploy);
-        await expect(sort.exposedSort(Array.from({ length: 10 }).fill(0) as any)).to.be.reverted;
-        await expect(sort.exposedSort(Array.from({ length: 11 }).fill(0) as any)).to.be.reverted;
-        await expect(sort.exposedSort(Array.from({ length: 12 }).fill(0) as any)).to.be.reverted;
+        await expect(sort.exposedSort(Array.from({ length: 10 }).fill(0) as any)).to.revert(ethers);
+        await expect(sort.exposedSort(Array.from({ length: 11 }).fill(0) as any)).to.revert(ethers);
+        await expect(sort.exposedSort(Array.from({ length: 12 }).fill(0) as any)).to.revert(ethers);
       });
     });
   });

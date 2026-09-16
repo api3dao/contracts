@@ -1,11 +1,8 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
-import hardhat from 'hardhat';
 
+import { ethers, helpers } from '../test-utils.js';
 import * as testUtils from '../test-utils.js';
-
-const { ethers } = hardhat;
 
 describe('SelfMulticall', function () {
   async function deploy() {
@@ -35,7 +32,7 @@ describe('SelfMulticall', function () {
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[0]!)[0]).to.equal(-1);
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[1]!)[0]).to.equal(-2);
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[2]!)[0]).to.equal(-3);
-        await expect(selfMulticall.multicall(data)).to.not.be.reverted;
+        await expect(selfMulticall.multicall(data)).to.not.revert(ethers);
         expect(await selfMulticall.argumentHistory()).to.deep.equal([1, 2, 3]);
       });
     });
@@ -91,7 +88,7 @@ describe('SelfMulticall', function () {
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[0]!)[0]).to.equal(-1);
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[1]!)[0]).to.equal(-2);
         expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[2]!)[0]).to.equal(-3);
-        await expect(selfMulticall.tryMulticall(data)).to.not.be.reverted;
+        await expect(selfMulticall.tryMulticall(data)).to.not.revert(ethers);
         expect(await selfMulticall.argumentHistory()).to.deep.equal([1, 2, 3]);
       });
     });
@@ -109,7 +106,7 @@ describe('SelfMulticall', function () {
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[0]!)[0]).to.equal(-1);
           expect(testUtils.decodeRevertString(returndata[1]!)).to.equal('Reverted with string');
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[2]!)[0]).to.equal(-3);
-          await expect(selfMulticall.tryMulticall(data)).to.not.be.reverted;
+          await expect(selfMulticall.tryMulticall(data)).to.not.revert(ethers);
           expect(await selfMulticall.argumentHistory()).to.deep.equal([1, 3]);
         });
       });
@@ -125,7 +122,7 @@ describe('SelfMulticall', function () {
           expect(successes).to.deep.equal([true, false, true]);
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[0]!)[0]).to.equal(-1);
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[2]!)[0]).to.equal(-3);
-          await expect(selfMulticall.tryMulticall(data)).to.not.be.reverted;
+          await expect(selfMulticall.tryMulticall(data)).to.not.revert(ethers);
           expect(await selfMulticall.argumentHistory()).to.deep.equal([1, 3]);
         });
       });
@@ -142,7 +139,7 @@ describe('SelfMulticall', function () {
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[0]!)[0]).to.equal(-1);
           expect(returndata[1]).to.equal('0x');
           expect(ethers.AbiCoder.defaultAbiCoder().decode(['int256'], returndata[2]!)[0]).to.equal(-3);
-          await expect(selfMulticall.tryMulticall(data)).to.not.be.reverted;
+          await expect(selfMulticall.tryMulticall(data)).to.not.revert(ethers);
           expect(await selfMulticall.argumentHistory()).to.deep.equal([1, 3]);
         });
       });

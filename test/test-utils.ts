@@ -1,9 +1,11 @@
 import type { AddressLike, BaseWallet, BigNumberish, BytesLike } from 'ethers';
-import hardhat from 'hardhat';
+import { network } from 'hardhat';
 
 import type { Api3ServerV1 } from '../src/index.js';
 
-const { ethers } = hardhat;
+// One connection for the whole suite. Test files share fixtures, and a fixture and the helper it
+// calls have to run against the same chain and the same snapshot store.
+const { ethers, networkHelpers: helpers } = await network.getOrCreate();
 
 const PROTOCOL_IDS = {
   RRP: '1',
@@ -232,6 +234,8 @@ function deriveBeaconSetId(beaconIds: BytesLike[]) {
 }
 
 export {
+  ethers,
+  helpers,
   PROTOCOL_IDS,
   generateRandomAirnodeWallet,
   generateRandomAddress,
