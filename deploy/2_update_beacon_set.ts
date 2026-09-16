@@ -3,7 +3,7 @@ import type { BytesLike } from 'ethers';
 import { deployments, ethers, network } from 'hardhat';
 
 import * as chainSupportData from '../data/chain-support.json';
-import { type ChainSupport, Api3ServerV1__factory } from '../src/index';
+import { type ChainSupport, Api3ServerV1__factory } from '../src/index.js';
 
 const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 

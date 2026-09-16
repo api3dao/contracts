@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import type { HDNodeWallet } from 'ethers';
 import hardhat from 'hardhat';
 
-import type { AirseekerRegistry } from '../../src/index';
+import type { AirseekerRegistry } from '../../src/index.js';
 import {
   deriveBeaconId,
   deriveBeaconSetId,
@@ -12,7 +12,7 @@ import {
   encodeUpdateParameters,
   readBeacons,
   updateBeaconSet,
-} from '../test-utils';
+} from '../test-utils.js';
 
 const { ethers } = hardhat;
 

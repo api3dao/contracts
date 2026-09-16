@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import type { BytesLike, HDNodeWallet } from 'ethers';
 import hardhat from 'hardhat';
 
-import { encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils';
+import { encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils.js';
 
 const { ethers } = hardhat;
 

@@ -4,14 +4,10 @@ import { join } from 'node:path';
 import { go } from '@api3/commons';
 import { config, ethers } from 'hardhat';
 
-import * as auctioneerMetadata from '../data/auctioneer-metadata.json';
-import * as chainSupportData from '../data/chain-support.json';
-import {
-  dapiManagementMerkleRootSigners,
-  dapiPricingMerkleRootSigners,
-  signedApiUrlMerkleRootSigners,
-} from '../data/dapi-management-metadata.json';
-import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
+import auctioneerMetadata from '../data/auctioneer-metadata.json' with { type: 'json' };
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import dapiManagementMetadata from '../data/dapi-management-metadata.json' with { type: 'json' };
+import managerMultisigMetadata from '../data/manager-multisig-metadata.json' with { type: 'json' };
 import type {
   AccessControlRegistry,
   Api3MarketV2,
@@ -22,12 +18,14 @@ import type {
   IApi3ReaderProxy,
   OevAuctionHouse,
   OwnableCallForwarder,
-} from '../src/index';
-import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index';
+} from '../src/index.js';
+import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index.js';
 
-import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants';
+import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
+const { dapiManagementMerkleRootSigners, dapiPricingMerkleRootSigners, signedApiUrlMerkleRootSigners } =
+  dapiManagementMetadata;
 
 const chainSymbolToTicker: Record<string, string> = {
   xDAI: 'DAI',

@@ -1,7 +1,7 @@
 import type { AddressLike, BaseWallet, BigNumberish, BytesLike } from 'ethers';
 import hardhat from 'hardhat';
 
-import type { Api3ServerV1 } from '../src/index';
+import type { Api3ServerV1 } from '../src/index.js';
 
 const { ethers } = hardhat;
 

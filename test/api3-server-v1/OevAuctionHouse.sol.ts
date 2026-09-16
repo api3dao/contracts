@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import type { AddressLike, BytesLike } from 'ethers';
 import hardhat from 'hardhat';
 
-import type { MockApi3ReaderProxy } from '../../src/index';
+import type { MockApi3ReaderProxy } from '../../src/index.js';
 
 const { ethers } = hardhat;
 

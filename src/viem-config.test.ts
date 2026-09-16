@@ -1,7 +1,7 @@
-import { CHAINS } from './generated/chains';
-import { type Chain } from './types';
-import { toUpperSnakeCase } from './utils/strings';
-import { chainHttpRpcUrlName, chains } from './viem-config';
+import { CHAINS } from './generated/chains.js';
+import { type Chain } from './types.js';
+import { toUpperSnakeCase } from './utils/strings.js';
+import { chainHttpRpcUrlName, chains } from './viem-config.js';
 
 function getRandomChain(): Chain {
   return CHAINS[Math.floor(Math.random() * CHAINS.length)]!;

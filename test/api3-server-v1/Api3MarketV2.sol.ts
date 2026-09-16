@@ -5,9 +5,9 @@ import { expect } from 'chai';
 import { type AddressLike, type BigNumberish, type BytesLike, type HDNodeWallet } from 'ethers';
 import hardhat from 'hardhat';
 
-import { type Api3MarketV2 } from '../../src/index';
+import { type Api3MarketV2 } from '../../src/index.js';
 import { signHash } from '../access/HashRegistry.sol';
-import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
+import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils.js';
 
 const { ethers } = hardhat;
 

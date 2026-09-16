@@ -8,10 +8,10 @@ import { join } from 'node:path';
 import { go } from '@api3/commons';
 import { config, ethers } from 'hardhat';
 
-import * as chainSupportData from '../data/chain-support.json';
-import { type ChainSupport, CHAINS } from '../src/index';
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import { type ChainSupport, CHAINS } from '../src/index.js';
 
-import { goAsyncOptions } from './constants';
+import { goAsyncOptions } from './constants.js';
 
 const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 
