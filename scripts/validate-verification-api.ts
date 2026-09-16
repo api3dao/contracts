@@ -1,7 +1,7 @@
 import { go } from '@api3/commons';
 import { z } from 'zod';
 
-import { type Chain, CHAINS } from '../src/index';
+import { type Chain, CHAINS } from '../src/index.js';
 
 const resultSchema = z.object({
   chainname: z.string(),

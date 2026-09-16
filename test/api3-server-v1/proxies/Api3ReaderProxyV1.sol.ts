@@ -3,7 +3,7 @@ import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import hardhat from 'hardhat';
 
-import * as testUtils from '../../test-utils';
+import * as testUtils from '../../test-utils.js';
 import { encodeData } from '../Api3ServerV1.sol';
 import { payOevBid, signDataWithAlternateTemplateId } from '../Api3ServerV1OevExtension.sol';
 

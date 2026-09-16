@@ -5,7 +5,7 @@
 // See: scripts/generate-chains.ts for more information
 // ===========================================================================
 
-import { type Chain } from '../types';
+import { type Chain } from '../types.js';
 
 export const CHAINS: Chain[] = [
   {

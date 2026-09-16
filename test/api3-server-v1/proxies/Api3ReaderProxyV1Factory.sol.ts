@@ -3,9 +3,9 @@ import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import hardhat from 'hardhat';
 
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../../../src/index';
-import type { Api3ReaderProxyV1 } from '../../../src/index';
-import * as testUtils from '../../test-utils';
+import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../../../src/index.js';
+import type { Api3ReaderProxyV1 } from '../../../src/index.js';
+import * as testUtils from '../../test-utils.js';
 
 const { ethers } = hardhat;
 

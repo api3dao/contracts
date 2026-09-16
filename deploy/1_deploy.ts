@@ -2,8 +2,8 @@ import { deployments, ethers, network } from 'hardhat';
 
 import * as chainSupportData from '../data/chain-support.json';
 import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
-import { CHAINS } from '../src/index';
-import type { Api3ReaderProxyV1Factory, ChainSupport, OwnableCallForwarder } from '../src/index';
+import { CHAINS } from '../src/index.js';
+import type { Api3ReaderProxyV1Factory, ChainSupport, OwnableCallForwarder } from '../src/index.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 

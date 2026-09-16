@@ -5,7 +5,7 @@
 // See: scripts/generate-dapps.ts for more information
 // ===========================================================================
 
-import { type Dapp } from '../types';
+import { type Dapp } from '../types.js';
 
 export const DAPPS: Dapp[] = [
   {

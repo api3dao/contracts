@@ -1,8 +1,8 @@
 import { deployments, ethers, network, run } from 'hardhat';
 
 import * as chainSupportData from '../data/chain-support.json';
-import { CHAINS } from '../src/generated/chains';
-import { type ChainSupport, Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../src/index';
+import { CHAINS } from '../src/generated/chains.js';
+import { type ChainSupport, Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../src/index.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 

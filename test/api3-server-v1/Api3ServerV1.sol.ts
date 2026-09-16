@@ -4,8 +4,8 @@ import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
 import hardhat from 'hardhat';
 
-import type { Api3ServerV1 } from '../../src/index';
-import * as testUtils from '../test-utils';
+import type { Api3ServerV1 } from '../../src/index.js';
+import * as testUtils from '../test-utils.js';
 
 const { ethers } = hardhat;
 

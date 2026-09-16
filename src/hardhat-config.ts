@@ -1,11 +1,11 @@
-import { CHAINS } from './generated/chains';
+import { CHAINS } from './generated/chains.js';
 import {
   type Chain,
   type HardhatEtherscanConfig,
   type HardhatBlockscoutConfig,
   type HardhatNetworksConfig,
-} from './types';
-import { toUpperSnakeCase } from './utils/strings';
+} from './types.js';
+import { toUpperSnakeCase } from './utils/strings.js';
 
 export function getEnvVariableNames(): string[] {
   const apiKeyEnvName = etherscanApiKeyName();

@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { CHAINS } from '../src/generated/chains';
-import { type Chain, chainSchema } from '../src/types';
-import { deepEqual } from '../src/utils/deep-equal';
+import { CHAINS } from '../src/generated/chains.js';
+import { type Chain, chainSchema } from '../src/types.js';
+import { deepEqual } from '../src/utils/deep-equal.js';
 
 const INPUT_DIR = path.join('data', 'chains');
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { CHAINS } from './generated/chains';
-import { hasUniqueEntries } from './utils/arrays';
+import { CHAINS } from './generated/chains.js';
+import { hasUniqueEntries } from './utils/arrays.js';
 
 export const verificationApiSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('etherscan') }),

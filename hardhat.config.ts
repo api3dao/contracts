@@ -8,7 +8,7 @@ import 'hardhat-deploy';
 import 'dotenv/config';
 import { task } from 'hardhat/config';
 
-import { hardhatConfig } from './src/index';
+import { hardhatConfig } from './src/index.js';
 
 const config: HardhatUserConfig = {
   blockscout: hardhatConfig.blockscout(),

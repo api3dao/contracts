@@ -11,14 +11,14 @@ import { go } from '@api3/commons';
 import { config, deployments, ethers } from 'hardhat';
 import type { Deployment } from 'hardhat-deploy/dist/types';
 
-import * as chainSupportData from '../data/chain-support.json';
-import { type ChainSupport, CHAINS } from '../src/index';
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import { type ChainSupport, CHAINS } from '../src/index.js';
 
 import {
   chainAliasesWithoutHistoricalTransactionIndexing,
   goAsyncOptions,
   skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
-} from './constants';
+} from './constants.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 

@@ -3,7 +3,7 @@ import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import hardhat from 'hardhat';
 
-import * as testUtils from '../test-utils';
+import * as testUtils from '../test-utils.js';
 
 const { ethers } = hardhat;
 
