@@ -12,10 +12,6 @@
     {
       "alias": "public",
       "rpcUrl": "https://manta-pacific-gascap.calderachain.xyz/http"
-    },
-    {
-      "alias": "dwellir",
-      "homepageUrl": "https://dwellir.com"
     }
   ],
   "symbol": "ETH",

@@ -12,18 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://avalanche-c-chain-rpc.publicnode.com"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
-    },
-    {
-      "alias": "blockpi",
-      "homepageUrl": "https://blockpi.io"
     }
   ],
   "symbol": "AVAX",

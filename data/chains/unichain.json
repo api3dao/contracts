@@ -12,18 +12,6 @@
     {
       "alias": "public",
       "rpcUrl": "https://mainnet.unichain.org/"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "blockpi",
-      "homepageUrl": "https://blockpi.io"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",

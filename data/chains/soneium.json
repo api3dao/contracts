@@ -12,18 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://soneium-rpc.publicnode.com"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
     }
   ],
   "symbol": "ETH",

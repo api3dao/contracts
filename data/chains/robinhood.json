@@ -8,18 +8,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://rpc.mainnet.chain.robinhood.com"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
-    },
-    {
-      "alias": "quicknode",
-      "homepageUrl": "https://quicknode.com"
-    },
-    {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "ETH",
