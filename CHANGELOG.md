@@ -1,5 +1,11 @@
 # @api3/contracts
 
+## 41.0.1
+
+### Patch Changes
+
+- e3c2224: Remove homepageUrl-only providers from all chain configurations
+
 ## 41.0.0
 
 ### Major Changes
