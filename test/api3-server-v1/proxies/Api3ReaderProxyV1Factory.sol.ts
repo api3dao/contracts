@@ -1,13 +1,10 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
-import hardhat from 'hardhat';
 
 import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../../../src/index.js';
 import type { Api3ReaderProxyV1 } from '../../../src/index.js';
+import { ethers, helpers } from '../../test-utils.js';
 import * as testUtils from '../../test-utils.js';
-
-const { ethers } = hardhat;
 
 describe('Api3ReaderProxyV1Factory', function () {
   async function deploy() {
@@ -166,7 +163,7 @@ describe('Api3ReaderProxyV1Factory', function () {
             await api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(dapiName, dappId, metadata);
             await expect(
               api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(dapiName, dappId, metadata)
-            ).to.be.revertedWithoutReason();
+            ).to.be.revertedWithoutReason(ethers);
           });
         });
       });

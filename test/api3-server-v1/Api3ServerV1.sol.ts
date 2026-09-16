@@ -1,13 +1,10 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
 import type { Api3ServerV1 } from '../../src/index.js';
+import { ethers, helpers } from '../test-utils.js';
 import * as testUtils from '../test-utils.js';
-
-const { ethers } = hardhat;
 
 export function encodeData(decodedData: BigNumberish) {
   return ethers.AbiCoder.defaultAbiCoder().encode(['int256'], [decodedData]);
@@ -1317,10 +1314,10 @@ describe('Api3ServerV1', function () {
         const { roles, api3ServerV1 } = await deploy();
         await expect(
           api3ServerV1.connect(roles.randomPerson).withdraw(roles.randomPerson!.address)
-        ).to.be.revertedWithoutReason();
+        ).to.be.revertedWithoutReason(ethers);
         await expect(
           api3ServerV1.connect(roles.randomPerson).withdraw(await api3ServerV1.getAddress())
-        ).to.be.revertedWithoutReason();
+        ).to.be.revertedWithoutReason(ethers);
       });
     });
   });
