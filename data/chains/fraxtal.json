@@ -12,14 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://fraxtal-rpc.publicnode.com:443"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
-    },
-    {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
     }
   ],
   "symbol": "FXS",

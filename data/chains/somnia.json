@@ -12,10 +12,6 @@
     {
       "alias": "publicnode",
       "rpcUrl": "https://somnia-rpc.publicnode.com"
-    },
-    {
-      "alias": "validationcloud",
-      "homepageUrl": "https://validationcloud.io/"
     }
   ],
   "symbol": "SOMI",

@@ -8,18 +8,6 @@
     {
       "alias": "default",
       "rpcUrl": "https://rpc.mainnet.taiko.xyz"
-    },
-    {
-      "alias": "reblok",
-      "homepageUrl": "https://reblok.io"
-    },
-    {
-      "alias": "blockpi",
-      "homepageUrl": "https://blockpi.io"
-    },
-    {
-      "alias": "tenderly",
-      "homepageUrl": "https://tenderly.co/"
     }
   ],
   "symbol": "ETH",

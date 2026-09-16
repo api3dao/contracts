@@ -12,10 +12,6 @@
     {
       "alias": "sentio",
       "rpcUrl": "https://mode-mainnet.rpc.sentio.xyz"
-    },
-    {
-      "alias": "alchemy",
-      "homepageUrl": "https://alchemy.com"
     }
   ],
   "symbol": "ETH",
