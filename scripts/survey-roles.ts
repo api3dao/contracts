@@ -6,10 +6,10 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { config, ethers } from 'hardhat';
+import { Interface, JsonRpcProvider } from 'ethers';
 
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
-import { type ChainSupport, CHAINS } from '../src/index.js';
+import { type ChainSupport, CHAINS, hardhatConfig } from '../src/index.js';
 
 import { goAsyncOptions } from './constants.js';
 
@@ -21,11 +21,13 @@ async function surveyRoles(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const provider = new JsonRpcProvider(
+    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
+  );
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
   );
-  const accessControlRegistryInterface = new ethers.Interface(accessControlRegistryAbi);
+  const accessControlRegistryInterface = new Interface(accessControlRegistryAbi);
   const blockNumber = await provider.getBlockNumber();
   let logs: any[] = [];
   let percentage = 0;

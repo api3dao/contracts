@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { config, ethers } from 'hardhat';
+import { AbiCoder, Contract, JsonRpcProvider, ZeroHash, getAddress, solidityPackedKeccak256 } from 'ethers';
 
 import auctioneerMetadata from '../data/auctioneer-metadata.json' with { type: 'json' };
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
@@ -19,7 +19,7 @@ import type {
   OevAuctionHouse,
   OwnableCallForwarder,
 } from '../src/index.js';
-import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index.js';
+import { CHAINS, computeApi3ReaderProxyV1Address, hardhatConfig } from '../src/index.js';
 
 import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants.js';
 
@@ -37,13 +37,15 @@ async function validateDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const provider = new JsonRpcProvider(
+    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
+  );
 
   // Validate the manager multisig owners and threshold
   const { address: gnosisSafeWithoutProxyAddress, abi: gnosisSafeWithoutProxyAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `GnosisSafeWithoutProxy.json`), 'utf8')
   );
-  const gnosisSafeWithoutProxy = new ethers.Contract(
+  const gnosisSafeWithoutProxy = new Contract(
     gnosisSafeWithoutProxyAddress,
     gnosisSafeWithoutProxyAbi,
     provider
@@ -58,8 +60,8 @@ async function validateDeployments(network: string) {
     managerMultisigOwners.length === goFetchGnosisSafeWithoutProxyOwners.data.length &&
     managerMultisigOwners.every((managerMultisigOwner: string) =>
       goFetchGnosisSafeWithoutProxyOwners.data
-        .map((owner) => ethers.getAddress(owner))
-        .includes(ethers.getAddress(managerMultisigOwner))
+        .map((owner) => getAddress(owner))
+        .includes(getAddress(managerMultisigOwner))
     )
   )) {
     throw new Error(
@@ -84,7 +86,7 @@ async function validateDeployments(network: string) {
   const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `OwnableCallForwarder.json`), 'utf8')
   );
-  const ownableCallForwarder = new ethers.Contract(
+  const ownableCallForwarder = new Contract(
     ownableCallForwarderAddress,
     ownableCallForwarderAbi,
     provider
@@ -93,16 +95,16 @@ async function validateDeployments(network: string) {
   if (!goFetchOwnableCallForwarderOwner.success || !goFetchOwnableCallForwarderOwner.data) {
     throw new Error(`${network} OwnableCallForwarder owner could not be fetched`);
   }
-  if (ethers.getAddress(goFetchOwnableCallForwarderOwner.data) !== ethers.getAddress(gnosisSafeWithoutProxyAddress)) {
+  if (getAddress(goFetchOwnableCallForwarderOwner.data) !== getAddress(gnosisSafeWithoutProxyAddress)) {
     throw new Error(
-      `${network} OwnableCallForwarder owner ${ethers.getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${ethers.getAddress(gnosisSafeWithoutProxyAddress)}`
+      `${network} OwnableCallForwarder owner ${getAddress(goFetchOwnableCallForwarderOwner.data)} is not the same as the manager multisig address ${getAddress(gnosisSafeWithoutProxyAddress)}`
     );
   }
   // Validate that the Api3ReaderProxyV1Factory owner is OwnableCallForwarder
   const { address: api3ReaderProxyV1FactoryAddress, abi: api3ReaderProxyV1FactoryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `Api3ReaderProxyV1Factory.json`), 'utf8')
   );
-  const api3ReaderProxyV1Factory = new ethers.Contract(
+  const api3ReaderProxyV1Factory = new Contract(
     api3ReaderProxyV1FactoryAddress,
     api3ReaderProxyV1FactoryAbi,
     provider
@@ -111,9 +113,9 @@ async function validateDeployments(network: string) {
   if (!goFetchApi3ReaderProxyV1FactoryOwner.success || !goFetchApi3ReaderProxyV1FactoryOwner.data) {
     throw new Error(`${network} Api3ReaderProxyV1Factory owner could not be fetched`);
   }
-  if (ethers.getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data) !== ethers.getAddress(ownableCallForwarderAddress)) {
+  if (getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data) !== getAddress(ownableCallForwarderAddress)) {
     throw new Error(
-      `${network} Api3ReaderProxyV1Factory owner ${ethers.getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data)} is not the same as the OwnableCallForwarder address ${ethers.getAddress(ownableCallForwarderAddress)}`
+      `${network} Api3ReaderProxyV1Factory owner ${getAddress(goFetchApi3ReaderProxyV1FactoryOwner.data)} is not the same as the OwnableCallForwarder address ${getAddress(ownableCallForwarderAddress)}`
     );
   }
 
@@ -121,7 +123,7 @@ async function validateDeployments(network: string) {
   const { address: api3MarketV2Address, abi: api3MarketV2Abi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `Api3MarketV2.json`), 'utf8')
   );
-  const api3MarketV2 = new ethers.Contract(api3MarketV2Address, api3MarketV2Abi, provider) as unknown as Api3MarketV2;
+  const api3MarketV2 = new Contract(api3MarketV2Address, api3MarketV2Abi, provider) as unknown as Api3MarketV2;
   const goFetchApi3MarketV2AirseekerRegistry = await go(async () => api3MarketV2.airseekerRegistry(), goAsyncOptions);
   if (!goFetchApi3MarketV2AirseekerRegistry.success || !goFetchApi3MarketV2AirseekerRegistry.data) {
     throw new Error(`${network} Api3MarketV2 AirseekerRegistry address could not be fetched`);
@@ -129,16 +131,16 @@ async function validateDeployments(network: string) {
   const { address: airseekerRegistryAddress } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AirseekerRegistry.json`), 'utf8')
   );
-  if (ethers.getAddress(goFetchApi3MarketV2AirseekerRegistry.data) !== ethers.getAddress(airseekerRegistryAddress)) {
+  if (getAddress(goFetchApi3MarketV2AirseekerRegistry.data) !== getAddress(airseekerRegistryAddress)) {
     throw new Error(
-      `${network} Api3MarketV2 AirseekerRegistry address ${ethers.getAddress(goFetchApi3MarketV2AirseekerRegistry.data)} is not the same as the AirseekerRegistry address ${airseekerRegistryAddress}`
+      `${network} Api3MarketV2 AirseekerRegistry address ${getAddress(goFetchApi3MarketV2AirseekerRegistry.data)} is not the same as the AirseekerRegistry address ${airseekerRegistryAddress}`
     );
   }
 
   // Validate that Api3MarketV2 dAPI management, dAPI pricing and Signed API URL MT hash signers are set
   const goFetchApi3MarketV2DapiManagementMerkleRootSignersHash = await go(
     async () =>
-      api3MarketV2.hashTypeToSignersHash(ethers.solidityPackedKeccak256(['string'], ['dAPI management Merkle root'])),
+      api3MarketV2.hashTypeToSignersHash(solidityPackedKeccak256(['string'], ['dAPI management Merkle root'])),
     goAsyncOptions
   );
   if (
@@ -147,18 +149,17 @@ async function validateDeployments(network: string) {
   ) {
     throw new Error(`${network} Api3MarketV2 dAPI management Merkle root signers hash could not be fetched`);
   }
-  if (goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data === ethers.ZeroHash) {
+  if (goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data === ZeroHash) {
     throw new Error(`${network} Api3MarketV2 dAPI management Merkle root signers are not set`);
   }
   if (
     goFetchApi3MarketV2DapiManagementMerkleRootSignersHash.data !==
-    ethers.solidityPackedKeccak256(['address[]'], [dapiManagementMerkleRootSigners])
+    solidityPackedKeccak256(['address[]'], [dapiManagementMerkleRootSigners])
   ) {
     throw new Error(`${network} Api3MarketV2 dAPI management Merkle root signers are set incorrectly`);
   }
   const goFetchApi3MarketV2DapiPricingMerkleRootSignersHash = await go(
-    async () =>
-      api3MarketV2.hashTypeToSignersHash(ethers.solidityPackedKeccak256(['string'], ['dAPI pricing Merkle root'])),
+    async () => api3MarketV2.hashTypeToSignersHash(solidityPackedKeccak256(['string'], ['dAPI pricing Merkle root'])),
     goAsyncOptions
   );
   if (
@@ -167,18 +168,17 @@ async function validateDeployments(network: string) {
   ) {
     throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers hash could not be fetched`);
   }
-  if (goFetchApi3MarketV2DapiPricingMerkleRootSignersHash.data === ethers.ZeroHash) {
+  if (goFetchApi3MarketV2DapiPricingMerkleRootSignersHash.data === ZeroHash) {
     throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are not set`);
   }
   if (
     goFetchApi3MarketV2DapiPricingMerkleRootSignersHash.data !==
-    ethers.solidityPackedKeccak256(['address[]'], [dapiPricingMerkleRootSigners])
+    solidityPackedKeccak256(['address[]'], [dapiPricingMerkleRootSigners])
   ) {
     throw new Error(`${network} Api3MarketV2 dAPI pricing Merkle root signers are set incorrectly`);
   }
   const goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash = await go(
-    async () =>
-      api3MarketV2.hashTypeToSignersHash(ethers.solidityPackedKeccak256(['string'], ['Signed API URL Merkle root'])),
+    async () => api3MarketV2.hashTypeToSignersHash(solidityPackedKeccak256(['string'], ['Signed API URL Merkle root'])),
     goAsyncOptions
   );
   if (
@@ -187,30 +187,30 @@ async function validateDeployments(network: string) {
   ) {
     throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers hash could not be fetched`);
   }
-  if (goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data === ethers.ZeroHash) {
+  if (goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data === ZeroHash) {
     throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers are not set`);
   }
   if (
     goFetchApi3MarketV2SignedApiUrlMerkleRootSignersHash.data !==
-    ethers.solidityPackedKeccak256(['address[]'], [signedApiUrlMerkleRootSigners])
+    solidityPackedKeccak256(['address[]'], [signedApiUrlMerkleRootSigners])
   ) {
     throw new Error(`${network} Api3MarketV2 Signed API URL Merkle root signers are set incorrectly`);
   }
 
   // Validate that Api3MarketV2 is a dAPI name setter
-  const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
-  const api3ServerV1AdminRole = ethers.solidityPackedKeccak256(
+  const rootRole = solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
+  const api3ServerV1AdminRole = solidityPackedKeccak256(
     ['bytes32', 'bytes32'],
-    [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1 admin'])]
+    [rootRole, solidityPackedKeccak256(['string'], ['Api3ServerV1 admin'])]
   );
-  const dapiNameSetterRole = ethers.solidityPackedKeccak256(
+  const dapiNameSetterRole = solidityPackedKeccak256(
     ['bytes32', 'bytes32'],
-    [api3ServerV1AdminRole, ethers.solidityPackedKeccak256(['string'], ['dAPI name setter'])]
+    [api3ServerV1AdminRole, solidityPackedKeccak256(['string'], ['dAPI name setter'])]
   );
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
   );
-  const accessControlRegistry = new ethers.Contract(
+  const accessControlRegistry = new Contract(
     accessControlRegistryAddress,
     accessControlRegistryAbi,
     provider
@@ -227,13 +227,13 @@ async function validateDeployments(network: string) {
   }
 
   // Validate that auction resolvers have the auctioneer role
-  const api3ServerV1OevExtensionAdminRole = ethers.solidityPackedKeccak256(
+  const api3ServerV1OevExtensionAdminRole = solidityPackedKeccak256(
     ['bytes32', 'bytes32'],
-    [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
+    [rootRole, solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
   );
-  const auctioneerRole = ethers.solidityPackedKeccak256(
+  const auctioneerRole = solidityPackedKeccak256(
     ['bytes32', 'bytes32'],
-    [api3ServerV1OevExtensionAdminRole, ethers.solidityPackedKeccak256(['string'], ['Auctioneer'])]
+    [api3ServerV1OevExtensionAdminRole, solidityPackedKeccak256(['string'], ['Auctioneer'])]
   );
 
   const goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus = await go(
@@ -250,11 +250,11 @@ async function validateDeployments(network: string) {
   }
   if (
     !goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.every(
-      (auctioneerRoleStatus) => auctioneerRoleStatus !== ethers.ZeroHash
+      (auctioneerRoleStatus) => auctioneerRoleStatus !== ZeroHash
     )
   ) {
     throw new Error(
-      `${network} (${auctioneerMetadata['auction-resolvers']}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ethers.ZeroHash ? false : true))})`
+      `${network} (${auctioneerMetadata['auction-resolvers']}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ZeroHash ? false : true))})`
     );
   }
 
@@ -263,19 +263,19 @@ async function validateDeployments(network: string) {
     const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
       fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
     );
-    const accessControlRegistry = new ethers.Contract(
+    const accessControlRegistry = new Contract(
       accessControlRegistryAddress,
       accessControlRegistryAbi,
       provider
     ) as unknown as AccessControlRegistry;
-    const rootRole = ethers.solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
-    const api3ServerV1OevExtensionAdminRole = ethers.solidityPackedKeccak256(
+    const rootRole = solidityPackedKeccak256(['address'], [ownableCallForwarderAddress]);
+    const api3ServerV1OevExtensionAdminRole = solidityPackedKeccak256(
       ['bytes32', 'bytes32'],
-      [rootRole, ethers.solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
+      [rootRole, solidityPackedKeccak256(['string'], ['Api3ServerV1OevExtension admin'])]
     );
-    const auctioneerRole = ethers.solidityPackedKeccak256(
+    const auctioneerRole = solidityPackedKeccak256(
       ['bytes32', 'bytes32'],
-      [api3ServerV1OevExtensionAdminRole, ethers.solidityPackedKeccak256(['string'], ['Auctioneer'])]
+      [api3ServerV1OevExtensionAdminRole, solidityPackedKeccak256(['string'], ['Auctioneer'])]
     );
 
     const goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus = await go(
@@ -293,11 +293,11 @@ async function validateDeployments(network: string) {
     }
     if (
       !goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.every(
-        (auctioneerRoleStatus) => auctioneerRoleStatus !== ethers.ZeroHash
+        (auctioneerRoleStatus) => auctioneerRoleStatus !== ZeroHash
       )
     ) {
       throw new Error(
-        `${network} (${[...auctioneerMetadata['auction-resolvers'], ...auctioneerMetadata['auction-cops']]}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ethers.ZeroHash ? false : true))})`
+        `${network} (${[...auctioneerMetadata['auction-resolvers'], ...auctioneerMetadata['auction-cops']]}) Api3ServerV1OevExtension auctioneer role statuses are (${goFetchApi3ServerV1OevExtensionAuctioneerRoleStatus.data.map((auctioneerRoleStatus) => (auctioneerRoleStatus === ZeroHash ? false : true))})`
       );
     }
 
@@ -305,7 +305,7 @@ async function validateDeployments(network: string) {
     const { address: oevAuctionHouseAddress, abi: oevAuctionHouseAbi } = JSON.parse(
       fs.readFileSync(join('deployments', network, `OevAuctionHouse.json`), 'utf8')
     );
-    const oevAuctionHouse = new ethers.Contract(
+    const oevAuctionHouse = new Contract(
       oevAuctionHouseAddress,
       oevAuctionHouseAbi,
       provider
@@ -352,7 +352,7 @@ async function validateDeployments(network: string) {
       throw new Error('OevAuctionHouse native currency rate proxy addresses could not be fetched');
     }
     const nativeCurrencyRateProxyAddresses = goFetchNativeCurrencyRateProxyAddresses.data.map((returndata) =>
-      ethers.AbiCoder.defaultAbiCoder().decode(['address'], returndata)
+      AbiCoder.defaultAbiCoder().decode(['address'], returndata)
     );
     const errorMessages = chainsWithNativeRateProxies.reduce((acc, chain, ind) => {
       const dapiName = `${chainSymbolToTicker[chain.symbol] ?? chain.symbol}/USD`;
@@ -381,7 +381,7 @@ async function validateDeployments(network: string) {
         'utf8'
       )
     );
-    const ethUsdRateReaderProxy = new ethers.Contract(
+    const ethUsdRateReaderProxy = new Contract(
       ethUsdRateReaderProxyV1Address,
       api3ReaderProxyAbi,
       provider
@@ -402,7 +402,7 @@ async function validateDeployments(network: string) {
           return null;
         }
 
-        const nativeCurrencyRateReaderProxy = new ethers.Contract(
+        const nativeCurrencyRateReaderProxy = new Contract(
           nativeCurrencyRateProxyAddresses[ind]!.toString(),
           api3ReaderProxyAbi,
           provider

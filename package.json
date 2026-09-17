@@ -59,7 +59,7 @@
     "prettier:check": "prettier --check \"./**/*.{js,cjs,ts,md,json,sol}\"",
     "prettier": "prettier --write \"./**/*.{js,cjs,ts,md,json,sol}\"",
     "postpack": "./postpack.sh",
-    "survey-roles": "hardhat run scripts/survey-roles.ts",
+    "survey-roles": "tsx scripts/survey-roles.ts",
     "test": "pnpm test:hardhat && pnpm test:jest",
     "test:hardhat": "hardhat test mocha",
     "test:hardhat:coverage": "NO_PARALLEL=true hardhat test mocha --coverage",
@@ -67,9 +67,9 @@
     "test:hardhat:gas": "NO_PARALLEL=true hardhat test mocha --gas-stats",
     "test:jest": "jest",
     "validate-verification-api": "tsx scripts/validate-verification-api.ts",
-    "validate-deployments": "hardhat run scripts/validate-deployments.ts",
-    "verify-deployments": "hardhat run scripts/verify-deployments.ts",
-    "verify-vendor-contracts": "hardhat run scripts/verify-vendor-contracts.ts"
+    "validate-deployments": "tsx scripts/validate-deployments.ts",
+    "verify-deployments": "tsx scripts/verify-deployments.ts",
+    "verify-vendor-contracts": "tsx scripts/verify-vendor-contracts.ts"
   },
   "devDependencies": {
     "@api3/commons": "^1.3.0",
