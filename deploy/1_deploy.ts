@@ -1,153 +1,125 @@
-import { deployments, ethers, network } from 'hardhat';
+import type { Abi } from '@rocketh/deploy';
+import { BrowserProvider, encodeBytes32String } from 'ethers';
+import type { DeploymentConstruction } from 'rocketh/types';
 
-import * as chainSupportData from '../data/chain-support.json';
-import * as managerMultisigMetadata from '../data/manager-multisig-metadata.json';
-import { CHAINS } from '../src/index.js';
-import type { Api3ReaderProxyV1Factory, ChainSupport, OwnableCallForwarder } from '../src/index.js';
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import managerMultisigMetadata from '../data/manager-multisig-metadata.json' with { type: 'json' };
+import { artifacts, deployScript } from '../rocketh/deploy.js';
+import { Api3ReaderProxyV1Factory__factory, CHAINS } from '../src/index.js';
+import type { ChainSupport } from '../src/index.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
-const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10n;
 
-module.exports = async () => {
-  const { deploy, log } = deployments;
-  const [deployer] = await ethers.getSigners();
+// eslint-disable-next-line import/no-default-export
+export default deployScript(
+  async (env) => {
+    const { deployer } = env.namedAccounts;
 
-  if (!chainsSupportedByMarket.includes(network.name) && network.name !== 'hardhat') {
-    throw new Error(`${network.name} is not supported`);
-  }
-  const gnosisSafeWithoutProxy = await deployments.get('GnosisSafeWithoutProxy').catch(async () => {
-    log(`Deploying GnosisSafeWithoutProxy`);
-    return deploy('GnosisSafeWithoutProxy', {
-      args: CHAINS.find((chain) => chain.alias === process.env.NETWORK)?.testnet
-        ? [managerMultisigMetadata.testnet.owners, managerMultisigMetadata.testnet.threshold]
-        : [managerMultisigMetadata.mainnet.owners, managerMultisigMetadata.mainnet.threshold],
-      from: deployer!.address,
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
-    });
-  });
+    // Hardhat 3 calls its built-in in-memory network `default`. A fork keeps the alias of the
+    // chain it simulates, so this only lets the throwaway local chain through.
+    const isLocalSimulation = env.name === 'default' && env.network.fork === undefined;
+    if (!chainsSupportedByMarket.includes(env.name) && !isLocalSimulation) {
+      throw new Error(`${env.name} is not supported`);
+    }
 
-  const { address: ownableCallForwarderAddress, abi: ownableCallForwarderAbi } = await deployments
-    .get('OwnableCallForwarder')
-    .catch(async () => {
-      log(`Deploying OwnableCallForwarder`);
-      return deploy('OwnableCallForwarder', {
-        from: deployer!.address,
-        args: [gnosisSafeWithoutProxy.address],
-        log: true,
-        deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+    // skipIfAlreadyDeployed returns an existing record untouched, without comparing bytecode or
+    // reaching the network. rocketh only logs when it deploys, so log the reuse here too.
+    const deployOnce = async <TAbi extends Abi>(name: string, args: DeploymentConstruction<TAbi>) => {
+      const result = await env.deploy(name, args, {
+        skipIfAlreadyDeployed: true,
+        deterministic: Boolean(process.env.DETERMINISTIC),
       });
-    });
-  const ownableCallForwarder = new ethers.Contract(
-    ownableCallForwarderAddress,
-    ownableCallForwarderAbi,
-    deployer
-  ) as unknown as OwnableCallForwarder;
+      env.showMessage(
+        result.newlyDeployed ? `Deployed "${name}" at ${result.address}` : `Reusing "${name}" at ${result.address}`
+      );
+      return result;
+    };
 
-  const accessControlRegistry = await deployments.get('AccessControlRegistry').catch(async () => {
-    log(`Deploying AccessControlRegistry`);
-    return deploy('AccessControlRegistry', {
-      from: deployer!.address,
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+    const isTestnet = CHAINS.find((chain) => chain.alias === env.name)?.testnet;
+    const { owners, threshold } = isTestnet ? managerMultisigMetadata.testnet : managerMultisigMetadata.mainnet;
+    const gnosisSafeWithoutProxy = await deployOnce('GnosisSafeWithoutProxy', {
+      account: deployer,
+      artifact: artifacts.GnosisSafeWithoutProxy,
+      args: [owners as `0x${string}`[], BigInt(threshold)],
     });
-  });
 
-  const api3ServerV1 = await deployments.get('Api3ServerV1').catch(async () => {
-    log(`Deploying Api3ServerV1`);
-    return deploy('Api3ServerV1', {
-      from: deployer!.address,
-      args: [accessControlRegistry.address, 'Api3ServerV1 admin', await ownableCallForwarder.getAddress()],
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+    const ownableCallForwarder = await deployOnce('OwnableCallForwarder', {
+      account: deployer,
+      artifact: artifacts.OwnableCallForwarder,
+      args: [gnosisSafeWithoutProxy.address],
     });
-  });
 
-  const api3ServerV1OevExtension = await deployments.get('Api3ServerV1OevExtension').catch(async () => {
-    log(`Deploying Api3ServerV1OevExtension`);
-    return deploy('Api3ServerV1OevExtension', {
-      from: deployer!.address,
+    const accessControlRegistry = await deployOnce('AccessControlRegistry', {
+      account: deployer,
+      artifact: artifacts.AccessControlRegistry,
+      args: [],
+    });
+
+    const api3ServerV1 = await deployOnce('Api3ServerV1', {
+      account: deployer,
+      artifact: artifacts.Api3ServerV1,
+      args: [accessControlRegistry.address, 'Api3ServerV1 admin', ownableCallForwarder.address],
+    });
+
+    const api3ServerV1OevExtension = await deployOnce('Api3ServerV1OevExtension', {
+      account: deployer,
+      artifact: artifacts.Api3ServerV1OevExtension,
       args: [
         accessControlRegistry.address,
         'Api3ServerV1OevExtension admin',
-        await ownableCallForwarder.getAddress(),
+        ownableCallForwarder.address,
         api3ServerV1.address,
       ],
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
     });
-  });
 
-  const { address: api3ReaderProxyV1FactoryAddress, abi: api3ReaderProxyV1FactoryAbi } = await deployments
-    .get('Api3ReaderProxyV1Factory')
-    .catch(async () => {
-      log(`Deploying Api3ReaderProxyV1Factory`);
-      return deploy('Api3ReaderProxyV1Factory', {
-        from: deployer!.address,
-        args: [await ownableCallForwarder.getAddress(), api3ServerV1OevExtension.address],
-        log: true,
-        deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
-      });
+    const api3ReaderProxyV1Factory = await deployOnce('Api3ReaderProxyV1Factory', {
+      account: deployer,
+      artifact: artifacts.Api3ReaderProxyV1Factory,
+      args: [ownableCallForwarder.address, api3ServerV1OevExtension.address],
     });
-  const api3ReaderProxyV1Factory = new ethers.Contract(
-    api3ReaderProxyV1FactoryAddress,
-    api3ReaderProxyV1FactoryAbi,
-    deployer
-  ) as unknown as Api3ReaderProxyV1Factory;
 
-  const dapiName = ethers.encodeBytes32String('ETH/USD');
-  const dappId = 1;
-  const api3ReaderProxyV1Metadata = '0x';
-  const expectedApi3ReaderProxyV1Address = await api3ReaderProxyV1Factory.computeApi3ReaderProxyV1Address(
-    dapiName,
-    dappId,
-    api3ReaderProxyV1Metadata
-  );
-  if ((await ethers.provider.getCode(expectedApi3ReaderProxyV1Address)) === '0x') {
-    const proxyTransactionResponse = await api3ReaderProxyV1Factory.deployApi3ReaderProxyV1(
+    // The factory deploys this proxy itself, so it gets no deployment record.
+    const signer = await new BrowserProvider(env.network.provider as never).getSigner(deployer);
+    const factory = Api3ReaderProxyV1Factory__factory.connect(api3ReaderProxyV1Factory.address, signer);
+    const dapiName = encodeBytes32String('ETH/USD');
+    const dappId = 1;
+    const api3ReaderProxyV1Metadata = '0x';
+    const expectedApi3ReaderProxyV1Address = await factory.computeApi3ReaderProxyV1Address(
       dapiName,
       dappId,
       api3ReaderProxyV1Metadata
     );
-    await proxyTransactionResponse.wait(1);
-    log(`Deployed example Api3ReaderProxyV1 at ${expectedApi3ReaderProxyV1Address}`);
-  }
+    if ((await signer.provider.getCode(expectedApi3ReaderProxyV1Address)) === '0x') {
+      const proxyTransactionResponse = await factory.deployApi3ReaderProxyV1(
+        dapiName,
+        dappId,
+        api3ReaderProxyV1Metadata
+      );
+      await proxyTransactionResponse.wait(1);
+      env.showMessage(`Deployed example Api3ReaderProxyV1 at ${expectedApi3ReaderProxyV1Address}`);
+    }
 
-  const api3MarketV2 = await deployments.get('Api3MarketV2').catch(async () => {
-    log(`Deploying Api3MarketV2`);
-    return deploy('Api3MarketV2', {
-      from: deployer!.address,
-      args: [
-        await ownableCallForwarder.getAddress(),
-        api3ReaderProxyV1FactoryAddress,
-        MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH,
-      ],
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+    const api3MarketV2 = await deployOnce('Api3MarketV2', {
+      account: deployer,
+      artifact: artifacts.Api3MarketV2,
+      args: [ownableCallForwarder.address, api3ReaderProxyV1Factory.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH],
     });
-  });
 
-  await deployments.get('AirseekerRegistry').catch(async () => {
-    log(`Deploying AirseekerRegistry`);
-    return deploy('AirseekerRegistry', {
-      from: deployer!.address,
+    await deployOnce('AirseekerRegistry', {
+      account: deployer,
+      artifact: artifacts.AirseekerRegistry,
       args: [api3MarketV2.address, api3ServerV1.address],
-      log: true,
-      deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
     });
-  });
 
-  if (chainsSupportedByOevAuctions.includes(network.name)) {
-    await deployments.get('OevAuctionHouse').catch(async () => {
-      log(`Deploying OevAuctionHouse`);
-      return deploy('OevAuctionHouse', {
-        from: deployer!.address,
-        args: [accessControlRegistry.address, 'OevAuctionHouse admin', await ownableCallForwarder.getAddress()],
-        log: true,
-        deterministicDeployment: process.env.DETERMINISTIC ? ethers.ZeroHash : '',
+    if (chainsSupportedByOevAuctions.includes(env.name)) {
+      await deployOnce('OevAuctionHouse', {
+        account: deployer,
+        artifact: artifacts.OevAuctionHouse,
+        args: [accessControlRegistry.address, 'OevAuctionHouse admin', ownableCallForwarder.address],
       });
-    });
-  }
-};
-module.exports.tags = ['deploy'];
+    }
+  },
+  { tags: ['deploy'] }
+);

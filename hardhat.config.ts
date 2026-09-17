@@ -1,6 +1,7 @@
 import hardhatToolboxMochaEthers from '@nomicfoundation/hardhat-toolbox-mocha-ethers';
 import 'dotenv/config';
 import { defineConfig } from 'hardhat/config';
+import hardhatDeploy from 'hardhat-deploy';
 import keycardProvider from 'keycard-hardhat-provider';
 
 // ./src/index re-exports ../typechain-types, which does not exist before the first build.
@@ -32,6 +33,7 @@ const compilers = [
 export default defineConfig({
   plugins: [
     hardhatToolboxMochaEthers,
+    hardhatDeploy,
     // Signs with a Keycard when KEYCARD_ACCOUNT is set, which is the field
     // hardhatConfig.networks() puts on each network in place of a mnemonic.
     keycardProvider,
@@ -39,13 +41,18 @@ export default defineConfig({
       id: 'api3-solc-source-names',
       hookHandlers: { solidity: async () => import('./plugins/solc-source-names.js') },
     },
+    // After hardhat-deploy, so these see the artifacts it generates.
+    {
+      id: 'api3-generated-artifact-names',
+      hookHandlers: { solidity: async () => import('./plugins/generated-artifact-names.js') },
+    },
     {
       id: 'api3-deployed-metadata-hashes',
       hookHandlers: { solidity: async () => import('./plugins/deployed-metadata-hashes.js') },
     },
   ],
-  // Verification uses the production profile, and Hardhat derives an undeclared one from the
-  // default by dropping its settings, so leaving it implicit changes the bytecode.
+  // `hardhat deploy` and verification use the production profile, and Hardhat derives an undeclared
+  // one from the default by dropping its settings, so leaving it implicit changes the bytecode.
   solidity: {
     profiles: {
       default: { compilers },
@@ -53,6 +60,8 @@ export default defineConfig({
     },
   },
   typechain: { outDir: 'typechain-types' },
+  // rocketh/deploy.ts reads these, and the deploy scripts pass them to env.deploy.
+  generateTypedArtifacts: { destinations: [{ folder: './generated', mode: 'typescript' }] },
   networks: hardhatConfig.v3.networks(),
   chainDescriptors: hardhatConfig.v3.chainDescriptors(),
   verify: hardhatConfig.v3.verify(),
