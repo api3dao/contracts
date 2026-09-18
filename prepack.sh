@@ -2,6 +2,7 @@
 rm -r artifacts
 rm -r cache
 rm -r dist
+rm -r generated
 rm -r node_modules
 rm -r typechain-types
 pnpm i
