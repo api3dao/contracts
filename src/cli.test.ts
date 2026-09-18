@@ -2,7 +2,9 @@ import { execSync } from 'node:child_process';
 
 import { goSync } from '@api3/commons';
 
-const CLI_EXECUTABLE = 'dist/src/cli.js';
+import packageJson from '../package.json' with { type: 'json' };
+
+const CLI_EXECUTABLE = packageJson.bin['api3-contracts'];
 
 type CommandArg = [string, string | number | boolean];
 

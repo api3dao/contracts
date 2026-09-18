@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/esm",
+    "rootDir": "."
+  },
+  "include": ["bin/**/*", "src/**/*", "typechain-types/**/*"],
+  "exclude": ["**/*.test.ts", "src/__snapshots__"]
+}

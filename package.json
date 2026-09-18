@@ -18,8 +18,27 @@
     "url": "https://github.com/api3dao/contracts.git"
   },
   "private": false,
-  "main": "dist/src/index",
-  "types": "dist/src/index",
+  "main": "./dist/cjs/src/index.js",
+  "types": "./dist/esm/src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/src/index.d.ts",
+        "default": "./dist/esm/src/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/src/index.d.ts",
+        "default": "./dist/cjs/src/index.js"
+      }
+    },
+    "./package.json": "./package.json",
+    "./access/*": "./access/*",
+    "./api3-server-v1/*": "./api3-server-v1/*",
+    "./interfaces/*": "./interfaces/*",
+    "./mock/*": "./mock/*",
+    "./utils/*": "./utils/*",
+    "./vendor/*": "./vendor/*"
+  },
   "files": [
     "access",
     "api3-server-v1",
@@ -30,10 +49,12 @@
     "dist"
   ],
   "bin": {
-    "api3-contracts": "./dist/bin/cli.js"
+    "api3-contracts": "./dist/esm/bin/cli.js"
   },
   "scripts": {
-    "build": "pnpm check && pnpm build:hardhat && pnpm generate && tsc -p tsconfig.build.json",
+    "build": "pnpm check && pnpm build:hardhat && pnpm generate && pnpm build:esm && pnpm build:cjs && tsx scripts/write-dist-package-json.ts",
+    "build:cjs": "tsc -p tsconfig.build.cjs.json",
+    "build:esm": "tsc -p tsconfig.build.esm.json",
     "build:hardhat": "hardhat build",
     "check": "pnpm check:chains && pnpm check:chain-support && pnpm check:deployment-addresses && pnpm check:metadata && pnpm check:example-env-file && pnpm check:dapps",
     "check:chain-support": "tsx scripts/check-chain-support.ts",
