@@ -1,3 +1,6 @@
+// viem >=2.55.10 marks its emitted `_types/` folder as `{"type":"module"}` (wevm/viem#4903), so TypeScript reports
+// TS1479 for this import. The require it emits is fine — viem still ships a CommonJS entry point (`_cjs/index.js`).
+// @ts-expect-error viem's declarations are ESM-only; the CommonJS entry point resolves correctly
 import { defineChain } from 'viem';
 
 import { CHAINS } from './generated/chains';
