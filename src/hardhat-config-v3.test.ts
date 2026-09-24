@@ -85,7 +85,7 @@ describe(chainDescriptors.name, () => {
     expect(chainDescriptors()[chain.id]!.blockExplorers.etherscan).toStrictEqual({
       name: 'Etherscan',
       url: chain.blockExplorerUrl,
-      apiUrl: `https://api.etherscan.io/v2/api?chainid=${chain.id}`,
+      apiUrl: 'https://api.etherscan.io/v2/api',
     });
   });
 
