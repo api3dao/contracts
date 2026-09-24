@@ -112,8 +112,8 @@ importers:
         specifier: ^30.5.0
         version: 30.5.0(@types/node@22.19.21)(ts-node@10.9.2(@types/node@22.19.21)(typescript@5.9.3))
       keycard-hardhat-provider:
-        specifier: 1.0.0-beta.0
-        version: 1.0.0-beta.0(hardhat@3.15.0)(zod@4.4.3)
+        specifier: 1.0.0-beta.2
+        version: 1.0.0-beta.2(hardhat@3.15.0)(zod@4.4.3)
       mocha:
         specifier: ^11.0.0
         version: 11.7.6
@@ -3483,8 +3483,8 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
-  keycard-hardhat-provider@1.0.0-beta.0:
-    resolution: {integrity: sha512-3XXbWT5UxA8CulbZGxPRTVv0hxmu9uvj5rTtipK8moWIHbdgc3cixS9//2zDiG2PbqsR4v2GSF1/Z+634/4FWg==}
+  keycard-hardhat-provider@1.0.0-beta.2:
+    resolution: {integrity: sha512-JtsupICzkC3q+ws3DJaBQ4H96yYM/AIj4Y/GEycfJYovUZOGKLhDcWwCQDZ0DXgGgN3v99J650xxykQZUQhneQ==}
     peerDependencies:
       hardhat: ^3.15.0
 
@@ -9192,7 +9192,7 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
-  keycard-hardhat-provider@1.0.0-beta.0(hardhat@3.15.0)(zod@4.4.3):
+  keycard-hardhat-provider@1.0.0-beta.2(hardhat@3.15.0)(zod@4.4.3):
     dependencies:
       '@nomicfoundation/hardhat-errors': 3.0.21
       '@nomicfoundation/hardhat-utils': 4.1.9
