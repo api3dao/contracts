@@ -1,6 +1,6 @@
 import hardhatToolboxMochaEthers from '@nomicfoundation/hardhat-toolbox-mocha-ethers';
 import 'dotenv/config';
-import { defineConfig } from 'hardhat/config';
+import { defineConfig, overrideTask } from 'hardhat/config';
 import hardhatDeploy from 'hardhat-deploy';
 import keycardProvider from 'keycard-hardhat-provider';
 
@@ -49,6 +49,17 @@ export default defineConfig({
     {
       id: 'api3-deployed-metadata-hashes',
       hookHandlers: { solidity: async () => import('./plugins/deployed-metadata-hashes.js') },
+    },
+    // After hardhat-deploy, which defines the deploy task this overrides. Closing the connection is
+    // what makes keycardProvider disconnect the card.
+    {
+      id: 'api3-close-deploy-connections',
+      hookHandlers: { network: async () => import('./plugins/open-connections.js') },
+      tasks: [
+        overrideTask('deploy')
+          .setAction(async () => import('./plugins/close-deploy-connections.js'))
+          .build(),
+      ],
     },
   ],
   // `hardhat deploy` and verification use the production profile, and Hardhat derives an undeclared
