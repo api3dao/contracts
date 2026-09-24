@@ -3,9 +3,9 @@ import { join } from 'node:path';
 
 import type { AddressLike } from 'ethers';
 
-import * as chainSupportData from '../../data/chain-support.json';
-import { CHAINS } from '../../src/generated/chains';
-import type { ChainSupport } from '../../src/types';
+import chainSupportData from '../../data/chain-support.json' with { type: 'json' };
+import { CHAINS } from '../../src/generated/chains.js';
+import type { ChainSupport } from '../../src/types.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 

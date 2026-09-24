@@ -4,3 +4,4 @@ minimumReleaseAge: 20160 # 14 days
 
 minimumReleaseAgeExclude:
   - '@api3/*'
+  - 'keycard-hardhat-provider'

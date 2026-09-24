@@ -1,4 +1,4 @@
-import { hasUniqueEntries } from './arrays';
+import { hasUniqueEntries } from './arrays.js';
 
 describe(hasUniqueEntries.name, () => {
   it('returns true for an empty array', () => {

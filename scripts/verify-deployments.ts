@@ -8,33 +8,52 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { config, deployments, ethers } from 'hardhat';
-import type { Deployment } from 'hardhat-deploy/dist/types';
+import {
+  AbiCoder,
+  JsonRpcProvider,
+  ZeroHash,
+  getBytes,
+  getCreateAddress,
+  hexlify,
+  getCreate2Address,
+  solidityPackedKeccak256,
+} from 'ethers';
 
-import * as chainSupportData from '../data/chain-support.json';
-import { type ChainSupport, CHAINS } from '../src/index';
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import { type ChainSupport, CHAINS, hardhatConfig } from '../src/index.js';
 
 import {
   chainAliasesWithoutHistoricalTransactionIndexing,
   goAsyncOptions,
   skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
-} from './constants';
+} from './constants.js';
+import { readArtifact } from './src/artifacts.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
+
+interface DeploymentRecord {
+  address: string;
+  abi: any[];
+  args?: string[];
+  bytecode: string;
+  deployedBytecode: string;
+  transactionHash?: string;
+  transaction?: { hash: string };
+}
 
 const METADATA_HASH_LENGTH = 85 * 2;
 // https://github.com/Arachnid/deterministic-deployment-proxy/tree/be3c5974db5028d502537209329ff2e730ed336c#proxy-address
 const CREATE2_FACTORY_ADDRESS = '0x4e59b44847b379578588920cA78FbF26c0B4956C';
 
 function maskImmutableVariables(bytecode: string, immutableByteRanges: { length: number; start: number }[]) {
-  const bytecodeBytes = ethers.getBytes(bytecode);
+  const bytecodeBytes = getBytes(bytecode);
   for (const { length, start } of immutableByteRanges) {
     bytecodeBytes.fill(0, start, start + length);
   }
-  return ethers.hexlify(bytecodeBytes);
+  return hexlify(bytecodeBytes);
 }
 
-function validateDeploymentArguments(network: string, deployment: Deployment, contractName: string) {
+function validateDeploymentArguments(network: string, deployment: DeploymentRecord, contractName: string) {
   let expectedDeploymentArgs: string[];
   switch (contractName) {
     case 'OwnableCallForwarder': {
@@ -140,7 +159,9 @@ async function verifyDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const provider = new JsonRpcProvider(
+    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
+  );
   const creationTxUnavailable = chainAliasesWithoutHistoricalTransactionIndexing.includes(network);
   if (creationTxUnavailable) {
     // eslint-disable-next-line no-console
@@ -165,22 +186,22 @@ async function verifyDeployments(network: string) {
 
   for (const contractName of contractNames) {
     const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
-    const artifact = await deployments.getArtifact(contractName);
-    const constructor = artifact.abi.find((method) => method.type === 'constructor');
+    const artifact = await readArtifact(contractName);
+    const constructor = artifact.abi.find((method: any) => method.type === 'constructor');
 
     validateDeploymentArguments(network, deployment, contractName);
 
     const expectedEncodedConstructorArguments = constructor
-      ? ethers.AbiCoder.defaultAbiCoder().encode(
+      ? AbiCoder.defaultAbiCoder().encode(
           constructor.inputs.map((input: any) => input.type),
           deployment.args
         )
       : '0x';
-    const salt = ethers.ZeroHash;
-    const expectedDeterministicDeploymentAddress = ethers.getCreate2Address(
+    const salt = ZeroHash;
+    const expectedDeterministicDeploymentAddress = getCreate2Address(
       CREATE2_FACTORY_ADDRESS,
       salt,
-      ethers.solidityPackedKeccak256(['bytes', 'bytes'], [artifact.bytecode, expectedEncodedConstructorArguments])
+      solidityPackedKeccak256(['bytes', 'bytes'], [artifact.bytecode, expectedEncodedConstructorArguments])
     );
 
     const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
@@ -194,11 +215,9 @@ async function verifyDeployments(network: string) {
         throw new Error(`${network} ${contractName} (${deploymentType}) contract code does not exist`);
       }
       if (!deployedDeterministically) {
-        // The immutable variable values are masked out, which means that they are not verified here. The byte
-        // ranges that they occupy are only available in the extended artifact.
-        const { evm } = await deployments.getExtendedArtifact(contractName);
+        // The immutable variable values are masked out, which means that they are not verified here.
         const immutableByteRanges = Object.values<{ length: number; start: number }[]>(
-          evm.deployedBytecode.immutableReferences ?? {}
+          artifact.immutableReferences ?? {}
         ).flat();
         const deployedBytecode = maskImmutableVariables(goFetchContractCode.data, immutableByteRanges);
         const deployedBytecodeWithoutMetadataHash = deployedBytecode.slice(0, -METADATA_HASH_LENGTH);
@@ -226,7 +245,7 @@ async function verifyDeployments(network: string) {
       const creationTx: any = goFetchCreationTx.data;
       const creationData = creationTx.data;
 
-      if (deployment.address !== ethers.getCreateAddress(creationTx)) {
+      if (deployment.address !== getCreateAddress(creationTx)) {
         throw new Error(`${network} ${contractName} creation tx deployment address does not match`);
       }
 

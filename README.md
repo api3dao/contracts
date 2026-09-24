@@ -367,6 +367,24 @@ console.log(hardhatConfig.getEnvVariableNames());
 */
 ```
 
+### hardhatConfig.v3
+
+The functions above return the shapes Hardhat 2 expects. `hardhatConfig.v3` returns the Hardhat 3 ones.
+
+Hardhat 3 changed three things: every network entry needs a `type`, block explorer endpoints moved from the verification plugin into core's `chainDescriptors` keyed by chain ID, and `etherscan`, `blockscout` and `sourcify` moved under one `verify` field.
+
+```ts
+import { hardhatConfig } from '@api3/contracts';
+
+export default {
+  networks: hardhatConfig.v3.networks(),
+  chainDescriptors: hardhatConfig.v3.chainDescriptors(),
+  verify: hardhatConfig.v3.verify(),
+};
+```
+
+`chainDescriptors()` replaces the `customChains` arrays of both `etherscan()` and `blockscout()`. Chains whose only verification API is Sourcify get no descriptor, because Sourcify needs no block explorer endpoint.
+
 ### viemConfig.chains()
 
 Returns an array of chains in the format that [Viem](https://viem.sh/docs/chains/introduction) expects. Each Chain object can be used to [create a Viem public client](https://viem.sh/docs/clients/public#usage).
