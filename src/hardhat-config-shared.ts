@@ -42,8 +42,13 @@ export function blockscoutChains(): Chain[] {
   );
 }
 
+export const ETHERSCAN_API_URL = 'https://api.etherscan.io/v2/api';
+
+// Hardhat 2's hardhat-verify has nowhere in its config to put a chain id, so the V2 endpoint takes
+// it in the URL. Hardhat 3's sends `chainid` as a query param of its own and so needs the bare
+// endpoint: undici refuses to add query params to a URL that already carries a query string.
 export function etherscanApiUrl(chain: Chain): string {
-  return `https://api.etherscan.io/v2/api?chainid=${chain.id}`;
+  return `${ETHERSCAN_API_URL}?chainid=${chain.id}`;
 }
 
 export function blockscoutApiUrl(chain: Chain): string {

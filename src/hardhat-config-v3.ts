@@ -4,8 +4,8 @@ import {
   blockscoutApiUrl,
   blockscoutChains,
   credentials,
+  ETHERSCAN_API_URL,
   etherscanApiKeyName,
-  etherscanApiUrl,
   etherscanChains,
   networkHttpRpcUrl,
   SOURCIFY_API_URL,
@@ -46,7 +46,8 @@ export function chainDescriptors(): HardhatV3ChainDescriptorsConfig {
         etherscan: {
           name: 'Etherscan',
           url: chain.blockExplorerUrl,
-          apiUrl: etherscanApiUrl(chain),
+          // Bare endpoint: hardhat-verify appends `chainid` itself.
+          apiUrl: ETHERSCAN_API_URL,
         },
       },
     };
