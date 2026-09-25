@@ -1,5 +1,15 @@
 # @api3/contracts
 
+## 42.0.0
+
+### Major Changes
+
+- 393dfe4: Remove support for following chains:
+
+  - mode
+  - mode-sepolia-testnet
+  - scroll
+
 ## 41.0.1
 
 ### Patch Changes
