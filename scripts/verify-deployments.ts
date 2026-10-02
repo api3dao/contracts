@@ -12,10 +12,12 @@ import {
   AbiCoder,
   JsonRpcProvider,
   ZeroHash,
+  getAddress,
   getBytes,
   getCreateAddress,
   hexlify,
   getCreate2Address,
+  isAddress,
   solidityPackedKeccak256,
 } from 'ethers';
 
@@ -31,10 +33,13 @@ import { readArtifact } from './src/artifacts.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
+// Records migrated from hardhat-deploy v1 carry `args` and `transactionHash` as well. Records written by v2 only
+// have `argsData`, plus `transaction.hash` unless the contract was found already deployed at its address.
 interface DeploymentRecord {
   address: string;
   abi: any[];
-  args?: string[];
+  args?: any[];
+  argsData?: string;
   bytecode: string;
   deployedBytecode: string;
   transactionHash?: string;
@@ -53,12 +58,18 @@ function maskImmutableVariables(bytecode: string, immutableByteRanges: { length:
   return hexlify(bytecodeBytes);
 }
 
-function validateDeploymentArguments(network: string, deployment: DeploymentRecord, contractName: string) {
+function deploymentArgs(deployment: DeploymentRecord, constructor: any): any[] {
+  if (deployment.args) return deployment.args;
+  if (!constructor || deployment.argsData === undefined || deployment.argsData === '0x') return [];
+  return [...AbiCoder.defaultAbiCoder().decode(constructor.inputs, deployment.argsData)];
+}
+
+function validateDeploymentArguments(network: string, contractName: string, args: any[]) {
   let expectedDeploymentArgs: string[];
   switch (contractName) {
     case 'OwnableCallForwarder': {
       if (skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification.includes(network)) {
-        expectedDeploymentArgs = deployment.args!;
+        expectedDeploymentArgs = args;
         break;
       } else {
         const { address: gnosisSafeWithoutProxyAddress } = JSON.parse(
@@ -107,7 +118,7 @@ function validateDeploymentArguments(network: string, deployment: DeploymentReco
         fs.readFileSync(join('deployments', network, 'Api3ServerV1OevExtension.json'), 'utf8')
       );
       // We do not check the initial owner as it is mutable and is validated separately
-      expectedDeploymentArgs = [deployment.args![0], api3ServerV1OevExtensionAddress];
+      expectedDeploymentArgs = [args[0], api3ServerV1OevExtensionAddress];
       break;
     }
     case 'Api3MarketV2': {
@@ -146,8 +157,11 @@ function validateDeploymentArguments(network: string, deployment: DeploymentReco
       return;
     }
   }
-  deployment.args!.map((deploymentArg: string, ind: number) => {
-    if (deploymentArg !== expectedDeploymentArgs[ind]) {
+  // Decoded uints are bigints where migrated records hold numbers, and v2 records hold lowercase addresses where
+  // decoding yields checksummed ones, so compare checksummed addresses and stringified values
+  const normalize = (value: any) => (typeof value === 'string' && isAddress(value) ? getAddress(value) : String(value));
+  args.map((deploymentArg: any, ind: number) => {
+    if (normalize(deploymentArg) !== normalize(expectedDeploymentArgs[ind])) {
       throw new Error(
         `${contractName} deployment arg #${ind} is expected to be ${expectedDeploymentArgs[ind]} but is ${deploymentArg}`
       );
@@ -189,12 +203,13 @@ async function verifyDeployments(network: string) {
     const artifact = await readArtifact(contractName);
     const constructor = artifact.abi.find((method: any) => method.type === 'constructor');
 
-    validateDeploymentArguments(network, deployment, contractName);
+    const args = deploymentArgs(deployment, constructor);
+    validateDeploymentArguments(network, contractName, args);
 
     const expectedEncodedConstructorArguments = constructor
       ? AbiCoder.defaultAbiCoder().encode(
           constructor.inputs.map((input: any) => input.type),
-          deployment.args
+          args
         )
       : '0x';
     const salt = ZeroHash;
@@ -204,8 +219,9 @@ async function verifyDeployments(network: string) {
       solidityPackedKeccak256(['bytes', 'bytes'], [artifact.bytecode, expectedEncodedConstructorArguments])
     );
 
-    const deployedDeterministically = deployment.address === expectedDeterministicDeploymentAddress;
-    if (deployedDeterministically || creationTxUnavailable) {
+    const deployedDeterministically = getAddress(deployment.address) === expectedDeterministicDeploymentAddress;
+    const creationTxHash = deployment.transaction?.hash ?? deployment.transactionHash;
+    if (deployedDeterministically || creationTxUnavailable || creationTxHash === undefined) {
       const deploymentType = deployedDeterministically ? 'deterministic' : 'undeterministic';
       const goFetchContractCode = await go(async () => provider.getCode(deployment.address), goAsyncOptions);
       if (!goFetchContractCode.success || !goFetchContractCode.data) {
@@ -235,17 +251,14 @@ async function verifyDeployments(network: string) {
         }
       }
     } else {
-      const goFetchCreationTx = await go(
-        async () => provider.getTransaction(deployment.transactionHash),
-        goAsyncOptions
-      );
+      const goFetchCreationTx = await go(async () => provider.getTransaction(creationTxHash), goAsyncOptions);
       if (!goFetchCreationTx.success || !goFetchCreationTx.data) {
         throw new Error(`${network} ${contractName} creation tx could not be fetched`);
       }
       const creationTx: any = goFetchCreationTx.data;
       const creationData = creationTx.data;
 
-      if (deployment.address !== getCreateAddress(creationTx)) {
+      if (getAddress(deployment.address) !== getCreateAddress(creationTx)) {
         throw new Error(`${network} ${contractName} creation tx deployment address does not match`);
       }
 

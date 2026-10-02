@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
-import type { AddressLike } from 'ethers';
+import { type AddressLike, getAddress } from 'ethers';
 
 import chainSupportData from '../../data/chain-support.json' with { type: 'json' };
 import { CHAINS } from '../../src/generated/chains.js';
@@ -42,7 +42,8 @@ function getDeploymentAddresses() {
     ];
     for (const contractName of contractNames) {
       const deployment = JSON.parse(fs.readFileSync(join('deployments', network, `${contractName}.json`), 'utf8'));
-      references[contractName] = { ...references[contractName], [chainId!]: deployment.address };
+      // hardhat-deploy v2 records addresses in lowercase, while the published addresses are checksummed
+      references[contractName] = { ...references[contractName], [chainId!]: getAddress(deployment.address) };
     }
   }
   return `${JSON.stringify(references, null, 2)}\n`;
