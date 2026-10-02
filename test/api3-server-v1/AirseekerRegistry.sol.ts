@@ -1,20 +1,18 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
-import type { AirseekerRegistry } from '../../src/index';
+import type { AirseekerRegistry } from '../../src/index.js';
 import {
+  ethers,
+  helpers,
   deriveBeaconId,
   deriveBeaconSetId,
   deriveTemplateId,
   encodeUpdateParameters,
   readBeacons,
   updateBeaconSet,
-} from '../test-utils';
-
-const { ethers } = hardhat;
+} from '../test-utils.js';
 
 const MAXIMUM_BEACON_COUNT_IN_SET = 21;
 const MAXIMUM_UPDATE_PARAMETERS_LENGTH = 1024;

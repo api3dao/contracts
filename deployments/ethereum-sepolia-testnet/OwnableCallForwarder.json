@@ -201,5 +201,7 @@
         "numberOfBytes": "20"
       }
     }
-  }
+  },
+  "argsData": "0x00000000000000000000000007b589f06bd0a5324c4e2376d66d2f4f25921de1",
+  "transaction": { "hash": "0xd01ff0c6604edeb58ba24f4f95365db17265a25bd9f4b4e04fb2c3da640d757a" }
 }

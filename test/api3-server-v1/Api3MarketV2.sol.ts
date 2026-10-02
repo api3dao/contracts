@@ -1,15 +1,11 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { expect } from 'chai';
 import { type AddressLike, type BigNumberish, type BytesLike, type HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
-import { type Api3MarketV2 } from '../../src/index';
+import { type Api3MarketV2 } from '../../src/index.js';
 import { signHash } from '../access/HashRegistry.sol';
-import { updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils';
-
-const { ethers } = hardhat;
+import { ethers, helpers, updateBeacon, updateBeaconSet, readBeacons, encodeUpdateParameters } from '../test-utils.js';
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
 const DAPI_MANAGEMENT_MERKLE_ROOT_HASH_TYPE = ethers.solidityPackedKeccak256(
@@ -502,7 +498,7 @@ describe('Api3MarketV2', function () {
           const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
           await expect(
             Api3MarketV2.deploy(roles.owner!.address, api3ServerV1.getAddress(), MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
-          ).to.be.revertedWithoutReason();
+          ).to.be.revertedWithoutReason(ethers);
         });
       });
       context('ProxyFactory address does not belong to a contract', function () {
@@ -511,7 +507,7 @@ describe('Api3MarketV2', function () {
           const Api3MarketV2 = await ethers.getContractFactory('Api3MarketV2', roles.deployer);
           await expect(
             Api3MarketV2.deploy(roles.owner!.address, roles.randomPerson!.address, MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH)
-          ).to.be.revertedWithoutReason();
+          ).to.be.revertedWithoutReason(ethers);
         });
       });
     });
@@ -588,7 +584,7 @@ describe('Api3MarketV2', function () {
               // Will revert without reason if the provided AirseekerRegistry address does not implement the Ownable interface
               await expect(
                 api3MarketV2.connect(roles.owner).setAirseekerRegistry(api3ServerV1.getAddress())
-              ).to.be.revertedWithoutReason();
+              ).to.be.revertedWithoutReason(ethers);
             });
           });
         });
@@ -2618,7 +2614,7 @@ describe('Api3MarketV2', function () {
                     ),
                   }
                 )
-            ).to.be.revertedWithoutReason();
+            ).to.be.revertedWithoutReason(ethers);
           });
         });
         context('...because dAPI management Merkle root is not registered', function () {
@@ -2858,7 +2854,7 @@ describe('Api3MarketV2', function () {
                     ),
                   }
                 )
-            ).to.be.revertedWithoutReason();
+            ).to.be.revertedWithoutReason(ethers);
           });
         });
         context('...because dAPI pricing Merkle root is not registered', function () {
@@ -3668,7 +3664,7 @@ describe('Api3MarketV2', function () {
                   dapiManagementMerkleLeaves.ethUsd!.values.sponsorWalletAddress,
                   '0x'
                 )
-            ).to.be.revertedWithoutReason();
+            ).to.be.revertedWithoutReason(ethers);
           });
         });
         context('...because dAPI management Merkle root is not registered', function () {
@@ -3778,7 +3774,7 @@ describe('Api3MarketV2', function () {
                 signedApiUrlMerkleLeaves[airnodes[0]!.address]!.values.signedApiUrl,
                 '0x'
               )
-          ).to.be.revertedWithoutReason();
+          ).to.be.revertedWithoutReason(ethers);
         });
       });
       context('...because signed API URL Merkle root is not registered', function () {

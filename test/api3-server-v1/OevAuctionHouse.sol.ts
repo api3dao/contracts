@@ -1,14 +1,11 @@
 import * as crypto from 'node:crypto';
 
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { AddressLike, BytesLike } from 'ethers';
-import hardhat from 'hardhat';
 
-import type { MockApi3ReaderProxy } from '../../src/index';
-
-const { ethers } = hardhat;
+import type { MockApi3ReaderProxy } from '../../src/index.js';
+import { ethers, helpers } from '../test-utils.js';
 
 const PROXY_SETTER_ROLE_DESCRIPTION = 'Proxy setter';
 const WITHDRAWER_ROLE_DESCRIPTION = 'Withdrawer';
@@ -2880,7 +2877,7 @@ describe('OevAuctionHouse', function () {
                   .setChainNativeCurrencyRateProxy(chainId, oevAuctionHouse.getAddress());
                 await expect(
                   oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
-                ).to.be.revertedWithoutReason();
+                ).to.be.revertedWithoutReason(ethers);
               });
             });
           });
@@ -2918,7 +2915,7 @@ describe('OevAuctionHouse', function () {
           await oevAuctionHouse.connect(roles.manager).setCollateralRateProxy(oevAuctionHouse.getAddress());
           await expect(
             oevAuctionHouse.getCurrentCollateralAndProtocolFeeAmounts(chainId, bidAmount)
-          ).to.be.revertedWithoutReason();
+          ).to.be.revertedWithoutReason(ethers);
         });
       });
     });
