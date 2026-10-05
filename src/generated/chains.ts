@@ -499,14 +499,14 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'robinhood',
-    blockExplorerUrl: 'https://robinhoodchain.blockscout.com/',
+    blockExplorerUrl: 'https://robin.etherscan.io/',
     decimals: 18,
     id: '4663',
     name: 'Robinhood Chain',
     providers: [{ alias: 'default', rpcUrl: 'https://rpc.mainnet.chain.robinhood.com' }],
     symbol: 'ETH',
     testnet: false,
-    verificationApi: { type: 'blockscout', url: 'https://robinhoodchain.blockscout.com/api' },
+    verificationApi: { type: 'etherscan' },
   },
   {
     alias: 'ronin-testnet',
