@@ -1,5 +1,5 @@
 ---
-'@api3/contracts': minor
+'@api3/contracts': patch
 ---
 
 Update auctioneer address
