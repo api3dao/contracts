@@ -1,6 +1,6 @@
 {
   "alias": "robinhood",
-  "blockExplorerUrl": "https://robinhoodchain.blockscout.com/",
+  "blockExplorerUrl": "https://robin.etherscan.io/",
   "decimals": 18,
   "id": "4663",
   "name": "Robinhood Chain",
@@ -13,7 +13,6 @@
   "symbol": "ETH",
   "testnet": false,
   "verificationApi": {
-    "type": "blockscout",
-    "url": "https://robinhoodchain.blockscout.com/api"
+    "type": "etherscan"
   }
 }
