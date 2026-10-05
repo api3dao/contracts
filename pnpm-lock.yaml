@@ -112,8 +112,8 @@ importers:
         specifier: ^30.5.0
         version: 30.5.0(@types/node@22.19.21)(ts-node@10.9.2(@types/node@22.19.21)(typescript@5.9.3))
       keycard-hardhat-provider:
-        specifier: 1.0.0-beta.2
-        version: 1.0.0-beta.2(hardhat@3.15.0)(zod@4.4.3)
+        specifier: ^1.0.0
+        version: 1.0.0(hardhat@3.15.0)(zod@4.4.3)
       mocha:
         specifier: ^11.0.0
         version: 11.7.6
@@ -3483,13 +3483,13 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
-  keycard-hardhat-provider@1.0.0-beta.2:
-    resolution: {integrity: sha512-JtsupICzkC3q+ws3DJaBQ4H96yYM/AIj4Y/GEycfJYovUZOGKLhDcWwCQDZ0DXgGgN3v99J650xxykQZUQhneQ==}
+  keycard-hardhat-provider@1.0.0:
+    resolution: {integrity: sha512-HHCb/8oUR03F8H+URzEunm1ETCNa7cn2+3JFQAkj47tT0g1hI9uVO/oCLE5xVqvMfWkYzn/HM6kd0s6hPpz8JA==}
     peerDependencies:
       hardhat: ^3.15.0
 
-  keycard-manager@0.9.8:
-    resolution: {integrity: sha512-3EbzBs9bpy8l1QxxxHHiASgbI9C1Mq0yFq7QeIF4BPTBTxpMXJHYamsSDNFLB52nlTKhqU/qbY4szAkfNz9Lew==}
+  keycard-manager@0.9.9:
+    resolution: {integrity: sha512-yk02WZeaRaA1qF1IF4Fz9StwIR3N/oiNTGvxFhnuVjfhl+gp7UmpF3uadOPkQCyycznst37O+gk1zLsbzmVhIA==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -9192,7 +9192,7 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
-  keycard-hardhat-provider@1.0.0-beta.2(hardhat@3.15.0)(zod@4.4.3):
+  keycard-hardhat-provider@1.0.0(hardhat@3.15.0)(zod@4.4.3):
     dependencies:
       '@nomicfoundation/hardhat-errors': 3.0.21
       '@nomicfoundation/hardhat-utils': 4.1.9
@@ -9200,13 +9200,13 @@ snapshots:
       '@types/node': 22.19.21
       ethers: 6.17.0
       hardhat: 3.15.0
-      keycard-manager: 0.9.8
+      keycard-manager: 0.9.9
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
       - zod
 
-  keycard-manager@0.9.8:
+  keycard-manager@0.9.9:
     dependencies:
       elliptic: 6.6.1
       ethers: 6.17.0
