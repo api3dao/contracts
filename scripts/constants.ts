@@ -44,8 +44,6 @@ export const skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerific
   'manta-sepolia-testnet',
   'mantle',
   'mantle-sepolia-testnet',
-  'opbnb',
-  'opbnb-testnet',
   'optimism',
   'optimism-sepolia-testnet',
   'polygon',
