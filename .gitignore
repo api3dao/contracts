@@ -10,6 +10,9 @@ dist
 /typechain
 /typechain-types
 
+# hardhat-deploy typed artifacts
+/generated
+
 # solidity-coverage files
 /coverage
 /coverage.json

@@ -1,9 +1,7 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
-import hardhat from 'hardhat';
 
-const { ethers } = hardhat;
+import { ethers, helpers } from '../test-utils.js';
 
 describe('ExtendedSelfMulticall', function () {
   async function deploy() {

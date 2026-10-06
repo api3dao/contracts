@@ -1,4 +1,4 @@
-import { deepEqual } from './deep-equal';
+import { deepEqual } from './deep-equal.js';
 
 describe('deepEqual', () => {
   it('primitive values', () => {

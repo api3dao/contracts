@@ -11,7 +11,7 @@ import {
   unsafeComputeDappId,
   DAPPS,
   deploymentAddresses,
-} from './index';
+} from './index.js';
 
 const COMMON_COMMAND_ARGUMENTS = {
   dappAlias: {

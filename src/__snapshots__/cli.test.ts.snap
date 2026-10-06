@@ -4,8 +4,8 @@ exports[`cli tests should match help output 1`] = `
 "cli.js [command]
 
 Commands:
-  cli.js print-api3readerproxyv1-address  Prints the dApp-specific
-                                          Api3ReaderProxyV1 address
+  cli.js print-api3readerproxyv1-address  Prints the dApp-specific Api3ReaderPro
+                                          xyV1 address
   cli.js compute-dapp-id                  Computes the dApp ID for a given dApp
                                           alias and chain ID
 

@@ -4,11 +4,11 @@ import path from 'node:path';
 import { goSync } from '@api3/commons';
 import { format } from 'prettier';
 
-import { type Dapp, dappSchema } from '../src/types';
+import { type Dapp, dappSchema } from '../src/types.js';
 
-const PRETTIER_CONFIG = path.join(__dirname, '..', '.prettierrc');
-const INPUT_DIR = path.join(__dirname, '..', 'data', 'dapps');
-const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
+const PRETTIER_CONFIG = path.join(import.meta.dirname, '..', '.prettierrc');
+const INPUT_DIR = path.join(import.meta.dirname, '..', 'data', 'dapps');
+const OUTPUT_DIR = path.join(import.meta.dirname, '..', 'src', 'generated');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'dapps.ts');
 
 const HEADER_CONTENT = `// ===========================================================================
@@ -18,7 +18,7 @@ const HEADER_CONTENT = `// =====================================================
 // See: scripts/generate-dapps.ts for more information
 // ===========================================================================
 
-import { type Dapp } from '../types';
+import { type Dapp } from '../types.js';
 `;
 
 function ensureMorphoDappConventions(fileContent: Dapp) {
