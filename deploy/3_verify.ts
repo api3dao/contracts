@@ -1,8 +1,8 @@
-import { verifyContract } from '@nomicfoundation/hardhat-verify/verify';
 import { AbiCoder, encodeBytes32String, getCreate2Address, keccak256, solidityPacked } from 'ethers';
 import hre from 'hardhat';
 
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import { verifyContract } from '../plugins/solc-source-names.js';
 import { deployScript } from '../rocketh/deploy.js';
 import { CHAINS } from '../src/generated/chains.js';
 import {
