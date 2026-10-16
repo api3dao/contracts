@@ -4,6 +4,6 @@
     "outDir": "./dist/esm",
     "rootDir": "."
   },
-  "include": ["bin/**/*", "src/**/*", "typechain-types/**/*"],
-  "exclude": ["**/*.test.ts", "src/__snapshots__"]
+  "include": ["src/**/*", "typechain-types/**/*"],
+  "exclude": ["**/*.test.ts", "src/__snapshots__", "src/cli.ts"]
 }

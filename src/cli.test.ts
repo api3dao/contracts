@@ -74,6 +74,10 @@ describe('cli tests', () => {
     expect(output).toMatchSnapshot();
   });
 
+  it('should print the package version', () => {
+    expect(execCommand('--version')).toBe(packageJson.version);
+  });
+
   it('should throw an error for an unknown chain id while checking Api3ReaderProxyV1 address', () => {
     expect(() => {
       execCommand(

@@ -49,7 +49,7 @@
     "dist"
   ],
   "bin": {
-    "api3-contracts": "./dist/esm/bin/cli.js"
+    "api3-contracts": "./dist/cjs/bin/cli.js"
   },
   "scripts": {
     "build": "pnpm check && pnpm build:hardhat && pnpm generate && pnpm build:esm && pnpm build:cjs && tsx scripts/write-dist-package-json.ts",
