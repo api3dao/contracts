@@ -1,4 +1,4 @@
-import { AbiCoder, encodeBytes32String, getCreate2Address, keccak256, solidityPacked } from 'ethers';
+import { type Interface, AbiCoder, encodeBytes32String, getCreate2Address, keccak256, solidityPacked } from 'ethers';
 import hre from 'hardhat';
 
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
@@ -10,11 +10,16 @@ import {
   Api3ReaderProxyV1__factory,
   ERC1967Proxy__factory,
   GnosisSafeWithoutProxy__factory,
+  OwnableCallForwarder__factory,
 } from '../src/index.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 10;
+
+const recordedArgs = (factory: { createInterface: () => Interface }, deployment: { argsData: string }) => [
+  ...AbiCoder.defaultAbiCoder().decode(factory.createInterface().deploy.inputs, deployment.argsData),
+];
 
 // eslint-disable-next-line import/no-default-export
 export default deployScript(
@@ -22,6 +27,12 @@ export default deployScript(
     const isLocalSimulation = env.name === 'default' && env.network.fork === undefined;
     if (!chainsSupportedByMarket.includes(env.name) && !isLocalSimulation) {
       throw new Error(`${env.name} is not supported`);
+    }
+
+    // The contracts of a fork exist only in the simulation.
+    if (env.network.fork !== undefined) {
+      env.showMessage(`⚠️ Attention: Running on a fork of ${env.name}, skipping verification.`);
+      return;
     }
 
     const verificationApiType = CHAINS.find((chain) => chain.alias === env.name)?.verificationApi?.type;
@@ -34,16 +45,12 @@ export default deployScript(
     const verificationProvider = verificationApiType === 'other' ? 'blockscout' : verificationApiType;
 
     const GnosisSafeWithoutProxy = env.get('GnosisSafeWithoutProxy');
-    // Decoded from the record, not from data/manager-multisig-metadata.json: that file tracks the
-    // current membership, so it stops describing a Safe already deployed once an owner changes.
-    const gnosisSafeWithoutProxyArgs = AbiCoder.defaultAbiCoder().decode(
-      GnosisSafeWithoutProxy__factory.createInterface().deploy.inputs,
-      GnosisSafeWithoutProxy.argsData
-    );
     await verifyContract(
       {
         address: GnosisSafeWithoutProxy.address,
-        constructorArgs: [...gnosisSafeWithoutProxyArgs],
+        // Decoded from the record, not from data/manager-multisig-metadata.json: that file tracks the
+        // current membership, so it stops describing a Safe already deployed once an owner changes.
+        constructorArgs: recordedArgs(GnosisSafeWithoutProxy__factory, GnosisSafeWithoutProxy),
         provider: verificationProvider,
       },
       hre
@@ -53,7 +60,8 @@ export default deployScript(
     await verifyContract(
       {
         address: OwnableCallForwarder.address,
-        constructorArgs: [GnosisSafeWithoutProxy.address],
+        // Decoded from the record as well, as many chains deployed it with an owner other than this Safe.
+        constructorArgs: recordedArgs(OwnableCallForwarder__factory, OwnableCallForwarder),
         provider: verificationProvider,
       },
       hre
