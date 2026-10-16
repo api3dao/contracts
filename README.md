@@ -10,19 +10,19 @@
 
 </div>
 
-> Contracts through which Api3 services are delivered
+> Contracts through which API3 services are delivered
 
-This package provides the tools to integrate data feeds that can be found at the [Api3 Market](https://market.api3.org). The typical workflow is as follows:
+This package provides the tools to integrate data feeds that can be found at the [API3 Market](https://market.api3.org). The typical workflow is as follows:
 
-1. Purchase data feed subscriptions and get the respective proxy addresses at the Api3 Market
+1. Purchase data feed subscriptions and get the respective proxy addresses at the API3 Market
 2. Use the proxy address computation utility function provided by this package (`computeCommunalApi3ReaderProxyV1Address()`) to validate the proxy addresses being used
 3. Use the proxy contract interfaces provided by this package in the reader contract, as demonstrated in https://github.com/api3dao/data-feed-reader-example
 
 A more complete list of what this package includes is as follows:
 
-- All contracts that facilitate Api3 data feed services, including OEV auctions
+- All contracts that facilitate API3 data feed services, including OEV auctions
 - `@typechain/ethers-v6` typings of these contracts
-- Addresses of the Api3 deployments of these contracts
+- Addresses of the API3 deployments of these contracts
 - Proxy address computation utility functions
 
 ## 🛡️ Security
@@ -266,7 +266,7 @@ console.log(address);
 
 ### computeCommunalApi3ReaderProxyV1Address
 
-Computes the Api3ReaderProxyV1 address being used by Api3 Market for a given dAPI name and chain ID.
+Computes the Api3ReaderProxyV1 address being used by API3 Market for a given dAPI name and chain ID.
 
 ```ts
 import { computeCommunalApi3ReaderProxyV1Address } from '@api3/contracts';
@@ -422,6 +422,6 @@ branch. Changeset files will be consolidated into a single new version and that 
 
 <!-- markdown-link-check-disable -->
 
-More information is contained in the [Api3 guidelines](https://github.com/api3dao/tasks/blob/main/API3%20Packages/changeset.md).
+More information is contained in the [API3 guidelines](https://github.com/api3dao/tasks/blob/main/API3%20Packages/changeset.md).
 
 <!-- markdown-link-check-enable -->
