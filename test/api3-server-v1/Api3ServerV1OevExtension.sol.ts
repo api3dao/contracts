@@ -1,15 +1,12 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { BaseWallet, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
-import type { MockApi3ServerV1OevExtensionOevBidPayer } from '../../src/index';
-import * as testUtils from '../test-utils';
+import type { MockApi3ServerV1OevExtensionOevBidPayer } from '../../src/index.js';
+import { ethers, helpers } from '../test-utils.js';
+import * as testUtils from '../test-utils.js';
 
 import { encodeData, median, updateBeacon } from './Api3ServerV1.sol';
-
-const { ethers } = hardhat;
 
 export async function signDataWithAlternateTemplateId(
   airnode: BaseWallet,

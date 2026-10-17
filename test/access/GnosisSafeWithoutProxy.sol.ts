@@ -1,10 +1,8 @@
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import { expect } from 'chai';
 import type { AddressLike, BigNumberish, BytesLike, HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 import type { GnosisSafeWithoutProxy } from 'typechain-types';
 
-const { ethers } = hardhat;
+import { ethers, helpers } from '../test-utils.js';
 
 // Similar to https://github.com/safe-global/safe-smart-account/blob/v1.3.0/contracts/handler/CompatibilityFallbackHandler.sol#L74
 const SENTINEL_MODULES = `0x${'1'.padStart(40, '0')}`;

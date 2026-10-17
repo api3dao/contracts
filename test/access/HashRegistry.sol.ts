@@ -1,10 +1,8 @@
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { BytesLike, HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
-const { ethers } = hardhat;
+import { ethers, helpers } from '../test-utils.js';
 
 const SIGNATURE_DELEGATION_HASH_TYPE = ethers.solidityPackedKeccak256(
   ['string'],

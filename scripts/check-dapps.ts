@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { DAPPS } from '../src/generated/dapps';
-import { dappSchema, type Dapp } from '../src/types';
-import { deepEqual } from '../src/utils/deep-equal';
+import { DAPPS } from '../src/generated/dapps.js';
+import { dappSchema, type Dapp } from '../src/types.js';
+import { deepEqual } from '../src/utils/deep-equal.js';
 
 const INPUT_DIR = path.join('data', 'dapps');
 

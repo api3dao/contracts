@@ -1,8 +1,8 @@
 import { defineChain } from 'viem';
 
-import { CHAINS } from './generated/chains';
-import { type Chain } from './types';
-import { toUpperSnakeCase } from './utils/strings';
+import { CHAINS } from './generated/chains.js';
+import { type Chain } from './types.js';
+import { toUpperSnakeCase } from './utils/strings.js';
 
 interface CustomRpcUrls {
   readonly environment: {

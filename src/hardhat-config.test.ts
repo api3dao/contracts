@@ -1,4 +1,4 @@
-import { CHAINS } from './generated/chains';
+import { CHAINS } from './generated/chains.js';
 import {
   etherscan,
   blockscout,
@@ -6,8 +6,8 @@ import {
   getEnvVariableNames,
   networkHttpRpcUrlName,
   networks,
-} from './hardhat-config';
-import { toUpperSnakeCase } from './utils/strings';
+} from './hardhat-config.js';
+import { toUpperSnakeCase } from './utils/strings.js';
 
 const OLD_ENV = process.env;
 
