@@ -42,6 +42,11 @@ const forkedChainId = networks[process.env.HARDHAT_FORK ?? '']?.chainId;
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   plugins: [
+    // Before the toolbox, so TypeChain sees the sorted list.
+    {
+      id: 'api3-sorted-artifact-paths',
+      hookHandlers: { solidity: async () => import('./plugins/sorted-artifact-paths.js') },
+    },
     hardhatToolboxMochaEthers,
     hardhatDeploy,
     // Signs with a Keycard when KEYCARD_ACCOUNT is set, which is the field
