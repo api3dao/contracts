@@ -2,12 +2,13 @@
 '@api3/contracts': major
 ---
 
-Build the package with Hardhat 3. Consumers on Hardhat 2 or CommonJS keep working, and runtime exports (addresses, ABIs, bytecode, chain data) are unchanged.
+Build the package with Hardhat 3, keeping the exported addresses, ABIs, bytecode and chain data unchanged:
 
-- The package is published as both an ES module and CommonJS, so `import` and `require` both resolve to the root entry point
-- An ES module can no longer default-import the package (`import api3 from '@api3/contracts'`), which worked while it was CommonJS only. Use named imports or `import * as api3 from '@api3/contracts'`
-- An `exports` map restricts subpath imports to the package root and the Solidity directories. Deep imports into `dist` no longer resolve
-- The `dist` layout changed. The CLI moved from `dist/bin/cli.js` to `dist/cjs/bin/cli.js`, and `dist/data/*.json` and `dist/deployments/addresses.json` are no longer shipped. The `api3-contracts` command is unchanged, and the same data is exported as `auctioneerMetadata`, `dapiManagementMetadata` and `deploymentAddresses`
-- `deploymentAddresses`, `auctioneerMetadata` and `dapiManagementMetadata` are now typed even when the consumer doesn't enable `resolveJsonModule`, where they used to be `any`. Code that relied on `any` may need casts
-- `hardhatConfig.v3` returns the `networks`, `chainDescriptors` and `verify` shapes that Hardhat 3 expects. `hardhatConfig.etherscan()`, `blockscout()` and `networks()` still return the Hardhat 2 shapes
-- Add `hardhatConfig.networkHttpRpcUrl`
+- Publish the package as both an ES module and CommonJS
+- Drop `import api3 from '@api3/contracts'` in ES modules in favor of named imports or `import * as api3 from '@api3/contracts'`
+- Add an `exports` map that limits imports to the package root, `package.json` and the Solidity directories, so deep imports into `dist` no longer resolve
+- Move the `api3-contracts` CLI from `dist/bin/cli.js` to `dist/cjs/bin/cli.js`
+- Stop shipping `dist/data/*.json` and `dist/deployments/addresses.json`, whose data stays exported as `auctioneerMetadata`, `dapiManagementMetadata` and `deploymentAddresses`
+- Type `auctioneerMetadata`, `dapiManagementMetadata` and `deploymentAddresses` for consumers without `resolveJsonModule`, who used to get `any`
+- Add `hardhatConfig.v3`, whose `networks()`, `chainDescriptors()` and `verify()` return the Hardhat 3 config shapes, and keep `hardhatConfig.networks()`, `etherscan()` and `blockscout()` on the Hardhat 2 shapes
+- Add `hardhatConfig.networkHttpRpcUrl()`
