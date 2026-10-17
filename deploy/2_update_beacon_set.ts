@@ -129,6 +129,12 @@ export default deployScript(
       return;
     }
 
+    // On a fork, plugins/fork-keycard-account.ts impersonates the card's account, which cannot sign.
+    if (env.network.fork !== undefined && process.env.KEYCARD_ACCOUNT) {
+      env.showMessage('Skipping gas estimation on a fork, as the Keycard account cannot sign there');
+      return;
+    }
+
     const estimateGasMulticallData = [] as BytesLike[];
 
     for (const [ind, templateId] of templateIds.entries()) {

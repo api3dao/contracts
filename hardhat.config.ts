@@ -36,6 +36,13 @@ let networks: Record<string, NetworkUserConfig> = hardhatConfig.v3.networks();
 if (process.env.HARDHAT_FORK) {
   const { addForkConfiguration } = await import('hardhat-deploy/helpers');
   networks = addForkConfiguration(networks);
+  // The simulated network's mnemonic is copied over, and EDR rejects the empty one it holds without
+  // MNEMONIC. The fork keeps EDR's own accounts instead.
+  const { fork } = networks;
+  if (fork !== undefined && !process.env.MNEMONIC) {
+    const { accounts: _emptyMnemonic, ...forkWithoutAccounts } = fork;
+    networks.fork = forkWithoutAccounts;
+  }
 }
 const forkedChainId = networks[process.env.HARDHAT_FORK ?? '']?.chainId;
 
@@ -55,6 +62,10 @@ export default defineConfig({
     {
       id: 'api3-rocketh-rpc-workarounds',
       hookHandlers: { network: async () => import('./plugins/rocketh-rpc-workarounds.js') },
+    },
+    {
+      id: 'api3-fork-keycard-account',
+      hookHandlers: { network: async () => import('./plugins/fork-keycard-account.js') },
     },
     {
       id: 'api3-solc-source-names',
