@@ -88,8 +88,8 @@
     "test:hardhat:gas": "NO_PARALLEL=true hardhat test mocha --gas-stats",
     "test:jest": "jest",
     "validate-verification-api": "tsx scripts/validate-verification-api.ts",
-    "validate-deployments": "tsx scripts/validate-deployments.ts",
-    "verify-deployments": "tsx scripts/verify-deployments.ts",
+    "validate-deployments": "pnpm build:hardhat && tsx scripts/validate-deployments.ts",
+    "verify-deployments": "pnpm build:hardhat && tsx scripts/verify-deployments.ts",
     "verify-vendor-contracts": "tsx scripts/verify-vendor-contracts.ts"
   },
   "devDependencies": {
