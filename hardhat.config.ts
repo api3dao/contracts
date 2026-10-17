@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import hardhatToolboxMochaEthers from '@nomicfoundation/hardhat-toolbox-mocha-ethers';
 import 'dotenv/config';
 import { defineConfig, overrideTask } from 'hardhat/config';
@@ -100,9 +102,13 @@ export default defineConfig({
       production: { compilers },
     },
   },
-  typechain: { outDir: 'typechain-types' },
+  // hardhat-deploy, and hardhat-typechain when cleaning, resolve a relative folder against the
+  // working directory, so a command run from a subdirectory would write or remove it there.
+  typechain: { outDir: path.join(import.meta.dirname, 'typechain-types') },
   // rocketh/deploy.ts reads these, and the deploy scripts pass them to env.deploy.
-  generateTypedArtifacts: { destinations: [{ folder: './generated', mode: 'typescript' }] },
+  generateTypedArtifacts: {
+    destinations: [{ folder: path.join(import.meta.dirname, 'generated'), mode: 'typescript' }],
+  },
   networks,
   chainDescriptors: {
     ...hardhatConfig.v3.chainDescriptors(),

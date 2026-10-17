@@ -10,8 +10,11 @@ const ALIAS = /( as )([A-Za-z_$][\w$]*(?:@[\w$.@-]*)+)/g;
 
 // eslint-disable-next-line import/no-default-export
 export default async (): Promise<Partial<SolidityHooks>> => ({
-  async processArtifactsAfterSuccessfulBuild() {
-    for (const file of await glob('./generated/{abis,artifacts}/index.{ts,js,d.ts}')) {
+  async processArtifactsAfterSuccessfulBuild(context) {
+    const indexes = context.config.generateTypedArtifacts.destinations.map(
+      ({ folder }) => `${folder}/{abis,artifacts}/index.{ts,js,d.ts}`
+    );
+    for (const file of await glob(indexes)) {
       const contents = await readFile(file, 'utf8');
       const sanitized = contents.replaceAll(
         ALIAS,

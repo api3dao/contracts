@@ -60,9 +60,10 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
 
     // hardhat-deploy reads generated/artifacts, and deploy/3_verify.ts reads `.bytecode` off a
     // TypeChain factory to compute a CREATE2 address.
+    const { destinations } = context.config.generateTypedArtifacts;
     const targets = [
       ...(await glob(`${artifactsDir}/contracts/**/*.json`)),
-      ...(await glob(`${root}/generated/artifacts/**/*.ts`)),
+      ...(await glob(destinations.map(({ folder }) => `${folder}/artifacts/**/*.ts`))),
       ...(await glob(`${root}/typechain-types/factories/**/*__factory.ts`)),
     ];
     for (const target of targets) {
