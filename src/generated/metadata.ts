@@ -6,7 +6,7 @@
 // ===========================================================================
 
 export const auctioneerMetadata = {
-  'auction-resolvers': ['0xfaf0490A34036a3FE2b740545D67b81b8d3ADfB8'],
+  'auction-resolvers': ['0xD09EBD2550D295DceA51e1A02E3D90c7160988A7'],
   'auction-cops': [],
 };
 

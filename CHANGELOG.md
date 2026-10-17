@@ -1,5 +1,12 @@
 # @api3/contracts
 
+## 42.0.1
+
+### Patch Changes
+
+- 619101b: Update auctioneer address
+- ef31d78: Update block explorer and verification API for robinhood
+
 ## 42.0.0
 
 ### Major Changes
