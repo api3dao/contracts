@@ -2,6 +2,7 @@
 // See https://github.com/api3dao/contracts/pull/310
 // TODO: Only display select role trees (which was not necessary at the time
 // this script was implemented)
+import 'dotenv/config';
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 

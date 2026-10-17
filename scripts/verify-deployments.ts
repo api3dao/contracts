@@ -4,6 +4,7 @@
 // that fetches the deployed bytecode from a chain and compares that with the output
 // of the local compilation.
 
+import 'dotenv/config';
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
