@@ -23,7 +23,7 @@ async function surveyRoles(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = createProvider(network);
+  const provider = await createProvider(network);
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
   );

@@ -174,7 +174,7 @@ async function verifyDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = createProvider(network);
+  const provider = await createProvider(network);
   const creationTxUnavailable = chainAliasesWithoutHistoricalTransactionIndexing.includes(network);
   if (creationTxUnavailable) {
     // eslint-disable-next-line no-console

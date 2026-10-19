@@ -39,7 +39,7 @@ async function validateDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = createProvider(network);
+  const provider = await createProvider(network);
 
   // Validate the manager multisig owners and threshold
   const { address: gnosisSafeWithoutProxyAddress, abi: gnosisSafeWithoutProxyAbi } = JSON.parse(
