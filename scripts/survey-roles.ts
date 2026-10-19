@@ -7,12 +7,13 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { Interface, JsonRpcProvider } from 'ethers';
+import { Interface } from 'ethers';
 
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
-import { type ChainSupport, CHAINS, hardhatConfig } from '../src/index.js';
+import { type ChainSupport, CHAINS } from '../src/index.js';
 
 import { goAsyncOptions } from './constants.js';
+import { createProvider } from './src/provider.js';
 
 const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 
@@ -22,9 +23,7 @@ async function surveyRoles(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new JsonRpcProvider(
-    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
-  );
+  const provider = await createProvider(network);
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
   );

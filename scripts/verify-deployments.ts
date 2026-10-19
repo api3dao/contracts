@@ -11,7 +11,6 @@ import { join } from 'node:path';
 import { go } from '@api3/commons';
 import {
   AbiCoder,
-  JsonRpcProvider,
   ZeroHash,
   getAddress,
   getBytes,
@@ -23,7 +22,7 @@ import {
 } from 'ethers';
 
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
-import { type ChainSupport, CHAINS, hardhatConfig } from '../src/index.js';
+import { type ChainSupport, CHAINS } from '../src/index.js';
 
 import {
   chainAliasesWithoutHistoricalTransactionIndexing,
@@ -31,6 +30,7 @@ import {
   skippedChainAliasesInOwnableCallForwarderConstructorArgumentVerification,
 } from './constants.js';
 import { readArtifact } from './src/artifacts.js';
+import { createProvider } from './src/provider.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 
@@ -174,9 +174,7 @@ async function verifyDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new JsonRpcProvider(
-    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
-  );
+  const provider = await createProvider(network);
   const creationTxUnavailable = chainAliasesWithoutHistoricalTransactionIndexing.includes(network);
   if (creationTxUnavailable) {
     // eslint-disable-next-line no-console
