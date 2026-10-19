@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { AbiCoder, Contract, JsonRpcProvider, ZeroHash, getAddress, solidityPackedKeccak256 } from 'ethers';
+import { AbiCoder, Contract, ZeroHash, getAddress, solidityPackedKeccak256 } from 'ethers';
 
 import auctioneerMetadata from '../data/auctioneer-metadata.json' with { type: 'json' };
 import chainSupportData from '../data/chain-support.json' with { type: 'json' };
@@ -20,9 +20,10 @@ import type {
   OevAuctionHouse,
   OwnableCallForwarder,
 } from '../src/index.js';
-import { CHAINS, computeApi3ReaderProxyV1Address, hardhatConfig } from '../src/index.js';
+import { CHAINS, computeApi3ReaderProxyV1Address } from '../src/index.js';
 
 import { goAsyncOptions, skippedChainAliasesInOevAuctionHouseNativeCurrencyRateValidation } from './constants.js';
+import { createProvider } from './src/provider.js';
 
 const { chainsSupportedByMarket, chainsSupportedByOevAuctions }: ChainSupport = chainSupportData;
 const { dapiManagementMerkleRootSigners, dapiPricingMerkleRootSigners, signedApiUrlMerkleRootSigners } =
@@ -38,9 +39,7 @@ async function validateDeployments(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new JsonRpcProvider(
-    hardhatConfig.networkHttpRpcUrl(CHAINS.find((chain) => chain.alias === network)!)
-  );
+  const provider = createProvider(network);
 
   // Validate the manager multisig owners and threshold
   const { address: gnosisSafeWithoutProxyAddress, abi: gnosisSafeWithoutProxyAbi } = JSON.parse(
