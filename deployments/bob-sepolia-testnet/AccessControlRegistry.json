@@ -514,5 +514,7 @@
         "numberOfBytes": "64"
       }
     }
-  }
+  },
+  "argsData": "0x",
+  "transaction": { "hash": "0xa2c9b3c6a20624ac5e3ab7aa62efe2e752265fd5bd6784417c599d830bc41d96" }
 }

@@ -5,9 +5,9 @@
     "sourceMap": true,
 
     "lib": ["esnext", "dom"],
-    "module": "Node16",
+    "module": "NodeNext",
     "esModuleInterop": true,
-    "moduleResolution": "Node16",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "isolatedModules": true,
     "target": "esnext",
@@ -29,5 +29,5 @@
     "baseUrl": "./",
     "outDir": "./dist"
   },
-  "include": ["**/*", ".eslintrc.js"]
+  "include": ["**/*", ".eslintrc.cjs"]
 }

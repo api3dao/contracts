@@ -2,16 +2,18 @@
 // See https://github.com/api3dao/contracts/pull/310
 // TODO: Only display select role trees (which was not necessary at the time
 // this script was implemented)
+import 'dotenv/config';
 import * as fs from 'node:fs';
 import { join } from 'node:path';
 
 import { go } from '@api3/commons';
-import { config, ethers } from 'hardhat';
+import { Interface } from 'ethers';
 
-import * as chainSupportData from '../data/chain-support.json';
-import { type ChainSupport, CHAINS } from '../src/index';
+import chainSupportData from '../data/chain-support.json' with { type: 'json' };
+import { type ChainSupport, CHAINS } from '../src/index.js';
 
-import { goAsyncOptions } from './constants';
+import { goAsyncOptions } from './constants.js';
+import { createProvider } from './src/provider.js';
 
 const { chainsSupportedByMarket }: ChainSupport = chainSupportData;
 
@@ -21,11 +23,11 @@ async function surveyRoles(network: string) {
   if (!chainsSupportedByMarket.includes(network)) {
     throw new Error(`${network} is not supported`);
   }
-  const provider = new ethers.JsonRpcProvider((config.networks[network] as any).url);
+  const provider = await createProvider(network);
   const { address: accessControlRegistryAddress, abi: accessControlRegistryAbi } = JSON.parse(
     fs.readFileSync(join('deployments', network, `AccessControlRegistry.json`), 'utf8')
   );
-  const accessControlRegistryInterface = new ethers.Interface(accessControlRegistryAbi);
+  const accessControlRegistryInterface = new Interface(accessControlRegistryAbi);
   const blockNumber = await provider.getBlockNumber();
   let logs: any[] = [];
   let percentage = 0;

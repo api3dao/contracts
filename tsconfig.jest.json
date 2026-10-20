@@ -1,0 +1,10 @@
+{
+  // Jest runs the src unit tests in its CommonJS registry, which cannot load the ES modules the
+  // root tsconfig emits.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "verbatimModuleSyntax": false
+  }
+}

@@ -1,7 +1,8 @@
 import * as ethers from 'ethers';
 
-import deploymentAddresses from '../deployments/addresses.json';
-import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../typechain-types';
+import { Api3ReaderProxyV1__factory, ERC1967Proxy__factory } from '../typechain-types/index.js';
+
+import { deploymentAddresses } from './generated/deployment-addresses.js';
 
 function computeApi3ReaderProxyV1Address(
   chainId: ethers.BigNumberish,
