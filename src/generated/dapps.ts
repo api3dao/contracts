@@ -35,8 +35,8 @@ export const DAPPS: Dapp[] = [
       },
       'euler-api3': {
         chains: ['ethereum', 'bsc'],
-        title: 'Euler vaults by Api3',
-        description: 'Only to be used for Euler vaults by Api3.',
+        title: 'Euler vaults by API3',
+        description: 'Only to be used for Euler vaults by API3.',
       },
     },
     homepageUrl: 'https://app.euler.finance/',
@@ -124,8 +124,8 @@ export const DAPPS: Dapp[] = [
       },
       'morpho-api3': {
         chains: ['ethereum', 'robinhood', 'base'],
-        title: 'Morpho market(s) by Api3',
-        description: 'Only to be used for the Morpho market(s) by Api3.',
+        title: 'Morpho market(s) by API3',
+        description: 'Only to be used for the Morpho market(s) by API3.',
       },
     },
     homepageUrl: 'https://morpho.org/vaults/',
