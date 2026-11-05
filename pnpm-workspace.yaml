@@ -6,3 +6,5 @@ minimumReleaseAgeExclude:
   - '@api3/*'
   - 'keycard-hardhat-provider'
   - 'keycard-manager'
+  # Renovate security update: zod@4.6.6
+  - zod@4.6.6
