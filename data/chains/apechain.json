@@ -17,6 +17,7 @@
   "symbol": "APE",
   "testnet": false,
   "verificationApi": {
-    "type": "etherscan"
+    "type": "other",
+    "url": "https://apescan.io/api"
   }
 }
