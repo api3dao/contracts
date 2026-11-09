@@ -135,9 +135,9 @@
   },
   "dependencies": {
     "ethers": "^6.17.0",
-    "viem": "^2.52.2",
+    "viem": "^2.57.11",
     "yargs": "^17.7.3",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "packageManager": "pnpm@10.28.0"
 }
