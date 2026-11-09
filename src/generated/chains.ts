@@ -5,19 +5,19 @@
 // See: scripts/generate-chains.ts for more information
 // ===========================================================================
 
-import { type Chain } from '../types';
+import { type Chain } from '../types.js';
 
 export const CHAINS: Chain[] = [
   {
     alias: 'apechain-arbitrum-sepolia-testnet',
-    blockExplorerUrl: 'https://curtis.apescan.io/',
+    blockExplorerUrl: 'https://curtis.apechain.com/',
     decimals: 18,
     id: '33111',
     name: 'ApeChain testnet',
     providers: [{ alias: 'default', rpcUrl: 'https://curtis.rpc.caldera.xyz/http' }],
     symbol: 'APE',
     testnet: true,
-    verificationApi: { type: 'etherscan' },
+    verificationApi: { type: 'other', url: 'https://curtis.apechain.com/api' },
   },
   {
     alias: 'apechain',
@@ -31,7 +31,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'APE',
     testnet: false,
-    verificationApi: { type: 'etherscan' },
+    verificationApi: { type: 'other', url: 'https://apescan.io/api' },
   },
   {
     alias: 'arbitrum-sepolia-testnet',
@@ -63,7 +63,7 @@ export const CHAINS: Chain[] = [
   },
   {
     alias: 'avalanche-testnet',
-    blockExplorerUrl: 'https://testnet.snowscan.xyz/',
+    blockExplorerUrl: 'https://testnet.snowtrace.io/',
     decimals: 18,
     id: '43113',
     name: 'Avalanche testnet',
@@ -73,7 +73,7 @@ export const CHAINS: Chain[] = [
     ],
     symbol: 'AVAX',
     testnet: true,
-    verificationApi: { type: 'etherscan' },
+    verificationApi: { type: 'other', url: 'https://api.routescan.io/v2/network/testnet/evm/43113/etherscan/api' },
   },
   {
     alias: 'avalanche',

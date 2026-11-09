@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { CHAINS } from './generated/chains';
-import { hasUniqueEntries } from './utils/arrays';
+import { CHAINS } from './generated/chains.js';
+import { hasUniqueEntries } from './utils/arrays.js';
 
 export const verificationApiSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('etherscan') }),
@@ -106,6 +106,42 @@ export interface HardhatEtherscanConfig {
 export interface HardhatBlockscoutConfig {
   enabled: boolean;
   customChains: HardhatEtherscanCustomChain[];
+}
+
+export interface HardhatV3HttpNetworkConfig {
+  type: 'http';
+  accounts?: { mnemonic: string };
+  keycardAccount?: string;
+  chainId: number;
+  url: string;
+}
+
+export interface HardhatV3NetworksConfig {
+  [key: string]: HardhatV3HttpNetworkConfig;
+}
+
+export interface HardhatV3BlockExplorerConfig {
+  name?: string;
+  url?: string;
+  apiUrl?: string;
+}
+
+export interface HardhatV3ChainDescriptorConfig {
+  name: string;
+  blockExplorers: {
+    etherscan?: HardhatV3BlockExplorerConfig;
+    blockscout?: HardhatV3BlockExplorerConfig;
+  };
+}
+
+export interface HardhatV3ChainDescriptorsConfig {
+  [chainId: string]: HardhatV3ChainDescriptorConfig;
+}
+
+export interface HardhatV3VerifyConfig {
+  etherscan: { apiKey: string; enabled: boolean };
+  blockscout: { enabled: boolean };
+  sourcify: { apiUrl: string; enabled: boolean };
 }
 
 export interface ChainSupport {

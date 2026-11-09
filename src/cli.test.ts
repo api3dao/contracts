@@ -2,7 +2,9 @@ import { execSync } from 'node:child_process';
 
 import { goSync } from '@api3/commons';
 
-const CLI_EXECUTABLE = 'dist/src/cli.js';
+import packageJson from '../package.json' with { type: 'json' };
+
+const CLI_EXECUTABLE = packageJson.bin['api3-contracts'];
 
 type CommandArg = [string, string | number | boolean];
 
@@ -70,6 +72,10 @@ describe('cli tests', () => {
   it('should match help output', () => {
     const output = execCommand('help');
     expect(output).toMatchSnapshot();
+  });
+
+  it('should print the package version', () => {
+    expect(execCommand('--version')).toBe(packageJson.version);
   });
 
   it('should throw an error for an unknown chain id while checking Api3ReaderProxyV1 address', () => {

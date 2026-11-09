@@ -1,4 +1,4 @@
-import { toUpperSnakeCase } from './strings';
+import { toUpperSnakeCase } from './strings.js';
 
 describe(toUpperSnakeCase.name, () => {
   it('converts simple words', () => {

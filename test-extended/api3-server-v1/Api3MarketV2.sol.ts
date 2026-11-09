@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
-import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/signers';
-import * as helpers from '@nomicfoundation/hardhat-network-helpers';
+import type { HardhatEthersSigner } from '@nomicfoundation/hardhat-ethers/types';
 import { expect } from 'chai';
 import type { BytesLike, HDNodeWallet } from 'ethers';
-import hardhat from 'hardhat';
 
-import { encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils';
-
-const { ethers } = hardhat;
+import { ethers, helpers, encodeUpdateParameters, updateBeaconSet } from '../../test/test-utils.js';
 
 const MAXIMUM_SUBSCRIPTION_QUEUE_LENGTH = 5;
 

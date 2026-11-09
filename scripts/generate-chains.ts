@@ -3,9 +3,9 @@ import path from 'node:path';
 
 import { format } from 'prettier';
 
-const PRETTIER_CONFIG = path.join(__dirname, '..', '.prettierrc');
-const INPUT_DIR = path.join(__dirname, '..', 'data', 'chains');
-const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'generated');
+const PRETTIER_CONFIG = path.join(import.meta.dirname, '..', '.prettierrc');
+const INPUT_DIR = path.join(import.meta.dirname, '..', 'data', 'chains');
+const OUTPUT_DIR = path.join(import.meta.dirname, '..', 'src', 'generated');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'chains.ts');
 
 const HEADER_CONTENT = `// ===========================================================================
@@ -15,7 +15,7 @@ const HEADER_CONTENT = `// =====================================================
 // See: scripts/generate-chains.ts for more information
 // ===========================================================================
 
-import { type Chain } from '../types';
+import { type Chain } from '../types.js';
 `;
 
 async function main(): Promise<void> {

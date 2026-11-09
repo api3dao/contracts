@@ -1,6 +1,6 @@
 import { z, ZodError } from 'zod';
 
-import { type Chain, chainAlias, chainSchema, chainProviderSchema, chainProvidersSchema, dappSchema } from './types';
+import { type Chain, chainAlias, chainSchema, chainProviderSchema, chainProvidersSchema, dappSchema } from './types.js';
 
 describe('chainSchema', () => {
   const validChain: Chain = {
