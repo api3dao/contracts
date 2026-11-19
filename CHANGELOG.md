@@ -1,5 +1,19 @@
 # @api3/contracts
 
+## 44.0.0
+
+### Major Changes
+
+- cf15464: Remove support for following chains:
+
+  - core-testnet
+  - kava
+  - kava-testnet
+  - manta
+  - manta-sepolia-testnet
+  - world
+  - world-sepolia-testnet
+
 ## 43.0.0
 
 ### Major Changes
